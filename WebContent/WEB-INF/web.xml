@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  
+ * Project 				:	prjLeaveApp
+ * Organization 		:	Sultan Qaboos University
+ * Centre				:	Centre for Information System
+ * Department 			:	Planning & Development
+ * Author				:	Bhabesh
+ * 
+ * FrameWork			:	Spring 3.1.0 (Annotation) Portlet
+ * 
+ * File Name			:	web.xml
+ * 
+ * Date of Modification	:	06-Aug-2012
+ *  
+ * Summary				:	web context file
+ *
+ * Copyright 2012 the original author or authors.
+ *
+ * Licensed under the SQU, CIS policy
+ * you may not use this file except in compliance with the License.
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ */
+-->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>prjLeaveApp</display-name>
+  <description>Leave Application</description>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/context/common.xml</param-value>
+  </context-param>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>ViewRendererServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.ViewRendererServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ViewRendererServlet</servlet-name>
+    <url-pattern>/WEB-INF/servlet/view</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description>Leave Application Servlet for Employee</description>
+    <display-name>LeaveAppEmpServlet</display-name>
+    <servlet-name>LeaveAppEmpServlet</servlet-name>
+    <servlet-class>om.edu.squ.squportal.portlet.leaveapp.servlet.LeaveAppEmpServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LeaveAppEmpServlet</servlet-name>
+    <url-pattern>/LeaveAppEmpServlet</url-pattern>
+  </servlet-mapping>
+</web-app>

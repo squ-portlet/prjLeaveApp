@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  
+ * Project 				:	test 
+ * Organization 		:	Sultan Qaboos University
+ * Centre				:	Centre for Information System
+ * Department 			:	Planning & Development
+ * Author				:	Bhabesh
+ * 
+ * FrameWork			:	Spring 3.1.0 (Annotation) Portlet
+ * 
+ * File Name			:	test-portlet.xml
+ * 
+ * Date of Modification	:	04-Aug-2012
+ *  
+ * Summary				:	Portlet context file (specific)
+ *
+ * Copyright 2012 the original author or authors.
+ *
+ * Licensed under the SQU, CIS policy
+ * you may not use this file except in compliance with the License.
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ */
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+        
+        
+        <!-- scan spring components -->
+			<context:component-scan base-package="om.edu.squ.squportal.portlet.leaveapp.controller" />
+ 
+ </beans>
