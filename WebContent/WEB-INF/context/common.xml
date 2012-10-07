@@ -71,11 +71,18 @@
 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="java:comp/env/jdbc/hrmscl"/>
 	</bean>
+	<tx:annotation-driven/>
 	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 	  <property name="dataSource" ref="dataSource"/>
 	  	<qualifier value="trLeaveReq"/>
 	 </bean>
+	<bean id="txManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	  <property name="dataSource" ref="dataSource"/>
+	  	<qualifier value="trLeaveAprv"/>
+	 </bean>
 	
+	
+		
 	<bean class="org.springframework.web.context.support.ServletContextAttributeExporter"> 
 		  <property name="attributes"> 
 		    <map> 

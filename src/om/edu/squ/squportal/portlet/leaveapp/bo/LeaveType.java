@@ -77,6 +77,18 @@ public class LeaveType
 	{
 		this.typeDesc = typeDesc;
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		return "LeaveType ["
+				+ (this.typeNo != null ? "typeNo=" + this.typeNo + ", " : "")
+				+ (this.typeDesc != null ? "typeDesc=" + this.typeDesc : "")
+				+ "]";
+	}
+	
 	
 	
 }

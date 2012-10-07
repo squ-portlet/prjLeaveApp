@@ -50,11 +50,15 @@
 <c:url value="/css/squPortletStyles.css" var="urlCssSquPortletStyle"/>
 <c:url value="/css/jquery-ui-1.8.18.custom.css" var="urlJQueryCSS"/>
 
+
+
+
 <c:url value="/js/jquery-1.7.1.min.js" var="urlJsJqueryMin"/>
 <c:url value="/js/jquery-ui-1.8.18.custom.min.js" var="urlJsJqueryCustom"/>
 
 <link type="text/css" href="${urlJQueryCSS}" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="${urlCssSquPortletStyle}" />
+
 
 <script type="text/javascript" src="${urlJsJqueryMin}"></script>
 <script type="text/javascript" src="${urlJsJqueryCustom}"></script>
@@ -98,6 +102,8 @@
 	.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url("${urlImgIcons2}"); }
 	.ui-state-active .ui-icon {background-image: url("${urlImgIcons2}"); }
 	.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url("${urlImgIcons2}"); }
+	
+
 
 </style>
 
@@ -131,45 +137,22 @@ $(function(){
 });
 
 //reference of the code from url mentioned below :
-//http://stackoverflow.com/questions/2412311/multiple-drop-down-lists-with-the-same-behaviour-with-jquery	
-// $(function() {
-//     $('select.selDeptCode').change(function() {
-//         var branchCode="${employee.branchCode}"
-//     	var deptCode = $(this).val(); //$(".selDeptCode > option:selected").attr("value");
-
-//         $.ajax({
-//             type: "GET",
-//             contentType: "application/json; charset=utf-8",
-//             url: "${servletLeave}?" + 'branchCode='+branchCode+'&deptCode='+deptCode,
-//             data: "{}",
-//             dataType: "json",
-//             success: function(data) {
-//                 var options = '';
-//                 for (index in data) {
-//                     var emp = data[index];
-//                     options += "<option value='" + emp.empNumber + "'>" + emp.empName + "</option>";
-//                 }
-//                 $(".selEmpNum").removeAttr('disabled').html(options);
-//             }
-//         }
-//         );
-//     });
-// });
-
-
+//http://stackoverflow.com/questions/2412311/multiple-drop-down-lists-with-the-same-behaviour-with-jquery
+//http://codeassembly.com/Simple-chained-combobox-plugin-for-jQuery/
 $(function() {
     var populateDropDowns = function() {
         var currentDropdown = $(this);
-        var branchCode="${employee.branchCode}"
+        var branchCode="${employee.branchCode}";
         var deptCode = $(this).val();
         $.ajax({
             type: "GET",
-            contentType: "application/json; charset=utf-8",
-            url:  "${servletLeave}?" + 'branchCode='+branchCode+'&deptCode='+deptCode,
-            data: "{}",
+            //contentType: "application/json; charset=utf-8",
+            //url:  '${servletLeave}&branchCode='+branchCode+'&deptCode='+deptCode,
+            url:  "${servletLeave}",
+            data: 'branchCode='+branchCode+'&deptCode='+deptCode,
             dataType: "json",
             success: function(data) {
-                var options = "<option value=' '>'<spring:message code="prop.leave.app.dropdown.text"/>'</option>"; 
+                var options = "<option value=' '><spring:message code="prop.leave.app.dropdown.text"/></option>"; 
                 for (index in data) {
                 	var emp = data[index];
                 	options += "<option value='" + emp.empNumber + "'>" + emp.empName + "</option>";
@@ -246,10 +229,30 @@ $(function() {
 						<spring:message code="prop.leave.app.apply.form.leave.type"/>:
 					</span>
 				</th>
-				<td colspan="4">
-					<form:select path="leaveType">
+				<td >
+					<form:select path="leaveTypeFlag">
 						<form:option value="">Select</form:option>
-						<form:options items="${leaveTypes}" itemLabel="typeDesc" itemValue="typeNo"/>
+						<form:options items="${leaveTypeFlag}" itemLabel="typeDesc" itemValue="typeNo"/>
+					</form:select>
+				</td>
+				<td>&nbsp;</td>
+				<th class="PortletHeaderColor">
+					<span class="PortletHeaderText">
+						<spring:message code="prop.leave.app.apply.form.requester.department"/>
+					</span>
+				</th>
+				<td colspan="4">
+					<form:select path="department2" cssClass="selDeptCode" id="selDeptCode">
+						<option><spring:message code="prop.leave.app.dropdown.text"/></option>
+						<c:forEach items="${departments}" var="dept">
+							<c:set value="" var="selct"/>
+							<c:if test="${employee.departmentCode==dept.deptCode}">
+								<c:set value="selected" var="selct"/> 
+							</c:if>
+							<option value="${dept.deptCode}" ${selct}>
+								<c:out value="${dept.deptDesc}"/>
+							</option>
+						</c:forEach>
 					</form:select>
 				</td>
 			</tr>

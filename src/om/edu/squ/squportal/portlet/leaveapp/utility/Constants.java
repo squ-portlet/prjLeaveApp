@@ -71,7 +71,10 @@ public interface Constants
 																			"            'en',initCap(SECTION.VHM_SECTION_NAME),          						" +
 																			"			 'ar',SECTION.VHM_SECTION_NAME_ARABIC) AS EMP_SECTION,					" +
 																			"    TO_CHAR(VHM_EMP_JOIN_DATE,'dd/mm/yyyy') AS EMP_JOIN_DATE,						" +
-																			"	DESG.VHM_HIERARCHY_CODE AS 	EMP_HIERARCHY_CODE									" +
+																			"	DESG.VHM_HIERARCHY_CODE AS 	EMP_HIERARCHY_CODE,									" +
+																			"   EMP.VHM_REL_CODE AS EMP_RELIGION_CODE,											" +
+																			"   EMP.VHM_EMP_LOCAL	AS EMP_OMANI,												" +
+																			"   EMP.VHM_EMP_SEX  AS EMP_SEX														" +
 																			" FROM VHM_EMPLOYEE EMP,															" +
 																			"     VHM_DESIGNATION DESG,															" +
 																			"     VHM_GRADE GRADE,																" +
@@ -117,81 +120,125 @@ public interface Constants
 																			"	  DESIGNATION.VHM_DESG_CODE = ADDL.VEAT_EMP_DESG_CODE	" +
 																			"	  AND ADDL.VEAT_EMP_CODE = LPAD(:paramEmpNumber,7,0)	";
 	
-	public static final String	SQL_COUNTER_LEAVE_REQUEST		=			" SELECT  DECODE (											" +
-																			"					max(VHM_LEAVE_REQ_NO), 					" +
-																	        "    				NULL,1,									" +
-																	        "					MAX(VHM_LEAVE_REQ_NO) + 1				" +
-																	        "    			  ) AS COUNTER 								" +			
-																	        "    FROM VHM_EMP_LEAVE_REQUEST								";
+//	public static final String	SQL_COUNTER_LEAVE_REQUEST		=			" SELECT  DECODE (											" +
+//																			"					max(VHM_LEAVE_REQ_NO), 					" +
+//																	        "    				NULL,1,									" +
+//																	        "					MAX(VHM_LEAVE_REQ_NO) + 1				" +
+//																	        "    			  ) AS COUNTER 								" +			
+//																	        "    FROM VHM_EMP_LEAVE_REQUEST								";
 	
-	public static final String	SQL_LEAVE_TYPE					=			" SELECT VHM_LEAVE_TYPE AS LEAVE_TYPE, 						" +
+	public static final String	SQL_COUNTER_LEAVE_REQUEST		=			"SELECT portal_LEAVE_REQ_NO_seq.nextval FROM DUAL";
+	public static final String	SQL_COUNTER_LEAVE_APPROVE		=			" SELECT  DECODE (											" +
+																			"					max(VHM_APP_SEQ_NO), 					" +
+																		    "    				NULL,1,									" +
+																		    "					MAX(VHM_APP_SEQ_NO) + 1				" +
+																		    "    			  ) AS COUNTER 								" +			
+																		    "    FROM VHM_EMP_LEAVE_REQUEST_APPROVAL								";
+	
+	public static final String	SQL_LEAVE_TYPE					=			" SELECT VHM_LEAVE_TYPE_FLAG AS LEAVE_TYPE, 				" +
                  															" DECODE(:paramLocale,                         				" +  			
-                              			                      				"	'en',initCap(VHM_LEAVE_DESC),      						" +    	
-																		    "	'ar',VHM_LEAVE_DESC_ARABIC) AS LEAVE_DESC 				" +   	
-																		    "	FROM VHM_LEAVE_TYPE 									" + 
-																		    "	WHERE VHM_LEAVE_ACTIVE = 'Y'							" +
-																		    "	AND VHM_LEAVE_TYPE = '0010'								";
+                              			                      				"	'en',initCap(VHM_LEAVE_TYPE_DESC),      				" +    	
+																		    "	'ar',VHM_LEAVE_TYPE_DESC_ARABIC) AS LEAVE_DESC 			" +   	
+																		    "	FROM VHM_LEAVE_TYPE_FLAG 								" + 
+																		    "	WHERE VHM_LEAVE_TYPE_ACTIVE = 'Y'						" +
+																		    "	AND VHM_SHOW_LEAVE_PORTAL_YN = 'Y'						" +
+																		    "   AND DECODE(:paramMuslim,'N',VHM_SHOW_MUSLIM_YN) IS NULL	" +
+																		    "	AND DECODE(:paramFemale,'N',VHM_SHOW_FEMALE_YN) IS NULL	" +
+																		    "   AND DECODE(:paramOmani,'N',VHM_SHOW_LOCAL_YN) IS NULL   ";
+																		   
 	
 	public static final String	SQL_ADMIN_ACTION				=			" SELECT VHM_ACTION_CODE AS ACTION_CODE,					" +
 																			" DECODE(:paramLocale, 												" +                          			
                               			                      				"	'en',initCap(VHM_ACTION_DESC),							" +          	
 																		    "	'ar',VHM_ACTION_DESC_ARABIC) AS ACTION_DESC				" +
-																		    " FROM VHM_LEAVE_ACTIONS    								";
+																		    " FROM VHM_WORKFLOW_ACTIONS    								" +
+																		    " WHERE VHM_SERVICE_TYPE = 'LEAVE'							";
 	
-	public static final String	SQL_VIEW_LEAVE_REQUEST			=			" SELECT 													" +
+	public static final String	SQL_VIEW_LEAVE_REQUEST			=			" SELECT DISTINCT											" +
 																			"	LVREQ.VHM_LEAVE_REQ_NO	AS LEAVE_REQUEST_NO,			" +
 																			"	TO_CHAR(LVREQ.VHM_LEAVE_REQ_DATE,'DD/MM/YYYY') AS LEAVE_REQ_DATE,				" +
 																			"	TO_CHAR(LVREQ.VHM_LEAVE_START_DATE,'DD/MM/YYYY') AS LEAVE_START_DATE,			" + 
 																			"	TO_CHAR(LVREQ.VHM_LEAVE_END_DATE,'DD/MM/YYYY') AS LEAVE_END_DATE,				" +
-																			" 	LVTYPE.VHM_LEAVE_TYPE AS LEAVE_TYPE,					" +	
+																			" 	LVTYPE.VHM_LEAVE_TYPE_FLAG LEAVE_TYPE,					" +	
 																			" DECODE													" +
 																			"	(														" +
-																			"		:paramLocale,													" +
-																			"		'en',LVTYPE.VHM_LEAVE_DESC,							" +
-																			"		'ar',LVTYPE.VHM_LEAVE_DESC_ARABIC					" +
+																			"		:paramLocale,										" +
+																			"		'en',LVTYPE.VHM_LEAVE_TYPE_DESC,					" +
+																			"		'ar',LVTYPE.VHM_LEAVE_TYPE_DESC_ARABIC				" +
 																			"	) AS LEAVE_DESC,										" +
 																			" DECODE													" +
 																			"	(														" +
-																			"		:paramLocale,													" +
-																			"		'en',LVSTATUS.VHM_LEAVE_STATUS_DESC,				" +
-																			"		'ar',LVSTATUS.VHM_LEAVE_STATUS_DESC_ARABIC			" +
-																			"		) AS LEAVE_STATUS									" +
+																			"		:paramLocale,										" +
+																			"		'en',LVSTATUS.VHM_STATUS_DESC,						" +
+																			"		'ar',LVSTATUS.VHM_STATUS_DESC_ARABIC				" +
+																			"		) AS LEAVE_STATUS,									" +
+																			"   LVREQ.VHM_EMP_CODE AS EMP_CODE,							" +
+																			"	LVREQ.VHM_EMP_INTERNET_USR_ID AS EMP_INTERNET_ID,		" +
+																			"	LVREQ.VHM_HIERARCHY_CODE AS EMP_HIERARCHY_CODE,			" +
+																			"   DECODE( 												" +
+									                                        "       NVL(												" +
+									                                        "          (SELECT DELG.VHM_DELEGATED_STATUS					" +
+									                                        "             FROM 											" +
+									                                        "             VHM_EMP_LEAVE_REQUEST LVREQ2,					" +
+									                                        "             VHM_EMP_LEAVE_REQ_DELEGATION DELG				" +
+									                                        "             WHERE  LVREQ2.VHM_LEAVE_REQ_NO = DELG.VHM_LEAVE_REQ_NO (+) " +
+									                                        "            AND LVREQ2.VHM_LEAVE_REQ_NO =LVREQ.VHM_LEAVE_REQ_NO),'N'	" +
+									                                        "       ),																" +
+									                                        "       'N','employee','senior'											" +
+									                                        "	) AS DELEGATE_STATUS														" +	
 																			" FROM 														" +
 																			"		VHM_EMP_LEAVE_REQUEST LVREQ,						" +
-																			"		VHM_LEAVE_TYPE LVTYPE,								" +
-																			"		VHM_LEAVE_STATUS LVSTATUS							" +
+																			"		VHM_LEAVE_TYPE_FLAG LVTYPE,							" +
+																			"		VHM_WORKFLOW_STATUS LVSTATUS,						" +
+																			"		VHM_EMP_LEAVE_REQ_DELEGATION DELG					" +
 																			" WHERE 													" +
-																			"		LVREQ.VHM_LEAVE_TYPE=LVTYPE.VHM_LEAVE_TYPE			" +
-																			"	AND LVREQ.VHM_LEAVE_STATUS_CODE = LVSTATUS.VHM_LEAVE_STATUS_CODE " +
+																			"		LVREQ.VHM_LEAVE_TYPE_FLAG=LVTYPE.VHM_LEAVE_TYPE_FLAG " +
+																			"	AND LVREQ.VHM_STATUS_CODE = LVSTATUS.VHM_STATUS_CODE 	" +
 																			"	AND	LVREQ.VHM_LEAVE_REQUEST_ACTIVE='Y'					" +
 																			"	AND 													" +
 																			"		(													" +
 																			"				LVREQ.VHM_EMP_CODE = :paramEmpNumber		" +
-																			"   		OR 	LVREQ.VHM_HIERARCHY_CODE > :paramHierarchy	" +
-																			"		)													" +
+																			"   	 OR 	LVREQ.VHM_HIERARCHY_CODE > :paramHierarchy	" +
+																			"		 OR													" +
+																			" (															" +
+							                                                "     DELG.VHM_DELEGATED_EMP_CODE = :paramEmpNumber			" +
+							                                                "    AND 													" +
+							                                                "    (														" +
+							                                                "                TO_DATE(LVREQ.VHM_LEAVE_START_DATE,'DD/MM/YYYY')	" + 
+							                                                "        BETWEEN TO_DATE(DELG.VHM_DELEGATED_FROM_DATE,'DD/MM/YYYY')	" +
+							                                                "                 AND TO_DATE(DELG.VHM_DELEGATED_TO_DATE,'DD/MM/YYYY')	" +
+							                                                "    )																	" +	
+							                                                "    AND 																" +
+							                                                "    (																	" +
+							                                                "                TO_DATE(SYSDATE,'DD/MM/YYYY') 							" +	
+							                                                "        BETWEEN TO_DATE(DELG.VHM_DELEGATED_FROM_DATE,'DD/MM/YYYY')		" +
+							                                                "                 AND TO_DATE(DELG.VHM_DELEGATED_TO_DATE,'DD/MM/YYYY')	" +
+							                                                "    )																	" +
+							                                                "  )																	" +
+																			" ) 														" +
 																			"	AND	LVREQ.VHM_BRANCH_CODE = :paramBranchCode			" +
 																			"	AND LVREQ.VHM_DEPT_CODE = :paramDeptCode				" +
-																			"	ORDER BY LVREQ.VHM_LEAVE_REQ_NO							";
+																			"	ORDER BY LVREQ.VHM_LEAVE_REQ_NO	DESC					";
 	
 	public static final String	SQL_VIEW_LEAVE_REQUEST_SPECIFIC	=			" SELECT 													" +
 																			"	LVREQ.VHM_LEAVE_REQ_NO AS LEAVE_REQUEST_NO,				" +
 																			"	TO_CHAR(LVREQ.VHM_LEAVE_REQ_DATE,'DD/MM/YYYY') 			" +
 																			"									AS LEAVE_REQ_DATE,		" +
-																			"	LVREQ.VHM_LEAVE_STATUS_CODE AS LEAVE_STATUS_CODE,		" +
+																			"	LVREQ.VHM_STATUS_CODE AS LEAVE_STATUS_CODE,		" +
 																			"	DECODE													" +
 																			"	  (:paramLocale,										" +
-																			"	      'en',InitCap(LVSTAT.VHM_LEAVE_STATUS_DESC),		" +
-																			"	      'ar',LVSTAT.VHM_LEAVE_STATUS_DESC_ARABIC			" +
+																			"	      'en',InitCap(LVSTAT.VHM_STATUS_DESC),		" +
+																			"	      'ar',LVSTAT.VHM_STATUS_DESC_ARABIC			" +
 																			"	  ) AS LEAVE_STATUS,									" +
 																			"	TO_CHAR(LVREQ.VHM_LEAVE_START_DATE,'DD/MM/YYYY') 		" +
 																			"									AS LEAVE_START_DATE,	" +
 																			"	TO_CHAR(LVREQ.VHM_LEAVE_END_DATE,'DD/MM/YYYY') 			" +
 																			"									AS LEAVE_END_DATE,		" +
-																			"	LVREQ.VHM_LEAVE_TYPE AS LEAVE_TYPE,						" +
+																			"	LVREQ.VHM_LEAVE_TYPE_FLAG AS LEAVE_TYPE,				" +
 																			"	DECODE													" +
 																			"	  (:paramLocale,										" +
-																			"	   'en',INITCAP(LVTYPE.VHM_LEAVE_DESC),					" +
-																			"	   'ar',LVTYPE.VHM_LEAVE_DESC_ARABIC					" +
+																			"	   'en',INITCAP(LVTYPE.VHM_LEAVE_TYPE_DESC),			" +
+																			"	   'ar',LVTYPE.VHM_LEAVE_TYPE_DESC_ARABIC				" +
 																			"	   ) AS LEAVE_DESC,										" +
 																			"	LVREQ.VHM_LEAVE_REQUEST_REMARKS AS LEAVE_REQ_REMARK,	" +
 																			"	LVREQ.VHM_EMP_CODE AS EMP_CODE,							" +
@@ -210,15 +257,15 @@ public interface Constants
 																			"							AS EMP_ADDITIONAL_POSITION_DESC	" +
 																			"	FROM													" + 
 																			"	  VHM_EMP_LEAVE_REQUEST LVREQ,							" +
-																			"	  VHM_LEAVE_STATUS LVSTAT,								" +
-																			"	  VHM_LEAVE_TYPE LVTYPE,								" +
+																			"	  VHM_WORKFLOW_STATUS LVSTAT,							" +
+																			"	  VHM_LEAVE_TYPE_FLAG LVTYPE,							" +
 																			"	  VHM_DEPARTMENT DEPT,									" +
 																			"	  VHM_DESIGNATION DESIG									" +
 																			"	WHERE 													" +
 																			"	  LVREQ.VHM_LEAVE_REQ_NO = :paramReqNo					" +
-																			"	  AND LVREQ.VHM_LEAVE_STATUS_CODE						" +
-																			"						=LVSTAT.VHM_LEAVE_STATUS_CODE		" +
-																			"	  AND LVREQ.VHM_LEAVE_TYPE = LVTYPE.VHM_LEAVE_TYPE  	" +
+																			"	  AND LVREQ.VHM_STATUS_CODE								" +
+																			"						=LVSTAT.VHM_STATUS_CODE				" +
+																			"	  AND LVREQ.VHM_LEAVE_TYPE_FLAG = LVTYPE.VHM_LEAVE_TYPE_FLAG " +
 																			"	  AND LVREQ.VHM_DEPT_CODE = DEPT.VHM_DEPT_CODE			" +
 																			"	  AND LVREQ.VHM_POSITION_CODE = DESIG.VHM_DESG_CODE (+)	";
 
@@ -226,14 +273,15 @@ public interface Constants
 	
 	public static final String	SQL_INSERT_LEAVE_REQUEST		=			" INSERT INTO VHM_EMP_LEAVE_REQUEST 						  " +
 																			" (															  " +
-																			" VHM_LEAVE_REQ_NO, VHM_LEAVE_REQ_DATE,VHM_LEAVE_STATUS_CODE, " +
+																			" VHM_LEAVE_REQ_NO, VHM_LEAVE_REQ_DATE,VHM_STATUS_CODE, " +
 																			" VHM_EMP_CODE, VHM_EMP_INTERNET_USR_ID,VHM_LEAVE_START_DATE, " +
 																			" VHM_LEAVE_END_DATE, 										  " +
 																			" VHM_BRANCH_CODE,VHM_DEPT_CODE, VHM_SECTION_CODE,			  " +
 																			" VHM_GRADE_CODE, VHM_DESG_CODE,VHM_EMP_JOB_TYPE,			  " +
 																			" VHM_LEAVE_TYPE, VHM_ADMIN_HOLDING_YN,	  " +
 																			" VHM_POSITION_CODE,VHM_HIERARCHY_CODE,VHM_LEAVE_REQUEST_ACTIVE," +
-																			" VHM_LEAVE_REQUEST_REMARKS,VHM_LEAVE_REQUEST_CRE_USR_INIT,VHM_LEAVE_REQUEST_CRE_DATE		" +
+																			" VHM_LEAVE_REQUEST_REMARKS,VHM_LEAVE_REQUEST_CRE_USR_INIT,VHM_LEAVE_REQUEST_CRE_DATE," +
+																			" VHM_LEAVE_TYPE_FLAG		" +
 																			" ) 															" +
 																			" VALUES 														" +
 																			"(																" +
@@ -242,9 +290,10 @@ public interface Constants
 																			" TO_DATE(:paramEndDate,'dd/MM/yyyy'),												" +
 																			" :paramBranchCode,:paramDepartmentCode,:paramSectionCode,		" +
 																			" :paramGradeCode,:paramDesignationCode,:paramJobTypeCode,		" +
-																			" :paramLeaveType,:paramIsAdmin,				" +
+																			" :paramLeaveType,:paramIsAdmin,								" +
 																			" :paramPositionCode,:paramHierarchyCode,:paramIsReqActive,		" +
-																			" :paramReqRemarks,:paramReqCreUserInit,SYSDATE					" +
+																			" :paramReqRemarks,:paramReqCreUserInit,SYSDATE,				" +
+																			" :paramLeaveTypeFlag											" +
 																			" )																";
 
 	public static final String	SQL_VIEW_LEAVE_REQ_DELEGATION	=			" SELECT														" + 
@@ -280,7 +329,8 @@ public interface Constants
 																			"	VHM_DELEGATED_EMP_SECTION_CODE,VHM_DELEGATED_EMP_DESG_CODE,	" +
 																			"	VHM_DELEGATED_EMP_GRADE_CODE,								" +
 																			"	VHM_DELEGATED_FROM_DATE, VHM_DELEGATED_TO_DATE,				" +
-																			"	VHM_DELEGATED_CRE_USER_INIT,VHM_DELEGATED_CRE_DATE			" +
+																			"	VHM_DELEGATED_CRE_USER_INIT,VHM_DELEGATED_CRE_DATE,			" +
+																			"	VHM_DELEGATED_STATUS										" +
 																			" )																" +
 																			" VALUES														" +
 																			" ( 															" +
@@ -289,10 +339,10 @@ public interface Constants
 																			"	:paramDelEmpSectionCode,:paramDelEmpDesig,					" +
 																			"	:paramDelEmpGradeCode,										" +
 																			"	TO_DATE(:paramDelFromDate,'DD/MM/YYYY'), TO_DATE(:paramDelToDate,'DD/MM/YYYY')," +
-																			"	:paramDelCreUser,SYSDATE									" +
+																			"	:paramDelCreUser,SYSDATE,'A'									" +
 																			" )																";
 
-	public static final String	SQL_INSERT_LEAVE_REQ_APPROVE	=			"INSERT INTO VHM_EMP_LEAVE_REQUEST_APPROVAL						" +
+	public static final String	SQL_INSERT_LEAVE_REQ_APPROVE	=			"	INSERT INTO VHM_EMP_LEAVE_REQUEST_APPROVAL					" +
 																		    "	(															" +
 																		    "  		VHM_LEAVE_REQ_NO, VHM_APP_EMP_CODE,						" +
 																		    "  		VHM_APP_INTERNET_ID, VHM_APP_HIERARCHY_CODE,			" +
@@ -301,14 +351,19 @@ public interface Constants
 																		    "  		VHM_APP_RECEIVED_DATE,VHM_APP_ACTION_DATE,				" +
 																		    "  		VHM_ACTION_CODE,VHM_APP_REMARKS,						" +
 																		    "  		VHM_APP_CRE_USER_INIT,VHM_APP_CRE_DATE,					" +
-																		    "	 )" +
-																		    "    VALUES " +
-																		    "	(" +
-																		    "		:paramReqNo, :paramEmpNo," +
-																		    "		:paramEmpInternetId," +
-																		    "	)" +
-																				"";
-	
+																		    "		VHM_APP_SEQ_NO											" +
+																		    "	 )															" +
+																		    "    VALUES 													" +
+																		    "	(															" +
+																		    "		:paramReqNo, :paramEmpNo,								" +
+																		    "		:paramEmpInternetId, :paramHierarchyCode,				" +
+																		    "		:paramBranchCode, :paramDeptCode,						" +
+																		    "		:paramSectionCode, :paramDesgCode,						" +
+																		    "		 SYSDATE,SYSDATE,										" +
+																		    "		:paramActionCode,:paramRemarks,							" +
+																		    "		:paramCreateUsr,SYSDATE,								" +
+																		    "		:paramSeqNo												" +
+																		    "	)															";
 	
 	/******************************************************/
 	/**********TABLE COLUMN CONSTANTS**********************/
@@ -334,7 +389,9 @@ public interface Constants
 	public static final	String	CONST_EMP_SECTION				=			"EMP_SECTION";
 	public static final	String	CONST_EMP_JOIN_DATE				=			"EMP_JOIN_DATE";
 	public static final	String	CONST_EMP_HIERARCHY_CODE		=			"EMP_HIERARCHY_CODE";
-	
+	public static final	String	CONST_EMP_RELIGION_CODE			=			"EMP_RELIGION_CODE";
+	public static final	String	CONST_EMP_OMANI					=			"EMP_OMANI";
+	public static final	String	CONST_EMP_SEX					=			"EMP_SEX";
 	
 	public static final	String	CONST_LEAVE_REQUEST_NO			=			"LEAVE_REQUEST_NO";
 	public static final	String	CONST_LEAVE_REQ_DATE			=			"LEAVE_REQ_DATE";
@@ -349,11 +406,12 @@ public interface Constants
 	public static final	String	CONST_ACTION_DESC				=			"ACTION_DESC";
 	public static final	String	CONST_DELEGATE_START_DATE		=			"DELEGATE_START_DATE";
 	public static final	String	CONST_DELEGATE_END_DATE			=			"DELEGATE_END_DATE";
+	public static final	String	CONST_DELEGATE_STATUS			=			"DELEGATE_STATUS";
 	
 	public static final	String	CONST_COUNTER					=			"COUNTER";
 	
 	public static final	String	USER_WEB						=			"WEB";
-	public static final	String	CONST_LEAVE_STATUS_WAITING_APPV	=			"1";
+	public static final	String	CONST_LEAVE_STATUS_WAITING_APPV	=			"0000000001";
 	
 	/******************************************************/
 	
@@ -366,6 +424,37 @@ public interface Constants
 	public static final	String	CONST_ADMIN_FALSE				=			"N";
 	public static final String	CONST_LEAVE_REQ_ACTIVE_TRUE		=			"Y";
 	public static final	String	CONST_LANG_DEFAULT_EN			=			"en";
+	
+	public static final	String	CONST_MUSLIM_NUM				=			"1";
+	public static final	String	CONST_MUSLIM					=			"Y";
+	public static final	String	CONST_NON_MUSLIM				=			"N";
+	
+	public static final	String	CONST_GENDER_FEMALE_NUM			=			"1";
+	public static final	String	CONST_GENDER_FEMALE				=			"Y";
+	public static final	String	CONST_GENDER_NON_FEMALE			=			"N";
+	
+	public static final	String	CONST_OMANI_NUM					=			"1";
+	public static final	String	CONST_OMANI						=			"Y";
+	public static final	String	CONST_NON_OMANI					=			"N";
+	public static final	String	CONST_EMP_SENIOR				=			"senior";
+	
+	public static final	String	CONST_ALLOW_ELEAVE_REQUEST_MSG	=			"allowELeaveRequestMsg";
+	
+	/******************************************************/
+	
+	
+	/***********STORED PROCEDURE**************************/
+	public static final	String	CONST_PROC_ALLOW_eLEAVE_REQUEST			=			"allow_eleave_request";
+	public static final	String	CONST_PROC_COL_IN_P_EMP_CODE			=			"P_EMP_CODE";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_FLAG			=			"P_LEAVE_FLAG";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_START			=			"P_LEAVE_START";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_END			=			"P_LEAVE_END";
+	public static final	String	CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN	=			"P_ACCEPT_LEAVE_YN";
+	public static final	String	CONST_PROC_COL_OUT_P_LEAVE_CODE			=			"P_LEAVE_CODE";
+	public static final	String	CONST_PROC_COL_OUT_P_MSG_ENGLISH		=			"P_MSG_ENG";
+	public static final	String	CONST_PROC_COL_OUT_P_MSG_ARABIC			=			"P_MSG_ARB";
+	
+	
 	/******************************************************/
 	
 	/**********JSP PAGES**********************************/

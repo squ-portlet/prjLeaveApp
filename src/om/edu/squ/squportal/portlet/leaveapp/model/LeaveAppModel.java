@@ -42,6 +42,7 @@ public class LeaveAppModel
 	private	String			requestNo;
 	private	String			requestDate;
 	private	String			leaveType;
+	private	String			leaveTypeFlag;
 	private	String			leaveStartDate;
 	private	String			leaveEndDate;
 	private	String			leaveRemarks;
@@ -49,6 +50,7 @@ public class LeaveAppModel
 	private	String			leaveLastReturnDate;
 	private	String			researchId;
 	private	boolean			adminSqu;
+	private	String			department2;										////	Department changed by employee
 	private	String			positionAdditional;
 	private	DelegatedEmp[]	delegatedEmps;
 	private	String			approverAction;										//	Action for approve, reject, return
@@ -113,6 +115,26 @@ public class LeaveAppModel
 	public void setLeaveType(String leaveType)
 	{
 		this.leaveType = leaveType;
+	}
+	/**
+	 * Getter Method	: getLeaveTypeFlag
+	 * @return the leaveTypeFlag
+	 * 
+	 * Date				: Sep 26, 2012
+	 */
+	public String getLeaveTypeFlag()
+	{
+		return this.leaveTypeFlag;
+	}
+	/**
+	 * Setter method : setLeaveTypeFlag
+	 * @param leaveTypeFlag the leaveTypeFlag to set
+	 * 
+	 * Date          : Sep 26, 2012 12:18:27 PM
+	 */
+	public void setLeaveTypeFlag(String leaveTypeFlag)
+	{
+		this.leaveTypeFlag = leaveTypeFlag;
 	}
 	/**
 	 * Getter Method	: getLeaveStartDate
@@ -253,6 +275,26 @@ public class LeaveAppModel
 	public void setAdminSqu(boolean adminSqu)
 	{
 		this.adminSqu = adminSqu;
+	}
+	/**
+	 * Getter Method	: getDepartment2
+	 * @return the department2
+	 * 
+	 * Date				: Sep 29, 2012
+	 */
+	public String getDepartment2()
+	{
+		return this.department2;
+	}
+	/**
+	 * Setter method : setDepartment2
+	 * @param department2 the department2 to set
+	 * 
+	 * Date          : Sep 29, 2012 2:17:34 PM
+	 */
+	public void setDepartment2(String department2)
+	{
+		this.department2 = department2;
 	}
 	/**
 	 * Getter Method	: getPositionAdditional

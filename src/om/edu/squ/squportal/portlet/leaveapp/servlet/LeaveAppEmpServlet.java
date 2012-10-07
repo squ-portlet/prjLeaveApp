@@ -69,6 +69,9 @@ public class LeaveAppEmpServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		logger.info("logger inside servlet");
+		System.out.println("logger inside servlet");
+		
 		String			branchCode	=	request.getParameter("branchCode");
 		String			deptCode	=	request.getParameter("deptCode");
 		Locale			locale		=	request.getLocale();			
@@ -78,6 +81,7 @@ public class LeaveAppEmpServlet extends HttpServlet {
 		Gson gson = new Gson();
 		
 		String	strJson	=	gson.toJson(employees);
+		logger.info("json from servlet : "+strJson);
 		response.getWriter().print(strJson);
 	}
 

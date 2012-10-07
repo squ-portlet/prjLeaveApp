@@ -45,6 +45,7 @@ public class LeaveRequest
 	private	String			leaveStatus;
 	private	Employee		employee;
 	private	LeaveType		leaveType;
+	private	LeaveType		leaveTypeFlag;
 	private	LeaveStatus		status;
 	private	String			leavePurpose;
 	private	boolean			leaveRequestActive;
@@ -230,6 +231,26 @@ public class LeaveRequest
 		this.leaveType = leaveType;
 	}
 	/**
+	 * Getter Method	: getLeaveTypeFlag
+	 * @return the leaveTypeFlag
+	 * 
+	 * Date				: Sep 26, 2012
+	 */
+	public LeaveType getLeaveTypeFlag()
+	{
+		return this.leaveTypeFlag;
+	}
+	/**
+	 * Setter method : setLeaveTypeFlag
+	 * @param leaveTypeFlag the leaveTypeFlag to set
+	 * 
+	 * Date          : Sep 26, 2012 12:31:29 PM
+	 */
+	public void setLeaveTypeFlag(LeaveType leaveTypeFlag)
+	{
+		this.leaveTypeFlag = leaveTypeFlag;
+	}
+	/**
 	 * Getter Method	: getStatus
 	 * @return the status
 	 * 
@@ -334,6 +355,9 @@ public class LeaveRequest
 						: "")
 				+ (this.leaveType != null ? "leaveType=" + this.leaveType
 						+ ", " : "")
+				+ (this.leaveTypeFlag != null ? "leaveTypeFlag="
+						+ this.leaveTypeFlag + ", " : "")
+				+ (this.status != null ? "status=" + this.status + ", " : "")
 				+ (this.leavePurpose != null ? "leavePurpose="
 						+ this.leavePurpose + ", " : "")
 				+ "leaveRequestActive="

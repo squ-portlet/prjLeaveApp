@@ -29,6 +29,7 @@
  */
 package om.edu.squ.squportal.portlet.leaveapp.dao.service;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,10 +37,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
+import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
+import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
 import om.edu.squ.squportal.portlet.leaveapp.dao.db.LeaveDbDao;
@@ -70,6 +73,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	/**
 	 * 
 	 * method name  : getLeaveTypes
+	 * @param employee
 	 * @param locale
 	 * @return
 	 * LeaveAppServiceDaoImpl
@@ -77,11 +81,11 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 * 
 	 * purpose		: List of available leave types
 	 *
-	 * Date    		:	Aug 25, 2012 1:05:51 PM
+	 * Date    		:	Sep 25, 2012 1:09:18 PM
 	 */
-	public List<LeaveType>	getLeaveTypes(Locale locale)
+	public List<LeaveType>	getLeaveTypes(Employee employee, Locale locale)
 	{
-		return leaveDbDao.getLeaveTypes(locale);
+		return leaveDbDao.getLeaveTypes(employee, locale);
 	}
 	
 	/**
@@ -143,41 +147,62 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	
 	/**
 	 * 
-	 * method name  : setNewLeaveRequest
+	 * method name  : getAllowEleaveRequest
 	 * @param leaveAppModel
-	 * @param employee
+	 * @param employeeNo
+	 * @param locale
 	 * @return
+	 * @throws ParseException
 	 * LeaveAppServiceDaoImpl
-	 * return type  : int
+	 * return type  : AllowEleaveRequestProc
 	 * 
-	 * purpose		: service layer for adding new leave request
+	 * purpose		: Check before insert leave request
 	 *
-	 * Date    		:	Sep 9, 2012 8:59:53 AM
+	 * Date    		:	Sep 29, 2012 11:04:01 AM
 	 */
-	public int setNewLeaveRequest(LeaveAppModel 	leaveAppModel, Employee	employee)
+	public synchronized AllowEleaveRequestProc	getAllowEleaveRequest(
+														LeaveAppModel 	leaveAppModel,
+														Employee	employee, Locale locale
+														) 
+	throws ParseException
 	{
-		LeaveRequest	leaveRequest	=	new LeaveRequest();
-		LeaveType		leaveType		=	new	LeaveType();		
 
+		LeaveRequest 			leaveRequest 						=	new LeaveRequest();
+		LeaveType				leaveType							=	new LeaveType();
+		LeaveType				leaveTypeFlag						=	new LeaveType();
+		AllowEleaveRequestProc	allowEleaveRequestProc				=	null;
 		
+		
+		employee.setEmpNumber(String.format("%07d", Integer.valueOf(employee.getEmpNumber())));
+		employee.setAdmin(leaveAppModel.isAdminSqu());
+		employee.setDesignationAddlCode(leaveAppModel.getPositionAdditional());
+		
+		leaveTypeFlag.setTypeNo(leaveAppModel.getLeaveTypeFlag());
+		
+		leaveRequest.setLeaveTypeFlag(leaveTypeFlag);
+		leaveRequest.setEmployee(employee);
 		leaveRequest.setLeaveStartDate(leaveAppModel.getLeaveStartDate());
 		leaveRequest.setLeaveEndDate(leaveAppModel.getLeaveEndDate());
-		leaveRequest.setLeaveStatus(Constants.CONST_LEAVE_STATUS_WAITING_APPV);
-		employee.setDesignationAddlCode(leaveAppModel.getPositionAdditional());
-		employee.setAdmin(leaveAppModel.isAdminSqu());
-		leaveRequest.setEmployee(employee);
-		leaveType.setTypeNo(leaveAppModel.getLeaveType());
-		leaveRequest.setLeaveType(leaveType);
 		leaveRequest.setLeaveRequestRemarks(leaveAppModel.getLeaveRemarks());
+		leaveRequest.setLeaveStatus(Constants.CONST_LEAVE_STATUS_WAITING_APPV);
 		
-		return leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps());
+		logger.info("leaveRequest : "+leaveRequest);
+		allowEleaveRequestProc	=	leaveDbDao.getAllowEleaveRequest(leaveRequest, locale);
 		
+		if(allowEleaveRequestProc.isAcceptLeave())
+		{
+			leaveType.setTypeNo(allowEleaveRequestProc.getLeaveCode());
+			leaveRequest.setLeaveType(leaveType);
+			leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps());
+		}
+		
+		return allowEleaveRequestProc;
 	}
+	
 	
 	/**
 	 * 
 	 * method name  : getLeaveRequests
-	 * @param empNumber
 	 * @param employee
 	 * @param locale
 	 * @return
@@ -188,9 +213,11 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 *
 	 * Date    		:	Sep 12, 2012 12:40:42 PM
 	 */
-	public List<LeaveRequest>	getLeaveRequests(String empNumber,Employee employee, Locale locale)
+	public List<LeaveRequest>	getLeaveRequests(Employee employee, Locale locale)
 	{
-		return leaveDbDao.getLeaveRequests(empNumber, employee, locale);
+		employee.setEmpNumber(String.format("%07d", Integer.valueOf(employee.getEmpNumber())));
+		
+		return leaveDbDao.getLeaveRequests(employee, locale);
 	}
 	
 	/**
@@ -260,4 +287,30 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	{
 		return leaveDbDao.getDepartments(branchCode,locale);
 	}
+
+	/**
+	 * 
+	 * method name  : setLeaveApprove
+	 * @param leaveAppModel
+	 * @param employee
+	 * @return
+	 * LeaveAppServiceDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: Set leave approve
+	 *
+	 * Date    		:	Oct 3, 2012 2:08:24 PM
+	 */
+	public int setLeaveApprove(LeaveAppModel 	leaveAppModel, Employee employee)
+	{
+		LeaveApprove	approve	=	new LeaveApprove();
+		employee.setEmpNumber(String.format("%07d", Integer.valueOf(employee.getEmpNumber())));
+		approve.setRequestNo(leaveAppModel.getRequestNo());
+		approve.setApproverAction(leaveAppModel.getApproverAction());
+		approve.setApproverRemark(leaveAppModel.getApproverRemark());
+		approve.setEmployee(employee);
+		
+		return leaveDbDao.setLeaveApprove(approve);
+	}
+	
 }

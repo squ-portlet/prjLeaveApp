@@ -59,6 +59,10 @@ public class Employee
 	private	String	hierarchyCode;
 	private	boolean	admin;
 	private	boolean	admin2;															//	Admin status changed by employee 
+	private	String	religionCode;
+	private	boolean	omani;
+	private	String	gender;
+	private	boolean	senior;															// employee or senior
 	
 	
 	public Employee(){}
@@ -556,6 +560,91 @@ public class Employee
 	{
 		this.admin2 = admin2;
 	}
+	/**
+	 * Getter Method	: getReligion
+	 * @return the religionCode
+	 * 
+	 * Date				: Sep 25, 2012
+	 */
+	public String getReligionCode()
+	{
+		return this.religionCode;
+	}
+
+	/**
+	 * Setter method : setReligion
+	 * @param religionCode the religionCode to set
+	 * 
+	 * Date          : Sep 25, 2012 10:33:37 AM
+	 */
+	public void setReligionCode(String religionCode)
+	{
+		this.religionCode = religionCode;
+	}
+	/**
+	 * Getter Method	: isOmani
+	 * @return the omani
+	 * 
+	 * Date				: Sep 25, 2012
+	 */
+	public boolean isOmani()
+	{
+		return this.omani;
+	}
+
+	/**
+	 * Setter method : setOmani
+	 * @param omani the omani to set
+	 * 
+	 * Date          : Sep 25, 2012 12:52:37 PM
+	 */
+	public void setOmani(boolean omani)
+	{
+		this.omani = omani;
+	}
+
+	/**
+	 * Getter Method	: getGender
+	 * @return the gender
+	 * 
+	 * Date				: Sep 25, 2012
+	 */
+	public String getGender()
+	{
+		return this.gender;
+	}
+
+	/**
+	 * Setter method : setGender
+	 * @param gender the gender to set
+	 * 
+	 * Date          : Sep 25, 2012 12:52:37 PM
+	 */
+	public void setGender(String gender)
+	{
+		this.gender = gender;
+	}
+	/**
+	 * Getter Method	: isSenior
+	 * @return the senior
+	 * 
+	 * Date				: Oct 7, 2012
+	 */
+	public boolean isSenior()
+	{
+		return this.senior;
+	}
+
+	/**
+	 * Setter method : setSenior
+	 * @param senior the senior to set
+	 * 
+	 * Date          : Oct 7, 2012 5:29:00 PM
+	 */
+	public void setSenior(boolean senior)
+	{
+		this.senior = senior;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -602,8 +691,16 @@ public class Employee
 				+ (this.jobTypeCode != null ? "jobTypeCode=" + this.jobTypeCode
 						+ ", " : "")
 				+ (this.hierarchyCode != null ? "hierarchyCode="
-						+ this.hierarchyCode + ", " : "") + "admin="
-				+ this.admin + ", admin2=" + this.admin2 + "]";
+						+ this.hierarchyCode + ", " : "")
+				+ "admin="
+				+ this.admin
+				+ ", admin2="
+				+ this.admin2
+				+ ", "
+				+ (this.religionCode != null ? "religionCode="
+						+ this.religionCode + ", " : "") + "omani="
+				+ this.omani + ", "
+				+ (this.gender != null ? "gender=" + this.gender : "") + "]";
 	}
 	
 	

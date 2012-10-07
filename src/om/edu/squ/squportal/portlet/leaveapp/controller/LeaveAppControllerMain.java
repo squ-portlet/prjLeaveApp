@@ -31,6 +31,7 @@ package om.edu.squ.squportal.portlet.leaveapp.controller;
 
 
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,6 +40,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
 
+import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
@@ -106,9 +108,10 @@ public class LeaveAppControllerMain
 		}
 		session.setAttribute("employee", employee);
 		
-		List<LeaveRequest>	leaveRequests	=	leaveAppServiceDao.getLeaveRequests(empNumber, employee,locale);
+		List<LeaveRequest>	leaveRequests	=	leaveAppServiceDao.getLeaveRequests(employee,locale);
 		model.addAttribute("leaveRequests", leaveRequests);
-		
+		model.addAttribute("empHierarchy", employee.getHierarchyCode());
+		model.addAttribute("empNumber", String.format("%07d", Integer.parseInt(empNumber)));
 		return Constants.PAGE_WELCOME;
 	}
 	
@@ -139,7 +142,7 @@ public class LeaveAppControllerMain
 			leaveAppModel.setPositionAdditional(employee.getDesignationAddlCode());
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
-		model.addAttribute("leaveTypes",leaveAppServiceDao.getLeaveTypes(locale) );
+		model.addAttribute("leaveTypeFlag",leaveAppServiceDao.getLeaveTypes(employee,locale) );
 		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
 		model.addAttribute("employee",employee );
 		model.addAttribute("addlPosition", leaveAppServiceDao.getAdditionalDesignation(employee.getEmpNumber(),locale));
@@ -172,15 +175,29 @@ public class LeaveAppControllerMain
 			@ModelAttribute("leaveAppModel") LeaveAppModel leaveAppModel,
 			BindingResult result,Locale locale,Model model)
 	{
-		PortletSession	session		=	request.getPortletSession();
-		Employee		employee	=	(Employee)session.getAttribute("employee");	
-		
-		logger.info("value of operation : "+operation);
+		PortletSession			session					=	request.getPortletSession();
+		Employee				employee				=	(Employee)session.getAttribute("employee");	
+		AllowEleaveRequestProc	allowEleaveRequestProc	=	null;
+
 		if(operation.equals(Constants.CONST_OPERATION_ADD))
 		{
-			logger.info("inside if ");
-			int dbResult	=	leaveAppServiceDao.setNewLeaveRequest(leaveAppModel,employee);
-			logger.info("db result : "+dbResult);
+
+			try
+			{
+				allowEleaveRequestProc	=	leaveAppServiceDao.getAllowEleaveRequest(leaveAppModel,employee,locale);
+				logger.info("leave Request allow notification : "+ allowEleaveRequestProc.toString());
+				response.setRenderParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowEleaveRequestProc.getLeaveMessage());
+				response.setRenderParameter("action", "backToMain");
+				
+			}
+			catch (Exception ex)
+			{
+				logger.error("exception at leave request allow notification : "+ex.getStackTrace());
+			}
+			
+						logger.info("inside if ");
+			//int dbResult	=	leaveAppServiceDao.setNewLeaveRequest(leaveAppModel,employee);
+			//logger.info("db result : "+dbResult);
 		}
 		
 	}
@@ -233,7 +250,8 @@ public class LeaveAppControllerMain
 			BindingResult result,Locale locale,Model model
 			)
 	{
-		
+		Employee	employee	=	(Employee)request.getPortletSession().getAttribute("employee");
+		leaveAppServiceDao.setLeaveApprove(leaveAppModel, employee);
 	}
 	
 	
@@ -251,8 +269,23 @@ public class LeaveAppControllerMain
 	 * Date    		:	Aug 7, 2012 1:06:05 PM
 	 */
 	@RequestMapping(params="action=backToMain")
-	private String	backToMain (PortletRequest request, Model model, Locale locale)
+	private String	backToMain (
+								PortletRequest request, Model model, Locale locale
+							)
 	{
+		if(null != request.getParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG))
+		{
+			String allowELeaveRequestMsg	=	request.getParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG);
+			if (!model.containsAttribute(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG))
+			{
+				logger.info("inside if - attribute avialable :"+allowELeaveRequestMsg);
+				model.addAttribute(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowELeaveRequestMsg);
+			}
+			else
+			{
+				logger.info("inside else - attribute value :"+allowELeaveRequestMsg);
+			}
+		}
 		return welcome(request,model,locale);
 	}
 	

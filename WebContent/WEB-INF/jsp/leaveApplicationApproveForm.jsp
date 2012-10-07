@@ -106,13 +106,6 @@ $(function(){
 		<fmt:message key="prop.leave.app.url.back"/>
 	</a>
 </div>
-requestNO:
-requestDate
-leaveType
-leaveStartDate
-leaveEndDate
-leaveRemarks
-adminSqu
 
 <portlet:actionURL var="leaveApprove">
 	<portlet:param name="action" value="leaveApprove"/>

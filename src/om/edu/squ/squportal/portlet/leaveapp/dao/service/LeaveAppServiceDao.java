@@ -29,10 +29,12 @@
  */
 package om.edu.squ.squportal.portlet.leaveapp.dao.service;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
 
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
+import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
@@ -52,6 +54,7 @@ public interface LeaveAppServiceDao
 	/**
 	 * 
 	 * method name  : getLeaveTypes
+	 * @param employee
 	 * @param locale
 	 * @return
 	 * LeaveAppServiceDao
@@ -59,9 +62,9 @@ public interface LeaveAppServiceDao
 	 * 
 	 * purpose		: List of available leave types
 	 *
-	 * Date    		:	Aug 25, 2012 1:20:39 PM
+	 * Date    		:	Sep 25, 2012 1:12:19 PM
 	 */
-	public List<LeaveType>	getLeaveTypes(Locale locale);
+	public List<LeaveType>	getLeaveTypes(Employee employee, Locale locale);
 	
 	/**
 	 * 
@@ -109,6 +112,26 @@ public interface LeaveAppServiceDao
 	
 	/**
 	 * 
+	 * method name  : getAllowEleaveRequest
+	 * @param leaveAppModel
+	 * @param employeeNo
+	 * @param locale
+	 * @return
+	 * LeaveAppServiceDao
+	 * return type  : AllowEleaveRequestProc
+	 * 
+	 * purpose		: Check before insert leave request
+	 *
+	 * Date    		:	Sep 29, 2012 11:05:23 AM
+	 * @throws ParseException 
+	 */
+	public AllowEleaveRequestProc	getAllowEleaveRequest(
+			LeaveAppModel 	leaveAppModel,
+			Employee	employee, Locale locale) 
+	throws ParseException;
+	
+	/**
+	 * 
 	 * method name  : setNewLeaveRequest
 	 * @param leaveAppModel
 	 * @param employee
@@ -120,12 +143,11 @@ public interface LeaveAppServiceDao
 	 *
 	 * Date    		:	Sep 9, 2012 9:00:49 AM
 	 */
-	public int setNewLeaveRequest(LeaveAppModel 	leaveAppModel, Employee	employee);
+	//public int setNewLeaveRequest(LeaveAppModel 	leaveAppModel, Employee	employee);
 	
 	/**
 	 * 
 	 * method name  : getLeaveRequests
-	 * @param empNumber
 	 * @param employee
 	 * @param locale
 	 * @return
@@ -136,7 +158,7 @@ public interface LeaveAppServiceDao
 	 *
 	 * Date    		:	Sep 12, 2012 12:41:29 PM
 	 */
-	public List<LeaveRequest>	getLeaveRequests(String empNumber,Employee employee, Locale locale);
+	public List<LeaveRequest>	getLeaveRequests(Employee employee, Locale locale);
 	
 	/**
 	 * 
@@ -181,4 +203,19 @@ public interface LeaveAppServiceDao
 	 * Date    		:	Sep 15, 2012 11:06:22 AM
 	 */
 	public List<Department>	getDepartments(String branchCode,Locale locale);
+	
+	/**
+	 * 
+	 * method name  : setLeaveApprove
+	 * @param leaveAppModel
+	 * @param employee
+	 * @return
+	 * LeaveAppServiceDao
+	 * return type  : int
+	 * 
+	 * purpose		: Set leave approve
+	 *
+	 * Date    		:	Oct 3, 2012 2:10:02 PM
+	 */
+	public int setLeaveApprove(LeaveAppModel 	leaveAppModel, Employee employee);
 }

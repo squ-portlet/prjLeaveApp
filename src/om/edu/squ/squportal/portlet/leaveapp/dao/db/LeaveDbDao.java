@@ -29,14 +29,17 @@
  */
 package om.edu.squ.squportal.portlet.leaveapp.dao.db;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
 
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
+import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
+import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
 
@@ -46,9 +49,11 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
  */
 public interface LeaveDbDao
 {
+
 	/**
 	 * 
 	 * method name  : getLeaveTypes
+	 * @param employee
 	 * @param locale
 	 * @return
 	 * LeaveDbDao
@@ -56,9 +61,9 @@ public interface LeaveDbDao
 	 * 
 	 * purpose		: List of available leave types
 	 *
-	 * Date    		:	Aug 25, 2012 1:00:22 PM
+	 * Date    		:	Sep 25, 2012 1:05:19 PM
 	 */
-	public List<LeaveType>	getLeaveTypes(Locale locale);
+	public List<LeaveType>	getLeaveTypes(Employee employee, Locale locale);
 	
 	/**
 	 * 
@@ -122,6 +127,23 @@ public interface LeaveDbDao
 	
 	/**
 	 * 
+	 * method name  : getAllowEleaveRequest
+	 * @param leaveRequest
+	 * @param locale
+	 * @return
+	 * @throws ParseException
+	 * LeaveDbDao
+	 * return type  : AllowEleaveRequestProc
+	 * 
+	 * purpose		: Check before insert leave request
+	 *
+	 * Date    		:	Sep 26, 2012 2:24:28 PM
+	 */
+	public AllowEleaveRequestProc	getAllowEleaveRequest(LeaveRequest leaveRequest, Locale locale) 
+	throws ParseException;
+	
+	/**
+	 * 
 	 * method name  : setNewLeaveRequest
 	 * @param leaveRequest
 	 * @return
@@ -152,7 +174,6 @@ public interface LeaveDbDao
 	/**
 	 * 
 	 * method name  : getLeaveRequests
-	 * @param empNumber
 	 * @param employee
 	 * @param locale
 	 * @return
@@ -163,7 +184,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Sep 12, 2012 12:39:13 PM
 	 */
-	public List<LeaveRequest>	getLeaveRequests(String empNumber,Employee employee, Locale locale);
+	public List<LeaveRequest>	getLeaveRequests(Employee employee, Locale locale);
 	
 	/**
 	 * 
@@ -193,4 +214,19 @@ public interface LeaveDbDao
 	 * Date    		:	Sep 15, 2012 11:02:44 AM
 	 */
 	public List<Department>	getDepartments(String branchCode, Locale locale);
+	
+	/**
+	 * 
+	 * method name  : setLeaveApprove
+	 * @param approve
+	 * @return
+	 * LeaveDbDao
+	 * return type  : int
+	 * 
+	 * purpose		: Set leave approve
+	 *
+	 * Date    		:	Oct 3, 2012 1:58:12 PM
+	 */
+	public int setLeaveApprove(LeaveApprove approve);
+	
 }
