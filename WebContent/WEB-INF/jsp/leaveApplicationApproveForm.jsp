@@ -379,6 +379,12 @@ $(function(){
 	<%-- 		<center> --%>
 	<%-- 			<input type="submit" value='<spring:message code="prop.leave.app.apply.form.requester.submit"/>' style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/> --%>
 	<%-- 		</center> --%>
+			<c:set var="varDisable" value="false"/>
+			<c:set var="bttnDisable" value="not disabled"/>
+			<c:if test="${leaveRequest.approve.approverAction==constActionApprove}">
+				<c:set var="varDisable" value="true"/>
+				<c:set var="bttnDisable" value="disabled='disabled'"/>
+			</c:if>
 			<fieldset>
 				<legend>
 					<spring:message code="prop.leave.app.apply.form.approvar.action.administrative"/>
@@ -394,8 +400,10 @@ $(function(){
 						<td>
 							<spring:message code="prop.leave.app.apply.form.approvar.actions" var="appActions"/>
 							
-							<form:select path="approverAction" >
-								<form:option value=""><spring:message code="prop.leave.app.dropdown.text"/></form:option>
+							<form:select path="approverAction" disabled="${varDisable}">
+								<c:if test="${empty leaveRequest.approve.approverAction}">
+									<form:option value=""><spring:message code="prop.leave.app.dropdown.text"/></form:option>
+								</c:if>
 								<form:options items="${adminActions}" itemLabel="actionDesc" itemValue="actionCode"/>
 							</form:select>
 						
@@ -407,12 +415,17 @@ $(function(){
 							</span>
 						</th>
 						<td>
-							<form:textarea path="approverRemark" cssStyle="width:100%"/>
+							<form:textarea path="approverRemark" cssStyle="width:100%" disabled="${varDisable}"/>
 						</td>
 					</tr>
 				</table>
 				<center>
-					<input type="submit" value='<spring:message code="prop.leave.app.apply.form.approver.submit"/>' style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
+					<input type="submit" value='<spring:message code="prop.leave.app.apply.form.approver.submit"/>' 
+					style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px" 
+					<c:if test="${varDisable}">
+						<c:out value="${bttnDisable}" />
+					</c:if>
+					/>
 				</center>
 				
 				

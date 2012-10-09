@@ -714,6 +714,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				LeaveStatus		leaveStatus		=	new LeaveStatus();
 				LeaveType		leaveType		=	new LeaveType();
 				Employee		employee		=	new	Employee();
+				LeaveApprove	approve			=	new LeaveApprove();
 					leaveRequest.setRequestNo(rs.getString(Constants.CONST_LEAVE_REQUEST_NO));
 					leaveRequest.setRequestDate(rs.getString(Constants.CONST_LEAVE_REQ_DATE));
 						leaveStatus.setStatusCode(rs.getString(Constants.CONST_LEAVE_STATUS_CODE));
@@ -742,6 +743,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 						employee.setDesignationAddlCode(rs.getString(Constants.CONST_EMP_ADDL_POSITION_CODE));
 						employee.setDesignationAddl(rs.getString(Constants.CONST_EMP_ADDL_POSITION_DESC));
 					leaveRequest.setEmployee(employee);
+					approve.setApproverAction(rs.getString(Constants.CONST_ACTION_CODE));
+					approve.setApproverRemark(rs.getString(Constants.CONST_APPROVER_REMARK));
+					leaveRequest.setApprove(approve);
 					
 				return leaveRequest;
 			
@@ -804,24 +808,41 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	@Transactional("trLeaveAprv")
 	public synchronized int setLeaveApprove(LeaveApprove approve)
 	{
+		int result	=	0;
+		
 		Employee	employee	=	approve.getEmployee();
-		
+
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
-		namedParameters.put("paramReqNo", approve.getRequestNo());
-		namedParameters.put("paramEmpNo", employee.getEmpNumber());
-		namedParameters.put("paramEmpInternetId", employee.getEmpInternetId());
-		namedParameters.put("paramHierarchyCode", employee.getHierarchyCode());
-		namedParameters.put("paramBranchCode", employee.getBranchCode());
-		namedParameters.put("paramDeptCode", employee.getDepartmentCode());
-		namedParameters.put("paramSectionCode", employee.getSectionCode());
-		namedParameters.put("paramDesgCode", employee.getDesignationCode());
-		namedParameters.put("paramActionCode",approve.getApproverAction());
-		namedParameters.put("paramRemarks", approve.getApproverRemark());
-		namedParameters.put("paramCreateUsr", Constants.USER_WEB);
-		namedParameters.put("paramSeqNo", String.valueOf(getLeaveApproveCounter()));
-		
+			namedParameters.put("paramReqNo", approve.getRequestNo());
+			namedParameters.put("paramEmpNo", employee.getEmpNumber());
+			namedParameters.put("paramActionCode",approve.getApproverAction());
+			namedParameters.put("paramApprvRemark", approve.getApproverRemark());
+
+			if(isApprovalRecordExist(approve.getRequestNo(), employee.getEmpNumber()))
+		{
+			namedParameters.put("paramUpdateUsr", Constants.USER_WEB);
+			namedParameters.put("paramActionCodeApprove", Constants.CONST_LEAVE_ACTION_APPROVE);
+			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_REQ_APPROVE,namedParameters );
+		}
+		else
+		{
+			namedParameters.put("paramEmpInternetId", employee.getEmpInternetId());
+			namedParameters.put("paramHierarchyCode", employee.getHierarchyCode());
+			namedParameters.put("paramBranchCode", employee.getBranchCode());
+			namedParameters.put("paramDeptCode", employee.getDepartmentCode());
+			namedParameters.put("paramSectionCode", employee.getSectionCode());
+			namedParameters.put("paramDesgCode", employee.getDesignationCode());
+			namedParameters.put("paramCreateUsr", Constants.USER_WEB);
+			namedParameters.put("paramSeqNo", String.valueOf(getLeaveApproveCounter()));
+			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQ_APPROVE,namedParameters );
+		}
+
 		logger.info("params for approval : "+namedParameters);
-		return this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQ_APPROVE,namedParameters );
+		
+		
+		setLeaveRequestStatusUpdate(approve.getRequestNo(), approve.getApproverAction());
+		return result;
+		
 	}
 	
 	
@@ -839,7 +860,29 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 */
 	private long getLeaveRequestCounter()
 	{
+		
 		return jdbcTemplate.queryForLong(Constants.SQL_COUNTER_LEAVE_REQUEST);
+	}
+	/**
+	 * 
+	 * method name  : isApprovalRecordExist
+	 * @param reqNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		:
+	 *
+	 * Date    		:	Oct 9, 2012 10:03:31 AM
+	 */
+	private	boolean isApprovalRecordExist(String reqNo, String empNumber)
+	{
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramReqNo", reqNo);
+		namedParameters.put("paramEmpNo", empNumber);
+		
+		int recNum	=namedParameterJdbcTemplate.queryForInt(Constants.SQL_REC_COUNTER_LEAVE_APPROVE, namedParameters);
+		return (recNum>0)?true:false;
 	}
 	
 	/**
@@ -858,5 +901,66 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		return jdbcTemplate.queryForLong(Constants.SQL_COUNTER_LEAVE_APPROVE);
 	}
 	
+	/**
+	 * 
+	 * method name  : setLeaveRequestStatusUpdate
+	 * @param requestNo
+	 * @param approveAction
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: update the leave request status
+	 *
+	 * Date    		:	Oct 8, 2012 12:19:59 PM
+	 */
+	private int setLeaveRequestStatusUpdate(String requestNo, String approveAction)
+	{
+		String leaveStatus	=	null;
+		if((null== approveAction) || (approveAction.trim().equals("")))
+		{
+			leaveStatus	=	Constants.CONST_LEAVE_STATUS_WAITING_APPV;
+		}
+		
+		if(approveAction.equals(Constants.CONST_LEAVE_ACTION_APPROVE))
+		{
+			leaveStatus	=	Constants.CONST_LEAVE_STATUS_APPROVED;
+		}
+		if(approveAction.equals(Constants.CONST_LEAVE_ACTION_RETURN))
+		{
+			leaveStatus	=	Constants.CONST_LEAVE_STATUS_WAITING_APPV;
+		}
+		if(approveAction.equals(Constants.CONST_LEAVE_ACTION_REJECT))
+		{
+			leaveStatus	=	Constants.CONST_LEAVE_STATUS_REJECTED;
+		}
+		
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramReqNo", requestNo);
+		namedParameters.put("paramStatusCode", leaveStatus);
+
+		return namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_REQ_STATUS, namedParameters);
+	}
+	
+	/**
+	 * 
+	 * method name  : getMapingReqStatusAction
+	 * @param reqStatus
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : String
+	 * 
+	 * purpose		: get Request Action code against request status code
+	 *
+	 * Date    		:	Oct 8, 2012 1:54:20 PM
+	 */
+	private String	getMapingReqStatusAction(String reqStatus)
+	{
+		Map<String,String>	mapStatusAction		=	new HashMap<String, String>();
+		mapStatusAction.put(Constants.CONST_LEAVE_STATUS_APPROVED, Constants.CONST_LEAVE_ACTION_APPROVE);
+		mapStatusAction.put(Constants.CONST_LEAVE_STATUS_WAITING_APPV, Constants.CONST_LEAVE_ACTION_RETURN);
+		mapStatusAction.put(Constants.CONST_LEAVE_STATUS_REJECTED, Constants.CONST_LEAVE_ACTION_REJECT);
+		return mapStatusAction.get(reqStatus);
+	}
 	
 }

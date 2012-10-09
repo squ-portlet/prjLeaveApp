@@ -47,6 +47,7 @@ public class LeaveRequest
 	private	LeaveType		leaveType;
 	private	LeaveType		leaveTypeFlag;
 	private	LeaveStatus		status;
+	private	LeaveApprove	approve;
 	private	String			leavePurpose;
 	private	boolean			leaveRequestActive;
 	private	String			leaveRequestRemarks;
@@ -269,6 +270,26 @@ public class LeaveRequest
 	public void setStatus(LeaveStatus status)
 	{
 		this.status = status;
+	}
+	/**
+	 * Getter Method	: getApprove
+	 * @return the approve
+	 * 
+	 * Date				: Oct 8, 2012
+	 */
+	public LeaveApprove getApprove()
+	{
+		return this.approve;
+	}
+	/**
+	 * Setter method : setApprove
+	 * @param approve the approve to set
+	 * 
+	 * Date          : Oct 8, 2012 2:02:58 PM
+	 */
+	public void setApprove(LeaveApprove approve)
+	{
+		this.approve = approve;
 	}
 	/**
 	 * Getter Method	: getLeavePurpose

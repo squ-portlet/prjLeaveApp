@@ -179,7 +179,8 @@
 							</portlet:param>
 						</portlet:renderURL>
 						<c:choose>
-							<c:when test="${(req.employee.hierarchyCode > empHierarchy) || (!req.employee.senior && (req.employee.empNumber != empNumber))}">
+							<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
+												(!req.employee.senior && (req.employee.empNumber != empNumber))}">
 								reqNo:'<a href="${varLeaveApprove}"><c:out value="${req.requestNo}"/></a>',
 							</c:when>
 							<c:otherwise>

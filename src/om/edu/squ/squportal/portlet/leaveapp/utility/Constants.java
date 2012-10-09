@@ -127,13 +127,18 @@ public interface Constants
 //																	        "    			  ) AS COUNTER 								" +			
 //																	        "    FROM VHM_EMP_LEAVE_REQUEST								";
 	
-	public static final String	SQL_COUNTER_LEAVE_REQUEST		=			"SELECT portal_LEAVE_REQ_NO_seq.nextval FROM DUAL";
+	public static final String	SQL_COUNTER_LEAVE_REQUEST		=			"SELECT portal_LEAVE_REQ_NO_seq.nextval FROM DUAL			";
 	public static final String	SQL_COUNTER_LEAVE_APPROVE		=			" SELECT  DECODE (											" +
 																			"					max(VHM_APP_SEQ_NO), 					" +
 																		    "    				NULL,1,									" +
-																		    "					MAX(VHM_APP_SEQ_NO) + 1				" +
+																		    "					MAX(VHM_APP_SEQ_NO) + 1					" +
 																		    "    			  ) AS COUNTER 								" +			
-																		    "    FROM VHM_EMP_LEAVE_REQUEST_APPROVAL								";
+																		    "    FROM VHM_EMP_LEAVE_REQUEST_APPROVAL					";
+	public static final String	SQL_REC_COUNTER_LEAVE_APPROVE	=			" SELECT COUNT(*) AS COUNTER								" +
+																			"  FROM VHM_EMP_LEAVE_REQUEST_APPROVAL						" +
+																			"  WHERE VHM_LEAVE_REQ_NO=:paramReqNo						" +
+																			"  AND   VHM_APP_EMP_CODE = :paramEmpNo						";	
+	
 	
 	public static final String	SQL_LEAVE_TYPE					=			" SELECT VHM_LEAVE_TYPE_FLAG AS LEAVE_TYPE, 				" +
                  															" DECODE(:paramLocale,                         				" +  			
@@ -254,20 +259,24 @@ public interface Constants
 																			"	  (:paramLocale,										" +
 																			"	   'en',INITCAP(DESIG.VHM_DESG_DESC),					" +
 																			"	   'ar',DESIG.VHM_DESG_DESC_ARABIC) 					" +
-																			"							AS EMP_ADDITIONAL_POSITION_DESC	" +
+																			"							AS EMP_ADDITIONAL_POSITION_DESC," +
+																			"	LVAPRV.VHM_ACTION_CODE AS ACTION_CODE,					" +
+																			"	LVAPRV.VHM_APP_REMARKS AS APPROVER_REMARK				" +
 																			"	FROM													" + 
 																			"	  VHM_EMP_LEAVE_REQUEST LVREQ,							" +
 																			"	  VHM_WORKFLOW_STATUS LVSTAT,							" +
 																			"	  VHM_LEAVE_TYPE_FLAG LVTYPE,							" +
 																			"	  VHM_DEPARTMENT DEPT,									" +
-																			"	  VHM_DESIGNATION DESIG									" +
+																			"	  VHM_DESIGNATION DESIG,								" +
+																			"	  VHM_EMP_LEAVE_REQUEST_APPROVAL LVAPRV					" +
 																			"	WHERE 													" +
 																			"	  LVREQ.VHM_LEAVE_REQ_NO = :paramReqNo					" +
 																			"	  AND LVREQ.VHM_STATUS_CODE								" +
 																			"						=LVSTAT.VHM_STATUS_CODE				" +
 																			"	  AND LVREQ.VHM_LEAVE_TYPE_FLAG = LVTYPE.VHM_LEAVE_TYPE_FLAG " +
 																			"	  AND LVREQ.VHM_DEPT_CODE = DEPT.VHM_DEPT_CODE			" +
-																			"	  AND LVREQ.VHM_POSITION_CODE = DESIG.VHM_DESG_CODE (+)	";
+																			"	  AND LVREQ.VHM_POSITION_CODE = DESIG.VHM_DESG_CODE (+)	" +
+																			"	  AND LVREQ.VHM_LEAVE_REQ_NO  =	LVAPRV.VHM_LEAVE_REQ_NO (+)";
 
 
 	
@@ -360,10 +369,23 @@ public interface Constants
 																		    "		:paramBranchCode, :paramDeptCode,						" +
 																		    "		:paramSectionCode, :paramDesgCode,						" +
 																		    "		 SYSDATE,SYSDATE,										" +
-																		    "		:paramActionCode,:paramRemarks,							" +
+																		    "		:paramActionCode,:paramApprvRemark,							" +
 																		    "		:paramCreateUsr,SYSDATE,								" +
 																		    "		:paramSeqNo												" +
 																		    "	)															";
+	
+	public static final String	SQL_UPDATE_LEAVE_REQ_STATUS		=			" UPDATE VHM_EMP_LEAVE_REQUEST									" +
+																			" SET VHM_STATUS_CODE=:paramStatusCode							" +
+																			" WHERE VHM_LEAVE_REQ_NO=:paramReqNo							";
+	
+	public static final String	SQL_UPDATE_LEAVE_REQ_APPROVE	=			"	UPDATE VHM_EMP_LEAVE_REQUEST_APPROVAL						" +
+																			"	SET VHM_ACTION_CODE = :paramActionCode,							" +        
+																			"	 VHM_APP_REMARKS = :paramApprvRemark,							" +
+																			"	 VHM_APP_UPD_USER_INIT = :paramUpdateUsr,						" +
+																			"	 VHM_APP_UPD_DATE  = SYSDATE									" +
+																			"	WHERE VHM_LEAVE_REQ_NO = :paramReqNo						" +
+																			"	AND VHM_APP_EMP_CODE = 	 :paramEmpNo						" +
+																			"	AND VHM_ACTION_CODE != :paramActionCodeApprove				";
 	
 	/******************************************************/
 	/**********TABLE COLUMN CONSTANTS**********************/
@@ -404,6 +426,7 @@ public interface Constants
 	public static final	String	CONST_LEAVE_REQ_REMARK			=			"LEAVE_REQ_REMARK";
 	public static final	String	CONST_ACTION_CODE				=			"ACTION_CODE";
 	public static final	String	CONST_ACTION_DESC				=			"ACTION_DESC";
+	public static final	String	CONST_APPROVER_REMARK			=			"APPROVER_REMARK";
 	public static final	String	CONST_DELEGATE_START_DATE		=			"DELEGATE_START_DATE";
 	public static final	String	CONST_DELEGATE_END_DATE			=			"DELEGATE_END_DATE";
 	public static final	String	CONST_DELEGATE_STATUS			=			"DELEGATE_STATUS";
@@ -411,7 +434,19 @@ public interface Constants
 	public static final	String	CONST_COUNTER					=			"COUNTER";
 	
 	public static final	String	USER_WEB						=			"WEB";
+	
 	public static final	String	CONST_LEAVE_STATUS_WAITING_APPV	=			"0000000001";
+	public static final	String	CONST_LEAVE_STATUS_APPROVED		=			"0000000002";
+	public static final	String	CONST_LEAVE_STATUS_REJECTED		=			"0000000003";
+	
+	public static final	String	CONST_LEAVE_ACTION_APPROVE		=			"0000000001";
+	public static final	String	CONST_LEAVE_ACTION_RETURN		=			"0000000002";
+	public static final	String	CONST_LEAVE_ACTION_REJECT		=			"0000000003";
+	
+	public static final	String	CONST_LEAVE_ACTION_APPROVE_DESC	=			"APPROVE";
+	public static final	String	CONST_LEAVE_ACTION_RETURN_DESC	=			"RETURN";
+	public static final	String	CONST_LEAVE_ACTION_REJECT_DESC	=			"REJECT";
+	
 	
 	/******************************************************/
 	

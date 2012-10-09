@@ -231,6 +231,8 @@ public class LeaveAppControllerMain
 			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
 			
 			leaveAppModel.setRequestNo(leaveRequest.getRequestNo());
+			leaveAppModel.setApproverAction(leaveRequest.getApprove().getApproverAction());
+			leaveAppModel.setApproverRemark(leaveRequest.getApprove().getApproverRemark());
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
 		
@@ -238,6 +240,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("leaveRequest", leaveRequest);
 		model.addAttribute("delegatedEmps", delegatedEmps);
 		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
+		model.addAttribute("constActionApprove",Constants.CONST_LEAVE_ACTION_APPROVE);
 		
 		return Constants.PAGE_LEAVE_APPROVE_FORM;
 	}
