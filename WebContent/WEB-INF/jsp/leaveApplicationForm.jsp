@@ -280,8 +280,8 @@ $(function() {
 				<td colspan="4"><form:textarea cssStyle="width:100%" path="leaveRemarks"/></td>
 			</tr>
 		</table>
-		
 		<p/>
+		<c:if test="${employee.hierarchyCode != baseHierarchyEmp}" >		
 		<table cellspacing="0" cellpadding="0" border="1" width="100%">
 			<caption><spring:message code="prop.leave.app.apply.form.required.details.other"/></caption>
 <!-- 			<tr> -->
@@ -333,121 +333,59 @@ $(function() {
 			</tr>
 		
 		</table>
-<!-- 		<table cellspacing="0" cellpadding="0" border="1" width="100%"> -->
-<%-- 			<caption><spring:message code="prop.leave.app.apply.form.requester.details"/></caption> --%>
-<!-- 			<tr> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.requester.name"/> --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<%-- 				<td><c:out value="${employee.empName}" /></td> --%>
-<!-- 				<td></td> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.requester.squ.id"/> --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<%-- 				<td><c:out value="${employee.empNumber}"/></td> --%>
-<!-- 			</tr> -->
-<!-- 			<tr> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.requester.job.title"/> --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<%-- 				<td><c:out value="${employee.designation}"/></td> --%>
-<!-- 				<td></td> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.requester.grade"/>: --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<%-- 				<td><c:out value="${employee.grade}"/> (<c:out value="${employee.gradeShort}"/>)</td> --%>
-<!-- 			</tr> -->
-<!-- 			<tr> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.requester.branch"/> --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<%-- 				<td><c:out value="${employee.branch}"/></td> --%>
-<!-- 				<td></td> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.requester.department"/> --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<%-- 				<td><c:out value="${employee.department}"/> (<c:out value="${employee.departmentShort}"/>)</td> --%>
-<!-- 			</tr> -->
-<!-- 			<tr> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.requester.section"/>: --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<%-- 				<td><c:out value="${employee.section}"/></td> --%>
-<!-- 				<td></td> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.requester.doa"/> --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<%-- 				<td><c:out value="${employee.joinDt}"/></td> --%>
-<!-- 			</tr>						 -->
-<!-- 		</table> -->
-		<table cellspacing="0" cellpadding="0" border="1" width="100%">
-			<caption>
-				<spring:message code="prop.leave.app.apply.form.delegated.employees"/>
-			</caption>
-			<tr>
-				<th class="PortletHeaderColor">
-					<span class="PortletHeaderText">
-						<spring:message code="prop.leave.app.apply.form.delegated.date.from"/>
-					</span>
-				</th>
-				<th class="PortletHeaderColor">
-					<span class="PortletHeaderText">
-						<spring:message code="prop.leave.app.apply.form.delegated.date.to"/>
-					</span>
-				</th>
-				<th class="PortletHeaderColor">
-					<span class="PortletHeaderText">
-						<spring:message code="prop.leave.app.apply.form.delegated.emp.code"/>
-					</span>
-				</th>
-				<th colspan="2"><i><spring:message code="prop.leave.app.apply.form.delegated.msg"/></i></th>
-				
-				
-			</tr>
-			<c:forEach var="i" begin="0" end="2" step="1">
+			<table cellspacing="0" cellpadding="0" border="1" width="100%">
+				<caption>
+					<spring:message code="prop.leave.app.apply.form.delegated.employees"/>
+				</caption>
 				<tr>
-					<td><form:input path="delegatedEmps[${i}].fromDate" cssClass="calendar"/></td>
-					<td><form:input path="delegatedEmps[${i}].toDate" cssClass="calendar"/></td>
-					<td><form:input path="delegatedEmps[${i}].empNumber" /></td>
-					<td>
-						<form:select path="delegatedEmps[${i}].empNumber" cssClass="selEmpNum" id="selEmpNum" onchange="getEmpId(this,${i});">
-							<option><spring:message code="prop.leave.app.dropdown.text"/></option>
-						</form:select>
-					</td>
-					<td>
-						<form:select path="delegatedEmps[${i}].departmentCode" cssClass="selDeptCode" id="selDeptCode">
-							<option><spring:message code="prop.leave.app.dropdown.text"/></option>
-							<c:forEach items="${departments}" var="dept">
-								<c:set value="" var="selct"/>
-								<c:if test="${employee.departmentCode==dept.deptCode}">
-									<c:set value="selected" var="selct"/> 
-								</c:if>
-								<option value="${dept.deptCode}" ${selct}>
-									<c:out value="${dept.deptDesc}"/>
-								</option>
-							</c:forEach>
-
-						</form:select>
-					</td>
+					<th class="PortletHeaderColor">
+						<span class="PortletHeaderText">
+							<spring:message code="prop.leave.app.apply.form.delegated.date.from"/>
+						</span>
+					</th>
+					<th class="PortletHeaderColor">
+						<span class="PortletHeaderText">
+							<spring:message code="prop.leave.app.apply.form.delegated.date.to"/>
+						</span>
+					</th>
+					<th class="PortletHeaderColor">
+						<span class="PortletHeaderText">
+							<spring:message code="prop.leave.app.apply.form.delegated.emp.code"/>
+						</span>
+					</th>
+					<th colspan="2"><i><spring:message code="prop.leave.app.apply.form.delegated.msg"/></i></th>
+					
+					
 				</tr>
-			</c:forEach>
-		</table>
+				<c:forEach var="i" begin="0" end="2" step="1">
+					<tr>
+						<td><form:input path="delegatedEmps[${i}].fromDate" cssClass="calendar"/></td>
+						<td><form:input path="delegatedEmps[${i}].toDate" cssClass="calendar"/></td>
+						<td><form:input path="delegatedEmps[${i}].empNumber" /></td>
+						<td>
+							<form:select path="delegatedEmps[${i}].empNumber" cssClass="selEmpNum" id="selEmpNum" onchange="getEmpId(this,${i});">
+								<option><spring:message code="prop.leave.app.dropdown.text"/></option>
+							</form:select>
+						</td>
+						<td>
+							<form:select path="delegatedEmps[${i}].departmentCode" cssClass="selDeptCode" id="selDeptCode">
+								<option><spring:message code="prop.leave.app.dropdown.text"/></option>
+								<c:forEach items="${departments}" var="dept">
+									<c:set value="" var="selct"/>
+									<c:if test="${employee.departmentCode==dept.deptCode}">
+										<c:set value="selected" var="selct"/> 
+									</c:if>
+									<option value="${dept.deptCode}" ${selct}>
+										<c:out value="${dept.deptDesc}"/>
+									</option>
+								</c:forEach>
+	
+							</form:select>
+						</td>
+					</tr>
+				</c:forEach>
+			</table>
+		</c:if>
 		
 		<table cellspacing="0" cellpadding="0" border="1" width="100%">
 			<tr>

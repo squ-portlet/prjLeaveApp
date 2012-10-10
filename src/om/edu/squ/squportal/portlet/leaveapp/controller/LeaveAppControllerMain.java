@@ -148,6 +148,8 @@ public class LeaveAppControllerMain
 		model.addAttribute("addlPosition", leaveAppServiceDao.getAdditionalDesignation(employee.getEmpNumber(),locale));
 		model.addAttribute(Constants.CONST_OPERATION,Constants.CONST_OPERATION_ADD);
 		model.addAttribute("departments",leaveAppServiceDao.getDepartments(employee.getBranchCode(),locale));
+		model.addAttribute("baseHierarchyEmp", Constants.CONST_EMPLOYEE_HIERARCHY_CODE);
+		
 		
 		return Constants.PAGE_LEAVE_APPLY_FORM;
 	}

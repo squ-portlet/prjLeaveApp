@@ -447,6 +447,7 @@ public interface Constants
 	public static final	String	CONST_LEAVE_ACTION_RETURN_DESC	=			"RETURN";
 	public static final	String	CONST_LEAVE_ACTION_REJECT_DESC	=			"REJECT";
 	
+	public static final	String	CONST_EMPLOYEE_HIERARCHY_CODE	=			"016";
 	
 	/******************************************************/
 	

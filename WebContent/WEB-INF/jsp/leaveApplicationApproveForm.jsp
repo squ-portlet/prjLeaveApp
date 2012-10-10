@@ -420,12 +420,11 @@ $(function(){
 					</tr>
 				</table>
 				<center>
+				<c:if test="${!varDisable}">
 					<input type="submit" value='<spring:message code="prop.leave.app.apply.form.approver.submit"/>' 
 					style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px" 
-					<c:if test="${varDisable}">
-						<c:out value="${bttnDisable}" />
-					</c:if>
 					/>
+				</c:if>
 				</center>
 				
 				
