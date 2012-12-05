@@ -53,4 +53,24 @@
     <servlet-name>LeaveAppEmpServlet</servlet-name>
     <url-pattern>/LeaveAppEmpServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description>Leave App Branch Servlet</description>
+    <display-name>LeaveAppBranchServlet</display-name>
+    <servlet-name>LeaveAppBranchServlet</servlet-name>
+    <servlet-class>om.edu.squ.squportal.portlet.leaveapp.servlet.LeaveAppBranchServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LeaveAppBranchServlet</servlet-name>
+    <url-pattern>/LeaveAppBranchServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description>Hod Servlet</description>
+    <display-name>LeaveAppHodServlet</display-name>
+    <servlet-name>LeaveAppHodServlet</servlet-name>
+    <servlet-class>om.edu.squ.squportal.portlet.leaveapp.servlet.LeaveAppHodServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LeaveAppHodServlet</servlet-name>
+    <url-pattern>/LeaveAppHodServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

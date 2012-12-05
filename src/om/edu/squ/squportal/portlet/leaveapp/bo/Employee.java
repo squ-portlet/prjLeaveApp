@@ -47,6 +47,8 @@ public class Employee
 	private	String	gradeShort;
 	private	String	branchCode;
 	private	String	branch;
+	private	String	branch2Code;
+	private	String	branch2;
 	private	String	departmentCode;
 	private	String	department;
 	private	String	department2code;												//	Department changed by employee
@@ -315,6 +317,50 @@ public class Employee
 	{
 		this.branch = branch;
 	}
+	/**
+	 * Getter Method	: getBranch2Code
+	 * @return the branch2Code
+	 * 
+	 * Date				: Nov 25, 2012
+	 */
+	public String getBranch2Code()
+	{
+		return this.branch2Code;
+	}
+
+	/**
+	 * Setter method : setBranch2Code
+	 * @param branch2Code the branch2Code to set
+	 * 
+	 * Date          : Nov 25, 2012 1:28:49 PM
+	 */
+	public void setBranch2Code(String branch2Code)
+	{
+		this.branch2Code = branch2Code;
+	}
+
+	/**
+	 * Getter Method	: getBranch2
+	 * @return the branch2
+	 * 
+	 * Date				: Nov 25, 2012
+	 */
+	public String getBranch2()
+	{
+		return this.branch2;
+	}
+
+	/**
+	 * Setter method : setBranch2
+	 * @param branch2 the branch2 to set
+	 * 
+	 * Date          : Nov 25, 2012 1:28:49 PM
+	 */
+	public void setBranch2(String branch2)
+	{
+		this.branch2 = branch2;
+	}
+
 	/**
 	 * Getter Method	: getDepartmentCode
 	 * @return the departmentCode
@@ -674,6 +720,9 @@ public class Employee
 				+ (this.branchCode != null ? "branchCode=" + this.branchCode
 						+ ", " : "")
 				+ (this.branch != null ? "branch=" + this.branch + ", " : "")
+				+ (this.branch2Code != null ? "branch2Code=" + this.branch2Code
+						+ ", " : "")
+				+ (this.branch2 != null ? "branch2=" + this.branch2 + ", " : "")
 				+ (this.departmentCode != null ? "departmentCode="
 						+ this.departmentCode + ", " : "")
 				+ (this.department != null ? "department=" + this.department
@@ -700,7 +749,8 @@ public class Employee
 				+ (this.religionCode != null ? "religionCode="
 						+ this.religionCode + ", " : "") + "omani="
 				+ this.omani + ", "
-				+ (this.gender != null ? "gender=" + this.gender : "") + "]";
+				+ (this.gender != null ? "gender=" + this.gender + ", " : "")
+				+ "senior=" + this.senior + "]";
 	}
 	
 	

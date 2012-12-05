@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
 import om.edu.squ.squportal.portlet.leaveapp.dao.db.LeaveDbDao;
 import om.edu.squ.squportal.portlet.leaveapp.dao.db.LeaveDbDaoImpl;
 
@@ -22,23 +25,26 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import com.google.gson.Gson;
 
 /**
- * Servlet implementation class LeaveAppEmpServlet
+ * Servlet implementation class LeaveAppBranchServlet
  */
-public class LeaveAppEmpServlet extends HttpServlet {
+public class LeaveAppBranchServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private	JdbcTemplate		jdbcTemplate;
 	private	DataSource			datasource;
+	
 	public void setDataSource(DataSource dataSource) 
 	{ 
 		this.jdbcTemplate		=	new JdbcTemplate(dataSource);
 		this.datasource			=	dataSource;
 	}
-
+	
+	
     /**
-     * Default constructor. 
+     * @see HttpServlet#HttpServlet()
      */
-    public LeaveAppEmpServlet() {
+    public LeaveAppBranchServlet() {
+        super();
         // TODO Auto-generated constructor stub
     }
 
@@ -51,17 +57,9 @@ public class LeaveAppEmpServlet extends HttpServlet {
 	}
 
 	/**
-	 * @see Servlet#destroy()
-	 */
-	public void destroy() {
-		// TODO Auto-generated method stub
-	}
-
-	/**
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
@@ -69,27 +67,32 @@ public class LeaveAppEmpServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("logger inside emp servlet");
-		System.out.println("logger inside emp servlet");
-		
-		String			branchCode	=	request.getParameter("branchCode");
-		String			deptCode	=	request.getParameter("deptCode");
-		Locale			locale		=	request.getLocale();			
-		
-		LeaveDbDao		leaveDbDao	=	new LeaveDbDaoImpl(datasource);
-		List<Employee>	employees	=	leaveDbDao.getEmployee(branchCode, deptCode, locale);
-		Gson gson = new Gson();
-		
-		String	strJson	=	gson.toJson(employees);
-		logger.info("json from servlet : "+strJson);
-		response.getWriter().print(strJson);
-	}
+		logger.info("logger inside branch servlet");
+		System.out.println("logger inside branch servlet");
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		Locale				locale		=	request.getLocale();			
+		String				strJson		=	null;
+		String				deptCode	=	null;
+		String				branchCode	=	request.getParameter("branchCode");
+		Gson 				gson 		= 	new Gson();
+		
+		LeaveDbDao			leaveDbDao	=	new LeaveDbDaoImpl(datasource);
+		
+		if(null == request.getParameter("deptCode"))
+		{
+			List<Department>	departments	=	leaveDbDao.getDepartments(branchCode, locale);
+			strJson	=	gson.toJson(departments);													//json objects for departments
+		}
+		else
+		{
+			deptCode						=	request.getParameter("deptCode");
+			List<Section>		sections	=	leaveDbDao.getSections(deptCode, locale);
+			strJson	=	gson.toJson(sections);														//json objects for sections
+		}
+		
+		
+		logger.info("json from branch servlet : "+strJson);
+		response.getWriter().print(strJson);
 	}
 
 }

@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
@@ -45,6 +46,7 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
 import om.edu.squ.squportal.portlet.leaveapp.dao.db.LeaveDbDao;
 import om.edu.squ.squportal.portlet.leaveapp.dao.ldap.LdapDao;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
@@ -176,6 +178,9 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		employee.setEmpNumber(String.format("%07d", Integer.valueOf(employee.getEmpNumber())));
 		employee.setAdmin(leaveAppModel.isAdminSqu());
 		employee.setDesignationAddlCode(leaveAppModel.getPositionAdditional());
+
+		employee.setBranch2Code(leaveAppModel.getBranch2());
+		employee.setDepartment2code(leaveAppModel.getDepartment2());
 		
 		leaveTypeFlag.setTypeNo(leaveAppModel.getLeaveTypeFlag());
 		
@@ -273,6 +278,23 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	
 	/**
 	 * 
+	 * method name  : getBranches
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Branch>
+	 * 
+	 * purpose		: Get list of active branches
+	 *
+	 * Date    		:	Nov 24, 2012 2:07:46 PM
+	 */
+	public List<Branch>	getBranches(Locale locale)
+	{
+		return leaveDbDao.getBranches(locale);
+	}
+	
+	/**
+	 * 
 	 * method name  : getDepartments
 	 * @param branchCode
 	 * @return
@@ -288,6 +310,24 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		return leaveDbDao.getDepartments(branchCode,locale);
 	}
 
+	/**
+	 * 
+	 * method name  : getSections
+	 * @param departmentCode
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Section>
+	 * 
+	 * purpose		: get list of sections
+	 *
+	 * Date    		:	Nov 26, 2012 12:40:40 PM
+	 */
+	public List<Section> getSections(String departmentCode, Locale locale)
+	{
+		return leaveDbDao.getSections(departmentCode, locale);
+	}
+	
 	/**
 	 * 
 	 * method name  : setLeaveApprove

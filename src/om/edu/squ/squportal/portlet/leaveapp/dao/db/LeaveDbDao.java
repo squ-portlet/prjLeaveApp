@@ -35,13 +35,16 @@ import java.util.Locale;
 
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
+import om.edu.squ.squportal.portlet.leaveapp.bo.HoD;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
 
 /**
  * @author Bhabesh
@@ -124,6 +127,55 @@ public interface LeaveDbDao
 	 * Date    		:	Sep 17, 2012 12:03:16 PM
 	 */
 	public List<Designation>	getAdditionalDesignation(String empNumber, Locale locale);
+
+	/**
+	 * 
+	 * method name  : getNextHeadBranch
+	 * @param branchCode
+	 * @param paramLevelAdd
+	 * @param locale
+	 * @return
+	 * LeaveDbDao
+	 * return type  : List<HoD>
+	 * 
+	 * purpose		: Get the head of the system from next hierarchy level (branch wise)
+	 *
+	 * Date    		:	Dec 5, 2012 8:29:35 AM
+	 */
+	public List<HoD> getNextHeadBranch(String branchCode, int paramLevelAdd, Locale locale);
+	
+	/**
+	 * 
+	 * method name  : getDepartmentHead
+	 * @param branchCode
+	 * @param deptCode
+	 * @param locale
+	 * @return
+	 * LeaveDbDao
+	 * return type  : List<HoD>
+	 * 
+	 * purpose		: get department head id and name
+	 *
+	 * Date    		:	Dec 5, 2012 9:34:39 AM
+	 */
+	public List<HoD> getDepartmentHead(String branchCode, String deptCode,Locale locale);
+	
+	/**
+	 * 
+	 * method name  : getSectionHead
+	 * @param branchCode
+	 * @param deptCode
+	 * @param sectCode
+	 * @param locale
+	 * @return
+	 * LeaveDbDao
+	 * return type  : List<HoD>
+	 * 
+	 * purpose		: get section head id and name 
+	 *
+	 * Date    		:	Dec 5, 2012 9:19:35 AM
+	 */
+	public List<HoD>	getSectionHead(String branchCode, String deptCode, String sectCode, Locale locale);
 	
 	/**
 	 * 
@@ -200,6 +252,20 @@ public interface LeaveDbDao
 	 * Date    		:	Sep 18, 2012 2:15:21 PM
 	 */
 	public LeaveRequest	getLeaveRequest(String reqNo, Locale locale);
+
+	/**
+	 * 
+	 * method name  : getBranches
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Branch>
+	 * 
+	 * purpose		: Get list of active branches
+	 *
+	 * Date    		:	Nov 24, 2012 2:07:46 PM
+	 */
+	public List<Branch>	getBranches(Locale locale);
 	
 	/**
 	 * 
@@ -214,6 +280,22 @@ public interface LeaveDbDao
 	 * Date    		:	Sep 15, 2012 11:02:44 AM
 	 */
 	public List<Department>	getDepartments(String branchCode, Locale locale);
+
+	/**
+	 * 
+	 * method name  : getSections
+	 * @param departmentCode
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Section>
+	 * 
+	 * purpose		: get list of sections
+	 *
+	 * Date    		:	Nov 26, 2012 12:40:40 PM
+	 */
+	public List<Section> getSections(String departmentCode, Locale locale);
+	
 	
 	/**
 	 * 

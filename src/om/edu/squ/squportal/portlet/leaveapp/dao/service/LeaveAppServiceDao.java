@@ -35,12 +35,14 @@ import java.util.Locale;
 
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
 import om.edu.squ.squportal.portlet.leaveapp.dao.ldap.LdapDao;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 
@@ -190,6 +192,21 @@ public interface LeaveAppServiceDao
 	 */
 	public List<DelegatedEmp>	getDelegations(String leaveRequestNo, Locale locale);
 	
+
+	/**
+	 * 
+	 * method name  : getBranches
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Branch>
+	 * 
+	 * purpose		: Get list of active branches
+	 *
+	 * Date    		:	Nov 24, 2012 2:07:46 PM
+	 */
+	public List<Branch>	getBranches(Locale locale);
+	
 	/**
 	 * 
 	 * method name  : getDepartments
@@ -203,6 +220,21 @@ public interface LeaveAppServiceDao
 	 * Date    		:	Sep 15, 2012 11:06:22 AM
 	 */
 	public List<Department>	getDepartments(String branchCode,Locale locale);
+	
+	/**
+	 * 
+	 * method name  : getSections
+	 * @param departmentCode
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Section>
+	 * 
+	 * purpose		: get list of sections
+	 *
+	 * Date    		:	Nov 26, 2012 12:40:40 PM
+	 */
+	public List<Section> getSections(String departmentCode, Locale locale);
 	
 	/**
 	 * 

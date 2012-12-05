@@ -50,7 +50,11 @@ public class LeaveAppModel
 	private	String			leaveLastReturnDate;
 	private	String			researchId;
 	private	boolean			adminSqu;
+	private	String			branch;
+	private	String			branch2;
 	private	String			department2;										////	Department changed by employee
+	private	String			section2;											//		Section changed by employee
+	private	String			hod;												//		head of department/section/branch
 	private	String			positionAdditional;
 	private	DelegatedEmp[]	delegatedEmps;
 	private	String			approverAction;										//	Action for approve, reject, return
@@ -277,6 +281,46 @@ public class LeaveAppModel
 		this.adminSqu = adminSqu;
 	}
 	/**
+	 * Getter Method	: getBranch
+	 * @return the branch
+	 * 
+	 * Date				: Nov 24, 2012
+	 */
+	public String getBranch()
+	{
+		return this.branch;
+	}
+	/**
+	 * Setter method : setBranch
+	 * @param branch the branch to set
+	 * 
+	 * Date          : Nov 24, 2012 2:20:52 PM
+	 */
+	public void setBranch(String branch)
+	{
+		this.branch = branch;
+	}
+	/**
+	 * Getter Method	: getBranch2
+	 * @return the branch2
+	 * 
+	 * Date				: Nov 25, 2012
+	 */
+	public String getBranch2()
+	{
+		return this.branch2;
+	}
+	/**
+	 * Setter method : setBranch2
+	 * @param branch2 the branch2 to set
+	 * 
+	 * Date          : Nov 25, 2012 1:30:10 PM
+	 */
+	public void setBranch2(String branch2)
+	{
+		this.branch2 = branch2;
+	}
+	/**
 	 * Getter Method	: getDepartment2
 	 * @return the department2
 	 * 
@@ -295,6 +339,46 @@ public class LeaveAppModel
 	public void setDepartment2(String department2)
 	{
 		this.department2 = department2;
+	}
+	/**
+	 * Getter Method	: getSection2
+	 * @return the section2
+	 * 
+	 * Date				: Nov 26, 2012
+	 */
+	public String getSection2()
+	{
+		return this.section2;
+	}
+	/**
+	 * Setter method : setSection2
+	 * @param section2 the section2 to set
+	 * 
+	 * Date          : Nov 26, 2012 12:59:30 PM
+	 */
+	public void setSection2(String section2)
+	{
+		this.section2 = section2;
+	}
+	/**
+	 * Getter Method	: getHod
+	 * @return the hod
+	 * 
+	 * Date				: Dec 5, 2012
+	 */
+	public String getHod()
+	{
+		return this.hod;
+	}
+	/**
+	 * Setter method : setHod
+	 * @param hod the hod to set
+	 * 
+	 * Date          : Dec 5, 2012 12:18:54 PM
+	 */
+	public void setHod(String hod)
+	{
+		this.hod = hod;
 	}
 	/**
 	 * Getter Method	: getPositionAdditional
@@ -393,6 +477,8 @@ public class LeaveAppModel
 						+ ", " : "")
 				+ (this.leaveType != null ? "leaveType=" + this.leaveType
 						+ ", " : "")
+				+ (this.leaveTypeFlag != null ? "leaveTypeFlag="
+						+ this.leaveTypeFlag + ", " : "")
 				+ (this.leaveStartDate != null ? "leaveStartDate="
 						+ this.leaveStartDate + ", " : "")
 				+ (this.leaveEndDate != null ? "leaveEndDate="
@@ -408,11 +494,19 @@ public class LeaveAppModel
 				+ "adminSqu="
 				+ this.adminSqu
 				+ ", "
+				+ (this.branch != null ? "branch=" + this.branch + ", " : "")
+				+ (this.branch2 != null ? "branch2=" + this.branch2 + ", " : "")
+				+ (this.department2 != null ? "department2=" + this.department2
+						+ ", " : "")
+				+ (this.section2 != null ? "section2=" + this.section2 + ", "
+						: "")
+				+ (this.hod != null ? "hod=" + this.hod + ", " : "")
+				+ (this.positionAdditional != null ? "positionAdditional="
+						+ this.positionAdditional + ", " : "")
 				+ (this.delegatedEmps != null ? "delegatedEmps="
 						+ Arrays.toString(this.delegatedEmps) + ", " : "")
-				+ "approverAction="
-				+ this.approverAction
-				+ ", "
+				+ (this.approverAction != null ? "approverAction="
+						+ this.approverAction + ", " : "")
 				+ (this.approverRemark != null ? "approverRemark="
 						+ this.approverRemark : "") + "]";
 	}

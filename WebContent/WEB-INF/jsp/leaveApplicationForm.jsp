@@ -64,6 +64,8 @@
 <script type="text/javascript" src="${urlJsJqueryCustom}"></script>
 
 <c:url value="/LeaveAppEmpServlet" var="servletLeave"/>
+<c:url value="/LeaveAppBranchServlet" var="servletLeaveBranch"/>
+<c:url value="/LeaveAppHodServlet" var="servletLeaveHOD"/>
 
 
 <style>
@@ -168,6 +170,116 @@ $(function() {
     $('select.selDeptCode').change(populateDropDowns);
 });
 
+/* get departments */
+$(function() {
+    var populateDropDowns = function() {
+        var currentDropdown = $(this);
+        var branchCode=$(this).val();
+        var deptCode = "${employee.departmentCode}";
+        $('#selSectionCode2').empty().append("<option value=''><spring:message code="prop.leave.app.dropdown.text"/></option>");
+        $(".divHod").html("HOD : ");
+        $.ajax({
+            type: "GET",
+//             contentType: "application/json; charset=utf-8",
+            url:  "${servletLeaveBranch}",
+            data: 'branchCode='+branchCode,
+            dataType: "json",
+            async:false,
+            success: function(data) {
+                var options = "<option value=' '><spring:message code="prop.leave.app.dropdown.text"/></option>"; 
+                for (index in data) {
+                	var dept = data[index];
+                	var selct = '';
+                	if (deptCode==dept.deptCode) selct=' selected';
+                	options += "<option value='" + dept.deptCode +"'" + selct + ">" + dept.deptDesc + "</option>";
+                }
+
+                currentDropdown.closest('tr').find("select.selDeptCode2").html(options);
+            }
+        }
+        );
+    };
+
+    $('select.selBranchCode').each(populateDropDowns);
+    $('select.selBranchCode').change(populateDropDowns);
+});
+
+/* get sections */
+$(function() {
+    var populateDropDowns = function() {
+        var currentDropdown = $(this);
+        var deptCode = $(this).val();
+        $.ajax({
+            type: "GET",
+//             contentType: "application/json; charset=utf-8",
+            url:  "${servletLeaveBranch}",
+            data: 'deptCode='+deptCode,
+            dataType: "json",
+            async:false,
+            success: function(data) {
+                var options = "<option value=''><spring:message code="prop.leave.app.dropdown.text"/></option>"; 
+                for (index in data) {
+                	var section = data[index];
+                	var selct = '';
+                	//if (deptCode==dept.deptCode) selct=' selected';
+                	options += "<option value='" + section.sectionCode +"'" + selct + ">" + section.sectionDesc + "</option>";
+                }
+
+                currentDropdown.closest('tr').find("select.selSectionCode2").html(options);
+            }
+        }
+        );
+    };
+
+    $('select.selDeptCode2').each(populateDropDowns);
+    $('select.selDeptCode2').change(populateDropDowns);
+});
+
+// Get HOD
+$(function() {
+    var populateDropDowns = function() {
+        //var currentDropdown = $(this);
+        var branchCode=$('select.selBranchCode').val();
+        var deptCode = $('select.selDeptCode2').val();
+        var sectionCode=$('select.selSectionCode2').val();
+        
+        $.ajax({
+            type: "GET",
+//             contentType: "application/json; charset=utf-8",
+            url:  "${servletLeaveHOD}",
+            data: 'branchCode='+branchCode+'&deptCode='+deptCode+'&sectionCode='+sectionCode,
+            dataType: "json",
+            success: function(data) {
+			var  dataHtml = '';
+		    for (index in data) {
+		    	 var hod = data[index];
+		    	 dataHtml += "<input type='radio' name='hod'  value='"+hod.hodId+"'/> " +hod.hodName+ "<br>"; 
+		    }
+		    $(".divHod").html(dataHtml);
+            }
+        }
+        );
+    };
+//     alert ("section code : "+$('select.selSectionCode2').val());
+// 	if($('select.selSectionCode2').val()  != '')
+// 		{
+// 			alert ("section code2 : "+$('select.selSectionCode2').val());
+		    $('select.selSectionCode2').each(populateDropDowns);
+		    $('select.selSectionCode2').change(populateDropDowns);
+// 		}
+// 	else
+// 		{
+// 		alert ("dept code : "+$('select.selSectionCode2').val());
+		    $('select.selDeptCode2').each(populateDropDowns);
+		    $('select.selDeptCode2').change(populateDropDowns);
+// 		}
+
+		    $('select.selBranchCode').each(populateDropDowns);
+		    $('select.selBranchCode').change(populateDropDowns);
+
+});
+
+
 
 </script>
 
@@ -238,22 +350,33 @@ $(function() {
 				<td>&nbsp;</td>
 				<th class="PortletHeaderColor">
 					<span class="PortletHeaderText">
-						<spring:message code="prop.leave.app.apply.form.requester.department"/>
+						<spring:message code="prop.leave.app.apply.form.requester.office"/>
 					</span>
 				</th>
-				<td colspan="4">
-					<form:select path="department2" cssClass="selDeptCode" id="selDeptCode">
+				<td >
+					<form:select path="branch2"  cssClass="selBranchCode" id="selBranchCode" >
 						<option><spring:message code="prop.leave.app.dropdown.text"/></option>
-						<c:forEach items="${departments}" var="dept">
+						<c:forEach items="${branches}" var="branch">
 							<c:set value="" var="selct"/>
-							<c:if test="${employee.departmentCode==dept.deptCode}">
+							<c:if test="${employee.branchCode==branch.branchCode}">
 								<c:set value="selected" var="selct"/> 
 							</c:if>
-							<option value="${dept.deptCode}" ${selct}>
-								<c:out value="${dept.deptDesc}"/>
+							<option value="${branch.branchCode}" ${selct}>
+								<c:out value="${branch.branchDesc}"/>
 							</option>
 						</c:forEach>
 					</form:select>
+				<br>
+					<form:select path="department2" cssClass="selDeptCode2" id="selDeptCode2">
+						<option><spring:message code="prop.leave.app.dropdown.text"/></option>
+					</form:select>
+				<br>
+					<form:select path="section2" cssClass="selSectionCode2" id="selSectionCode2">
+						<option><spring:message code="prop.leave.app.dropdown.text"/></option>
+					</form:select>
+				<br>
+					<div id="divHod" class="divHod"></div>
+					
 				</td>
 			</tr>
 			<tr>

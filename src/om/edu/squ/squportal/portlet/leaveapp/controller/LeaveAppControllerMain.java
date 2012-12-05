@@ -147,6 +147,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("employee",employee );
 		model.addAttribute("addlPosition", leaveAppServiceDao.getAdditionalDesignation(employee.getEmpNumber(),locale));
 		model.addAttribute(Constants.CONST_OPERATION,Constants.CONST_OPERATION_ADD);
+		model.addAttribute("branches",leaveAppServiceDao.getBranches(locale));
 		model.addAttribute("departments",leaveAppServiceDao.getDepartments(employee.getBranchCode(),locale));
 		model.addAttribute("baseHierarchyEmp", Constants.CONST_EMPLOYEE_HIERARCHY_CODE);
 		
@@ -183,18 +184,17 @@ public class LeaveAppControllerMain
 
 		if(operation.equals(Constants.CONST_OPERATION_ADD))
 		{
-
 			try
 			{
 				allowEleaveRequestProc	=	leaveAppServiceDao.getAllowEleaveRequest(leaveAppModel,employee,locale);
 				logger.info("leave Request allow notification : "+ allowEleaveRequestProc.toString());
 				response.setRenderParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowEleaveRequestProc.getLeaveMessage());
 				response.setRenderParameter("action", "backToMain");
-				
 			}
 			catch (Exception ex)
 			{
-				logger.error("exception at leave request allow notification : "+ex.getStackTrace());
+				ex.printStackTrace();
+				logger.error("exception at leave request allow notification : "+ex.getMessage());
 			}
 			
 						logger.info("inside if ");

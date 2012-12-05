@@ -45,16 +45,20 @@ import javax.sql.DataSource;
 
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
+import om.edu.squ.squportal.portlet.leaveapp.bo.HoD;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveStatus;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
 import om.edu.squ.squportal.portlet.leaveapp.exception.DbNotAvailableException;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
+import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -478,6 +482,129 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	
 	/**
 	 * 
+	 * method name  : getDepartmentHead
+	 * @param branchCode
+	 * @param deptCode
+	 * @param locale
+	 * @return
+	 * LeaveDbDao
+	 * return type  : List<HoD>
+	 * 
+	 * purpose		: get department head id and name
+	 *
+	 * Date    		:	Dec 5, 2012 9:34:39 AM
+	 */
+	public List<HoD> getDepartmentHead(String branchCode, String deptCode,Locale locale)
+	{
+		RowMapper<HoD> mapper	=	new RowMapper<HoD>()
+		{
+			
+			public HoD mapRow(ResultSet rs, int rowNum) throws SQLException
+			{
+				HoD	hod		=	new HoD();
+				hod.setHodId(rs.getString(Constants.CONST_EMP_CODE));
+				hod.setHodName(
+						rs.getString(Constants.CONST_EMP_NAME)
+						+"<br>"+UtilProperty.getMessage("prop.leave.app.department.head", null)
+						+" "+UtilProperty.getMessage("prop.leave.app.level.no", new String[]{rs.getString(Constants.CONST_EMP_LEVEL)})
+							);
+				return hod;
+			}
+		};
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramBranchCode", branchCode);
+		namedParameters.put("paramDept", deptCode);
+		namedParameters.put("paramLocale", locale.getLanguage());
+		
+		logger.info("param HOD branch/Dept id : "+namedParameters);
+		logger.info("HOD SQL"+Constants.SQL_VIEW_DEPT_HEAD_ID);
+		
+		return this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_DEPT_HEAD_ID, namedParameters, mapper);
+	}
+	
+	/**
+	 * 
+	 * method name  : getSectionHead
+	 * @param branchCode
+	 * @param deptCode
+	 * @param sectCode
+	 * @param locale
+	 * @return
+	 * LeaveDbDao
+	 * return type  : List<HoD>
+	 * 
+	 * purpose		: get section head id and name 
+	 *
+	 * Date    		:	Dec 5, 2012 9:19:35 AM
+	 */
+	public List<HoD>	getSectionHead(String branchCode, String deptCode, String sectCode, Locale locale)
+	{
+		RowMapper<HoD> mapper = new RowMapper<HoD>()
+		{
+
+			public HoD mapRow(ResultSet rs, int rowNum) throws SQLException
+			{
+				HoD		hod		=	new HoD();
+						hod.setHodId(rs.getString(Constants.CONST_EMP_CODE));
+						hod.setHodName(rs.getString(Constants.CONST_EMP_NAME)
+								+"<br> "+UtilProperty.getMessage("prop.leave.app.section.head", null)
+								+" "+UtilProperty.getMessage("prop.leave.app.level.no", new String[]{rs.getString(Constants.CONST_EMP_LEVEL)})
+								);
+				return hod;		
+				
+			}
+			
+		};
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramBranchCode", branchCode);
+		namedParameters.put("paramDept", deptCode);
+		namedParameters.put("paramSectCode", sectCode);
+		namedParameters.put("paramLocale", locale.getLanguage());
+		
+		return this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_SECTION_HEAD_ID, namedParameters, mapper);
+		
+	}
+	
+	/**
+	 * 
+	 * method name  : getNextHeadBranch
+	 * @param branchCode
+	 * @param paramLevelAdd
+	 * @param locale
+	 * @return
+	 * LeaveDbDao
+	 * return type  : List<HoD>
+	 * 
+	 * purpose		: Get the head of the system from next hierarchy level (branch wise)
+	 *
+	 * Date    		:	Dec 5, 2012 8:29:35 AM
+	 */
+	public List<HoD> getNextHeadBranch(String branchCode, int paramLevelAdd, Locale locale)
+	{
+		RowMapper<HoD> 	mapper	=	new RowMapper<HoD>()
+		{
+			
+			public HoD mapRow(ResultSet rs, int rowNum) throws SQLException
+			{
+				HoD		hod		=	new HoD();
+				hod.setHodId(rs.getString(Constants.CONST_EMP_CODE));
+				hod.setHodName(rs.getString(Constants.CONST_EMP_NAME)
+						+ "<br> " +UtilProperty.getMessage("prop.leave.app.higher.head", null)
+						+" "+UtilProperty.getMessage("prop.leave.app.level.no", new String[]{rs.getString(Constants.CONST_EMP_LEVEL)})
+				);
+
+				return hod;
+			}
+		};
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramBranchCode", branchCode);
+		namedParameters.put("paramLevelAdd", String.valueOf(paramLevelAdd));
+		namedParameters.put("paramLocale", locale.getLanguage());
+		return this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_BRANCH_HEAD_NEXT_HIERARCHY, namedParameters, mapper);
+	}
+	
+	/**
+	 * 
 	 * method name  : setNewLeaveRequest
 	 * @param leaveRequest
 	 * @param delegatedEmps
@@ -493,6 +620,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	public synchronized int setNewLeaveRequest(LeaveRequest leaveRequest, DelegatedEmp[] delegatedEmps)
 	{
 		int			result					=	0;
+		String		hodId				=	null;
 		String		leaveRequestNo			=	String.valueOf(getLeaveRequestCounter());
 		Employee 	emp						=	leaveRequest.getEmployee();
 		LeaveType	leaveType				=	leaveRequest.getLeaveType();
@@ -530,10 +658,30 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramReqCreUserInit",Constants.USER_WEB);
 		namedParameters.put("paramLeaveTypeFlag",leaveRequest.getLeaveTypeFlag().getTypeNo());
 		//namedParameters.put("paramReqCreDate",);
+		try{
+			hodId	=	getDepartmentHead(emp.getBranch2Code(),emp.getDepartment2code(),Locale.ENGLISH).get(0).getHodId();
+		}
+		catch(Exception ex)
+		{
+			
+			hodId	=	getDepartmentHead(emp.getBranchCode(),emp.getDepartmentCode(),Locale.ENGLISH).get(0).getHodId();
+			logger.error("error in selected department :" +emp.getDepartment2code() +", therefore default department chosen. error : "+ex);
+			
+			System.out.println("error in department2 : "+ex);
+		}
+		namedParameters.put("paramHodId", hodId);
+		
+		
+		logger.info("request insert statement :" +Constants.SQL_INSERT_LEAVE_REQUEST);
+		logger.info("request insert param :" +namedParameters);
 		
 		result =  this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQUEST, namedParameters);
+
 		
-		setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps);
+		if(null != delegatedEmps)
+		{
+			setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps);
+		}
 		
 		return result;
 		
@@ -676,9 +824,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 		namedParameters.put("paramLocale", locale.getLanguage());
 		namedParameters.put("paramEmpNumber", employee.getEmpNumber());
-		namedParameters.put("paramHierarchy", employee.getHierarchyCode());
-		namedParameters.put("paramBranchCode", employee.getBranchCode());
-		namedParameters.put("paramDeptCode", employee.getDepartmentCode());
+//		namedParameters.put("paramHierarchy", employee.getHierarchyCode());
+//		namedParameters.put("paramBranchCode", employee.getBranchCode());
+//		namedParameters.put("paramDeptCode", employee.getDepartmentCode());
 		
 		List<LeaveRequest>	leaveRequests	=	this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_LEAVE_REQUEST, namedParameters, mapper);
 		
@@ -759,6 +907,40 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 	}
 	
+	/**
+	 * 
+	 * method name  : getBranches
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Branch>
+	 * 
+	 * purpose		: Get list of active branches
+	 *
+	 * Date    		:	Nov 24, 2012 2:07:46 PM
+	 */
+	public List<Branch>	getBranches(Locale locale)
+	{
+		RowMapper<Branch> mapper	=	new RowMapper<Branch>()
+		{
+			
+			public Branch mapRow(ResultSet rs, int rowNum) throws SQLException
+			{
+				Branch	branch		=	new Branch();
+				branch.setBranchCode(rs.getString(Constants.CONST_EMP_BRANCH_CODE));
+				branch.setBranchDesc(rs.getString(Constants.CONST_EMP_BRANCH));
+				return branch;
+			}
+		};
+		
+		
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramLocale", locale.getLanguage());
+		return this.namedParameterJdbcTemplate.query(Constants.SQL_BRANCH, namedParameters, mapper);
+	}
+	
+	
+	
 	
 	/**
 	 * 
@@ -792,6 +974,41 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramBranchCode", branchCode);
 		return this.namedParameterJdbcTemplate.query(Constants.SQL_DEPARTMENT, namedParameters, mapper);
 	}
+	
+	/**
+	 * 
+	 * method name  : getSections
+	 * @param departmentCode
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Section>
+	 * 
+	 * purpose		: get list of sections
+	 *
+	 * Date    		:	Nov 26, 2012 12:40:40 PM
+	 */
+	public List<Section> getSections(String departmentCode, Locale locale)
+	{
+		RowMapper<Section> mapper	=	new RowMapper<Section>()
+		{
+			
+			public Section mapRow(ResultSet rs, int rowNum) throws SQLException
+			{
+				Section	section		=	new Section();
+				section.setSectionCode(rs.getString(Constants.CONST_EMP_SECTION_CODE));
+				section.setSectionDesc(rs.getString(Constants.CONST_EMP_SECTION));
+				return section;
+			}
+		};
+		
+		
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramLocale", locale.getLanguage());
+		namedParameters.put("paramDept", departmentCode);
+		return this.namedParameterJdbcTemplate.query(Constants.SQL_SECTION, namedParameters, mapper);
+	}
+	
 	
 	/**
 	 * 
