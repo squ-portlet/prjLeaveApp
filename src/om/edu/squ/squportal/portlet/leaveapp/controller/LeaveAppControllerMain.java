@@ -44,11 +44,13 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
+import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
 import om.edu.squ.squportal.portlet.leaveapp.dao.db.LeaveDbDao;
 import om.edu.squ.squportal.portlet.leaveapp.dao.ldap.LdapDao;
 import om.edu.squ.squportal.portlet.leaveapp.dao.service.LeaveAppServiceDao;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
+import om.edu.squ.squportal.portlet.leaveapp.validator.LeaveAppValidator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,6 +114,8 @@ public class LeaveAppControllerMain
 		model.addAttribute("leaveRequests", leaveRequests);
 		model.addAttribute("empHierarchy", employee.getHierarchyCode());
 		model.addAttribute("empNumber", String.format("%07d", Integer.parseInt(empNumber)));
+		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
+		model.addAttribute("furtherClarification", Constants.CONST_LEAVE_STATUS_FURTHER_CLARIFICATION);
 		return Constants.PAGE_WELCOME;
 	}
 	
@@ -140,20 +144,25 @@ public class LeaveAppControllerMain
 			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
 			leaveAppModel.setAdminSqu(employee.isAdmin());
 			leaveAppModel.setPositionAdditional(employee.getDesignationAddlCode());
+			leaveAppModel.setOpMode(Constants.CONST_MODEL_MODE_INSERT);
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
+		model.addAttribute("empNumber", String.format("%07d", Integer.valueOf(employee.getEmpNumber())));
 		model.addAttribute("leaveTypeFlag",leaveAppServiceDao.getLeaveTypes(employee,locale) );
 		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
 		model.addAttribute("employee",employee );
 		model.addAttribute("addlPosition", leaveAppServiceDao.getAdditionalDesignation(employee.getEmpNumber(),locale));
 		model.addAttribute(Constants.CONST_OPERATION,Constants.CONST_OPERATION_ADD);
 		model.addAttribute("branches",leaveAppServiceDao.getBranches(locale));
+		model.addAttribute("branchesEmpno",leaveAppServiceDao.getBranches(employee.getEmpNumber(),locale));
 		model.addAttribute("departments",leaveAppServiceDao.getDepartments(employee.getBranchCode(),locale));
 		model.addAttribute("baseHierarchyEmp", Constants.CONST_EMPLOYEE_HIERARCHY_CODE);
-		
+		model.addAttribute("baseLevelEmp", Constants.CONST_EMPLOYEE_LEVEL);
+		model.addAttribute("opMode", Constants.CONST_MODEL_MODE_INSERT);
 		
 		return Constants.PAGE_LEAVE_APPLY_FORM;
 	}
+
 	
 	/**
 	 * 
@@ -172,38 +181,71 @@ public class LeaveAppControllerMain
 	 *
 	 * Date    		:	Sep 1, 2012 12:31:53 PM
 	 */
-	@RequestMapping (params="action=submitRequest")
-	private void submitLeave(@RequestParam("operation") String operation, ActionRequest request,
+	@RequestMapping (params="action=newApply")
+	private void submitLeave(
+			@RequestParam("operation") String operation,
+			@RequestParam("reqNum") String requestNo,
+			@RequestParam("leaveTypeNo") String leaveTypeNo,
+			ActionRequest request,
 			ActionResponse response, PortletRequest req, 
 			@ModelAttribute("leaveAppModel") LeaveAppModel leaveAppModel,
-			BindingResult result,Locale locale,Model model)
+			BindingResult result,Locale locale,Model model
+			)
 	{
 		PortletSession			session					=	request.getPortletSession();
 		Employee				employee				=	(Employee)session.getAttribute("employee");	
 		AllowEleaveRequestProc	allowEleaveRequestProc	=	null;
 
-		if(operation.equals(Constants.CONST_OPERATION_ADD))
+		new LeaveAppValidator().validate(leaveAppModel, result);
+		
+		logger.info("HOD value : "+leaveAppModel.getHod());
+		
+		if(result.hasErrors())
 		{
+			logger.warn("validation error : "+result.getAllErrors());
+			
+			response.setRenderParameter("action", "newApply");
+		}
+		else
+		{
+			
 			try
 			{
-				allowEleaveRequestProc	=	leaveAppServiceDao.getAllowEleaveRequest(leaveAppModel,employee,locale);
+				allowEleaveRequestProc	=	leaveAppServiceDao.getAllowEleaveRequest
+																	(
+																		requestNo,leaveTypeNo,
+																		leaveAppModel,employee, locale
+																	 );
 				logger.info("leave Request allow notification : "+ allowEleaveRequestProc.toString());
-				response.setRenderParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowEleaveRequestProc.getLeaveMessage());
-				response.setRenderParameter("action", "backToMain");
 			}
-			catch (Exception ex)
+			catch (ParseException ex)
 			{
+				// TODO Auto-generated catch block
 				ex.printStackTrace();
 				logger.error("exception at leave request allow notification : "+ex.getMessage());
 			}
+
+			if(operation.equals(Constants.CONST_OPERATION_ADD))
+			{
+					response.setRenderParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowEleaveRequestProc.getLeaveMessage());
+					response.setRenderParameter("action", "backToMain");
+					logger.info("inside if ");
+				//int dbResult	=	leaveAppServiceDao.setNewLeaveRequest(leaveAppModel,employee);
+				//logger.info("db result : "+dbResult);
+			}
+			else if(operation.equals(Constants.CONST_OPERATION_UPDATE))
+			{
+				//logger.info("model -- leave app model : "+leaveAppModel.toString());
+			}
 			
-						logger.info("inside if ");
-			//int dbResult	=	leaveAppServiceDao.setNewLeaveRequest(leaveAppModel,employee);
-			//logger.info("db result : "+dbResult);
 		}
 		
 	}
 
+	
+	
+	
+	
 	/**
 	 * 
 	 * method name  : leaveApplicationApprove
@@ -247,6 +289,23 @@ public class LeaveAppControllerMain
 		return Constants.PAGE_LEAVE_APPROVE_FORM;
 	}
 	
+	/**
+	 * 
+	 * method name  : leaveApplicationApprove
+	 * @param request
+	 * @param response
+	 * @param req
+	 * @param leaveAppModel
+	 * @param result
+	 * @param locale
+	 * @param model
+	 * LeaveAppControllerMain
+	 * return type  : void
+	 * 
+	 * purpose		: leave approve
+	 *
+	 * Date    		:	Dec 9, 2012 2:36:22 PM
+	 */
 	@RequestMapping(params="action=leaveApprove")
 	private void leaveApplicationApprove(
 			ActionRequest request,
@@ -257,6 +316,35 @@ public class LeaveAppControllerMain
 	{
 		Employee	employee	=	(Employee)request.getPortletSession().getAttribute("employee");
 		leaveAppServiceDao.setLeaveApprove(leaveAppModel, employee);
+	}
+	
+
+	/**
+	 * 
+	 * method name  : leaveAppAutoAdminAction
+	 * @param requestNo
+	 * @param actionNo
+	 * @param request
+	 * @param model
+	 * @param locale
+	 * @return
+	 * LeaveAppControllerMain
+	 * return type  : String
+	 * 
+	 * purpose		: action taken from grid itself
+	 *
+	 * Date    		:	Dec 10, 2012 10:29:16 AM
+	 */
+	@RequestMapping(params="action=leaveAutoAdminAction")
+	private String leaveAppAutoAdminAction(
+			@RequestParam("reqNum") String requestNo,
+			@RequestParam("appActionNum") String actionNo,
+			PortletRequest request, Model model, Locale locale
+			)
+	{
+		Employee	employee	=	(Employee)request.getPortletSession().getAttribute("employee");
+		leaveAppServiceDao.setLeaveApprove(requestNo, actionNo, locale, employee);
+		return  welcome(request,model,locale);
 	}
 	
 	
@@ -293,6 +381,63 @@ public class LeaveAppControllerMain
 		}
 		return welcome(request,model,locale);
 	}
+
+	
+	/**
+	 * 
+	 * method name  : updateLeaveApply
+	 * @param request
+	 * @param model
+	 * @param locale
+	 * @return
+	 * LeaveAppControllerMain
+	 * return type  : String
+	 * 
+	 * purpose		: 
+	 *
+	 * Date    		:	Dec 15, 2012 8:56:59 AM
+	 */
+	@RequestMapping(params="action=updateLeaveApply")
+	private	String updateLeaveApply(
+									@RequestParam("reqNum") String requestNo, 
+									PortletRequest request, Model model,Locale locale
+									)
+	{
+		PortletSession	session	=	request.getPortletSession();
+		Employee	employee	=	(Employee)session.getAttribute("employee");	
+		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(requestNo, locale);
+		
+		if(!model.containsAttribute("leaveAppModel"))
+		{
+			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
+			leaveAppModel.setAdminSqu(employee.isAdmin());
+			leaveAppModel.setPositionAdditional(employee.getDesignationAddlCode());
+			LeaveType		leaveTypeFlag	=	leaveRequest.getLeaveTypeFlag();
+			leaveAppModel.setLeaveTypeFlag(leaveTypeFlag.getTypeNo());
+			leaveAppModel.setLeaveStartDate(leaveRequest.getLeaveStartDate());
+			leaveAppModel.setLeaveEndDate(leaveRequest.getLeaveEndDate());
+			leaveAppModel.setHod(leaveRequest.getSuggestedHod());
+			leaveAppModel.setLeaveRemarks(leaveRequest.getLeaveRequestRemarks());
+			leaveAppModel.setOpMode(Constants.CONST_MODEL_MODE_UPDATE);
+			model.addAttribute("leaveAppModel",leaveAppModel );
+		}
+		model.addAttribute("leaveTypeFlag",leaveAppServiceDao.getLeaveTypes(employee,locale) );
+		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
+		model.addAttribute("employee",employee );
+		model.addAttribute("addlPosition", leaveAppServiceDao.getAdditionalDesignation(employee.getEmpNumber(),locale));
+		model.addAttribute(Constants.CONST_OPERATION,Constants.CONST_OPERATION_UPDATE);
+		model.addAttribute("branches",leaveAppServiceDao.getBranches(locale));
+		model.addAttribute("departments",leaveAppServiceDao.getDepartments(employee.getBranchCode(),locale));
+		model.addAttribute("baseHierarchyEmp", Constants.CONST_EMPLOYEE_HIERARCHY_CODE);
+		model.addAttribute("baseLevelEmp", Constants.CONST_EMPLOYEE_LEVEL);
+		model.addAttribute("opMode", Constants.CONST_MODEL_MODE_UPDATE);
+		
+		model.addAttribute("approver", leaveRequest.getApprove());
+		model.addAttribute("reqNum", requestNo);
+		model.addAttribute("leaveTypeNo", leaveRequest.getLeaveType().getTypeNo());
+		return Constants.PAGE_LEAVE_APPLY_FORM;
+	}
+	
 	
 	/**
 	 * 

@@ -100,8 +100,8 @@ public interface LeaveDbDao
 	/**
 	 * 
 	 * method name  : getEmployee
+	 * @param empNumber
 	 * @param branchCode
-	 * @param deptCode
 	 * @param locale
 	 * @return
 	 * LeaveDbDao
@@ -111,7 +111,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Sep 16, 2012 9:20:42 AM
 	 */
-	public List<Employee>	getEmployee(String branchCode, String deptCode,Locale locale);
+	public List<Employee>	getEmployee(String empNumber, String branchCode, Locale locale);
 	
 	/**
 	 * 
@@ -198,6 +198,7 @@ public interface LeaveDbDao
 	 * 
 	 * method name  : setNewLeaveRequest
 	 * @param leaveRequest
+	 * @param locale TODO
 	 * @return
 	 * LeaveDbDao
 	 * return type  : int
@@ -206,7 +207,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Sep 8, 2012 1:46:27 PM
 	 */
-	int setNewLeaveRequest(LeaveRequest leaveRequest,DelegatedEmp[] delegatedEmps);
+	int setNewLeaveRequest(LeaveRequest leaveRequest,DelegatedEmp[] delegatedEmps, Locale locale);
 	
 	/**
 	 * 
@@ -266,6 +267,21 @@ public interface LeaveDbDao
 	 * Date    		:	Nov 24, 2012 2:07:46 PM
 	 */
 	public List<Branch>	getBranches(Locale locale);
+	
+	/**
+	 * 
+	 * method name  : getBranches
+	 * @param empNumber
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Branch>
+	 * 
+	 * purpose		: get list of branch based on empno
+	 *
+	 * Date    		:	Dec 19, 2012 10:17:04 AM
+	 */
+	public List<Branch> getBranches (String empNumber, Locale locale);
 	
 	/**
 	 * 

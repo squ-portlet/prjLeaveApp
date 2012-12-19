@@ -40,7 +40,9 @@ public class DelegatedEmp
 	private	String	empNumber;
 	private	String	empInternetId;
 	private	String	empName;
+	private String	branchCode;
 	private	String	departmentCode;
+	
 	/**
 	 * Getter Method	: getFromDate
 	 * @return the fromDate
@@ -142,6 +144,26 @@ public class DelegatedEmp
 		this.empName = empName;
 	}
 	/**
+	 * Getter Method	: getBranchCode
+	 * @return the branchCode
+	 * 
+	 * Date				: Dec 19, 2012
+	 */
+	public String getBranchCode()
+	{
+		return this.branchCode;
+	}
+	/**
+	 * Setter method : setBranchCode
+	 * @param branchCode the branchCode to set
+	 * 
+	 * Date          : Dec 19, 2012 1:04:11 PM
+	 */
+	public void setBranchCode(String branchCode)
+	{
+		this.branchCode = branchCode;
+	}
+	/**
 	 * Getter Method	: getDepartmentCode
 	 * @return the departmentCode
 	 * 
@@ -173,7 +195,11 @@ public class DelegatedEmp
 				+ (this.toDate != null ? "toDate=" + this.toDate + ", " : "")
 				+ (this.empNumber != null ? "empNumber=" + this.empNumber
 						+ ", " : "")
+				+ (this.empInternetId != null ? "empInternetId="
+						+ this.empInternetId + ", " : "")
 				+ (this.empName != null ? "empName=" + this.empName + ", " : "")
+				+ (this.branchCode != null ? "branchCode=" + this.branchCode
+						+ ", " : "")
 				+ (this.departmentCode != null ? "departmentCode="
 						+ this.departmentCode : "") + "]";
 	}

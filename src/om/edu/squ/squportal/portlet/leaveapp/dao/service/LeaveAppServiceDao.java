@@ -115,9 +115,11 @@ public interface LeaveAppServiceDao
 	/**
 	 * 
 	 * method name  : getAllowEleaveRequest
+	 * @param requestNo
+	 * @param leaveTypeNo
 	 * @param leaveAppModel
-	 * @param employeeNo
 	 * @param locale
+	 * @param employeeNo
 	 * @return
 	 * LeaveAppServiceDao
 	 * return type  : AllowEleaveRequestProc
@@ -128,8 +130,9 @@ public interface LeaveAppServiceDao
 	 * @throws ParseException 
 	 */
 	public AllowEleaveRequestProc	getAllowEleaveRequest(
-			LeaveAppModel 	leaveAppModel,
-			Employee	employee, Locale locale) 
+			String requestNo,
+			String leaveTypeNo,
+			LeaveAppModel 	leaveAppModel, Employee	employee, Locale locale) 
 	throws ParseException;
 	
 	/**
@@ -209,6 +212,21 @@ public interface LeaveAppServiceDao
 	
 	/**
 	 * 
+	 * method name  : getBranches
+	 * @param empNumber
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Branch>
+	 * 
+	 * purpose		: get list of branch based on empno
+	 *
+	 * Date    		:	Dec 19, 2012 10:17:04 AM
+	 */
+	public List<Branch> getBranches (String empNumber, Locale locale);
+	
+	/**
+	 * 
 	 * method name  : getDepartments
 	 * @param branchCode
 	 * @return
@@ -250,4 +268,21 @@ public interface LeaveAppServiceDao
 	 * Date    		:	Oct 3, 2012 2:10:02 PM
 	 */
 	public int setLeaveApprove(LeaveAppModel 	leaveAppModel, Employee employee);
+	
+	/**
+	 * 
+	 * method name  : setLeaveApprove
+	 * @param requestNo
+	 * @param actionNo
+	 * @param locale
+	 * @param employee
+	 * @return
+	 * LeaveAppServiceDao
+	 * return type  : int
+	 * 
+	 * purpose		: Set leave approve
+	 *
+	 * Date    		:	Dec 10, 2012 10:27:07 AM
+	 */
+	public int setLeaveApprove(String requestNo, String actionNo, Locale locale,Employee employee);
 }

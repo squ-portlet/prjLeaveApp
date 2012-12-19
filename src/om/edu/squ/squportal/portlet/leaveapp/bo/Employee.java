@@ -47,10 +47,12 @@ public class Employee
 	private	String	gradeShort;
 	private	String	branchCode;
 	private	String	branch;
+	private	String	branchAddlCode;
 	private	String	branch2Code;
 	private	String	branch2;
 	private	String	departmentCode;
 	private	String	department;
+	private	String	departmentAddlCode;
 	private	String	department2code;												//	Department changed by employee
 	private	String	department2;
 	private	String	departmentShort;
@@ -59,13 +61,16 @@ public class Employee
 	private	String	joinDt;
 	private	String	jobTypeCode;
 	private	String	hierarchyCode;
+	private	String	hierarchyLevelCode;
+	private	String	hierarchyAddlCode;
+	private	String	hierarchyAddlLevelCode;
 	private	boolean	admin;
 	private	boolean	admin2;															//	Admin status changed by employee 
 	private	String	religionCode;
 	private	boolean	omani;
 	private	String	gender;
 	private	boolean	senior;															// employee or senior
-	
+	private	String	myHodId;														// Hod Id of the concerned employee
 	
 	public Employee(){}
 	
@@ -318,6 +323,28 @@ public class Employee
 		this.branch = branch;
 	}
 	/**
+	 * Getter Method	: getBranchAddlCode
+	 * @return the branchAddlCode
+	 * 
+	 * Date				: Dec 17, 2012
+	 */
+	public String getBranchAddlCode()
+	{
+		return this.branchAddlCode;
+	}
+
+	/**
+	 * Setter method : setBranchAddlCode
+	 * @param branchAddlCode the branchAddlCode to set
+	 * 
+	 * Date          : Dec 17, 2012 2:18:20 PM
+	 */
+	public void setBranchAddlCode(String branchAddlCode)
+	{
+		this.branchAddlCode = branchAddlCode;
+	}
+
+	/**
 	 * Getter Method	: getBranch2Code
 	 * @return the branch2Code
 	 * 
@@ -401,6 +428,28 @@ public class Employee
 	{
 		this.department = department;
 	}
+	/**
+	 * Getter Method	: getDepartmentAddlCode
+	 * @return the departmentAddlCode
+	 * 
+	 * Date				: Dec 17, 2012
+	 */
+	public String getDepartmentAddlCode()
+	{
+		return this.departmentAddlCode;
+	}
+
+	/**
+	 * Setter method : setDepartmentAddlCode
+	 * @param departmentAddlCode the departmentAddlCode to set
+	 * 
+	 * Date          : Dec 17, 2012 2:19:29 PM
+	 */
+	public void setDepartmentAddlCode(String departmentAddlCode)
+	{
+		this.departmentAddlCode = departmentAddlCode;
+	}
+
 	/**
 	 * Getter Method	: getDepartment2code
 	 * @return the department2code
@@ -566,6 +615,69 @@ public class Employee
 		this.hierarchyCode = hierarchyCode;
 	}
 	/**
+	 * Getter Method	: getHierarchyLevelCode
+	 * @return the hierarchyLevelCode
+	 * 
+	 * Date				: Dec 9, 2012
+	 */
+	public String getHierarchyLevelCode()
+	{
+		return this.hierarchyLevelCode;
+	}
+	/**
+	 * Setter method : setHierarchyLevelCode
+	 * @param hierarchyLevelCode the hierarchyLevelCode to set
+	 * 
+	 * Date          : Dec 9, 2012 1:06:58 PM
+	 */
+	public void setHierarchyLevelCode(String hierarchyLevelCode)
+	{
+		this.hierarchyLevelCode = hierarchyLevelCode;
+	}
+	/**
+	 * Getter Method	: getHierarchyAddlCode
+	 * @return the hierarchyAddlCode
+	 * 
+	 * Date				: Dec 11, 2012
+	 */
+	public String getHierarchyAddlCode()
+	{
+		return this.hierarchyAddlCode;
+	}
+	/**
+	 * Setter method : setHierarchyAddlCode
+	 * @param hierarchyAddlCode the hierarchyAddlCode to set
+	 * 
+	 * Date          : Dec 11, 2012 1:48:16 PM
+	 */
+	public void setHierarchyAddlCode(String hierarchyAddlCode)
+	{
+		this.hierarchyAddlCode = hierarchyAddlCode;
+	}
+
+	/**
+	 * Getter Method	: getHierarchyAddlLevelCode
+	 * @return the hierarchyAddlLevelCode
+	 * 
+	 * Date				: Dec 11, 2012
+	 */
+	public String getHierarchyAddlLevelCode()
+	{
+		return this.hierarchyAddlLevelCode;
+	}
+
+	/**
+	 * Setter method : setHierarchyAddlLevelCode
+	 * @param hierarchyAddlLevelCode the hierarchyAddlLevelCode to set
+	 * 
+	 * Date          : Dec 11, 2012 1:48:16 PM
+	 */
+	public void setHierarchyAddlLevelCode(String hierarchyAddlLevelCode)
+	{
+		this.hierarchyAddlLevelCode = hierarchyAddlLevelCode;
+	}
+
+	/**
 	 * Getter Method	: isAdmin
 	 * @return the admin
 	 * 
@@ -691,6 +803,27 @@ public class Employee
 	{
 		this.senior = senior;
 	}
+	/**
+	 * Getter Method	: getMyHodId
+	 * @return the myHodId
+	 * 
+	 * Date				: Dec 8, 2012
+	 */
+	public String getMyHodId()
+	{
+		return this.myHodId;
+	}
+
+	/**
+	 * Setter method : setMyHodId
+	 * @param myHodId the myHodId to set
+	 * 
+	 * Date          : Dec 8, 2012 8:53:02 AM
+	 */
+	public void setMyHodId(String myHodId)
+	{
+		this.myHodId = myHodId;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -741,6 +874,8 @@ public class Employee
 						+ ", " : "")
 				+ (this.hierarchyCode != null ? "hierarchyCode="
 						+ this.hierarchyCode + ", " : "")
+				+ (this.hierarchyLevelCode != null ? "hierarchyLevelCode="
+						+ this.hierarchyLevelCode + ", " : "")
 				+ "admin="
 				+ this.admin
 				+ ", admin2="
@@ -750,7 +885,8 @@ public class Employee
 						+ this.religionCode + ", " : "") + "omani="
 				+ this.omani + ", "
 				+ (this.gender != null ? "gender=" + this.gender + ", " : "")
-				+ "senior=" + this.senior + "]";
+				+ "senior=" + this.senior + ", "
+				+ (this.myHodId != null ? "myHodId=" + this.myHodId : "") + "]";
 	}
 	
 	

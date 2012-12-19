@@ -145,16 +145,18 @@
 		   	          '<spring:message code="prop.leave.app.title.request.leave.end.date"/>',
 		   	          '<spring:message code="prop.leave.app.title.request.leave.type"/>',
 		   	          '<spring:message code="prop.leave.app.title.request.status"/>',
-		   	          'employee'
+		   	          '<spring:message code="prop.leave.app.title.request.employee"/>',
+		   	          '<spring:message code="prop.leave.app.title.request.action"/>'
 		   	          ],
 		   	colModel:[
-		   		{name:'reqNo',index:'endDate'},
+		   		{name:'reqNo',width:90,index:'endDate'},
 		   		{name:'reqDate',index:'reqDate', align:"right"},
 		   		{name:'startDate',index:'startDate',  align:"right"},
 		   		{name:'endDate',index:'endDate', align:"right"},
 		   		{name:'type'},		
 		   		{name:'status'},
-		   		{name:'employee'}
+		   		{name:'employee'},
+		   		{name:'actions',width:200}
 		   	],
 		   	rowNum:10,
 		   	rowList:[10,20,30],
@@ -181,7 +183,7 @@
 						<c:choose>
 							<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
 												(!req.employee.senior && (req.employee.empNumber != empNumber))}">
-								reqNo:'<a href="${varLeaveApprove}"><c:out value="${req.requestNo}"/></a>',
+								reqNo:'<a href="${varLeaveApprove}"><font color="red"><c:out value="${req.requestNo}"/></font></a>',
 							</c:when>
 							<c:otherwise>
 								reqNo:'<c:out value="${req.requestNo}"/>',
@@ -192,17 +194,129 @@
 					 endDate:'<c:out value="${req.leaveEndDate}"/>',
 					 type:'<c:out value="${req.leaveType.typeDesc}"/>',
 					 status:'<c:out value="${req.leaveStatus}"/>',
-					 employee:'<c:out value="${req.employee.empNumber}"/> / <c:out value="${req.employee.empInternetId}"/>'
+					 employee:'<c:out value="${req.employee.empNumber}"/> / <c:out value="${req.employee.empInternetId}"/>',
+					<c:choose>
+						<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
+											(!req.employee.senior && (req.employee.empNumber != empNumber))}">
+						actions: '<c:forEach items="${adminActions}" var="admActions">'+
+									'<portlet:renderURL var="varLeaveAdminAction">'+
+									'   <portlet:param name="action" value="leaveAutoAdminAction"/>'+
+									'   <portlet:param name="reqNum" value="${req.requestNo}"/>'+
+									'   <portlet:param name="appActionNum" value="${admActions.actionCode}"/>'+
+									'</portlet:renderURL>'+
+									'<a href="${varLeaveAdminAction}"><c:out value="${admActions.actionDesc}"/></a>'+
+								'</c:forEach>'		
+						</c:when>
+						<c:when test="${(req.status.statusCode == furtherClarification)}">
+							<portlet:renderURL var="varLeaveClarification">
+								<portlet:param name="action" value="updateLeaveApply"/>
+								<portlet:param name="reqNum" value="${req.requestNo}"/>
+							</portlet:renderURL>
+							actions:'<a href="${varLeaveClarification}"><font color="red"><spring:message code="prop.leave.app.apply.action.update"/></font></a>'
+						</c:when>
+						<c:otherwise>
+						actions:'-'
+						</c:otherwise>
+					</c:choose>
+					
 					},
 				</c:forEach>
-	 
+	 			
 	      		];
 	$(function(){      		
 	for(var i=0;i<=mydata.length;i++)
 		$('#list2').jqGrid('addRowData',i+1,mydata[i]);
+		$('#backupDiv').remove();
 	});
 	
 	</script>
+
+<div id="backupDiv">
+<fieldset > 
+		<legend><spring:message code="javax.portlet.title"/></legend>
+
+ <table border="1" style="border:1px solid; margin: 1em; border-collapse: collapse;">
+ 	<tr>
+	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.no"/></th>
+	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.date"/></th>
+	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.start.date"/></th>
+	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
+	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
+	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.status"/></th>
+	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.employee"/></th>
+	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.action"/></th>
+ 	</tr>
+ 	<c:forEach items="${leaveRequests}" var="req" >
+		<portlet:renderURL var="varLeaveApprove">
+			<portlet:param name="action" value="leaveApprove"/>
+			<portlet:param name="reqNo" >
+			<jsp:attribute name="value">
+				<c:out value="${req.requestNo}"/>
+			</jsp:attribute>
+			</portlet:param>
+		</portlet:renderURL>
+		<tr>
+			<td>
+				<c:choose>
+					<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
+										(!req.employee.senior && (req.employee.empNumber != empNumber))}">
+						<a href="${varLeaveApprove}"><c:out value="${req.requestNo}"/></a>
+					</c:when>
+					<c:otherwise>
+						<c:out value="${req.requestNo}"/>
+					</c:otherwise>
+				</c:choose>
+			</td>
+			<td>
+				<c:out value="${req.requestDate}"/>
+			</td>
+			<td>
+				<c:out value="${req.leaveStartDate}"/>
+			</td>
+			<td>
+				<c:out value="${req.leaveEndDate}"/>
+			</td>
+			<td>
+				<c:out value="${req.leaveType.typeDesc}"/>
+			</td>
+			<td>
+				<c:out value="${req.leaveStatus}"/>
+			</td>
+			<td>
+				<c:out value="${req.employee.empNumber}"/> / <c:out value="${req.employee.empInternetId}"/>
+			</td>
+			<td>
+				<c:choose>
+					<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
+						(!req.employee.senior && (req.employee.empNumber != empNumber))}">
+						<c:forEach items="${adminActions}" var="admActions">
+							<portlet:renderURL var="varLeaveAdminAction">
+							   <portlet:param name="action" value="leaveAutoAdminAction"/>
+							   <portlet:param name="reqNum" value="${req.requestNo}"/>
+							   <portlet:param name="appActionNum" value="${admActions.actionCode}"/>
+							</portlet:renderURL>
+							<a href="${varLeaveAdminAction}"><c:out value="${admActions.actionDesc}"/></a>
+						</c:forEach>		
+					</c:when>
+					<c:when test="${(req.status.statusCode == furtherClarification)}">
+						<portlet:renderURL var="varLeaveClarification">
+							<portlet:param name="action" value="updateLeaveApply"/>
+							<portlet:param name="reqNum" value="${req.requestNo}"/>
+						</portlet:renderURL>
+							<a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a>
+					</c:when>
+					<c:otherwise>
+						-
+					</c:otherwise>
+				</c:choose>
+			</td>
+		</tr>
+ 	</c:forEach>
+ </table>
+ </fieldset>
+</div>
+
+
 </c:if>
 
 

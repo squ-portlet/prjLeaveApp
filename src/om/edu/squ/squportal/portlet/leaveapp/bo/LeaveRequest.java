@@ -51,6 +51,7 @@ public class LeaveRequest
 	private	String			leavePurpose;
 	private	boolean			leaveRequestActive;
 	private	String			leaveRequestRemarks;
+	private	String			suggestedHod;
 	/**
 	 * Getter Method	: getRequestNo
 	 * @return the requestNo
@@ -351,6 +352,26 @@ public class LeaveRequest
 	{
 		this.leaveRequestRemarks = leaveRequestRemarks;
 	}
+	/**
+	 * Getter Method	: getSuggestedHod
+	 * @return the suggestedHod
+	 * 
+	 * Date				: Dec 15, 2012
+	 */
+	public String getSuggestedHod()
+	{
+		return this.suggestedHod;
+	}
+	/**
+	 * Setter method : setSuggestedHod
+	 * @param suggestedHod the suggestedHod to set
+	 * 
+	 * Date          : Dec 15, 2012 10:03:27 AM
+	 */
+	public void setSuggestedHod(String suggestedHod)
+	{
+		this.suggestedHod = suggestedHod;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -379,13 +400,16 @@ public class LeaveRequest
 				+ (this.leaveTypeFlag != null ? "leaveTypeFlag="
 						+ this.leaveTypeFlag + ", " : "")
 				+ (this.status != null ? "status=" + this.status + ", " : "")
+				+ (this.approve != null ? "approve=" + this.approve + ", " : "")
 				+ (this.leavePurpose != null ? "leavePurpose="
 						+ this.leavePurpose + ", " : "")
 				+ "leaveRequestActive="
 				+ this.leaveRequestActive
 				+ ", "
 				+ (this.leaveRequestRemarks != null ? "leaveRequestRemarks="
-						+ this.leaveRequestRemarks : "") + "]";
+						+ this.leaveRequestRemarks + ", " : "")
+				+ (this.suggestedHod != null ? "suggestedHod="
+						+ this.suggestedHod : "") + "]";
 	}
 	
 	

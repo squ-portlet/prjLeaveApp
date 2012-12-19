@@ -59,6 +59,7 @@ public class LeaveAppModel
 	private	DelegatedEmp[]	delegatedEmps;
 	private	String			approverAction;										//	Action for approve, reject, return
 	private	String			approverRemark;
+	private	String			opMode;												//  mode for update/insert etc.
 	
 	/**
 	 * Getter Method	: getRequestNo
@@ -463,7 +464,26 @@ public class LeaveAppModel
 		this.approverRemark = approverRemark;
 	}
 	
-	
+	/**
+	 * Getter Method	: getOpMode
+	 * @return the opMode
+	 * 
+	 * Date				: Dec 15, 2012
+	 */
+	public String getOpMode()
+	{
+		return this.opMode;
+	}
+	/**
+	 * Setter method : setOpMode
+	 * @param opMode the opMode to set
+	 * 
+	 * Date          : Dec 15, 2012 12:41:29 PM
+	 */
+	public void setOpMode(String opMode)
+	{
+		this.opMode = opMode;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -508,7 +528,8 @@ public class LeaveAppModel
 				+ (this.approverAction != null ? "approverAction="
 						+ this.approverAction + ", " : "")
 				+ (this.approverRemark != null ? "approverRemark="
-						+ this.approverRemark : "") + "]";
+						+ this.approverRemark + ", " : "")
+				+ (this.opMode != null ? "opMode=" + this.opMode : "") + "]";
 	}
 	
 	

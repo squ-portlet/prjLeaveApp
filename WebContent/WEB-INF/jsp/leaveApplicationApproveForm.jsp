@@ -301,38 +301,40 @@ $(function(){
 					<td><c:out value="${leaveRequest.employee.joinDt}"/></td>
 				</tr>						
 			</table>
-			<table cellspacing="0" cellpadding="0" border="1" width="100%">
-				<caption>
-					<spring:message code="prop.leave.app.apply.form.delegated.employees"/>
-				</caption>
-				<tr>
-					<th class="PortletHeaderColor">
-						<span class="PortletHeaderText">
-							<spring:message code="prop.leave.app.apply.form.delegated.date.from"/>
-						</span>
-					</th>
-					<th class="PortletHeaderColor">
-						<span class="PortletHeaderText">
-							<spring:message code="prop.leave.app.apply.form.delegated.date.to"/>
-						</span>
-					</th>
-					<th class="PortletHeaderColor">
-						<span class="PortletHeaderText">
-							<spring:message code="prop.leave.app.apply.form.delegated.emp.code"/>
-						</span>
-					</th>
-				</tr>
-	<%-- 			<c:forEach var="i" begin="0" end="2" step="1"> --%>
-					<c:forEach items="${delegatedEmps}" var="delgEmp">
+			<c:if test="${not empty delegatedEmps}">
+				<table cellspacing="0" cellpadding="0" border="1" width="100%">
+					<caption>
+						<spring:message code="prop.leave.app.apply.form.delegated.employees"/>
+					</caption>
 					<tr>
-						<td><c:out value ="${delgEmp.fromDate}" /></td>
-						<td><c:out value ="${delgEmp.toDate}" /></td>
-						<td>
-						<c:out value ="${delgEmp.empInternetId}" /> / (<c:out value ="${delgEmp.empNumber}" />) - <c:out value ="${delgEmp.empName}" /> -
-						</td>
+						<th class="PortletHeaderColor">
+							<span class="PortletHeaderText">
+								<spring:message code="prop.leave.app.apply.form.delegated.date.from"/>
+							</span>
+						</th>
+						<th class="PortletHeaderColor">
+							<span class="PortletHeaderText">
+								<spring:message code="prop.leave.app.apply.form.delegated.date.to"/>
+							</span>
+						</th>
+						<th class="PortletHeaderColor">
+							<span class="PortletHeaderText">
+								<spring:message code="prop.leave.app.apply.form.delegated.emp.code"/>
+							</span>
+						</th>
 					</tr>
-				</c:forEach>
-			</table>
+		<%-- 			<c:forEach var="i" begin="0" end="2" step="1"> --%>
+						<c:forEach items="${delegatedEmps}" var="delgEmp">
+						<tr>
+							<td><c:out value ="${delgEmp.fromDate}" /></td>
+							<td><c:out value ="${delgEmp.toDate}" /></td>
+							<td>
+							<c:out value ="${delgEmp.empInternetId}" /> / (<c:out value ="${delgEmp.empNumber}" />) - <c:out value ="${delgEmp.empName}" /> -
+							</td>
+						</tr>
+					</c:forEach>
+				</table>
+			</c:if>
 			
 	<!-- 		<table cellspacing="0" cellpadding="0" border="1" width="100%"> -->
 	<!-- 			<tr> -->

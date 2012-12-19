@@ -9,8 +9,8 @@
  * FrameWork			:	Spring 3.1.0 (Annotation) Portlet
  * 
  * File Name			:	LeaveAppValidator.java
- * Package Name			:	om.edu.squ.squportal.portlet.leaveapp.controller
- * Date of creation		:	Oct 10, 2012  1:19:54 PM
+ * Package Name			:	om.edu.squ.squportal.portlet.leaveapp.validator
+ * Date of creation		:	Dec 8, 2012  9:41:28 AM
  * Date of modification :	
  * 
  * Summary				:	
@@ -27,16 +27,10 @@
  *
  * 
  */
-package om.edu.squ.squportal.portlet.leaveapp.controller;
+package om.edu.squ.squportal.portlet.leaveapp.validator;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -47,8 +41,6 @@ import org.springframework.validation.Validator;
 public class LeaveAppValidator implements Validator
 {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
 	public boolean supports(Class clazz)
 	{
 		return LeaveAppModel.class.equals(clazz);
@@ -56,13 +48,12 @@ public class LeaveAppValidator implements Validator
 
 	public void validate(Object obj, Errors err)
 	{
-	     Date currentDate = new Date();
-	     SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-	     
-	     LeaveAppModel	leaveAppModel	=	(LeaveAppModel)obj;
-	     DelegatedEmp[]	delegatedEmps	=	leaveAppModel.getDelegatedEmps();
-	     
-	     //for
+		LeaveAppModel	leaveAppModel	=	(LeaveAppModel) obj;
+		
+		if(null == leaveAppModel.getHod()|| leaveAppModel.getHod().trim().equals(""))
+		{
+			err.rejectValue("hod", "error.prop.leave.app.approver.na");
+		}
 		
 	}
 	

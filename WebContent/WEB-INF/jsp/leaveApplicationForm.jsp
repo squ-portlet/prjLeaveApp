@@ -144,14 +144,14 @@ $(function(){
 $(function() {
     var populateDropDowns = function() {
         var currentDropdown = $(this);
-        var branchCode="${employee.branchCode}";
-        var deptCode = $(this).val();
+        var branchCode=$(this).val();
+        var empNumber = "${empNumber}";
         $.ajax({
             type: "GET",
             //contentType: "application/json; charset=utf-8",
             //url:  '${servletLeave}&branchCode='+branchCode+'&deptCode='+deptCode,
             url:  "${servletLeave}",
-            data: 'branchCode='+branchCode+'&deptCode='+deptCode,
+            data: 'branchCode='+branchCode+'&empNumber='+empNumber,
             dataType: "json",
             success: function(data) {
                 var options = "<option value=' '><spring:message code="prop.leave.app.dropdown.text"/></option>"; 
@@ -166,8 +166,8 @@ $(function() {
         );
     };
 
-    $('select.selDeptCode').each(populateDropDowns);
-    $('select.selDeptCode').change(populateDropDowns);
+    $('select.selBranchCode').each(populateDropDowns);
+    $('select.selBranchCode').change(populateDropDowns);
 });
 
 /* get departments */
@@ -176,6 +176,10 @@ $(function() {
         var currentDropdown = $(this);
         var branchCode=$(this).val();
         var deptCode = "${employee.departmentCode}";
+        <c:if test="${opMode == 'u'}">
+        	var deptCode = "${approver.departmentCode}";
+        </c:if>
+        
         $('#selSectionCode2').empty().append("<option value=''><spring:message code="prop.leave.app.dropdown.text"/></option>");
         $(".divHod").html("HOD : ");
         $.ajax({
@@ -242,7 +246,7 @@ $(function() {
         var branchCode=$('select.selBranchCode').val();
         var deptCode = $('select.selDeptCode2').val();
         var sectionCode=$('select.selSectionCode2').val();
-        
+        var hodId="${leaveAppModel.hod}";
         $.ajax({
             type: "GET",
 //             contentType: "application/json; charset=utf-8",
@@ -251,9 +255,13 @@ $(function() {
             dataType: "json",
             success: function(data) {
 			var  dataHtml = '';
+			
 		    for (index in data) {
 		    	 var hod = data[index];
-		    	 dataHtml += "<input type='radio' name='hod'  value='"+hod.hodId+"'/> " +hod.hodName+ "<br>"; 
+		    	 var selct = '';
+		    	 
+		    	 if (hod.hodId==hodId) selct=' checked ';
+			    	 dataHtml += "<input type='radio' name='hod'  value='"+hod.hodId+"'"+ selct + "/> " +hod.hodName+ "<br>"; 
 		    }
 		    $(".divHod").html(dataHtml);
             }
@@ -283,23 +291,23 @@ $(function() {
 
 </script>
 
-
-
 </head>
 
 <portlet:actionURL var="submitRequest">
-	<portlet:param name="action" value="submitRequest"/>
+	<portlet:param name="action" value="newApply"/>
 		<portlet:param name="operation">
 		<jsp:attribute name="value">
 			<c:out value="${operation}"/>
 		</jsp:attribute>
 	</portlet:param>
+	<portlet:param name="reqNum" value = "${reqNum}"/>
+	<portlet:param name="leaveTypeNo" value="${leaveTypeNo}"/>
 </portlet:actionURL>
 
 <portlet:renderURL var="backToMain">
 	<portlet:param name="action" value="backToMain"/>
 </portlet:renderURL>
-
+request no : <c:out value="${requestNo}"/>
 
 <div >
 	<a class="button" style="width: 100 px; " href="${backToMain}">
@@ -341,7 +349,7 @@ $(function() {
 						<spring:message code="prop.leave.app.apply.form.leave.type"/>:
 					</span>
 				</th>
-				<td >
+				<td style="vertical-align: top;">
 					<form:select path="leaveTypeFlag">
 						<form:option value="">Select</form:option>
 						<form:options items="${leaveTypeFlag}" itemLabel="typeDesc" itemValue="typeNo"/>
@@ -350,7 +358,7 @@ $(function() {
 				<td>&nbsp;</td>
 				<th class="PortletHeaderColor">
 					<span class="PortletHeaderText">
-						<spring:message code="prop.leave.app.apply.form.requester.office"/>
+						<spring:message code="prop.leave.app.apply.form.requester.approver.selection"/>
 					</span>
 				</th>
 				<td >
@@ -358,9 +366,18 @@ $(function() {
 						<option><spring:message code="prop.leave.app.dropdown.text"/></option>
 						<c:forEach items="${branches}" var="branch">
 							<c:set value="" var="selct"/>
-							<c:if test="${employee.branchCode==branch.branchCode}">
-								<c:set value="selected" var="selct"/> 
-							</c:if>
+							<c:choose>
+								<c:when test='${opMode=="u"}'>
+									<c:if test="${approver.branchCode==branch.branchCode}">
+										<c:set value="selected" var="selct"/> 
+									</c:if>
+								</c:when>
+								<c:otherwise>
+									<c:if test="${employee.branchCode==branch.branchCode}">
+										<c:set value="selected" var="selct"/> 
+									</c:if>
+								</c:otherwise>
+							</c:choose>
 							<option value="${branch.branchCode}" ${selct}>
 								<c:out value="${branch.branchDesc}"/>
 							</option>
@@ -375,7 +392,7 @@ $(function() {
 						<option><spring:message code="prop.leave.app.dropdown.text"/></option>
 					</form:select>
 				<br>
-					<div id="divHod" class="divHod"></div>
+					<div id="divHod" class="divHod"></div><form:errors path="hod"  cssClass="error"/>
 					
 				</td>
 			</tr>
@@ -404,7 +421,7 @@ $(function() {
 			</tr>
 		</table>
 		<p/>
-		<c:if test="${employee.hierarchyCode != baseHierarchyEmp}" >		
+		<c:if test="${(employee.hierarchyLevelCode != baseLevelEmp) || (not empty (employee.hierarchyAddlLevelCode) != baseLevelEmp)}" >		
 		<table cellspacing="0" cellpadding="0" border="1" width="100%">
 			<caption><spring:message code="prop.leave.app.apply.form.required.details.other"/></caption>
 <!-- 			<tr> -->
@@ -491,15 +508,15 @@ $(function() {
 							</form:select>
 						</td>
 						<td>
-							<form:select path="delegatedEmps[${i}].departmentCode" cssClass="selDeptCode" id="selDeptCode">
+							<form:select path="delegatedEmps[${i}].branchCode" cssClass="selBranchCode" id="selBranchCode">
 								<option><spring:message code="prop.leave.app.dropdown.text"/></option>
-								<c:forEach items="${departments}" var="dept">
+								<c:forEach items="${branchesEmpno}" var="brn">
 									<c:set value="" var="selct"/>
-									<c:if test="${employee.departmentCode==dept.deptCode}">
+									<c:if test="${employee.branchCode==brn.branchCode}">
 										<c:set value="selected" var="selct"/> 
 									</c:if>
-									<option value="${dept.deptCode}" ${selct}>
-										<c:out value="${dept.deptDesc}"/>
+									<option value="${brn.branchCode}" ${selct}>
+										<c:out value="${brn.branchDesc}"/>
 									</option>
 								</c:forEach>
 	

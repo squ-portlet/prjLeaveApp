@@ -72,12 +72,15 @@ public class LeaveAppEmpServlet extends HttpServlet {
 		logger.info("logger inside emp servlet");
 		System.out.println("logger inside emp servlet");
 		
+		String			empNumber		=	request.getParameter("empNumber");
 		String			branchCode	=	request.getParameter("branchCode");
-		String			deptCode	=	request.getParameter("deptCode");
+		
+		//String			deptCode	=	request.getParameter("deptCode");
+		
 		Locale			locale		=	request.getLocale();			
 		
 		LeaveDbDao		leaveDbDao	=	new LeaveDbDaoImpl(datasource);
-		List<Employee>	employees	=	leaveDbDao.getEmployee(branchCode, deptCode, locale);
+		List<Employee>	employees	=	leaveDbDao.getEmployee(empNumber,branchCode,locale);
 		Gson gson = new Gson();
 		
 		String	strJson	=	gson.toJson(employees);

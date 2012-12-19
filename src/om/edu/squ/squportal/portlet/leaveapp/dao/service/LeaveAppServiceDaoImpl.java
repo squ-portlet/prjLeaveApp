@@ -51,6 +51,7 @@ import om.edu.squ.squportal.portlet.leaveapp.dao.db.LeaveDbDao;
 import om.edu.squ.squportal.portlet.leaveapp.dao.ldap.LdapDao;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
+import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
 
 /**
  * @author Bhabesh
@@ -150,9 +151,11 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	/**
 	 * 
 	 * method name  : getAllowEleaveRequest
+	 * @param requestNo 
+	 * @param leaveTypeNo
 	 * @param leaveAppModel
-	 * @param employeeNo
 	 * @param locale
+	 * @param employeeNo
 	 * @return
 	 * @throws ParseException
 	 * LeaveAppServiceDaoImpl
@@ -163,7 +166,9 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 * Date    		:	Sep 29, 2012 11:04:01 AM
 	 */
 	public synchronized AllowEleaveRequestProc	getAllowEleaveRequest(
-														LeaveAppModel 	leaveAppModel,
+														String requestNo,
+														String leaveTypeNo, 
+														LeaveAppModel 	leaveAppModel, 
 														Employee	employee, Locale locale
 														) 
 	throws ParseException
@@ -181,9 +186,10 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 
 		employee.setBranch2Code(leaveAppModel.getBranch2());
 		employee.setDepartment2code(leaveAppModel.getDepartment2());
-		
+		employee.setMyHodId(leaveAppModel.getHod());
 		leaveTypeFlag.setTypeNo(leaveAppModel.getLeaveTypeFlag());
 		
+		leaveRequest.setRequestNo(requestNo);
 		leaveRequest.setLeaveTypeFlag(leaveTypeFlag);
 		leaveRequest.setEmployee(employee);
 		leaveRequest.setLeaveStartDate(leaveAppModel.getLeaveStartDate());
@@ -192,13 +198,23 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		leaveRequest.setLeaveStatus(Constants.CONST_LEAVE_STATUS_WAITING_APPV);
 		
 		logger.info("leaveRequest : "+leaveRequest);
-		allowEleaveRequestProc	=	leaveDbDao.getAllowEleaveRequest(leaveRequest, locale);
+		if (null == requestNo || requestNo.trim().equals(""))
+		{
+			allowEleaveRequestProc	=	leaveDbDao.getAllowEleaveRequest(leaveRequest, locale);
+		}
+		else //TODO for existing leaves
+		{
+			//TODO -- This feature is in test mode
+			allowEleaveRequestProc	=	new AllowEleaveRequestProc();
+			allowEleaveRequestProc.setAcceptLeave(true);
+			allowEleaveRequestProc.setLeaveCode(leaveTypeNo);
+		}
 		
 		if(allowEleaveRequestProc.isAcceptLeave())
 		{
 			leaveType.setTypeNo(allowEleaveRequestProc.getLeaveCode());
 			leaveRequest.setLeaveType(leaveType);
-			leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps());
+			leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps(), null);
 		}
 		
 		return allowEleaveRequestProc;
@@ -295,6 +311,25 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	
 	/**
 	 * 
+	 * method name  : getBranches
+	 * @param empNumber
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Branch>
+	 * 
+	 * purpose		: get list of branch based on empno
+	 *
+	 * Date    		:	Dec 19, 2012 10:17:04 AM
+	 */
+	public List<Branch> getBranches (String empNumber, Locale locale)
+	{
+		empNumber = String.format("%07d", Integer.valueOf(empNumber));
+		return leaveDbDao.getBranches(empNumber, locale);
+	}
+	
+	/**
+	 * 
 	 * method name  : getDepartments
 	 * @param branchCode
 	 * @return
@@ -350,6 +385,38 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		approve.setApproverRemark(leaveAppModel.getApproverRemark());
 		approve.setEmployee(employee);
 		
+		return leaveDbDao.setLeaveApprove(approve);
+	}
+	
+	/**
+	 * 
+	 * method name  : setLeaveApprove
+	 * @param requestNo
+	 * @param actionNo
+	 * @param locale
+	 * @param employee
+	 * @return
+	 * LeaveAppServiceDao
+	 * return type  : int
+	 * 
+	 * purpose		: Set leave approve
+	 *
+	 * Date    		:	Dec 10, 2012 10:27:07 AM
+	 */
+	public int setLeaveApprove(String requestNo, String actionNo, Locale locale,Employee employee)
+	{
+		LeaveApprove	approve	=	new LeaveApprove();
+		employee.setEmpNumber(String.format("%07d", Integer.valueOf(employee.getEmpNumber())));
+		approve.setRequestNo(requestNo);
+		approve.setApproverAction(actionNo);
+		approve.setApproverRemark(
+				UtilProperty.getMessage(
+											"prop.leave.app.apply.form.approvar.auto.remarks", 
+											null, 
+											locale
+										)
+								);
+		approve.setEmployee(employee);
 		return leaveDbDao.setLeaveApprove(approve);
 	}
 	

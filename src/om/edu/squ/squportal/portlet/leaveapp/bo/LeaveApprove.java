@@ -37,6 +37,9 @@ public class LeaveApprove
 {
 	private		String		requestNo;
 	private		Employee	employee;
+	private		String		branchCode;
+	private		String		departmentCode;
+	private		String		sectionCode;
 	private		String		approverAction;
 	private		String		approverRemark;
 	/**
@@ -78,6 +81,66 @@ public class LeaveApprove
 	public void setEmployee(Employee employee)
 	{
 		this.employee = employee;
+	}
+	/**
+	 * Getter Method	: getBranchCode
+	 * @return the branchCode
+	 * 
+	 * Date				: Dec 15, 2012
+	 */
+	public String getBranchCode()
+	{
+		return this.branchCode;
+	}
+	/**
+	 * Setter method : setBranchCode
+	 * @param branchCode the branchCode to set
+	 * 
+	 * Date          : Dec 15, 2012 12:26:38 PM
+	 */
+	public void setBranchCode(String branchCode)
+	{
+		this.branchCode = branchCode;
+	}
+	/**
+	 * Getter Method	: getDepartmentCode
+	 * @return the departmentCode
+	 * 
+	 * Date				: Dec 15, 2012
+	 */
+	public String getDepartmentCode()
+	{
+		return this.departmentCode;
+	}
+	/**
+	 * Setter method : setDepartmentCode
+	 * @param departmentCode the departmentCode to set
+	 * 
+	 * Date          : Dec 15, 2012 12:26:38 PM
+	 */
+	public void setDepartmentCode(String departmentCode)
+	{
+		this.departmentCode = departmentCode;
+	}
+	/**
+	 * Getter Method	: getSectionCode
+	 * @return the sectionCode
+	 * 
+	 * Date				: Dec 15, 2012
+	 */
+	public String getSectionCode()
+	{
+		return this.sectionCode;
+	}
+	/**
+	 * Setter method : setSectionCode
+	 * @param sectionCode the sectionCode to set
+	 * 
+	 * Date          : Dec 15, 2012 12:26:38 PM
+	 */
+	public void setSectionCode(String sectionCode)
+	{
+		this.sectionCode = sectionCode;
 	}
 	/**
 	 * Getter Method	: getApproverAction

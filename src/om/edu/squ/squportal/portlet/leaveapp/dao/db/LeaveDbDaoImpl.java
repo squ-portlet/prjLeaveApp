@@ -257,13 +257,18 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				employee.setGradeShort(rs.getString(Constants.CONST_EMP_GRADE_SHORT));
 				employee.setBranchCode(rs.getString(Constants.CONST_EMP_BRANCH_CODE));
 				employee.setBranch(rs.getString(Constants.CONST_EMP_BRANCH));
+				employee.setBranchAddlCode(rs.getString(Constants.CONST_EMP_BRANCH_ADDL_CODE));
 				employee.setDepartmentCode(rs.getString(Constants.CONST_EMP_DEPARTMENT_CODE));
 				employee.setDepartment(rs.getString(Constants.CONST_EMP_DEPARTMENT));
+				employee.setDepartmentAddlCode(rs.getString(Constants.CONST_EMP_DEPARTMENT_ADDL_CODE));
 				employee.setDepartmentShort(rs.getString(Constants.CONST_EMP_DEPARTMENT_SHORT));
 				employee.setSectionCode(rs.getString(Constants.CONST_EMP_SECTION_CODE));
 				employee.setSection(rs.getString(Constants.CONST_EMP_SECTION));
 				employee.setJoinDt(rs.getString(Constants.CONST_EMP_JOIN_DATE));
 				employee.setHierarchyCode(rs.getString(Constants.CONST_EMP_HIERARCHY_CODE));
+				employee.setHierarchyLevelCode(rs.getString(Constants.CONST_EMP_LEVEL));
+				employee.setHierarchyAddlCode(rs.getString(Constants.CONST_EMP_ADDL_HIERARCHY_CODE));
+				employee.setHierarchyAddlLevelCode(rs.getString(Constants.CONST_EMP_ADDL_LEVEL));
 				if(rs.getString(Constants.CONST_EMP_ADMIN.toUpperCase()).equals("Y"))
 				{
 					employee.setAdmin(true);
@@ -288,6 +293,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		Map<String,String> namedParameters = new HashMap<String,String>();
 		namedParameters.put("paramLocale", locale.getLanguage());
 		namedParameters.put("paramEmpNumber", empNumber);
+	
+		logger.info("employee param : "+namedParameters);
+		logger.info("employee sql : "+Constants.SQL_EMPLOYEE);
 		
 		return this.namedParameterJdbcTemplate.queryForObject(Constants.SQL_EMPLOYEE, namedParameters, mapper);
 		
@@ -296,8 +304,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	/**
 	 * 
 	 * method name  : getEmployee
+	 * @param empNumber
 	 * @param branchCode
-	 * @param deptCode
 	 * @param locale
 	 * @return
 	 * LeaveDbDaoImpl
@@ -307,29 +315,70 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Sep 16, 2012 9:05:32 AM
 	 */
-	public List<Employee>	getEmployee(String branchCode, String deptCode,Locale locale)
+	public List<Employee>	getEmployee(String empNumber, String branchCode,  Locale locale )
 	{
-		RowMapper<Employee> mapper	=	new RowMapper<Employee>()
+		String			deptCode		=	null;
+		String			empLevelCode	=	null;
+		int 			intEmpLevelCode	=	0;		
+		List<Employee>	lstEmployees	=	null;
+		try
 		{
-
-			public Employee mapRow(ResultSet rs, int rowNum)
-					throws SQLException
+			Employee	employee	=	getEmployee(empNumber);
+			if(employee.getBranchCode().equals(branchCode))
 			{
-				
-				Employee	employee	=	new Employee();
-				employee.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
-				employee.setEmpName(rs.getString(Constants.CONST_EMP_NAME));
-				
-				return employee;
+				deptCode		=	employee.getDepartmentCode();
+				empLevelCode	=	employee.getHierarchyLevelCode();
 			}
-		};
+			else if(employee.getBranchAddlCode().equals(branchCode))
+			{
+				empLevelCode	=	employee.getHierarchyAddlLevelCode();
+			}
+			
+			intEmpLevelCode	=	Integer.parseInt(empLevelCode);
+			
+			RowMapper<Employee> mapper	=	new RowMapper<Employee>()
+			{
+				public Employee mapRow(ResultSet rs, int rowNum)
+						throws SQLException
+				{
+					
+					Employee	employee	=	new Employee();
+					employee.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
+					employee.setEmpName(rs.getString(Constants.CONST_EMP_NAME));
+					
+					return employee;
+				}
+			};
+			
+			for (int i=intEmpLevelCode+1; i<=Integer.parseInt(Constants.CONST_EMPLOYEE_LEVEL);i++)
+			{
+				Map<String,String> namedParameters = new HashMap<String,String>();
+				namedParameters.put("paramLocale", locale.getLanguage());
+				namedParameters.put("paramBranchCode", branchCode);
+				namedParameters.put("paramDept", deptCode);
+				namedParameters.put("paramLevel", String.valueOf(i));
+				try
+				{
+					lstEmployees	=	this.namedParameterJdbcTemplate.query(Constants.SQL_EMP_BRANCH_DEPT_SHORT, namedParameters, mapper);
+					if(lstEmployees.size() != 0)
+					{
+						break;
+					}
+				}
+				catch(Exception ex)
+				{
+					logger.info("no emp data found for level : '"+i+"'; error : "+ex);
+				}
+
+			}
+		}
+		catch(Exception ex)
+		{
+			logger.info("Error generated: can not fetch employee list");
+		}
 		
-		Map<String,String> namedParameters = new HashMap<String,String>();
-		namedParameters.put("paramLocale", locale.getLanguage());
-		namedParameters.put("paramBranchCode", branchCode);
-		namedParameters.put("paramDept", deptCode);
 		
-		return	this.namedParameterJdbcTemplate.query(Constants.SQL_EMP_BRANCH_DEPT_SHORT, namedParameters, mapper);
+		return	lstEmployees;
 		
 	}
 	
@@ -608,6 +657,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 * method name  : setNewLeaveRequest
 	 * @param leaveRequest
 	 * @param delegatedEmps
+	 * @param locale
 	 * @return
 	 * LeaveDbDaoImpl
 	 * return type  : int
@@ -617,11 +667,19 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 * Date    		:	Sep 10, 2012 2:47:24 PM
 	 */
 	@Transactional("trLeaveReq")
-	public synchronized int setNewLeaveRequest(LeaveRequest leaveRequest, DelegatedEmp[] delegatedEmps)
+	public synchronized int setNewLeaveRequest(LeaveRequest leaveRequest, DelegatedEmp[] delegatedEmps, Locale locale )
 	{
 		int			result					=	0;
-		String		hodId				=	null;
-		String		leaveRequestNo			=	String.valueOf(getLeaveRequestCounter());
+		String		leaveRequestNo			=	null;
+		if (null == leaveRequest.getRequestNo() || leaveRequest.getRequestNo().trim().equals(""))
+		{
+			leaveRequestNo			=	String.valueOf(getLeaveRequestCounter());
+		}
+		else
+		{
+			leaveRequestNo			=	leaveRequest.getRequestNo();
+		}
+		
 		Employee 	emp						=	leaveRequest.getEmployee();
 		LeaveType	leaveType				=	leaveRequest.getLeaveType();
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
@@ -655,32 +713,37 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramHierarchyCode",emp.getHierarchyCode());
 		namedParameters.put("paramIsReqActive",Constants.CONST_LEAVE_REQ_ACTIVE_TRUE);
 		namedParameters.put("paramReqRemarks",leaveRequest.getLeaveRequestRemarks());
-		namedParameters.put("paramReqCreUserInit",Constants.USER_WEB);
+		namedParameters.put("paramReqUserInit",Constants.USER_WEB);
 		namedParameters.put("paramLeaveTypeFlag",leaveRequest.getLeaveTypeFlag().getTypeNo());
 		//namedParameters.put("paramReqCreDate",);
-		try{
-			hodId	=	getDepartmentHead(emp.getBranch2Code(),emp.getDepartment2code(),Locale.ENGLISH).get(0).getHodId();
-		}
-		catch(Exception ex)
-		{
-			
-			hodId	=	getDepartmentHead(emp.getBranchCode(),emp.getDepartmentCode(),Locale.ENGLISH).get(0).getHodId();
-			logger.error("error in selected department :" +emp.getDepartment2code() +", therefore default department chosen. error : "+ex);
-			
-			System.out.println("error in department2 : "+ex);
-		}
-		namedParameters.put("paramHodId", hodId);
+		
+		namedParameters.put("paramHodId", emp.getMyHodId());
 		
 		
 		logger.info("request insert statement :" +Constants.SQL_INSERT_LEAVE_REQUEST);
 		logger.info("request insert param :" +namedParameters);
 		
-		result =  this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQUEST, namedParameters);
+		if(null == leaveRequest.getRequestNo() || leaveRequest.getRequestNo().trim().equals("") )
+		{
+			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQUEST, namedParameters);
+		}
+		else
+		{
+			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_REQUEST, namedParameters);
+			LeaveApprove	approve		=	new LeaveApprove();
+			Employee		employee	=	new Employee();
+			employee.setEmpNumber(emp.getMyHodId());
+			approve.setEmployee(employee);
+			approve.setRequestNo(leaveRequestNo);
+			approve.setApproverRemark(UtilProperty.getMessage("prop.leave.app.apply.form.approvar.auto.remarks2", null, locale));
+			
+			setLeaveApprove(approve);
+		}
 
 		
 		if(null != delegatedEmps)
 		{
-			setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps);
+			setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps,emp.getEmpNumber());
 		}
 		
 		return result;
@@ -729,18 +792,18 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	
 	
 	/**
-	 * 
 	 * method name  : setNewLeaveDelegationRequest
 	 * @param requestNo
 	 * @param delegatedEmps
+	 * @param orginEmpNumber
 	 * LeaveDbDaoImpl
 	 * return type  : void
 	 * 
-	 * purpose		: 
+	 * purpose		: set delegation
 	 *
-	 * Date    		:	Sep 10, 2012 2:42:53 PM
+	 * Date    		:	Dec 8, 2012 12:44:31 PM
 	 */
-	private	void	setNewLeaveDelegationRequest(String requestNo, DelegatedEmp[] delegatedEmps)
+	private	void	setNewLeaveDelegationRequest(String requestNo, DelegatedEmp[] delegatedEmps,String orginEmpNumber )
 	{
 		logger.info("delegated employees length: "+delegatedEmps.length);
 		try
@@ -763,6 +826,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					namedParameters.put("paramDelFromDate",delEmp.getFromDate());
 					namedParameters.put("paramDelToDate",delEmp.getToDate());
 					namedParameters.put("paramDelCreUser",Constants.USER_WEB);
+					namedParameters.put("paramOriginEmpCode",orginEmpNumber);
+					logger.info("delegated param : "+namedParameters);
 					
 					this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQ_DELEGATION, namedParameters);
 				}
@@ -795,6 +860,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			{
 				LeaveRequest	leaveRequest	=	new LeaveRequest();
 				LeaveType		leaveType		=	new LeaveType();
+				LeaveStatus		leaveStatus		=	new LeaveStatus();
 				Employee		employee		=	new	Employee();
 				
 				leaveRequest.setRequestNo(rs.getString(Constants.CONST_LEAVE_REQUEST_NO));
@@ -805,6 +871,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveType.setTypeDesc(rs.getString(Constants.CONST_LEAVE_DESC));
 				leaveRequest.setLeaveType(leaveType);
 				leaveRequest.setLeaveStatus(rs.getString(Constants.CONST_LEAVE_STATUS));
+					leaveStatus.setStatusCode(rs.getString(Constants.CONST_LEAVE_STATUS_CODE));
+					leaveStatus.setStatusDesc(rs.getString(Constants.CONST_LEAVE_STATUS));
+				leaveRequest.setStatus(leaveStatus);
 					employee.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
 					employee.setEmpInternetId(rs.getString(Constants.CONST_EMP_INTERNET_ID));
 					employee.setHierarchyCode(rs.getString(Constants.CONST_EMP_HIERARCHY_CODE));
@@ -824,9 +893,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 		namedParameters.put("paramLocale", locale.getLanguage());
 		namedParameters.put("paramEmpNumber", employee.getEmpNumber());
-//		namedParameters.put("paramHierarchy", employee.getHierarchyCode());
-//		namedParameters.put("paramBranchCode", employee.getBranchCode());
-//		namedParameters.put("paramDeptCode", employee.getDepartmentCode());
+		namedParameters.put("paramLevel", employee.getHierarchyLevelCode());
+
 		
 		List<LeaveRequest>	leaveRequests	=	this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_LEAVE_REQUEST, namedParameters, mapper);
 		
@@ -861,6 +929,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				LeaveRequest	leaveRequest	=	new LeaveRequest();
 				LeaveStatus		leaveStatus		=	new LeaveStatus();
 				LeaveType		leaveType		=	new LeaveType();
+				LeaveType		leaveTypeFlag	=	new LeaveType();
 				Employee		employee		=	new	Employee();
 				LeaveApprove	approve			=	new LeaveApprove();
 					leaveRequest.setRequestNo(rs.getString(Constants.CONST_LEAVE_REQUEST_NO));
@@ -872,7 +941,10 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveRequest.setLeaveEndDate(rs.getString(Constants.CONST_LEAVE_END_DATE));
 						leaveType.setTypeNo(rs.getString(Constants.CONST_LEAVE_TYPE));
 						leaveType.setTypeDesc(rs.getString(Constants.CONST_LEAVE_DESC));
+						leaveTypeFlag.setTypeNo(rs.getString(Constants.CONST_LEAVE_TYPE_FLAG));
+						leaveTypeFlag.setTypeDesc(rs.getString(Constants.CONST_LEAVE_DESC));
 					leaveRequest.setLeaveType(leaveType);
+					leaveRequest.setLeaveTypeFlag(leaveTypeFlag);
 					leaveRequest.setLeaveRequestRemarks(rs.getString(Constants.CONST_LEAVE_REQ_REMARK));
 						employee.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
 							if(null!= rs.getString(Constants.CONST_EMP_ADMIN) &&  
@@ -891,8 +963,12 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 						employee.setDesignationAddlCode(rs.getString(Constants.CONST_EMP_ADDL_POSITION_CODE));
 						employee.setDesignationAddl(rs.getString(Constants.CONST_EMP_ADDL_POSITION_DESC));
 					leaveRequest.setEmployee(employee);
+					approve.setBranchCode(rs.getString(Constants.CONST_EMP_APP_BRANCH_CODE));
+					approve.setDepartmentCode(rs.getString(Constants.CONST_EMP_APP_DEPARTMENT_CODE));
+					approve.setSectionCode(rs.getString(Constants.CONST_EMP_APP_SECTION_CODE));
 					approve.setApproverAction(rs.getString(Constants.CONST_ACTION_CODE));
 					approve.setApproverRemark(rs.getString(Constants.CONST_APPROVER_REMARK));
+					leaveRequest.setSuggestedHod(rs.getString(Constants.CONST_SUGGESTED_APPROVER_CODE));
 					leaveRequest.setApprove(approve);
 					
 				return leaveRequest;
@@ -939,7 +1015,39 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		return this.namedParameterJdbcTemplate.query(Constants.SQL_BRANCH, namedParameters, mapper);
 	}
 	
-	
+	/**
+	 * 
+	 * method name  : getBranches
+	 * @param empNumber
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Branch>
+	 * 
+	 * purpose		: get list of branch based on empno
+	 *
+	 * Date    		:	Dec 19, 2012 10:17:04 AM
+	 */
+	public List<Branch> getBranches (String empNumber, Locale locale)
+	{
+		RowMapper<Branch> mapper	=	new RowMapper<Branch>()
+		{
+			
+			public Branch mapRow(ResultSet rs, int rowNum) throws SQLException
+			{
+				Branch	branch		=	new Branch();
+				branch.setBranchCode(rs.getString(Constants.CONST_EMP_BRANCH_CODE));
+				branch.setBranchDesc(rs.getString(Constants.CONST_EMP_BRANCH));
+				return branch;
+			}
+		};
+		
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramLocale", locale.getLanguage());
+		namedParameters.put("paramEmpNo", empNumber);
+		
+		return this.namedParameterJdbcTemplate.query(Constants.SQL_BRANCH_USING_EMPNO, namedParameters, mapper);
+	}
 	
 	
 	/**
@@ -1037,9 +1145,14 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 
 			if(isApprovalRecordExist(approve.getRequestNo(), employee.getEmpNumber()))
 		{
+				
 			namedParameters.put("paramUpdateUsr", Constants.USER_WEB);
 			namedParameters.put("paramActionCodeApprove", Constants.CONST_LEAVE_ACTION_APPROVE);
+			logger.info("update leave approve sql param : "+namedParameters);
+			logger.info("update leave approve sql : " +Constants.SQL_UPDATE_LEAVE_REQ_APPROVE);
 			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_REQ_APPROVE,namedParameters );
+			logger.info("update transaction status info : "+result);
+			
 		}
 		else
 		{
@@ -1051,13 +1164,19 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			namedParameters.put("paramDesgCode", employee.getDesignationCode());
 			namedParameters.put("paramCreateUsr", Constants.USER_WEB);
 			namedParameters.put("paramSeqNo", String.valueOf(getLeaveApproveCounter()));
+			
+			logger.info("update leave approve sql param : "+namedParameters);
+			logger.info("update leave approve sql : " +Constants.SQL_INSERT_LEAVE_REQ_APPROVE);
+			
 			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQ_APPROVE,namedParameters );
+			logger.info("insert transaction status info : "+result);
 		}
 
 		logger.info("params for approval : "+namedParameters);
 		
 		
-		setLeaveRequestStatusUpdate(approve.getRequestNo(), approve.getApproverAction());
+		int result2 = setLeaveRequestStatusUpdate(approve.getRequestNo(), approve.getApproverAction());
+		logger.info("transaction status info : "+result2);
 		return result;
 		
 	}
@@ -1131,6 +1250,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Oct 8, 2012 12:19:59 PM
 	 */
+	@Transactional("trLeaveAprv")
 	private int setLeaveRequestStatusUpdate(String requestNo, String approveAction)
 	{
 		String leaveStatus	=	null;
@@ -1138,24 +1258,28 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		{
 			leaveStatus	=	Constants.CONST_LEAVE_STATUS_WAITING_APPV;
 		}
-		
-		if(approveAction.equals(Constants.CONST_LEAVE_ACTION_APPROVE))
+		else
 		{
-			leaveStatus	=	Constants.CONST_LEAVE_STATUS_APPROVED;
+			if(approveAction.equals(Constants.CONST_LEAVE_ACTION_APPROVE))
+			{
+				leaveStatus	=	Constants.CONST_LEAVE_STATUS_APPROVED;
+			}
+			if(approveAction.equals(Constants.CONST_LEAVE_ACTION_RETURN))
+			{
+				leaveStatus	=	Constants.CONST_LEAVE_STATUS_FURTHER_CLARIFICATION;
+			}
+			if(approveAction.equals(Constants.CONST_LEAVE_ACTION_REJECT))
+			{
+				leaveStatus	=	Constants.CONST_LEAVE_STATUS_REJECTED;
+			}
 		}
-		if(approveAction.equals(Constants.CONST_LEAVE_ACTION_RETURN))
-		{
-			leaveStatus	=	Constants.CONST_LEAVE_STATUS_WAITING_APPV;
-		}
-		if(approveAction.equals(Constants.CONST_LEAVE_ACTION_REJECT))
-		{
-			leaveStatus	=	Constants.CONST_LEAVE_STATUS_REJECTED;
-		}
-		
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 		namedParameters.put("paramReqNo", requestNo);
 		namedParameters.put("paramStatusCode", leaveStatus);
-
+		
+		logger.info("leave request status update; param: "+namedParameters);
+		logger.info("leave request status update; SQL: "+Constants.SQL_UPDATE_LEAVE_REQ_STATUS);
+		
 		return namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_REQ_STATUS, namedParameters);
 	}
 	
