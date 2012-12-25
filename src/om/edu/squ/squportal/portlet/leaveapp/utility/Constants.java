@@ -306,7 +306,7 @@ public interface Constants
 
 	
 	public static final String	SQL_VIEW_DEPT_HEAD_ID			=			"   SELECT VHM_EMP_CODE AS EMP_CODE,						" +
-																			"  DECODE(:paramLocale,										" +
+																			"  	DECODE(:paramLocale,									" +
 																		    "         'en',initCap(VHM_EMP_NAME) ,						" +
 																		    "         'ar',VHM_EMP_NAME_ARABIC							" +
 																		    "         )	AS EMP_NAME,HIR.VHM_LEVEL AS EMP_LEVEL			" +	
@@ -683,6 +683,10 @@ public interface Constants
 	public static final int		CONST_LEVEL_COUNT				=			7;
 	public static final String	CONST_MODEL_MODE_UPDATE			=			"u";
 	public static final String	CONST_MODEL_MODE_INSERT			=			"i";
+	
+	public static final String	CONST_NOT_AVAILABLE				=			"NA";
+	public static final int		CONST_DELEGATION_REQ_LEAVE_DAYS	=			5;
+	
 	
 	/******************************************************/
 	

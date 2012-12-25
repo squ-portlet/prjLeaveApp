@@ -146,6 +146,7 @@ $(function() {
         var currentDropdown = $(this);
         var branchCode=$(this).val();
         var empNumber = "${empNumber}";
+        $('txtEmpNum').val='';
         $.ajax({
             type: "GET",
             //contentType: "application/json; charset=utf-8",
@@ -154,7 +155,7 @@ $(function() {
             data: 'branchCode='+branchCode+'&empNumber='+empNumber,
             dataType: "json",
             success: function(data) {
-                var options = "<option value=' '><spring:message code="prop.leave.app.dropdown.text"/></option>"; 
+                var options = "<option value=''><spring:message code="prop.leave.app.dropdown.text"/></option>"; 
                 for (index in data) {
                 	var emp = data[index];
                 	options += "<option value='" + emp.empNumber + "'>" + emp.empName + "</option>";
@@ -242,7 +243,6 @@ $(function() {
 // Get HOD
 $(function() {
     var populateDropDowns = function() {
-        //var currentDropdown = $(this);
         var branchCode=$('select.selBranchCode').val();
         var deptCode = $('select.selDeptCode2').val();
         var sectionCode=$('select.selSectionCode2').val();
@@ -292,7 +292,6 @@ $(function() {
 </script>
 
 </head>
-
 <portlet:actionURL var="submitRequest">
 	<portlet:param name="action" value="newApply"/>
 		<portlet:param name="operation">
@@ -300,14 +299,13 @@ $(function() {
 			<c:out value="${operation}"/>
 		</jsp:attribute>
 	</portlet:param>
-	<portlet:param name="reqNum" value = "${reqNum}"/>
+	<portlet:param name="reqNum" value="${reqNum}"/>
 	<portlet:param name="leaveTypeNo" value="${leaveTypeNo}"/>
 </portlet:actionURL>
 
 <portlet:renderURL var="backToMain">
 	<portlet:param name="action" value="backToMain"/>
 </portlet:renderURL>
-request no : <c:out value="${requestNo}"/>
 
 <div >
 	<a class="button" style="width: 100 px; " href="${backToMain}">
@@ -354,6 +352,8 @@ request no : <c:out value="${requestNo}"/>
 						<form:option value="">Select</form:option>
 						<form:options items="${leaveTypeFlag}" itemLabel="typeDesc" itemValue="typeNo"/>
 					</form:select>
+					<br>
+					<form:errors path="leaveTypeFlag" cssClass="error" />
 				</td>
 				<td>&nbsp;</td>
 				<th class="PortletHeaderColor">
@@ -402,14 +402,18 @@ request no : <c:out value="${requestNo}"/>
 						<spring:message code="prop.leave.app.apply.form.leave.start.date"/>:
 					</span>
 				</th>
-				<td><form:input path="leaveStartDate" id="leaveStartDate" cssClass="calendar"/></td>
+				<td><form:input path="leaveStartDate" id="leaveStartDate" cssClass="calendar"/>
+					<br><form:errors path="leaveStartDate" cssClass="error" />
+				</td>
 				<td>&nbsp;</td>
 				<th class="PortletHeaderColor">
 					<span class="PortletHeaderText">
 						<spring:message code="prop.leave.app.apply.form.leave.end.date"/>:
 					</span>
 				</th>
-				<td><form:input path="leaveEndDate" id="leaveEndDate" cssClass="calendar"/></td>
+				<td><form:input path="leaveEndDate" id="leaveEndDate" cssClass="calendar"/>
+					<br><form:errors path="leaveEndDate" cssClass="error"/>
+				</td>
 			</tr>
 			<tr>
 				<th class="PortletHeaderColor">
@@ -499,11 +503,17 @@ request no : <c:out value="${requestNo}"/>
 				</tr>
 				<c:forEach var="i" begin="0" end="2" step="1">
 					<tr>
-						<td><form:input path="delegatedEmps[${i}].fromDate" cssClass="calendar"/></td>
-						<td><form:input path="delegatedEmps[${i}].toDate" cssClass="calendar"/></td>
-						<td><form:input path="delegatedEmps[${i}].empNumber" /></td>
+						<td><form:input path="delegatedEmps[${i}].fromDate" cssClass="calendar"/>
+							<br><form:errors path="delegatedEmps[${i}].fromDate" cssClass="error"/>
+						</td>
+						<td><form:input path="delegatedEmps[${i}].toDate" cssClass="calendar"/>
+							<br><form:errors path="delegatedEmps[${i}].toDate" cssClass="error"/>
+						</td>
+						<td><form:input path="delegatedEmps[${i}].empNumber" cssClass="txtEmpNum" id="delegatedEmps[${i}].empNumber"/>
+							<br><form:errors path="delegatedEmps[${i}].empNumber" cssClass="error"/>
+						</td>
 						<td>
-							<form:select path="delegatedEmps[${i}].empNumber" cssClass="selEmpNum" id="selEmpNum" onchange="getEmpId(this,${i});">
+							<form:select path="delegatedEmps[${i}].empName" cssClass="selEmpNum" id="selEmpNum" onchange="getEmpId(this,${i});">
 								<option><spring:message code="prop.leave.app.dropdown.text"/></option>
 							</form:select>
 						</td>
@@ -618,7 +628,8 @@ request no : <c:out value="${requestNo}"/>
 <script type="text/javascript">
 	function getEmpId(obj,i)
 	{
-		document.getElementById('delegatedEmps'+i+'.empNumber').value=obj.value;
+		document.getElementById('delegatedEmps['+i+'].empNumber').value=obj.value;
+		//document.getElementById(obj2).value=obj.value;
 	}
 	
 </script>

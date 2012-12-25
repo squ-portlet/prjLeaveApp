@@ -160,6 +160,8 @@ public class LeaveAppControllerMain
 		model.addAttribute("baseLevelEmp", Constants.CONST_EMPLOYEE_LEVEL);
 		model.addAttribute("opMode", Constants.CONST_MODEL_MODE_INSERT);
 		
+		model.addAttribute("reqNum", Constants.CONST_NOT_AVAILABLE);
+		model.addAttribute("leaveTypeNo", Constants.CONST_NOT_AVAILABLE);
 		return Constants.PAGE_LEAVE_APPLY_FORM;
 	}
 
@@ -220,14 +222,20 @@ public class LeaveAppControllerMain
 			}
 			catch (ParseException ex)
 			{
-				// TODO Auto-generated catch block
 				ex.printStackTrace();
 				logger.error("exception at leave request allow notification : "+ex.getMessage());
 			}
 
 			if(operation.equals(Constants.CONST_OPERATION_ADD))
 			{
-					response.setRenderParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowEleaveRequestProc.getLeaveMessage());
+					try
+					{
+						response.setRenderParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowEleaveRequestProc.getLeaveMessage());
+					}
+					catch(NullPointerException nEx)
+					{
+						logger.error("error generating message : "+nEx);
+					}
 					response.setRenderParameter("action", "backToMain");
 					logger.info("inside if ");
 				//int dbResult	=	leaveAppServiceDao.setNewLeaveRequest(leaveAppModel,employee);

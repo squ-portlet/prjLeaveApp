@@ -671,7 +671,11 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	{
 		int			result					=	0;
 		String		leaveRequestNo			=	null;
-		if (null == leaveRequest.getRequestNo() || leaveRequest.getRequestNo().trim().equals(""))
+		if (
+				null == leaveRequest.getRequestNo() ||
+				leaveRequest.getRequestNo().trim().equals("") ||
+				leaveRequest.getRequestNo().trim().equals(Constants.CONST_NOT_AVAILABLE)
+				)
 		{
 			leaveRequestNo			=	String.valueOf(getLeaveRequestCounter());
 		}
@@ -723,7 +727,10 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		logger.info("request insert statement :" +Constants.SQL_INSERT_LEAVE_REQUEST);
 		logger.info("request insert param :" +namedParameters);
 		
-		if(null == leaveRequest.getRequestNo() || leaveRequest.getRequestNo().trim().equals("") )
+		if(
+			null == leaveRequest.getRequestNo() || 
+		   leaveRequest.getRequestNo().trim().equals("") || 
+		   leaveRequest.getRequestNo().trim().equals(Constants.CONST_NOT_AVAILABLE))
 		{
 			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQUEST, namedParameters);
 		}
@@ -1165,8 +1172,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			namedParameters.put("paramCreateUsr", Constants.USER_WEB);
 			namedParameters.put("paramSeqNo", String.valueOf(getLeaveApproveCounter()));
 			
-			logger.info("update leave approve sql param : "+namedParameters);
-			logger.info("update leave approve sql : " +Constants.SQL_INSERT_LEAVE_REQ_APPROVE);
+			logger.info("insert leave approve sql param : "+namedParameters);
+			logger.info("insert leave approve sql : " +Constants.SQL_INSERT_LEAVE_REQ_APPROVE);
 			
 			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQ_APPROVE,namedParameters );
 			logger.info("insert transaction status info : "+result);

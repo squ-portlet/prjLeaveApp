@@ -29,12 +29,15 @@
  */
 package om.edu.squ.squportal.portlet.leaveapp.bo;
 
+import java.io.Serializable;
+
 /**
  * @author Bhabesh
  *
  */
-public class AdminAction
+public class AdminAction implements Serializable
 {
+	private static final long	serialVersionUID	= 1L;
 	private	String 	actionCode;
 	private	String	actionDesc;
 	/**

@@ -29,12 +29,15 @@
  */
 package om.edu.squ.squportal.portlet.leaveapp.bo;
 
+import java.io.Serializable;
+
 /**
  * @author Bhabesh
  *
  */
-public class DelegatedEmp
+public class DelegatedEmp implements Serializable
 {
+	private static final long	serialVersionUID	= 1L;
 	private	String	fromDate;
 	private	String	toDate;
 	private	String	empNumber;

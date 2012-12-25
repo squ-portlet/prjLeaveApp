@@ -29,12 +29,16 @@
  */
 package om.edu.squ.squportal.portlet.leaveapp.bo;
 
+import java.io.Serializable;
+
 /**
  * @author Bhabesh
  *
  */
-public class Designation
+public class Designation implements Serializable
 {
+	private static final long	serialVersionUID	= 1L;
+	
 	private	String	desigCode;
 	private	String	desigDescription;
 	/**

@@ -29,6 +29,7 @@
  */
 package om.edu.squ.squportal.portlet.leaveapp.model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
@@ -37,8 +38,10 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
  * @author Bhabesh
  *
  */
-public class LeaveAppModel
+public class LeaveAppModel implements Serializable
 {
+	private static final long	serialVersionUID	= 1L;
+	
 	private	String			requestNo;
 	private	String			requestDate;
 	private	String			leaveType;
