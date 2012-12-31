@@ -265,7 +265,7 @@ public interface Constants
 																			"	LVREQ.VHM_HIERARCHY_CODE AS EMP_HIERARCHY_CODE,			" +
 																			"   DECODE( 												" +
 																			"       NVL(												" +
-																			"          (SELECT DELG.VHM_DELEGATED_STATUS				" +	
+																			"          (SELECT DISTINCT DELG.VHM_DELEGATED_STATUS		" +	
 																			"             FROM 											" +
 																			"             VHM_EMP_LEAVE_REQUEST LVREQ2,					" +
 																			"             VHM_EMP_LEAVE_REQ_DELEGATION DELG				" +
@@ -348,7 +348,26 @@ public interface Constants
 																		  	"			AND  DESG.VHM_HIERARCHY_CODE = HIR.VHM_HIERARCHY_CODE " +
 																		  	"			AND EMP.VHM_EMP_BRAN_CODE       = :paramBranchCode	" +
 																		  	"			AND VHM_EMP_ACTIVE          = 'Y'				" +
-																			"		)													";
+																			"		)													" +
+																			" UNION														" +
+																			"	SELECT DISTINCT	VHM_EMP_CODE AS EMP_CODE,				" +						
+																		  	"	DECODE('en',											" +
+																		  	"			'en',initCap(VHM_EMP_NAME) , 					" +
+																		  	"			'ar',VHM_EMP_NAME_ARABIC 						" +
+																		  	"		)	AS EMP_NAME , HIR.VHM_LEVEL AS EMP_LEVEL		" +	
+																			"	FROM													" +
+																		  	"		VHM_EMPLOYEE EMP ,									" +
+																		  	"		VHM_DESIGNATION DESG, 								" +
+																		  	"		VHM_HIERARCHY HIR,									" +
+										                                    "      VHM_EMPLOYEE_ADDITIONAL_TASK ADESIG					" +
+																			"	WHERE													" +
+										                                    "      ADESIG.VEAT_EMP_DESG_CODE   =  DESG.VHM_DESG_CODE	" +
+																			"		AND  DESG.VHM_HIERARCHY_CODE = HIR.VHM_HIERARCHY_CODE " +
+																			"		AND ADESIG.VEAT_EMP_BRANCH_CODE  =:paramBranchCode	" +
+										                                    "      AND HIR.VHM_LEVEL 			< '010'					" +
+										                                    "      AND EMP.VHM_EMP_CODE = ADESIG.VEAT_EMP_CODE			" +
+										                                    "      AND ADESIG.VEAT_TO_DATE IS NULL						" +
+										                                    "      AND EMP.VHM_EMP_ACTIVE          = 'Y'	    		";
 
 	
 	

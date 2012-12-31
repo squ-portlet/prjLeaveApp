@@ -317,6 +317,7 @@ $(function() {
 
 
 <form:form modelAttribute="leaveAppModel"  action="${submitRequest}" method="post" htmlEscape="false" >
+<h2><font color="red"><form:errors path="*" /></font></h2>
 	<fieldset>
 		<legend>
 			<h3>

@@ -37,6 +37,8 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -46,7 +48,7 @@ import org.springframework.validation.Validator;
  */
 public class LeaveAppValidator implements Validator
 {
-
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	public boolean supports(Class clazz)
 	{
 		return LeaveAppModel.class.equals(clazz);
@@ -54,7 +56,10 @@ public class LeaveAppValidator implements Validator
 
 	public void validate(Object obj, Errors err)
 	{
-	     Date currentDate = new Date();
+		Date 			currentDate 	= 	new Date();
+		Date			dtLvStartDate	=	null;										//	Leave start date
+		Date			dtLvEndDate		=	null;										//	Leave end date
+
 	     SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
 	     sdfDate.setLenient(false); 
 	     
@@ -82,101 +87,195 @@ public class LeaveAppValidator implements Validator
 		}
 
 		
-		
-		if(null != delegatedEmps && delegatedEmps.length != 0)
+		try
 		{
-			for (int i=0;i<delegatedEmps.length; i++)
+			if(null != leaveAppModel.getLeaveStartDate() && null != leaveAppModel.getLeaveEndDate() )
 			{
+				dtLvStartDate		=	sdfDate.parse(leaveAppModel.getLeaveStartDate());
+				dtLvEndDate			=	sdfDate.parse(leaveAppModel.getLeaveEndDate());
+
+				long	msDiffLvDate	=	dtLvEndDate.getTime() - dtLvStartDate.getTime();
+				long	constTimeMilli	=	1000*60*60*24;	
+				long	lvDateNos		=	(msDiffLvDate/constTimeMilli)+1;						// total number of leaves
+				long	delgDateNos		=	0;														// total number of delegation dates 
 				
-				
-				Date			dtLvStartDate	=	null;										//	Leave start date
-				Date			dtLvEndDate		=	null;										//	Leave end date
-				
-				Date			dtDelgStartDate	=	null;
-				Date			dtDelgEndDate	=	null;
-				
-				DelegatedEmp	delEmps			=	delegatedEmps[i];
-				
-				
-				try
+				if(null != delegatedEmps && delegatedEmps.length != 0)
 				{
-					
-					dtLvStartDate	=	sdfDate.parse(leaveAppModel.getLeaveStartDate());
-					dtLvEndDate		=	sdfDate.parse(leaveAppModel.getLeaveEndDate());
-					
-				}
-				catch (ParseException ex)
-				{
-					// TODO Auto-generated catch block
-					ex.printStackTrace();
-				}
-				
-				
-				if(
-						!(null == delEmps.getEmpNumber() || delEmps.getEmpNumber().trim().equals("")) ||  
-						!(null == delEmps.getFromDate() || delEmps.getFromDate().trim().equals(""))	||
-						!(null == delEmps.getToDate() || delEmps.getToDate().trim().equals(""))
-				  )
-				{
-					try
+					for (int i=0;i<delegatedEmps.length; i++)
 					{
+						Date			dtDelgStartDate	=	null;
+						Date			dtDelgEndDate	=	null;
 						
-						dtDelgStartDate	=	sdfDate.parse(delEmps.getFromDate());
-						dtDelgEndDate   =	sdfDate.parse(delEmps.getToDate());
+						DelegatedEmp	delEmps			=	delegatedEmps[i];
+						
+						
+						
+						if(
+								!(null == delEmps.getEmpNumber() || delEmps.getEmpNumber().trim().equals("")) ||  
+								!(null == delEmps.getFromDate() || delEmps.getFromDate().trim().equals(""))	||
+								!(null == delEmps.getToDate() || delEmps.getToDate().trim().equals(""))
+						  )
+						{
+							System.out.println("INSIDE IF");
+							
+								if ((null == delEmps.getFromDate()) || delEmps.getFromDate().trim().equals("") )
+								{
+									err.rejectValue("delegatedEmps["+i+"].fromDate", "error.prop.leave.app.delegate.fromDate.na");
+									break;
+								}
+								else
+								{
+									dtDelgStartDate	=	sdfDate.parse(delEmps.getFromDate());
+								}
+								if ((null == delEmps.getToDate()) || delEmps.getToDate().trim().equals("") )
+								{
+									err.rejectValue("delegatedEmps["+i+"].toDate", "error.prop.leave.app.delegate.fromDate.na");
+									break;
+								}
+								else
+								{
+									dtDelgEndDate   =	sdfDate.parse(delEmps.getToDate());
+								}
+								
+								long	msDiffDelgDate = dtDelgEndDate.getTime() - dtDelgStartDate.getTime();
+								long	delgDateNo	=	(msDiffDelgDate/constTimeMilli) +1;
+										delgDateNos	=	delgDateNos	+	delgDateNo;
+										if(lvDateNos == delgDateNos)
+										{
+											break;
+										}
+								
+								
+								if(																		//empty emp number not accepted
+										null == delEmps.getEmpNumber() || 
+										delEmps.getEmpNumber().trim().equals("")
+									)
+								{
+									err.rejectValue("delegatedEmps["+i+"].empNumber", "error.prop.leave.app.delegate.empnumber.na");
+									break;
+								}
+								if(null != dtDelgStartDate || null !=dtDelgEndDate )
+								{
+									if(dtDelgEndDate.compareTo(dtDelgStartDate) < 0)								// toDate should not be greater
+									{
+										err.rejectValue("delegatedEmps["+i+"].fromDate", "error.prop.leave.app.delegate.fromDate.na");
+										break;
+									}
+									if(dtDelgStartDate.compareTo(dtLvStartDate)<0)
+									{
+										err.rejectValue("delegatedEmps["+i+"].fromDate", "error.prop.leave.app.delegate.Date.not.higher.than.leave.Date");
+										break;
+									}
+									if(dtLvEndDate.compareTo(dtDelgEndDate)<0)
+									{
+										err.rejectValue("delegatedEmps["+i+"].toDate", "error.prop.leave.app.delegate.Date.not.higher.than.leave.Date");
+										break;
+									}
+									
+									
+								}
+								else																			// empty delegation date not accepted
+								{
+										err.rejectValue("delegatedEmps["+i+"].toDate", "error.prop.leave.app.delegate.fromDate.na");
+								}
+								
+								/**
+								 * this following block of code ensures the validation on overlapping of delegation dates
+								 */
+								if( 
+
+									(i+1) < delegatedEmps.length 
+								  )
+								{
+									try
+									{
+										DelegatedEmp	delEmps1			=	delegatedEmps[i];
+										DelegatedEmp	delEmps2			=	delegatedEmps[i+1];
+										System.out.println ("delegatedEmps[i+1] : "+delegatedEmps[i+1]);
+										
+										if((
+												null != delEmps1.getToDate() || delEmps1.getToDate().trim().equals(""))  && 
+												null != delEmps2.getFromDate() || delEmps2.getFromDate().trim().equals("") )
+										{
+										
+											
+												Date			dtDelgEndDate1		=	sdfDate.parse(delEmps1.getToDate());
+												Date			dtDelgStartDate2 	=	sdfDate.parse(delEmps2.getFromDate());
+												
+												System.out.println("dtDelgEndDate1 : "+dtDelgEndDate1);
+												System.out.println("dtDelgStartDate2 : "+dtDelgStartDate2);
+												System.out.println("condition : "+dtDelgStartDate2.compareTo(dtDelgEndDate1));
+												
+												if(dtDelgStartDate2.compareTo(dtDelgEndDate1)<0)
+												{
+													err.rejectValue("delegatedEmps["+(i+1)+"].fromDate", "error.prop.leave.app.delegate.date.overlap");
+												}
+										}
+									}
+									catch(ArrayIndexOutOfBoundsException exArrEx)
+									{
+										//TODO for i+1
+									}
+									catch(ParseException exPars)
+									{
+										//TODO for i+1
+									}
+								}// end if
+								
+								
+								
+//								if(((msDiffLvDate /(constTimeMilli)+1)) > Constants.CONST_DELEGATION_REQ_LEAVE_DAYS)								// delegation requirement
+//										{																									// for more than 5 days
+//										err.rejectValue("delegatedEmps["+i+"].fromDate", "error.prop.leave.app.delegate.limit.exceed.na", 
+//														new Object[]{String.valueOf(Constants.CONST_DELEGATION_REQ_LEAVE_DAYS)}, "");	
+//											break;
+//										}
+								
+								
+						}
+						else
+						{
+							System.out.println("INSIDE ELSE");
+								
+							if(((msDiffLvDate /(constTimeMilli)+1)) > Constants.CONST_DELEGATION_REQ_LEAVE_DAYS)								// delegation requirement
+									{																									// for more than 5 days
+									err.rejectValue("delegatedEmps["+i+"].fromDate", "error.prop.leave.app.delegate.limit.exceed.na", 
+													new Object[]{String.valueOf(Constants.CONST_DELEGATION_REQ_LEAVE_DAYS)}, "");	
+										break;
+									}
+						}
+						
 
 						
-					}
-					catch (ParseException ex)
-					{
-						// TODO Auto-generated catch block
-						ex.printStackTrace();
-					}
-																									//empty emp number not accepted
-						if(																		
-								null == delEmps.getEmpNumber() || 
-								delEmps.getEmpNumber().trim().equals("")
-							)
-						{
-							err.rejectValue("delegatedEmps["+i+"].empNumber", "error.prop.leave.app.delegate.empnumber.na");
-							break;
-						}
-						if(null != dtDelgStartDate || null !=dtDelgEndDate )
-						{
-							if(dtDelgEndDate.compareTo(dtDelgStartDate) < 0)								// toDate should not be greater
-							{
-								err.rejectValue("delegatedEmps["+i+"].fromDate", "error.prop.leave.app.delegate.fromDate.na");
-							}
-							if(dtLvStartDate.compareTo(dtDelgStartDate)<0)
-							{
-								err.rejectValue("delegatedEmps["+i+"].fromDate", "error.prop.leave.app.delegate.Date.not.higher.than.leave.Date");
-							}
-							if(dtLvEndDate.compareTo(dtDelgEndDate)<0)
-							{
-								err.rejectValue("delegatedEmps["+i+"].toDate", "error.prop.leave.app.delegate.Date.not.higher.than.leave.Date");
-							}
 							
-						}
-						else																			// empty delegation date not accepted
-						{
-								err.rejectValue("delegatedEmps["+i+"].toDate", "error.prop.leave.app.delegate.fromDate.na");
-						}
-				}
-				else
-				{
-					long msDiff	=	dtLvEndDate.getTime() - dtLvStartDate.getTime();
-						
-					if(((msDiff /(1000*60*60*24)+1)) > Constants.CONST_DELEGATION_REQ_LEAVE_DAYS)								// toDate should not be greater
-							{
-							//error.prop.leave.app.delegate.limit.exceed.na
-							err.rejectValue("delegatedEmps["+i+"].fromDate", "error.prop.leave.app.delegate.limit.exceed.na", 
-											new Object[]{String.valueOf(Constants.CONST_DELEGATION_REQ_LEAVE_DAYS)}, "");	
-							//err.rejectValue("delegatedEmps["+i+"].fromDate", "error.prop.leave.app.delegate.fromDate.na");
-								break;
-							}
-				}
+					} // End of for loop
+
 					
-			}
+					System.out.println("lvDateNos : "+lvDateNos);
+					System.out.println("delgDateNos : "+delgDateNos);
+					
+					if((lvDateNos  >  Constants.CONST_DELEGATION_REQ_LEAVE_DAYS) && lvDateNos != delgDateNos)
+					{
+						err.rejectValue("leaveStartDate", "error.prop.leave.app.delegate.date.not.equal");
+					}
+					
+				}
+
+				
+
+			
+			
+			}	// end if
 		}
+		catch (ParseException ex)
+		{
+			System.out.println("error : "+ex);
+			ex.printStackTrace();
+			// TODO Auto-generated catch block
+			logger.warn("date parsing issue. Detail : "+ex.getMessage());
+		}
+		
+		
 		
 		
 		

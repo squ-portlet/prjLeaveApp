@@ -902,10 +902,10 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramEmpNumber", employee.getEmpNumber());
 		namedParameters.put("paramLevel", employee.getHierarchyLevelCode());
 
+		logger.info("param : "+namedParameters);
 		
 		List<LeaveRequest>	leaveRequests	=	this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_LEAVE_REQUEST, namedParameters, mapper);
 		
-		logger.info("param : "+namedParameters);
 		logger.info("leave request : "+leaveRequests);
 		
 		
