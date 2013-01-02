@@ -133,6 +133,7 @@ public interface LeaveDbDao
 	 * method name  : getNextHeadBranch
 	 * @param branchCode
 	 * @param paramLevelAdd
+	 * @param empLevel
 	 * @param locale
 	 * @return
 	 * LeaveDbDao
@@ -142,13 +143,14 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Dec 5, 2012 8:29:35 AM
 	 */
-	public List<HoD> getNextHeadBranch(String branchCode, int paramLevelAdd, Locale locale);
+	public List<HoD> getNextHeadBranch(String branchCode, int paramLevelAdd, String empLevel, Locale locale);
 	
 	/**
 	 * 
 	 * method name  : getDepartmentHead
 	 * @param branchCode
 	 * @param deptCode
+	 * @param empLevel
 	 * @param locale
 	 * @return
 	 * LeaveDbDao
@@ -158,7 +160,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Dec 5, 2012 9:34:39 AM
 	 */
-	public List<HoD> getDepartmentHead(String branchCode, String deptCode,Locale locale);
+	public List<HoD> getDepartmentHead(String branchCode, String deptCode,String empLevel, Locale locale);
 	
 	/**
 	 * 
@@ -166,6 +168,7 @@ public interface LeaveDbDao
 	 * @param branchCode
 	 * @param deptCode
 	 * @param sectCode
+	 * @param empLevel
 	 * @param locale
 	 * @return
 	 * LeaveDbDao
@@ -175,7 +178,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Dec 5, 2012 9:19:35 AM
 	 */
-	public List<HoD>	getSectionHead(String branchCode, String deptCode, String sectCode, Locale locale);
+	public List<HoD>	getSectionHead(String branchCode, String deptCode, String sectCode, String empLevel,Locale locale);
 	
 	/**
 	 * 

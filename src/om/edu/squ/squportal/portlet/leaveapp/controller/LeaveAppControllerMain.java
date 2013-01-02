@@ -113,6 +113,7 @@ public class LeaveAppControllerMain
 		List<LeaveRequest>	leaveRequests	=	leaveAppServiceDao.getLeaveRequests(employee,locale);
 		model.addAttribute("leaveRequests", leaveRequests);
 		model.addAttribute("empHierarchy", employee.getHierarchyCode());
+		model.addAttribute("empHierarchyAddl", employee.getHierarchyAddlCode());
 		model.addAttribute("empNumber", String.format("%07d", Integer.parseInt(empNumber)));
 		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
 		model.addAttribute("furtherClarification", Constants.CONST_LEAVE_STATUS_FURTHER_CLARIFICATION);
@@ -417,8 +418,10 @@ public class LeaveAppControllerMain
 		
 		if(!model.containsAttribute("leaveAppModel"))
 		{
+			List<DelegatedEmp>	delegatedEmps	=	leaveAppServiceDao.getDelegations(requestNo, locale);
 			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
 			leaveAppModel.setAdminSqu(employee.isAdmin());
+			leaveAppModel.setDelegatedEmpsList(delegatedEmps);
 			leaveAppModel.setPositionAdditional(employee.getDesignationAddlCode());
 			LeaveType		leaveTypeFlag	=	leaveRequest.getLeaveTypeFlag();
 			leaveAppModel.setLeaveTypeFlag(leaveTypeFlag.getTypeNo());
@@ -429,12 +432,14 @@ public class LeaveAppControllerMain
 			leaveAppModel.setOpMode(Constants.CONST_MODEL_MODE_UPDATE);
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
+		model.addAttribute("empNumber", String.format("%07d", Integer.valueOf(employee.getEmpNumber())));
 		model.addAttribute("leaveTypeFlag",leaveAppServiceDao.getLeaveTypes(employee,locale) );
 		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
 		model.addAttribute("employee",employee );
 		model.addAttribute("addlPosition", leaveAppServiceDao.getAdditionalDesignation(employee.getEmpNumber(),locale));
 		model.addAttribute(Constants.CONST_OPERATION,Constants.CONST_OPERATION_UPDATE);
 		model.addAttribute("branches",leaveAppServiceDao.getBranches(locale));
+		model.addAttribute("branchesEmpno",leaveAppServiceDao.getBranches(employee.getEmpNumber(),locale));
 		model.addAttribute("departments",leaveAppServiceDao.getDepartments(employee.getBranchCode(),locale));
 		model.addAttribute("baseHierarchyEmp", Constants.CONST_EMPLOYEE_HIERARCHY_CODE);
 		model.addAttribute("baseLevelEmp", Constants.CONST_EMPLOYEE_LEVEL);

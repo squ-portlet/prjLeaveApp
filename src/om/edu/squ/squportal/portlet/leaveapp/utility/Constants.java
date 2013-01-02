@@ -317,7 +317,7 @@ public interface Constants
 																			"   AND VHM_EMP_BRAN_CODE =:paramBranchCode					" +			
 																			"   AND VHM_EMP_DEPT_CODE = :paramDept						" +
 																			"   AND VHM_EMP_ACTIVE = 'Y'								" +
-																			"   AND  HIR.VHM_LEVEL 			< '010'						";
+																			"   AND  HIR.VHM_LEVEL 			< DECODE(:paramEmpLevel,'NA','010',:paramEmpLevel)	";
 																			
 
 	public static final String	SQL_VIEW_BRANCH_HEAD_NEXT_HIERARCHY	=		"	SELECT	VHM_EMP_CODE AS EMP_CODE,						" +
@@ -334,7 +334,7 @@ public interface Constants
 																			"		AND  DESG.VHM_HIERARCHY_CODE = HIR.VHM_HIERARCHY_CODE " +
 																			"		AND VHM_EMP_BRAN_CODE       = :paramBranchCode		" +
 																			"		AND VHM_EMP_ACTIVE          = 'Y'					" +
-																			"		AND HIR.VHM_LEVEL 			< '010'					" +
+																			"		AND HIR.VHM_LEVEL 			< DECODE(:paramEmpLevel,'NA','010',:paramEmpLevel)" +
 																			"		AND HIR.VHM_LEVEL = 								" +
 																			"		(													" +
 																		  	"			SELECT											" +
@@ -364,7 +364,7 @@ public interface Constants
 										                                    "      ADESIG.VEAT_EMP_DESG_CODE   =  DESG.VHM_DESG_CODE	" +
 																			"		AND  DESG.VHM_HIERARCHY_CODE = HIR.VHM_HIERARCHY_CODE " +
 																			"		AND ADESIG.VEAT_EMP_BRANCH_CODE  =:paramBranchCode	" +
-										                                    "      AND HIR.VHM_LEVEL 			< '010'					" +
+										                                    "      AND HIR.VHM_LEVEL 			< DECODE(:paramEmpLevel,'NA','010',:paramEmpLevel)" +
 										                                    "      AND EMP.VHM_EMP_CODE = ADESIG.VEAT_EMP_CODE			" +
 										                                    "      AND ADESIG.VEAT_TO_DATE IS NULL						" +
 										                                    "      AND EMP.VHM_EMP_ACTIVE          = 'Y'	    		";
@@ -385,11 +385,12 @@ public interface Constants
 																		    "   AND VHM_EMP_DEPT_CODE = :paramDept						" +
 																		    "   AND SEC.VHM_SECTION_CODE = :paramSectCode				" +
 																		    "   AND VHM_EMP_ACTIVE = 'Y'								" +
-																		    "   AND HIR.VHM_LEVEL 			< '010'						"; 
+																		    "   AND HIR.VHM_LEVEL 			< DECODE(:paramEmpLevel,'NA','010',:paramEmpLevel)	"; 
 																		    											 
 	
 	
-	public static final String	SQL_VIEW_LEAVE_REQUEST_SPECIFIC	=			" SELECT 													" +
+	public static final String	SQL_VIEW_LEAVE_REQUEST_SPECIFIC	=			"SELECT * FROM (											" +
+																			" 	SELECT 													" +
 																			"	LVREQ.VHM_LEAVE_REQ_NO AS LEAVE_REQUEST_NO,				" +
 																			"	TO_CHAR(LVREQ.VHM_LEAVE_REQ_DATE,'DD/MM/YYYY') 			" +
 																			"									AS LEAVE_REQ_DATE,		" +
@@ -442,14 +443,17 @@ public interface Constants
 																			"	  VHM_EMPLOYEE EMP										" +
 																			"	WHERE 													" +
 																			"	  LVREQ.VHM_LEAVE_REQ_NO = :paramReqNo					" +
-																			"	  AND EMP.VHM_EMP_CODE = 								" +
-																			"						LVREQ.VHM_SUGGESTED_APP_EMP_CODE	" +
+//																			"	  AND EMP.VHM_EMP_CODE = 								" +
+//																			"						LVREQ.VHM_SUGGESTED_APP_EMP_CODE	" +
+																			"	  AND EMP.VHM_EMP_CODE          = LVREQ.VHM_EMP_CODE	" +
 																			"	  AND LVREQ.VHM_STATUS_CODE								" +
 																			"						=LVSTAT.VHM_STATUS_CODE				" +
 																			"	  AND LVREQ.VHM_LEAVE_TYPE_FLAG = LVTYPE.VHM_LEAVE_TYPE_FLAG " +
 																			"	  AND LVREQ.VHM_DEPT_CODE = DEPT.VHM_DEPT_CODE			" +
 																			"	  AND LVREQ.VHM_POSITION_CODE = DESIG.VHM_DESG_CODE (+)	" +
-																			"	  AND LVREQ.VHM_LEAVE_REQ_NO  =	LVAPRV.VHM_LEAVE_REQ_NO (+)";
+																			"	  AND LVREQ.VHM_LEAVE_REQ_NO  =	LVAPRV.VHM_LEAVE_REQ_NO (+)" +
+																			"	ORDER BY LEAVE_REQ_DATE DESC							" +
+																			") WHERE ROWNUM <=1											";
 
 
 	
@@ -530,7 +534,8 @@ public interface Constants
 																			"    VHM_EMPLOYEE EMP											" +
 																			" WHERE															" +
 																			"    REQ_DELG.VHM_DELEGATED_EMP_CODE = EMP.VHM_EMP_CODE			" +
-																			"    AND REQ_DELG.VHM_LEAVE_REQ_NO = :paramLeaveReqNo			";
+																			"    AND REQ_DELG.VHM_LEAVE_REQ_NO = :paramLeaveReqNo			" +
+																			"	 AND VHM_DELEGATED_STATUS = 'A'";
 
 	public static final String	SQL_INSERT_LEAVE_REQ_DELEGATION	=			" INSERT INTO VHM_EMP_LEAVE_REQ_DELEGATION 						" +
 																			" (  															" +

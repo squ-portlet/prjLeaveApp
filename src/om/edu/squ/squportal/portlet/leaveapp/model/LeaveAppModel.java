@@ -31,6 +31,7 @@ package om.edu.squ.squportal.portlet.leaveapp.model;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.List;
 
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 
@@ -425,6 +426,26 @@ public class LeaveAppModel implements Serializable
 		this.delegatedEmps = delegatedEmps;
 	}
 	
+	/**
+	 * 
+	 * method name  : setDelegatedEmpsList
+	 * @param delegatedEmps
+	 * LeaveAppModel
+	 * return type  : void
+	 * 
+	 * purpose		: convert list to array for delegated emps
+	 *
+	 * Date    		:	Jan 1, 2013 9:50:11 AM
+	 */
+	public void setDelegatedEmpsList(List<DelegatedEmp> delegatedEmpsLst)
+	{
+		DelegatedEmp[]	delEmpsArr	=	new DelegatedEmp[delegatedEmpsLst.size()];
+		for(int i=0; i<delegatedEmpsLst.size(); i++)
+		{
+			delEmpsArr[i] = delegatedEmpsLst.get(i);
+		}
+		this.delegatedEmps	=	delEmpsArr;
+	}
 	
 	/**
 	 * Getter Method	: getApproverAction

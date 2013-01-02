@@ -534,6 +534,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 * method name  : getDepartmentHead
 	 * @param branchCode
 	 * @param deptCode
+	 * @param 
 	 * @param locale
 	 * @return
 	 * LeaveDbDao
@@ -543,7 +544,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Dec 5, 2012 9:34:39 AM
 	 */
-	public List<HoD> getDepartmentHead(String branchCode, String deptCode,Locale locale)
+	public List<HoD> getDepartmentHead(String branchCode, String deptCode,String empLevel, Locale locale)
 	{
 		RowMapper<HoD> mapper	=	new RowMapper<HoD>()
 		{
@@ -563,6 +564,11 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 		namedParameters.put("paramBranchCode", branchCode);
 		namedParameters.put("paramDept", deptCode);
+		if(null == empLevel || empLevel.trim().equals(""))
+		{
+			empLevel = Constants.CONST_NOT_AVAILABLE;
+		}
+		namedParameters.put("paramEmpLevel", empLevel);
 		namedParameters.put("paramLocale", locale.getLanguage());
 		
 		logger.info("param HOD branch/Dept id : "+namedParameters);
@@ -577,6 +583,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 * @param branchCode
 	 * @param deptCode
 	 * @param sectCode
+	 * @param empLevel
 	 * @param locale
 	 * @return
 	 * LeaveDbDao
@@ -586,7 +593,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Dec 5, 2012 9:19:35 AM
 	 */
-	public List<HoD>	getSectionHead(String branchCode, String deptCode, String sectCode, Locale locale)
+	public List<HoD>	getSectionHead(String branchCode, String deptCode, String sectCode, String empLevel, Locale locale)
 	{
 		RowMapper<HoD> mapper = new RowMapper<HoD>()
 		{
@@ -608,6 +615,12 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramBranchCode", branchCode);
 		namedParameters.put("paramDept", deptCode);
 		namedParameters.put("paramSectCode", sectCode);
+		if(null == empLevel || empLevel.trim().equals(""))
+		{
+			empLevel = Constants.CONST_NOT_AVAILABLE;
+		}
+		namedParameters.put("paramEmpLevel", empLevel);
+
 		namedParameters.put("paramLocale", locale.getLanguage());
 		
 		return this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_SECTION_HEAD_ID, namedParameters, mapper);
@@ -619,6 +632,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 * method name  : getNextHeadBranch
 	 * @param branchCode
 	 * @param paramLevelAdd
+	 * @param empLevel
 	 * @param locale
 	 * @return
 	 * LeaveDbDao
@@ -628,7 +642,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Dec 5, 2012 8:29:35 AM
 	 */
-	public List<HoD> getNextHeadBranch(String branchCode, int paramLevelAdd, Locale locale)
+	public List<HoD> getNextHeadBranch(String branchCode, int paramLevelAdd, String empLevel, Locale locale)
 	{
 		RowMapper<HoD> 	mapper	=	new RowMapper<HoD>()
 		{
@@ -648,6 +662,11 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 		namedParameters.put("paramBranchCode", branchCode);
 		namedParameters.put("paramLevelAdd", String.valueOf(paramLevelAdd));
+		if(null == empLevel || empLevel.trim().equals(""))
+		{
+			empLevel = Constants.CONST_NOT_AVAILABLE;
+		}
+		namedParameters.put("paramEmpLevel", empLevel);
 		namedParameters.put("paramLocale", locale.getLanguage());
 		return this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_BRANCH_HEAD_NEXT_HIERARCHY, namedParameters, mapper);
 	}
@@ -744,7 +763,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			approve.setRequestNo(leaveRequestNo);
 			approve.setApproverRemark(UtilProperty.getMessage("prop.leave.app.apply.form.approvar.auto.remarks2", null, locale));
 			
-			setLeaveApprove(approve);
+			//setLeaveApprove(approve);
 		}
 
 		
@@ -796,6 +815,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 	}
 	
+	
+
 	
 	
 	/**
@@ -985,6 +1006,10 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 		namedParameters.put("paramLocale", locale.getLanguage());
 		namedParameters.put("paramReqNo", reqNo);
+		
+		
+		logger.info("sepecific leave request param : "+namedParameters);
+		logger.info("sepecific leave request SQL : "+Constants.SQL_VIEW_LEAVE_REQUEST_SPECIFIC);
 		
 		return this.namedParameterJdbcTemplate.queryForObject(Constants.SQL_VIEW_LEAVE_REQUEST_SPECIFIC, namedParameters, mapper);
 		

@@ -246,12 +246,13 @@ $(function() {
         var branchCode=$('select.selBranchCode').val();
         var deptCode = $('select.selDeptCode2').val();
         var sectionCode=$('select.selSectionCode2').val();
+        var hierarchyLevelCode="${employee.hierarchyLevelCode}";
         var hodId="${leaveAppModel.hod}";
         $.ajax({
             type: "GET",
-//             contentType: "application/json; charset=utf-8",
+//             contentType: "application/json; charset=utf-8", hierarchyLevelCode
             url:  "${servletLeaveHOD}",
-            data: 'branchCode='+branchCode+'&deptCode='+deptCode+'&sectionCode='+sectionCode,
+            data: 'branchCode='+branchCode+'&deptCode='+deptCode+'&sectionCode='+sectionCode+'&hierarchyLevelCode='+hierarchyLevelCode,
             dataType: "json",
             success: function(data) {
 			var  dataHtml = '';
@@ -369,9 +370,11 @@ $(function() {
 							<c:set value="" var="selct"/>
 							<c:choose>
 								<c:when test='${opMode=="u"}'>
-									<c:if test="${approver.branchCode==branch.branchCode}">
-										<c:set value="selected" var="selct"/> 
-									</c:if>
+<%-- 								<c:if test="${approver.branchCode==branch.branchCode}"> --%>
+									<c:if test="${employee.branchCode==branch.branchCode}">
+<%-- 								<c:if test="${employee.branchCode==branch.branchCode}"> --%>
+									<c:set value="selected" var="selct"/> 
+								</c:if>
 								</c:when>
 								<c:otherwise>
 									<c:if test="${employee.branchCode==branch.branchCode}">

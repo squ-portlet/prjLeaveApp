@@ -68,15 +68,16 @@ public class LeaveAppHodServlet extends HttpServlet {
 		logger.info("logger inside Hod servlet");
 		System.out.println("logger inside Hod servlet");
 		
-		Locale			locale		=	request.getLocale();	
-		String			branchCode	=	request.getParameter("branchCode");
-		String			deptCode	=	request.getParameter("deptCode");
-		String			sectCode	=	null;
-		HoD				deptHead	=	null;
-		List<HoD>		sectHead	=	null;
-		HoD				hoD			=	new HoD("na","na");
-		List<HoD>		hoDList		=	null;
-		String			strJson		=	null;
+		Locale			locale				=	request.getLocale();	
+		String			branchCode			=	request.getParameter("branchCode");
+		String			deptCode			=	request.getParameter("deptCode");
+		String			hierarchyLevelCode	=	request.getParameter("hierarchyLevelCode");
+		String			sectCode			=	null;
+		HoD				deptHead			=	null;
+		List<HoD>		sectHead			=	null;
+		HoD				hoD					=	new HoD("na","na");
+		List<HoD>		hoDList				=	null;
+		String			strJson				=	null;
 				
 		
 		LeaveDbDao		leaveDbDao	=	new LeaveDbDaoImpl(datasource);
@@ -87,7 +88,7 @@ public class LeaveAppHodServlet extends HttpServlet {
 			sectCode		=	request.getParameter("sectionCode");
 			try
 			{
-				sectHead		=	leaveDbDao.getSectionHead(branchCode, deptCode, sectCode, locale);
+				sectHead		=	leaveDbDao.getSectionHead(branchCode, deptCode, sectCode,hierarchyLevelCode, locale);
 				hoDList			=	sectHead;		//leaveDbDao.getDepartmentHead(branchCode, deptCode, locale);
 
 				if(hoDList.size()==0)
@@ -95,7 +96,7 @@ public class LeaveAppHodServlet extends HttpServlet {
 					logger.warn("hod not available at section level, " +
 							"for branch : "+branchCode + " department : "+deptCode+ " section : " +sectCode);
 
-					hoDList	=	getDepartmentHeads(branchCode, deptCode, locale);
+					hoDList	=	getDepartmentHeads(branchCode, deptCode, hierarchyLevelCode, locale);
 				}
 			}
 			catch(Exception ex)
@@ -110,7 +111,7 @@ public class LeaveAppHodServlet extends HttpServlet {
 		{
 			try
 			{
-				hoDList	=	leaveDbDao.getDepartmentHead(branchCode, deptCode, locale);
+				hoDList	=	leaveDbDao.getDepartmentHead(branchCode, deptCode, hierarchyLevelCode, locale);
 				
 				if(hoDList.size() == 0)
 				{
@@ -119,7 +120,7 @@ public class LeaveAppHodServlet extends HttpServlet {
 					{
 						try
 							{
-								List<HoD> hoDNextLevelList	=	getBranchLevelHeads(branchCode, i, locale);
+								List<HoD> hoDNextLevelList	=	getBranchLevelHeads(branchCode, i, hierarchyLevelCode, locale);
 								if(hoDNextLevelList.size() != 0)
 								{
 									hoDList	= hoDNextLevelList;
@@ -172,13 +173,13 @@ public class LeaveAppHodServlet extends HttpServlet {
 	 *
 	 * Date    		:	Dec 5, 2012 9:51:01 AM
 	 */
-	private List<HoD>	getDepartmentHeads(String branchCode, String deptCode,Locale locale)
+	private List<HoD>	getDepartmentHeads(String branchCode, String deptCode, String hierarchyLevelCode, Locale locale)
 	{
 		LeaveDbDao		leaveDbDao	=	new LeaveDbDaoImpl(datasource);
 		List<HoD>		lstHods		=	null;
 		try
 		{
-			lstHods	=	leaveDbDao.getDepartmentHead(branchCode, deptCode, locale);
+			lstHods	=	leaveDbDao.getDepartmentHead(branchCode, deptCode, hierarchyLevelCode, locale);
 		}
 		catch(Exception ex)
 		{
@@ -202,14 +203,14 @@ public class LeaveAppHodServlet extends HttpServlet {
 	 *
 	 * Date    		:	Dec 5, 2012 10:02:21 AM
 	 */
-	private List<HoD>	getBranchLevelHeads(String branchCode, int paramLevelAdd, Locale locale)
+	private List<HoD>	getBranchLevelHeads(String branchCode, int paramLevelAdd, String hierarchyLevelCode, Locale locale)
 	{
 		LeaveDbDao		leaveDbDao	=	new LeaveDbDaoImpl(datasource);
 		List<HoD>		lstHods		=	null;
 		
 		try
 		{
-			lstHods	=	leaveDbDao.getNextHeadBranch(branchCode, paramLevelAdd, locale);
+			lstHods	=	leaveDbDao.getNextHeadBranch(branchCode, paramLevelAdd,hierarchyLevelCode, locale);
 		}
 		catch(Exception ex)
 		{

@@ -66,10 +66,10 @@ public class LeaveAppValidator implements Validator
 		LeaveAppModel	leaveAppModel	=	(LeaveAppModel) obj;
 		DelegatedEmp[]	delegatedEmps	=	leaveAppModel.getDelegatedEmps();
 		
-		if(null == leaveAppModel.getHod()|| leaveAppModel.getHod().trim().equals(""))
-		{
-			err.rejectValue("hod", "error.prop.leave.app.approver.na");
-		}
+//		if(null == leaveAppModel.getHod()|| leaveAppModel.getHod().trim().equals(""))
+//		{
+//			err.rejectValue("hod", "error.prop.leave.app.approver.na");
+//		}
 		
 		if(null == leaveAppModel.getLeaveTypeFlag() || leaveAppModel.getLeaveTypeFlag().trim().equals(""))
 		{
