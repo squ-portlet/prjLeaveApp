@@ -585,12 +585,19 @@ public interface Constants
 																			" WHERE VHM_LEAVE_REQ_NO=:paramReqNo							";
 	
 	public static final String	SQL_UPDATE_LEAVE_REQ_APPROVE	=			"	UPDATE VHM_EMP_LEAVE_REQUEST_APPROVAL						" +
-																			"	SET VHM_ACTION_CODE = :paramActionCode,							" +        
-																			"	 VHM_APP_REMARKS = :paramApprvRemark,							" +
-																			"	 VHM_APP_UPD_USER_INIT = :paramUpdateUsr,						" +
-																			"	 VHM_APP_UPD_DATE  = SYSDATE									" +
+																			"	SET VHM_ACTION_CODE = :paramActionCode,						" +        
+																			"	 VHM_APP_REMARKS = :paramApprvRemark,						" +
+																			"	 VHM_APP_UPD_USER_INIT = :paramUpdateUsr,					" +
+																			"	 VHM_APP_UPD_DATE  = SYSDATE								" +
 																			"	WHERE VHM_LEAVE_REQ_NO = :paramReqNo						" +
-																			"	AND VHM_APP_EMP_CODE = 	 :paramEmpNo						";
+																			"	AND VHM_APP_EMP_CODE = 	 :paramEmpNo						" +
+																			"	AND VHM_APP_RECEIVED_DATE = (								" +
+																			"			SELECT MAX(VHM_APP_RECEIVED_DATE) 					" +
+																			"			FROM VHM_EMP_LEAVE_REQUEST_APPROVAL					" +
+																			"			WHERE VHM_LEAVE_REQ_NO = :paramReqNo 				" +
+																			"			AND VHM_APP_EMP_CODE = 	 :paramEmpNo				" +
+																			"			)													";
+																			
 																			
 	
 	public static final String	SQL_UPDATE_APPROVE_ON_REQ_CHANGE =			"	UPDATE VHM_EMP_LEAVE_REQUEST_APPROVAL						" +
