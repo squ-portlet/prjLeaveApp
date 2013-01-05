@@ -452,6 +452,12 @@ public interface Constants
 																			"	  AND LVREQ.VHM_DEPT_CODE = DEPT.VHM_DEPT_CODE			" +
 																			"	  AND LVREQ.VHM_POSITION_CODE = DESIG.VHM_DESG_CODE (+)	" +
 																			"	  AND LVREQ.VHM_LEAVE_REQ_NO  =	LVAPRV.VHM_LEAVE_REQ_NO (+)" +
+																			"     AND LVAPRV.VHM_APP_RECEIVED_DATE = 					" +
+																			"							(					  			" +
+																			"							SELECT MAX(VHM_APP_RECEIVED_DATE) " +	
+																			"							FROM VHM_EMP_LEAVE_REQUEST_APPROVAL " +
+																			"							WHERE VHM_LEAVE_REQ_NO = :paramReqNo " +
+																			"										)					" +
 																			"	ORDER BY LEAVE_REQ_DATE DESC							" +
 																			") WHERE ROWNUM <=1											";
 

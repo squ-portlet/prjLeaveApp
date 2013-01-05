@@ -370,9 +370,8 @@ $(function() {
 							<c:set value="" var="selct"/>
 							<c:choose>
 								<c:when test='${opMode=="u"}'>
-<%-- 								<c:if test="${approver.branchCode==branch.branchCode}"> --%>
-									<c:if test="${employee.branchCode==branch.branchCode}">
-<%-- 								<c:if test="${employee.branchCode==branch.branchCode}"> --%>
+								<c:if test="${approver.branchCode==branch.branchCode}">
+<%-- 									<c:if test="${employee.branchCode==branch.branchCode}"> --%>
 									<c:set value="selected" var="selct"/> 
 								</c:if>
 								</c:when>
