@@ -125,49 +125,20 @@
 	<h2><font color="red"><c:out value="${allowELeaveRequestMsg}"/></font></h2>
 </c:if>
 
-<table id="list2"></table>
-<div id="pager2"></div>
+<table id="list3" class="listT"></table>
+<div id="pager3" class="pagerT"></div>
 
+<table id="list2" class="listT"></table>
+<div id="pager2" class="pagerT"></div>
 
 
 <c:if test="${not empty leaveRequests}">
 	<script type="text/javascript">
 	//contribution :  http://trirand.com/blog/jqgrid/jqgrid.html
-	$(function(){
-		$('#list2').jqGrid({
-		   	//url:'server.php?q=2',
-			//datatype: "json",
-			datatype: "local",
-		   	colNames:[
-		   	          '<spring:message code="prop.leave.app.title.request.no"/>',
-		   	          '<spring:message code="prop.leave.app.title.request.date"/>', 
-		   	          '<spring:message code="prop.leave.app.title.request.leave.start.date"/>',
-		   	          '<spring:message code="prop.leave.app.title.request.leave.end.date"/>',
-		   	          '<spring:message code="prop.leave.app.title.request.leave.type"/>',
-		   	          '<spring:message code="prop.leave.app.title.request.status"/>',
-		   	          '<spring:message code="prop.leave.app.title.request.employee"/>',
-		   	          '<spring:message code="prop.leave.app.title.request.action"/>'
-		   	          ],
-		   	colModel:[
-		   		{name:'reqNo',width:90,index:'endDate'},
-		   		{name:'reqDate',index:'reqDate', align:"right"},
-		   		{name:'startDate',index:'startDate',  align:"right"},
-		   		{name:'endDate',index:'endDate', align:"right"},
-		   		{name:'type'},		
-		   		{name:'status'},
-		   		{name:'employee'},
-		   		{name:'actions',width:200}
-		   	],
-		   	rowNum:10,
-		   	rowList:[10,20,30],
-		   	pager: '#pager2',
-		   	sortname: 'reqNo',
-		    viewrecords: true,
-		    sortorder: "desc",
-		    caption:'<spring:message code="javax.portlet.title"/>'
-		});
-	});
+
 	
+	var countRequester = 0;
+	var countApprover = 0;
 	var mydata = [
 				<c:forEach items="${leaveRequests}" var="req" >
 					{
@@ -195,42 +166,192 @@
 					 endDate:'<c:out value="${req.leaveEndDate}"/>',
 					 type:'<c:out value="${req.leaveType.typeDesc}"/>',
 					 status:'<c:out value="${req.leaveStatus}"/>',
-					 employee:'<c:out value="${req.employee.empNumber}"/> / <c:out value="${req.employee.empInternetId}"/>',
+						<c:choose>
+						<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
+										(req.employee.hierarchyCode >empHierarchyAddl) ||
+											(!req.employee.senior && (req.employee.empNumber != empNumber))}">
+							employee:'<c:out value="${req.employee.empName}"/> &nbsp; (<c:out value="${req.employee.empNumber}"/>)',
+						</c:when>
+						<c:otherwise>
+							employee:'<c:out value="${req.approve.employee.empName}"/> &nbsp; (<c:out value="${req.approve.employee.empNumber}"/>)',
+						</c:otherwise>
+					</c:choose>
+					 
 					<c:choose>
 						<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
 											(req.employee.hierarchyCode >empHierarchyAddl) ||
 											(!req.employee.senior && (req.employee.empNumber != empNumber))}">
-						actions: '<c:forEach items="${adminActions}" var="admActions">'+
+							actions: '<c:forEach items="${adminActions}" var="admActions">'+
 									'<portlet:renderURL var="varLeaveAdminAction">'+
 									'   <portlet:param name="action" value="leaveAutoAdminAction"/>'+
 									'   <portlet:param name="reqNum" value="${req.requestNo}"/>'+
 									'   <portlet:param name="appActionNum" value="${admActions.actionCode}"/>'+
 									'</portlet:renderURL>'+
 									'<a href="${varLeaveAdminAction}"><c:out value="${admActions.actionDesc}"/></a> &nbsp;'+
-								'</c:forEach>'		
+								'</c:forEach>',		
 						</c:when>
 						<c:when test="${(req.status.statusCode == furtherClarification)}">
 							<portlet:renderURL var="varLeaveClarification">
 								<portlet:param name="action" value="updateLeaveApply"/>
 								<portlet:param name="reqNum" value="${req.requestNo}"/>
 							</portlet:renderURL>
-							actions:'<a href="${varLeaveClarification}"><font color="red"><spring:message code="prop.leave.app.apply.action.update"/></font></a>'
+							actions:'<a href="${varLeaveClarification}"><font color="red"><spring:message code="prop.leave.app.apply.action.update"/></font></a>',
 						</c:when>
 						<c:otherwise>
-						actions:'-'
+						actions:'-',
 						</c:otherwise>
 					</c:choose>
 					
+					<c:choose>
+					<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
+									(req.employee.hierarchyCode >empHierarchyAddl) ||
+										(!req.employee.senior && (req.employee.empNumber != empNumber))}">
+					isApprover:'y'
+					</c:when>
+					<c:otherwise>
+					isApprover:'n'
+					</c:otherwise>
+				</c:choose>
+					
 					},
 				</c:forEach>
-	 			
+
 	      		];
-	$(function(){      		
-	for(var i=0;i<=mydata.length;i++)
-		$('#list2').jqGrid('addRowData',i+1,mydata[i]);
-		$('#backupDiv').remove();
+	
+	
+	var list3Data = mydata;
+	
+	
+	$(function(){
+		for(var i=0;i<mydata.length;i++)
+			{
+			if(mydata[i].isApprover=="y")
+				{
+					countApprover	=	countApprover + 1;
+				}
+			if(mydata[i].isApprover=="n")
+				{
+					countRequester	=	countRequester + 1;
+				}
+
+			
+			}
+		
 	});
 	
+	
+	$(function(){
+		if(countApprover != 0)
+			{
+		$('#list2').jqGrid({
+		   	//url:'server.php?q=2',
+			//datatype: "json",
+			datatype: "local",
+		   	colNames:[
+		   	          '<spring:message code="prop.leave.app.title.request.no"/>',
+		   	          '<spring:message code="prop.leave.app.title.request.date"/>', 
+		   	          '<spring:message code="prop.leave.app.title.request.leave.start.date"/>',
+		   	          '<spring:message code="prop.leave.app.title.request.leave.end.date"/>',
+		   	          '<spring:message code="prop.leave.app.title.request.leave.type"/>',
+		   	          '<spring:message code="prop.leave.app.title.request.status"/>',
+		   	       '<spring:message code="prop.leave.app.title.request.requester"/>',
+		   	          '<spring:message code="prop.leave.app.title.request.action"/>'
+		   	       	  //'approver'
+		   	          ],
+		   	colModel:[
+		   		{name:'reqNo',width:90,index:'endDate'},
+		   		{name:'reqDate',index:'reqDate', align:"right"},
+		   		{name:'startDate',index:'startDate',  align:"right"},
+		   		{name:'endDate',index:'endDate', align:"right"},
+		   		{name:'type'},		
+		   		{name:'status'},
+		   		{name:'employee'},
+		   		{name:'actions',width:200}
+		   		//{name:'approver',width:200}
+		   	],
+		   	rowNum:10,
+		   	rowList:[10,20,30],
+		   	pager: '#pager2',
+		   	sortname: 'reqNo',
+		    viewrecords: true,
+		    sortorder: "desc",
+		    caption:'<spring:message code="prop.leave.app.title.request.approver.header"/>'
+		});
+	
+		}
+		
+	});
+
+	$(function(){
+		if(countRequester != 0)
+			{
+		$('#list3').jqGrid({
+		   	//url:'server.php?q=2',
+			//datatype: "json",
+			datatype: "local",
+		   	colNames:[
+		   	          '<spring:message code="prop.leave.app.title.request.no"/>',
+		   	          '<spring:message code="prop.leave.app.title.request.date"/>', 
+		   	          '<spring:message code="prop.leave.app.title.request.leave.start.date"/>',
+		   	          '<spring:message code="prop.leave.app.title.request.leave.end.date"/>',
+		   	          '<spring:message code="prop.leave.app.title.request.leave.type"/>',
+		   	          '<spring:message code="prop.leave.app.title.request.status"/>',
+			   	       '<spring:message code="prop.leave.app.title.request.approver"/>',
+		   	          '<spring:message code="prop.leave.app.title.request.action"/>'
+		   	       	  //'approver'
+		   	          ],
+		   	colModel:[
+		   		{name:'reqNo',width:90,index:'endDate'},
+		   		{name:'reqDate',index:'reqDate', align:"right"},
+		   		{name:'startDate',index:'startDate',  align:"right"},
+		   		{name:'endDate',index:'endDate', align:"right"},
+		   		{name:'type'},		
+		   		{name:'status'},
+		   		{name:'employee'},
+		   		{name:'actions',width:200}
+		   		//{name:'approver',width:200}
+		   	],
+		   	rowNum:10,
+		   	rowList:[10,20,30],
+		   	pager: '#pager3',
+		   	sortname: 'reqNo',
+		    viewrecords: true,
+		    sortorder: "desc",
+		    caption:'<spring:message code="prop.leave.app.title.request.requester.header"/>'
+		});
+		
+		}
+	});
+
+	
+	$(function(){
+		if(countApprover != 0)
+			{
+				for(var i=0;i<mydata.length;i++)
+				{
+				if(mydata[i].isApprover=="y")
+					{
+					$('#list2').jqGrid('addRowData',i+1,mydata[i]);	
+					}
+				}
+			}
+		$('#backupDiv').remove();
+	});
+
+
+	$(function(){  
+		if(countRequester != 0)
+			{
+				for(var i=0;i<list3Data.length;i++)
+				{
+				if(list3Data[i].isApprover=="n")
+					{
+					$('#list3').jqGrid('addRowData',i+1,list3Data[i]);	
+					}
+				}
+			}
+		});
+		
 	</script>
 
 <div id="backupDiv">

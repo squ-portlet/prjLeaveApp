@@ -262,6 +262,9 @@ public interface Constants
 																			"		) AS LEAVE_STATUS,									" +
 																			"   LVREQ.VHM_EMP_CODE AS EMP_CODE,							" +
 																			"	LVREQ.VHM_EMP_INTERNET_USR_ID AS EMP_INTERNET_ID,		" +
+																			" DECODE('en',												" +
+									                                        "      'en',initCap(EMP.VHM_EMP_NAME),						" +
+									                                        "      'ar',EMP.VHM_EMP_NAME_ARABIC) AS EMP_NAME,			" +
 																			"	LVREQ.VHM_HIERARCHY_CODE AS EMP_HIERARCHY_CODE,			" +
 																			"   DECODE( 												" +
 																			"       NVL(												" +
@@ -273,16 +276,27 @@ public interface Constants
 																			"            AND LVREQ2.VHM_LEAVE_REQ_NO =LVREQ.VHM_LEAVE_REQ_NO),'N'		" +
 																			"       ),													" +			
 																			"       'N','employee','senior'								" +			
-																			"	) AS DELEGATE_STATUS,HIR.VHM_LEVEL AS EMP_LEVEL			" +						
+																			"	) AS DELEGATE_STATUS,HIR.VHM_LEVEL AS EMP_LEVEL,		" +
+																			" 	APP.VHM_APP_EMP_CODE AS EMP_APP_CODE,					" +
+																			"	(														" +
+																			"		SELECT DECODE('en',									" +
+										                                    "          'en',initCap(EMPAPP.VHM_EMP_NAME),				" +
+										                                    "          'ar',EMPAPP.VHM_EMP_NAME_ARABIC) 				" +
+										                                    "    	FROM VHM_EMPLOYEE  EMPAPP							" +
+										                                    "    	WHERE 												" +
+										                                    "	EMPAPP.VHM_EMP_CODE=APP.VHM_APP_EMP_CODE				" +
+										                                    "	) AS EMP_APP_NAME										" +
 																			" FROM 														" +
 																			"		VHM_EMP_LEAVE_REQUEST LVREQ,						" +
 																			"		VHM_LEAVE_TYPE_FLAG LVTYPE,							" +
 																			"		VHM_WORKFLOW_STATUS LVSTATUS,						" +
 																			"		VHM_EMP_LEAVE_REQUEST_APPROVAL APP,					" +
 																			"		VHM_EMP_LEAVE_REQ_DELEGATION DELG,					" +
-																			"		VHM_HIERARCHY HIR									" +
+																			"		VHM_HIERARCHY HIR,									" +
+																			"		VHM_EMPLOYEE EMP									" +
 																			" WHERE														" + 													
-																			"		LVREQ.VHM_LEAVE_TYPE_FLAG=LVTYPE.VHM_LEAVE_TYPE_FLAG 				" +
+																			"		LVREQ.VHM_LEAVE_TYPE_FLAG=LVTYPE.VHM_LEAVE_TYPE_FLAG " +
+																			"	AND LVREQ.VHM_EMP_CODE = EMP.VHM_EMP_CODE				" +
 																			"	AND LVREQ.VHM_STATUS_CODE = LVSTATUS.VHM_STATUS_CODE 	" +
 																			"	AND	LVREQ.VHM_LEAVE_REQUEST_ACTIVE='Y'					" +
 																			"	AND LVREQ.VHM_LEAVE_REQ_NO = APP.VHM_LEAVE_REQ_NO		" +
@@ -639,6 +653,8 @@ public interface Constants
 	public static final	String	CONST_EMP_DEPARTMENT_SHORT		=			"EMP_DEPARTMENT_SHORT";
 	public static final	String	CONST_EMP_SECTION_CODE			=			"EMP_SECTION_CODE";
 	public static final	String	CONST_EMP_SECTION				=			"EMP_SECTION";
+	public static final	String	CONST_EMP_APP_CODE				=			"EMP_APP_CODE";
+	public static final	String	CONST_EMP_APP_NAME				=			"EMP_APP_NAME";
 	public static final	String	CONST_EMP_APP_BRANCH_CODE		=			"EMP_APP_BRANCH_CODE";
 	public static final	String	CONST_EMP_APP_DEPARTMENT_CODE	=			"EMP_APP_DEPARTMENT_CODE";
 	public static final	String	CONST_EMP_APP_SECTION_CODE		=			"EMP_APP_SECTION_CODE";

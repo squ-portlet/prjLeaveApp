@@ -889,7 +889,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				LeaveRequest	leaveRequest	=	new LeaveRequest();
 				LeaveType		leaveType		=	new LeaveType();
 				LeaveStatus		leaveStatus		=	new LeaveStatus();
-				Employee		employee		=	new	Employee();
+				LeaveApprove	leaveApprove	=	new LeaveApprove();
+				Employee		employeeReq		=	new	Employee();											//	Employee as requester
+				Employee		employeeApp		=	new Employee();											//	Employee as approver
 				
 				leaveRequest.setRequestNo(rs.getString(Constants.CONST_LEAVE_REQUEST_NO));
 				leaveRequest.setRequestDate(rs.getString(Constants.CONST_LEAVE_REQ_DATE));
@@ -902,18 +904,23 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveStatus.setStatusCode(rs.getString(Constants.CONST_LEAVE_STATUS_CODE));
 					leaveStatus.setStatusDesc(rs.getString(Constants.CONST_LEAVE_STATUS));
 				leaveRequest.setStatus(leaveStatus);
-					employee.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
-					employee.setEmpInternetId(rs.getString(Constants.CONST_EMP_INTERNET_ID));
-					employee.setHierarchyCode(rs.getString(Constants.CONST_EMP_HIERARCHY_CODE));
+					employeeReq.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
+					employeeReq.setEmpInternetId(rs.getString(Constants.CONST_EMP_INTERNET_ID));
+					employeeReq.setEmpName(rs.getString(Constants.CONST_EMP_NAME));
+					employeeReq.setHierarchyCode(rs.getString(Constants.CONST_EMP_HIERARCHY_CODE));
 					if(rs.getString(Constants.CONST_DELEGATE_STATUS).equals(Constants.CONST_EMP_SENIOR))
 					{
-						employee.setSenior(true);
+						employeeReq.setSenior(true);
 					}
 					else
 					{
-						employee.setSenior(false);
+						employeeReq.setSenior(false);
 					}
-				leaveRequest.setEmployee(employee);
+				leaveRequest.setEmployee(employeeReq);
+						employeeApp.setEmpNumber(rs.getString(Constants.CONST_EMP_APP_CODE));
+						employeeApp.setEmpName(rs.getString(Constants.CONST_EMP_APP_NAME));
+					leaveApprove.setEmployee(employeeApp);
+				leaveRequest.setApprove(leaveApprove);
 				return leaveRequest;
 			}
 		};
