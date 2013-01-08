@@ -354,7 +354,9 @@
 		
 	</script>
 
+
 <div id="backupDiv">
+<c:set value="0" var="cnt"/>
 <fieldset > 
 		<legend><spring:message code="javax.portlet.title"/></legend>
 
@@ -366,7 +368,8 @@
 	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
 	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
 	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.status"/></th>
-	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.employee"/></th>
+	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.requester"/></th>
+	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.approver"/></th>
 	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.action"/></th>
  	</tr>
  	<c:forEach items="${leaveRequests}" var="req" >
@@ -378,10 +381,24 @@
 			</jsp:attribute>
 			</portlet:param>
 		</portlet:renderURL>
-		<tr>
+
+		<c:choose> 
+			<c:when test='${(req.employee.hierarchyCode > empHierarchy) || 
+										(!req.employee.senior && (req.employee.empNumber != empNumber))}'>
+			<c:set value="yellow" var="colYell"/>
+			<c:set value="${cnt+1}" var="cnt"/>
+			</c:when>
+			<c:otherwise>
+			<c:set value="white" var="colYell"/>
+			</c:otherwise>
+										
+		</c:choose>
+		
+		<tr bgcolor="${colYell}">
 			<td>
 				<c:choose>
 					<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
+									(req.employee.hierarchyCode >empHierarchyAddl) ||
 										(!req.employee.senior && (req.employee.empNumber != empNumber))}">
 						<a href="${varLeaveApprove}"><c:out value="${req.requestNo}"/></a>
 					</c:when>
@@ -406,11 +423,15 @@
 				<c:out value="${req.leaveStatus}"/>
 			</td>
 			<td>
-				<c:out value="${req.employee.empNumber}"/> / <c:out value="${req.employee.empInternetId}"/>
+				<c:out value="${req.employee.empName}"/> &nbsp; (<c:out value="${req.employee.empNumber}"/>)
+			</td>
+			<td>
+				<c:out value="${req.approve.employee.empName}"/> &nbsp; (<c:out value="${req.approve.employee.empNumber}"/>)
 			</td>
 			<td>
 				<c:choose>
 					<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
+					(req.employee.hierarchyCode >empHierarchyAddl) ||
 						(!req.employee.senior && (req.employee.empNumber != empNumber))}">
 						<c:forEach items="${adminActions}" var="admActions">
 							<portlet:renderURL var="varLeaveAdminAction">
@@ -437,9 +458,15 @@
  	</c:forEach>
  </table>
  </fieldset>
+	<c:if test="${cnt!=0}">
+		 <spring:message code="prop.leave.app.title.request.note"/>
+ 	</c:if>
+ <table>
+ 	<tr>
+ 		<td></td><td></td>
+ 	</tr>
+ </table>
 </div>
-
-
 </c:if>
 
 
