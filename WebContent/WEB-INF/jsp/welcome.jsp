@@ -181,14 +181,21 @@
 						<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
 											(req.employee.hierarchyCode >empHierarchyAddl) ||
 											(!req.employee.senior && (req.employee.empNumber != empNumber))}">
-							actions: '<c:forEach items="${adminActions}" var="admActions">'+
+							<c:choose>
+								<c:when test="${(req.status.statusCode == leaveStatusApproved)}">
+									actions: '-',
+								</c:when>
+								<c:otherwise>
+									actions: '<c:forEach items="${adminActions}" var="admActions">'+
 									'<portlet:renderURL var="varLeaveAdminAction">'+
 									'   <portlet:param name="action" value="leaveAutoAdminAction"/>'+
 									'   <portlet:param name="reqNum" value="${req.requestNo}"/>'+
 									'   <portlet:param name="appActionNum" value="${admActions.actionCode}"/>'+
 									'</portlet:renderURL>'+
 									'<a href="${varLeaveAdminAction}"><c:out value="${admActions.actionDesc}"/></a> &nbsp;'+
-								'</c:forEach>',		
+									'</c:forEach>',		
+								</c:otherwise>
+							</c:choose>
 						</c:when>
 						<c:when test="${(req.status.statusCode == furtherClarification)}">
 							<portlet:renderURL var="varLeaveClarification">
@@ -198,7 +205,7 @@
 							actions:'<a href="${varLeaveClarification}"><font color="red"><spring:message code="prop.leave.app.apply.action.update"/></font></a>',
 						</c:when>
 						<c:otherwise>
-						actions:'-',
+							actions:'-',
 						</c:otherwise>
 					</c:choose>
 					
@@ -433,14 +440,21 @@
 					<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
 					(req.employee.hierarchyCode >empHierarchyAddl) ||
 						(!req.employee.senior && (req.employee.empNumber != empNumber))}">
-						<c:forEach items="${adminActions}" var="admActions">
-							<portlet:renderURL var="varLeaveAdminAction">
-							   <portlet:param name="action" value="leaveAutoAdminAction"/>
-							   <portlet:param name="reqNum" value="${req.requestNo}"/>
-							   <portlet:param name="appActionNum" value="${admActions.actionCode}"/>
-							</portlet:renderURL>
-							<a href="${varLeaveAdminAction}"><c:out value="${admActions.actionDesc}"/></a>
-						</c:forEach>		
+						<c:choose>
+								<c:when test="${(req.status.statusCode == leaveStatusApproved)}">
+									-
+								</c:when>
+							<c:otherwise>
+								<c:forEach items="${adminActions}" var="admActions">
+									<portlet:renderURL var="varLeaveAdminAction">
+									   <portlet:param name="action" value="leaveAutoAdminAction"/>
+									   <portlet:param name="reqNum" value="${req.requestNo}"/>
+									   <portlet:param name="appActionNum" value="${admActions.actionCode}"/>
+									</portlet:renderURL>
+										<a href="${varLeaveAdminAction}"><c:out value="${admActions.actionDesc}"/></a>
+								</c:forEach>
+							</c:otherwise>
+						</c:choose>		
 					</c:when>
 					<c:when test="${(req.status.statusCode == furtherClarification)}">
 						<portlet:renderURL var="varLeaveClarification">

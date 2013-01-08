@@ -117,6 +117,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("empNumber", String.format("%07d", Integer.parseInt(empNumber)));
 		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
 		model.addAttribute("furtherClarification", Constants.CONST_LEAVE_STATUS_FURTHER_CLARIFICATION);
+		model.addAttribute("leaveStatusApproved", Constants.CONST_LEAVE_STATUS_APPROVED);
 		return Constants.PAGE_WELCOME;
 	}
 	
