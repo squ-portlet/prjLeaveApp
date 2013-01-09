@@ -29,12 +29,15 @@
  */
 package om.edu.squ.squportal.portlet.leaveapp.bo;
 
+import java.io.Serializable;
+
 /**
  * @author Bhabesh
  *
  */
-public class LeaveApprove
+public class LeaveApprove implements Serializable
 {
+	private static final long	serialVersionUID	= 1L;
 	private		String		requestNo;
 	private		Employee	employee;
 	private		String		branchCode;

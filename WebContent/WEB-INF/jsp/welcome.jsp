@@ -187,11 +187,11 @@
 								</c:when>
 								<c:otherwise>
 									actions: '<c:forEach items="${adminActions}" var="admActions">'+
-									'<portlet:renderURL var="varLeaveAdminAction">'+
+									'<portlet:actionURL var="varLeaveAdminAction">'+
 									'   <portlet:param name="action" value="leaveAutoAdminAction"/>'+
 									'   <portlet:param name="reqNum" value="${req.requestNo}"/>'+
 									'   <portlet:param name="appActionNum" value="${admActions.actionCode}"/>'+
-									'</portlet:renderURL>'+
+									'</portlet:actionURL>'+
 									'<a href="${varLeaveAdminAction}"><c:out value="${admActions.actionDesc}"/></a> &nbsp;'+
 									'</c:forEach>',		
 								</c:otherwise>
@@ -360,7 +360,6 @@
 		});
 		
 	</script>
-
 
 <div id="backupDiv">
 <c:set value="0" var="cnt"/>

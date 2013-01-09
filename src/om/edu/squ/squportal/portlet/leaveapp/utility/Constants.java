@@ -607,6 +607,7 @@ public interface Constants
 	public static final String	SQL_UPDATE_LEAVE_REQ_APPROVE	=			"	UPDATE VHM_EMP_LEAVE_REQUEST_APPROVAL						" +
 																			"	SET VHM_ACTION_CODE = :paramActionCode,						" +        
 																			"	 VHM_APP_REMARKS = :paramApprvRemark,						" +
+																			"	 VHM_APP_ACTION_DATE = SYSDATE,								" +
 																			"	 VHM_APP_UPD_USER_INIT = :paramUpdateUsr,					" +
 																			"	 VHM_APP_UPD_DATE  = SYSDATE								" +
 																			"	WHERE VHM_LEAVE_REQ_NO = :paramReqNo						" +

@@ -326,35 +326,43 @@ public class LeaveAppControllerMain
 	{
 		Employee	employee	=	(Employee)request.getPortletSession().getAttribute("employee");
 		leaveAppServiceDao.setLeaveApprove(leaveAppModel, employee);
+		response.setRenderParameter("action", "backToMain");
 	}
 	
-
 	/**
 	 * 
 	 * method name  : leaveAppAutoAdminAction
 	 * @param requestNo
 	 * @param actionNo
 	 * @param request
-	 * @param model
+	 * @param response
+	 * @param req
+	 * @param leaveAppModel
+	 * @param result
 	 * @param locale
-	 * @return
+	 * @param model
 	 * LeaveAppControllerMain
-	 * return type  : String
+	 * return type  : void
 	 * 
 	 * purpose		: action taken from grid itself
 	 *
-	 * Date    		:	Dec 10, 2012 10:29:16 AM
+	 * Date    		:	Jan 9, 2013 2:00:01 PM
 	 */
 	@RequestMapping(params="action=leaveAutoAdminAction")
-	private String leaveAppAutoAdminAction(
-			@RequestParam("reqNum") String requestNo,
-			@RequestParam("appActionNum") String actionNo,
-			PortletRequest request, Model model, Locale locale
-			)
+	private void leaveAppAutoAdminAction 
+		(
+				@RequestParam("reqNum") String requestNo,
+				@RequestParam("appActionNum") String actionNo,
+				ActionRequest request,
+				ActionResponse response, PortletRequest req, 
+				@ModelAttribute("leaveAppModel") LeaveAppModel leaveAppModel,
+				BindingResult result,Locale locale,Model model
+
+		)
 	{
 		Employee	employee	=	(Employee)request.getPortletSession().getAttribute("employee");
 		leaveAppServiceDao.setLeaveApprove(requestNo, actionNo, locale, employee);
-		return  welcome(request,model,locale);
+		response.setRenderParameter("action", "backToMain");
 	}
 	
 	
