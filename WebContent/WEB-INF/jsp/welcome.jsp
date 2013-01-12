@@ -192,7 +192,7 @@
 									'   <portlet:param name="reqNum" value="${req.requestNo}"/>'+
 									'   <portlet:param name="appActionNum" value="${admActions.actionCode}"/>'+
 									'</portlet:actionURL>'+
-									'<a href="${varLeaveAdminAction}"><c:out value="${admActions.actionDesc}"/></a> &nbsp;'+
+									'<a href="${varLeaveAdminAction}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a> &nbsp;'+
 									'</c:forEach>',		
 								</c:otherwise>
 							</c:choose>

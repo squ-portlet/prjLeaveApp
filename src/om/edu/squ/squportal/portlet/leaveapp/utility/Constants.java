@@ -309,6 +309,11 @@ public interface Constants
 																			"			OR (											" +
 																			"					DELG.VHM_DELEGATED_EMP_CODE = :paramEmpNumber	" +
 																			"					AND	(									" +
+																			"							TO_DATE(SYSDATE,'DD/MM/YYYY') BETWEEN " +
+																			"								TO_DATE(DELG.VHM_DELEGATED_FROM_DATE,'DD/MM/YYYY')	 " +
+																			"							 AND TO_DATE(DELG.VHM_DELEGATED_TO_DATE,'DD/MM/YYYY')	 " +
+																			"						)									" +
+																			"					AND	(									" +
 																			"							TO_DATE(LVREQ.VHM_LEAVE_START_DATE,'DD/MM/YYYY') BETWEEN " +
 																			"								TO_DATE(DELG.VHM_DELEGATED_FROM_DATE,'DD/MM/YYYY')	 " +
 																			"							 AND TO_DATE(DELG.VHM_DELEGATED_TO_DATE,'DD/MM/YYYY')	 " +
