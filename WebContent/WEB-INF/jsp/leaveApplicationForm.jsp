@@ -364,6 +364,8 @@ $(function() {
 					</span>
 				</th>
 				<td >
+				<div id="divHod" class="divHod"></div><form:errors path="hod"  cssClass="error"/>
+				<br>
 					<form:select path="branch2"  cssClass="selBranchCode" id="selBranchCode" >
 						<option><spring:message code="prop.leave.app.dropdown.text"/></option>
 						<c:forEach items="${branches}" var="branch">
@@ -394,9 +396,6 @@ $(function() {
 					<form:select path="section2" cssClass="selSectionCode2" id="selSectionCode2">
 						<option><spring:message code="prop.leave.app.dropdown.text"/></option>
 					</form:select>
-				<br>
-					<div id="divHod" class="divHod"></div><form:errors path="hod"  cssClass="error"/>
-					
 				</td>
 			</tr>
 			<tr>
