@@ -738,7 +738,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramReqRemarks",leaveRequest.getLeaveRequestRemarks());
 		namedParameters.put("paramReqUserInit",Constants.USER_WEB);
 		namedParameters.put("paramLeaveTypeFlag",leaveRequest.getLeaveTypeFlag().getTypeNo());
-		//namedParameters.put("paramReqCreDate",);
+
 		
 		namedParameters.put("paramHodId", emp.getMyHodId());
 		
@@ -752,6 +752,11 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		   leaveRequest.getRequestNo().trim().equals(Constants.CONST_NOT_AVAILABLE))
 		{
 			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQUEST, namedParameters);
+			
+			if(null != delegatedEmps)
+			{
+				setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps,emp.getEmpNumber(),Constants.CONST_OPERATION_ADD);
+			}
 		}
 		else
 		{
@@ -762,15 +767,12 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			approve.setEmployee(employee);
 			approve.setRequestNo(leaveRequestNo);
 			approve.setApproverRemark(UtilProperty.getMessage("prop.leave.app.apply.form.approvar.auto.remarks2", null, locale));
-			
-			//setLeaveApprove(approve);
+			setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps,emp.getEmpNumber(),Constants.CONST_OPERATION_UPDATE);
+
 		}
 
 		
-		if(null != delegatedEmps)
-		{
-			setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps,emp.getEmpNumber());
-		}
+
 		
 		return result;
 		
@@ -824,6 +826,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 * @param requestNo
 	 * @param delegatedEmps
 	 * @param orginEmpNumber
+	 * @param operation
 	 * LeaveDbDaoImpl
 	 * return type  : void
 	 * 
@@ -831,18 +834,32 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Dec 8, 2012 12:44:31 PM
 	 */
-	private	void	setNewLeaveDelegationRequest(String requestNo, DelegatedEmp[] delegatedEmps,String orginEmpNumber )
+	@Transactional("trLeaveDelegate")
+	private	void	setNewLeaveDelegationRequest(String requestNo, DelegatedEmp[] delegatedEmps,String orginEmpNumber,String operation)
 	{
 		logger.info("delegated employees length: "+delegatedEmps.length);
 		try
 		{
+			if(operation.equals(Constants.CONST_OPERATION_UPDATE))
+			{	Map<String,String> namedParameters2 	= 	new HashMap<String,String>();
+				namedParameters2.put("paramLeaveReqNo", requestNo);
+				this.namedParameterJdbcTemplate.update(Constants.SQL_DELETE_LEAVE_REQ_DELEGATION, namedParameters2);
+			}
+			
 			for(DelegatedEmp delEmp: delegatedEmps)
 				{
 					logger.info("delegated employee Summary : "+delEmp.toString());
-					
+					Employee	employee	=	null;
 					String 		empNumber	=	delEmp.getEmpNumber();
-					Employee	employee	=	getEmployee(empNumber);
-					logger.info("delegated emplyee details : "+employee.toString());
+					if(null != empNumber && !empNumber.trim().equals(""))
+					{
+						employee	=	getEmployee(empNumber);
+						logger.info("delegated emplyee details : "+employee.toString());
+					}
+					else
+					{
+						break;
+					}
 					Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 					namedParameters.put("paramLeaveReqNo", requestNo);
 					namedParameters.put("paramDelEmpCode",empNumber);
@@ -857,12 +874,19 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					namedParameters.put("paramOriginEmpCode",orginEmpNumber);
 					logger.info("delegated param : "+namedParameters);
 					
-					this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQ_DELEGATION, namedParameters);
+					if(!(null == delEmp.getEmpNumber() || delEmp.getEmpNumber().trim().equals("")) && 
+							!(null == delEmp.getFromDate() || delEmp.getFromDate().trim().equals("")) &&
+							!(null == delEmp.getToDate() || delEmp.getToDate().trim().equals(""))
+					)
+						{
+							this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQ_DELEGATION, namedParameters);
+						}
+
 				}
 		}
 		catch(Exception ex)
 		{
-			logger.warn("Error in Delegated employees. error description : "+ex.getMessage());
+			logger.error("Error in Delegated employees. error description : "+ex.getMessage());
 		}
 	}
 	

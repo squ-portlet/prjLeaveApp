@@ -80,7 +80,10 @@
 	  <property name="dataSource" ref="dataSource"/>
 	  	<qualifier value="trLeaveAprv"/>
 	 </bean>
-	
+	<bean id="txManager3" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	  <property name="dataSource" ref="dataSource"/>
+	  	<qualifier value="trLeaveDelegate"/>
+	 </bean>	
 	
 		
 	<bean class="org.springframework.web.context.support.ServletContextAttributeExporter"> 

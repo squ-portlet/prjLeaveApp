@@ -198,18 +198,10 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		leaveRequest.setLeaveStatus(Constants.CONST_LEAVE_STATUS_WAITING_APPV);
 		
 		logger.info("leaveRequest : "+leaveRequest);
-//		if (null == requestNo || requestNo.trim().equals("") || requestNo.equals(Constants.CONST_NOT_AVAILABLE))
-//		{
+
 			allowEleaveRequestProc	=	leaveDbDao.getAllowEleaveRequest(leaveRequest, locale);
 			logger.info("allowEleaveRequestProc : "+allowEleaveRequestProc );
-//		}
-//		else //TODO for existing leaves
-//		{
-			//TODO -- This feature is in test mode
-//			allowEleaveRequestProc	=	new AllowEleaveRequestProc();
-//			allowEleaveRequestProc.setAcceptLeave(true);
-//			allowEleaveRequestProc.setLeaveCode(leaveTypeNo);
-//		}
+
 		
 		if(allowEleaveRequestProc.isAcceptLeave())
 		{

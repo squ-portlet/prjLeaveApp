@@ -581,7 +581,9 @@ public interface Constants
 																			"	TO_DATE(:paramDelFromDate,'DD/MM/YYYY'), TO_DATE(:paramDelToDate,'DD/MM/YYYY')," +
 																			"	:paramDelCreUser,SYSDATE,'A',:paramOriginEmpCode								" +
 																			" )																";
-
+	public static final String	SQL_DELETE_LEAVE_REQ_DELEGATION	=			" DELETE VHM_EMP_LEAVE_REQ_DELEGATION							" +
+																			" WHERE VHM_LEAVE_REQ_NO = :paramLeaveReqNo						";					
+		
 	public static final String	SQL_INSERT_LEAVE_REQ_APPROVE	=			"	INSERT INTO VHM_EMP_LEAVE_REQUEST_APPROVAL					" +
 																		    "	(															" +
 																		    "  		VHM_LEAVE_REQ_NO, VHM_APP_EMP_CODE,						" +
