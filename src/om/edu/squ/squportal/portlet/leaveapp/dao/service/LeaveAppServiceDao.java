@@ -40,6 +40,7 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
+import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
@@ -179,6 +180,21 @@ public interface LeaveAppServiceDao
 	 * Date    		:	Sep 18, 2012 2:31:17 PM
 	 */
 	public LeaveRequest	getLeaveRequest(String reqNo, Locale locale);
+	
+	/**
+	 * 
+	 * method name  : getLeaveApproveHistory
+	 * @param requestNo
+	 * @param locale
+	 * @return
+	 * LeaveAppServiceDaoImpl
+	 * return type  : List<LeaveApprove>
+	 * 
+	 * purpose		: Get approver's history
+	 *
+	 * Date    		:	Jan 13, 2013 1:01:30 PM
+	 */
+	public List<LeaveApprove>	getLeaveApproveHistory(String requestNo, Locale locale);
 	
 	/**
 	 * 

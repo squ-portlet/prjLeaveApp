@@ -39,6 +39,7 @@ public class LeaveApprove implements Serializable
 {
 	private static final long	serialVersionUID	= 1L;
 	private		String		requestNo;
+	private		AdminAction	action;
 	private		Employee	employee;
 	private		String		branchCode;
 	private		String		departmentCode;
@@ -64,6 +65,26 @@ public class LeaveApprove implements Serializable
 	public void setRequestNo(String requestNo)
 	{
 		this.requestNo = requestNo;
+	}
+	/**
+	 * Getter Method	: getAction
+	 * @return the action
+	 * 
+	 * Date				: Jan 13, 2013
+	 */
+	public AdminAction getAction()
+	{
+		return this.action;
+	}
+	/**
+	 * Setter method : setAction
+	 * @param action the action to set
+	 * 
+	 * Date          : Jan 13, 2013 12:29:06 PM
+	 */
+	public void setAction(AdminAction action)
+	{
+		this.action = action;
 	}
 	/**
 	 * Getter Method	: getEmployee
@@ -194,8 +215,15 @@ public class LeaveApprove implements Serializable
 		return "LeaveApprove ["
 				+ (this.requestNo != null ? "requestNo=" + this.requestNo
 						+ ", " : "")
+				+ (this.action != null ? "action=" + this.action + ", " : "")
 				+ (this.employee != null ? "employee=" + this.employee + ", "
 						: "")
+				+ (this.branchCode != null ? "branchCode=" + this.branchCode
+						+ ", " : "")
+				+ (this.departmentCode != null ? "departmentCode="
+						+ this.departmentCode + ", " : "")
+				+ (this.sectionCode != null ? "sectionCode=" + this.sectionCode
+						+ ", " : "")
 				+ (this.approverAction != null ? "approverAction="
 						+ this.approverAction + ", " : "")
 				+ (this.approverRemark != null ? "approverRemark="

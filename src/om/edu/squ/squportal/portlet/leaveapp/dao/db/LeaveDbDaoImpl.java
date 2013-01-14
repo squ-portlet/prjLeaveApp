@@ -1045,6 +1045,51 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		return this.namedParameterJdbcTemplate.queryForObject(Constants.SQL_VIEW_LEAVE_REQUEST_SPECIFIC, namedParameters, mapper);
 		
 	}
+
+	/**
+	 * 
+	 * method name  : getLeaveApproveHistory
+	 * @param requestNo
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<LeaveApprove>
+	 * 
+	 * purpose		: Get approver's history
+	 *
+	 * Date    		:	Jan 13, 2013 12:53:38 PM
+	 */
+	public List<LeaveApprove>	getLeaveApproveHistory(String requestNo, Locale locale)
+	{
+		RowMapper<LeaveApprove> mapper	=	new RowMapper<LeaveApprove>()
+		{
+			
+			public LeaveApprove mapRow(ResultSet rs, int rowNum) throws SQLException
+			{
+				LeaveApprove	approve		=	new LeaveApprove();
+				AdminAction		action		=	new AdminAction();
+				Employee		employee	=	new Employee();
+
+				action.setActionCode(rs.getString(Constants.CONST_ACTION_CODE));
+				action.setActionDesc(rs.getString(Constants.CONST_ACTION_DESC));
+				action.setActionDate(rs.getString(Constants.CONST_ACTION_DATE));
+				action.setAdminActionRemark(rs.getString(Constants.CONST_APPROVER_REMARK));
+				
+				employee.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
+				employee.setEmpName(rs.getString(Constants.CONST_EMP_NAME));
+				
+				approve.setAction(action);
+				approve.setEmployee(employee);
+				
+				return approve;
+			}
+		};
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramLocale", locale.getLanguage());
+		namedParameters.put("paramReqNo", requestNo);
+
+		return this.namedParameterJdbcTemplate.query(Constants.SQL_LEAVE_APPROVE_HISTORY, namedParameters, mapper);
+	}
 	
 	/**
 	 * 

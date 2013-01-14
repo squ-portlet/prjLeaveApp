@@ -298,11 +298,13 @@ public class LeaveAppControllerMain
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
 		
+		
 		List<DelegatedEmp>	delegatedEmps	=	leaveAppServiceDao.getDelegations(requestNo, locale);
 		model.addAttribute("leaveRequest", leaveRequest);
 		model.addAttribute("delegatedEmps", delegatedEmps);
 		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
 		model.addAttribute("constActionApprove",Constants.CONST_LEAVE_ACTION_APPROVE);
+		model.addAttribute("appHistory", leaveAppServiceDao.getLeaveApproveHistory(requestNo, locale));
 		
 		return Constants.PAGE_LEAVE_APPROVE_FORM;
 	}

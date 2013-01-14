@@ -259,6 +259,21 @@ public interface LeaveDbDao
 
 	/**
 	 * 
+	 * method name  : getLeaveApproveHistory
+	 * @param requestNo
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<LeaveApprove>
+	 * 
+	 * purpose		: Get approver's history
+	 *
+	 * Date    		:	Jan 13, 2013 12:53:38 PM
+	 */
+	public List<LeaveApprove>	getLeaveApproveHistory(String requestNo, Locale locale);
+	
+	/**
+	 * 
 	 * method name  : getBranches
 	 * @param locale
 	 * @return

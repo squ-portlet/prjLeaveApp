@@ -343,41 +343,43 @@ $(function(){
 	<!-- 				</td> -->
 	<!-- 			</tr> -->
 	<!-- 		</table> -->
-			
-			<table cellspacing="0" cellpadding="0" border="1" width="100%">
-				<caption>
-					<spring:message code="prop.leave.app.apply.form.approvar.history.details"/>
-				</caption>
-				
-				<tr>
-					<th class="PortletHeaderColor">
-						<span class="PortletHeaderText">
-							<spring:message code="prop.leave.app.apply.form.approvar.name"/>
-						</span>
-					</th>
-					<th class="PortletHeaderColor">
-						<span class="PortletHeaderText">
-							<spring:message code="prop.leave.app.apply.form.approvar.date"/>
-						</span>
-					</th>
-					<th class="PortletHeaderColor">
-						<span class="PortletHeaderText">
-							<spring:message code="prop.leave.app.apply.form.approvar.action"/>
-						</span>
-					</th>
-					<th class="PortletHeaderColor">
-						<span class="PortletHeaderText">
-							<spring:message code="prop.leave.app.apply.form.approvar.approver"/>
-						</span>
-					</th>	
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>	
-				</tr>			
-			</table>
+			<c:if test="${not empty appHistory}" >
+			<fieldset>
+					<legend><spring:message code="prop.leave.app.apply.form.approvar.history.details"/></legend>
+				<table cellspacing="0" cellpadding="0" border="1" width="100%">
+					<tr>
+						<th class="PortletHeaderColor">
+							<span class="PortletHeaderText">
+								<spring:message code="prop.leave.app.apply.form.approvar.name"/>
+							</span>
+						</th>
+						<th class="PortletHeaderColor">
+							<span class="PortletHeaderText">
+								<spring:message code="prop.leave.app.apply.form.approvar.date"/>
+							</span>
+						</th>
+						<th class="PortletHeaderColor">
+							<span class="PortletHeaderText">
+								<spring:message code="prop.leave.app.apply.form.approvar.action"/>
+							</span>
+						</th>
+						<th class="PortletHeaderColor">
+							<span class="PortletHeaderText">
+								<spring:message code="prop.leave.app.apply.form.approvar.approver"/>
+							</span>
+						</th>	
+					</tr>
+					<c:forEach items="${appHistory}" var="appHis">
+						<tr>
+							<td>&nbsp;<c:out value="${appHis.employee.empName}" /></td>
+							<td>&nbsp;<c:out value="${appHis.action.actionDate}" /></td>
+							<td>&nbsp;<c:out value="${appHis.action.actionDesc}" /></td>
+							<td>&nbsp;<c:out value="${appHis.action.adminActionRemark}" /></td>	
+						</tr>
+					</c:forEach>			
+				</table>
+			</fieldset>
+			</c:if>
 	<%-- 		<center> --%>
 	<%-- 			<input type="submit" value='<spring:message code="prop.leave.app.apply.form.requester.submit"/>' style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/> --%>
 	<%-- 		</center> --%>

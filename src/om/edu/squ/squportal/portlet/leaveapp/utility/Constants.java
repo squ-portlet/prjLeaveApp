@@ -110,17 +110,6 @@ public interface Constants
 																			"	AND HIR.VHM_HIERARCHY_CODE = DESG.VHM_HIERARCHY_CODE (+)						" +
 																			"   AND EMP.VHM_EMP_CODE = ADESIG.VEAT_EMP_CODE(+)									";
 	
-//	public static final	String	SQL_EMP_BRANCH_DEPT_SHORT		=			" SELECT VHM_EMP_CODE AS EMP_CODE,							" +
-//																			"  	DECODE(													" +
-//																			"			:paramLocale,                          			" +		
-//																			"            'en',initCap(EMP.VHM_EMP_NAME),   				" +       	
-//																			"			 'ar',EMP.VHM_EMP_NAME_ARABIC					" +
-//																			"	) AS EMP_NAME											" +
-//																			"	FROM VHM_EMPLOYEE EMP									" +
-//																			" WHERE VHM_EMP_BRAN_CODE = :paramBranchCode				" +
-//																			" AND VHM_EMP_DEPT_CODE = :paramDept						" +
-//																			" AND VHM_EMP_ACTIVE = 'Y' 									";	
-	
 	public static final	String	SQL_EMP_BRANCH_DEPT_SHORT		= 			" SELECT VHM_EMP_CODE AS EMP_CODE,							" +							
 																			"     DECODE(												" +	
 																			"       :paramLocale,	              						" +
@@ -481,6 +470,43 @@ public interface Constants
 																			") WHERE ROWNUM <=1											";
 
 
+	public static final String	SQL_LEAVE_APPROVE_HISTORY		=			" SELECT													" +
+																			"	VHM_APP_EMP_CODE AS EMP_CODE,							" +
+																			"	DECODE(													" +
+																			"	      :paramLocale,												" +
+																			"	      'en',initcap(EMP.VHM_EMP_NAME),					" +
+																			"	      'ar',EMP.VHM_EMP_NAME_ARABIC						" +
+																			"	      ) AS EMP_NAME,									" +
+																			"	TO_CHAR(VHM_APP_ACTION_DATE,'dd-mm-yyyy hh:mi AM') AS ACTION_DATE, " +
+																			"	APP.VHM_ACTION_CODE AS ACTION_CODE,						" +
+																			"	DECODE( 												" +
+																			"	  :paramLocale,													" +
+																			"	  'en',initCap(VHM_ACTION_DESC),						" +
+																			"	  'ar',VHM_ACTION_DESC_ARABIC							" +
+																			"	) AS ACTION_DESC,										" +
+																			"	VHM_APP_REMARKS AS APPROVER_REMARK						" +
+																			"	FROM VHM_EMP_LEAVE_REQUEST_APPROVAL APP,				" +
+																			"	VHM_WORKFLOW_ACTIONS WFACTION,							" +
+																			"	VHM_EMPLOYEE EMP										" +
+																			"	WHERE APP.VHM_APP_EMP_CODE = EMP.VHM_EMP_CODE			" +
+																			"	AND APP.VHM_ACTION_CODE=WFACTION.VHM_ACTION_CODE		" +
+																			"	AND APP.VHM_LEAVE_REQ_NO = :paramReqNo					" +
+																			"	ORDER BY VHM_APP_RECEIVED_DATE DESC 					";
+	
+	
+	
+//	public static final String SQL_LEAVE_STATUS_HISTORY			=			"SELECT SLOG.VHM_STATUS_CODE AS LEAVE_STATUS_CODE,
+//DECODE(
+//  'en',
+//  'en',initcap(STAT.VHM_STATUS_DESC),
+//  'ar',VHM_STATUS_DESC_ARABIC
+//) AS LEAVE_STATUS,
+//TO_CHAR(SLOG.VHM_STATUS_DATE,'DD/MM/YYYY HH:MI AM') AS LEAVE_STATUS_DATE,
+//SLOG.VHM_STATUS_REMARKS AS LEAVE_REQUEST_REMARKS
+//FROM VHM_WORKFLOW_STATUS_LOG SLOG, VHM_WORKFLOW_STATUS STAT
+//WHERE SLOG.VHM_STATUS_CODE=STAT.VHM_STATUS_CODE
+//AND SLOG.VHM_LEAVE_REQ_NO=166
+//ORDER BY SLOG.VHM_STATUS_DATE DESC"
 	
 	public static final String	SQL_INSERT_LEAVE_REQUEST		=			" INSERT INTO VHM_EMP_LEAVE_REQUEST 						  " +
 																			" (															  " +
@@ -680,12 +706,16 @@ public interface Constants
 	public static final	String	CONST_LEAVE_END_DATE			=			"LEAVE_END_DATE";
 	public static final	String	CONST_LEAVE_STATUS				=			"LEAVE_STATUS";
 	public static final	String	CONST_LEAVE_STATUS_CODE			=			"LEAVE_STATUS_CODE";
+	public static final	String	CONST_LEAVE_STATUS_DATE			=			"LEAVE_STATUS_DATE";
+	public static final	String	CONST_LEAVE_REQUEST_REMARKS		=			"LEAVE_REQUEST_REMARKS";
+	
 	public static final	String	CONST_LEAVE_TYPE				=			"LEAVE_TYPE";
 	public static final	String	CONST_LEAVE_DESC				=			"LEAVE_DESC";
 	public static final	String	CONST_LEAVE_TYPE_FLAG			=			"LEAVE_TYPE_FLAG";
 	public static final	String	CONST_LEAVE_REQ_REMARK			=			"LEAVE_REQ_REMARK";
 	public static final	String	CONST_ACTION_CODE				=			"ACTION_CODE";
 	public static final	String	CONST_ACTION_DESC				=			"ACTION_DESC";
+	public static final	String	CONST_ACTION_DATE				=			"ACTION_DATE";
 	public static final	String	CONST_APPROVER_REMARK			=			"APPROVER_REMARK";
 	public static final	String	CONST_DELEGATE_START_DATE		=			"DELEGATE_START_DATE";
 	public static final	String	CONST_DELEGATE_END_DATE			=			"DELEGATE_END_DATE";
