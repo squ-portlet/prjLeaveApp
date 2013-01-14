@@ -326,10 +326,11 @@ $(function(){
 		<%-- 			<c:forEach var="i" begin="0" end="2" step="1"> --%>
 						<c:forEach items="${delegatedEmps}" var="delgEmp">
 						<tr>
-							<td><c:out value ="${delgEmp.fromDate}" /></td>
-							<td><c:out value ="${delgEmp.toDate}" /></td>
+							<td>&nbsp;<c:out value ="${delgEmp.fromDate}" /></td>
+							<td>&nbsp;<c:out value ="${delgEmp.toDate}" /></td>
 							<td>
-							<c:out value ="${delgEmp.empInternetId}" /> / (<c:out value ="${delgEmp.empNumber}" />) - <c:out value ="${delgEmp.empName}" /> -
+<%-- 							<c:out value ="${delgEmp.empInternetId}" /> / (<c:out value ="${delgEmp.empNumber}" />) -  --%>
+							&nbsp;<c:out value ="${delgEmp.empName}" /> 
 							</td>
 						</tr>
 					</c:forEach>
