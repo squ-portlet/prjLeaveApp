@@ -386,7 +386,9 @@ $(function(){
 	<%-- 		</center> --%>
 			<c:set var="varDisable" value="false"/>
 			<c:set var="bttnDisable" value="not disabled"/>
-			<c:if test="${leaveRequest.approve.approverAction==constActionApprove}">
+			<c:if test="${(leaveRequest.approve.approverAction==constActionApprove) ||
+						(leaveRequest.approve.approverAction==constActionReturn)  ||
+						(leaveRequest.approve.approverAction==constActionReject)}">
 				<c:set var="varDisable" value="true"/>
 				<c:set var="bttnDisable" value="disabled='disabled'"/>
 			</c:if>

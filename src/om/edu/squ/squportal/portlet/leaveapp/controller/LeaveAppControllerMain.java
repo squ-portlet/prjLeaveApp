@@ -118,6 +118,8 @@ public class LeaveAppControllerMain
 		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
 		model.addAttribute("furtherClarification", Constants.CONST_LEAVE_STATUS_FURTHER_CLARIFICATION);
 		model.addAttribute("leaveStatusApproved", Constants.CONST_LEAVE_STATUS_APPROVED);
+		model.addAttribute("leaveStatusRejected", Constants.CONST_LEAVE_STATUS_REJECTED);
+
 		return Constants.PAGE_WELCOME;
 	}
 	
@@ -304,6 +306,8 @@ public class LeaveAppControllerMain
 		model.addAttribute("delegatedEmps", delegatedEmps);
 		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
 		model.addAttribute("constActionApprove",Constants.CONST_LEAVE_ACTION_APPROVE);
+		model.addAttribute("constActionReturn", Constants.CONST_LEAVE_ACTION_RETURN);
+		model.addAttribute("constActionReject", Constants.CONST_LEAVE_ACTION_REJECT);		
 		model.addAttribute("appHistory", leaveAppServiceDao.getLeaveApproveHistory(requestNo, locale));
 		
 		return Constants.PAGE_LEAVE_APPROVE_FORM;
