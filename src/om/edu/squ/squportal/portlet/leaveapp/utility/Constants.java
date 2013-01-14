@@ -469,7 +469,20 @@ public interface Constants
 																			"	ORDER BY LEAVE_REQ_DATE DESC							" +
 																			") WHERE ROWNUM <=1											";
 
-
+	public static final String SQL_LEAVE_STATUS_HISTORY			=			"	SELECT SLOG.VHM_STATUS_CODE AS LEAVE_STATUS_CODE,		" +
+																			" 		DECODE(												" +
+																			"  		:paramLocale,										" +
+																			"  		'en',initcap(STAT.VHM_STATUS_DESC),					" +
+																			"  		'ar',VHM_STATUS_DESC_ARABIC							" +
+																			"		) AS LEAVE_STATUS,									" +
+																			"		TO_CHAR(SLOG.VHM_STATUS_DATE,'DD/MM/YYYY HH:MI AM') AS LEAVE_STATUS_DATE, " +
+																			"		SLOG.VHM_STATUS_REMARKS AS LEAVE_REQUEST_REMARKS	" +
+																			"	FROM VHM_WORKFLOW_STATUS_LOG SLOG, 						" +
+																			"		VHM_WORKFLOW_STATUS STAT							" +
+																			"	WHERE SLOG.VHM_STATUS_CODE=STAT.VHM_STATUS_CODE			" +
+																			"	AND SLOG.VHM_LEAVE_REQ_NO=:paramReqNo					" +
+																			"	ORDER BY SLOG.VHM_STATUS_DATE DESC						";
+	
 	public static final String	SQL_LEAVE_APPROVE_HISTORY		=			" SELECT													" +
 																			"	VHM_APP_EMP_CODE AS EMP_CODE,							" +
 																			"	DECODE(													" +
@@ -492,21 +505,6 @@ public interface Constants
 																			"	AND APP.VHM_ACTION_CODE=WFACTION.VHM_ACTION_CODE		" +
 																			"	AND APP.VHM_LEAVE_REQ_NO = :paramReqNo					" +
 																			"	ORDER BY VHM_APP_RECEIVED_DATE DESC 					";
-	
-	
-	
-//	public static final String SQL_LEAVE_STATUS_HISTORY			=			"SELECT SLOG.VHM_STATUS_CODE AS LEAVE_STATUS_CODE,
-//DECODE(
-//  'en',
-//  'en',initcap(STAT.VHM_STATUS_DESC),
-//  'ar',VHM_STATUS_DESC_ARABIC
-//) AS LEAVE_STATUS,
-//TO_CHAR(SLOG.VHM_STATUS_DATE,'DD/MM/YYYY HH:MI AM') AS LEAVE_STATUS_DATE,
-//SLOG.VHM_STATUS_REMARKS AS LEAVE_REQUEST_REMARKS
-//FROM VHM_WORKFLOW_STATUS_LOG SLOG, VHM_WORKFLOW_STATUS STAT
-//WHERE SLOG.VHM_STATUS_CODE=STAT.VHM_STATUS_CODE
-//AND SLOG.VHM_LEAVE_REQ_NO=166
-//ORDER BY SLOG.VHM_STATUS_DATE DESC"
 	
 	public static final String	SQL_INSERT_LEAVE_REQUEST		=			" INSERT INTO VHM_EMP_LEAVE_REQUEST 						  " +
 																			" (															  " +

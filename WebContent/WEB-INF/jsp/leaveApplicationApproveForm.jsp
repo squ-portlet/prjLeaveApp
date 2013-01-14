@@ -336,14 +336,41 @@ $(function(){
 					</c:forEach>
 				</table>
 			</c:if>
+
+			<c:if test="${not empty leaveHistory}">
+			<fieldset>
+				<legend><spring:message code="prop.leave.app.form.requester.history.details"/></legend>
+				<table cellspacing="0" cellpadding="0" border="1" width="100%">
+					<tr>
+						<th  class="PortletHeaderColor">
+							<span class="PortletHeaderText">
+								<spring:message code="prop.leave.app.form.requester.history.date"/>
+							</span>
+						</th>
+						<th  class="PortletHeaderColor">
+							<span class="PortletHeaderText">
+								<spring:message code="prop.leave.app.form.requester.history.status"/>
+							</span>
+						</th>
+						<th  class="PortletHeaderColor">
+							<span class="PortletHeaderText">
+								<spring:message code="prop.leave.app.form.requester.history.remarks"/>
+							</span>
+						</th>
+					</tr>
+					<c:forEach items="${leaveHistory}" var="lhis">
+						<tr>
+							<td>&nbsp; <c:out value="${lhis.requestDate}" /> </td>
+							<td>&nbsp; <c:out value="${lhis.status.statusDesc}" /> </td>
+							<td>&nbsp; <c:out value="${lhis.leaveRequestRemarks}" /> </td>
+						</tr>
+					</c:forEach>
+				</table>
+			</fieldset>
 			
-	<!-- 		<table cellspacing="0" cellpadding="0" border="1" width="100%"> -->
-	<!-- 			<tr> -->
-	<!-- 				<td> -->
-						
-	<!-- 				</td> -->
-	<!-- 			</tr> -->
-	<!-- 		</table> -->
+			
+			</c:if>			
+	
 			<c:if test="${not empty appHistory}" >
 			<fieldset>
 					<legend><spring:message code="prop.leave.app.apply.form.approvar.history.details"/></legend>
@@ -381,9 +408,7 @@ $(function(){
 				</table>
 			</fieldset>
 			</c:if>
-	<%-- 		<center> --%>
-	<%-- 			<input type="submit" value='<spring:message code="prop.leave.app.apply.form.requester.submit"/>' style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/> --%>
-	<%-- 		</center> --%>
+
 			<c:set var="varDisable" value="false"/>
 			<c:set var="bttnDisable" value="not disabled"/>
 			<c:if test="${(leaveRequest.approve.approverAction==constActionApprove) ||

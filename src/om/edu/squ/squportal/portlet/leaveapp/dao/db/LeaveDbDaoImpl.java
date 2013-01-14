@@ -1048,6 +1048,48 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 
 	/**
 	 * 
+	 * method name  : getLeaveRequestHistory
+	 * @param requestNo
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<LeaveRequest>
+	 * 
+	 * purpose		: Leave request history
+	 *
+	 * Date    		:	Jan 14, 2013 2:11:38 PM
+	 */
+	public List<LeaveRequest>	getLeaveRequestHistory(String requestNo, Locale locale)
+	{
+		RowMapper<LeaveRequest> mapper	=	new RowMapper<LeaveRequest>()
+		{
+			
+			public LeaveRequest mapRow(ResultSet rs, int rowNum) throws SQLException
+			{
+				LeaveRequest	leaveRequest	=	new LeaveRequest();
+				LeaveStatus		leaveStatus		=	new LeaveStatus();
+				
+				leaveStatus.setStatusCode(rs.getString(Constants.CONST_LEAVE_STATUS_CODE));
+				leaveStatus.setStatusDesc(rs.getString(Constants.CONST_LEAVE_STATUS));
+				
+				leaveRequest.setStatus(leaveStatus);
+				leaveRequest.setRequestDate(rs.getString(Constants.CONST_LEAVE_STATUS_DATE));
+				leaveRequest.setLeaveRequestRemarks(rs.getString(Constants.CONST_LEAVE_REQUEST_REMARKS));
+				return leaveRequest;
+			}
+		};
+		
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramLocale", locale.getLanguage());
+		namedParameters.put("paramReqNo", requestNo);
+		
+		
+		return this.namedParameterJdbcTemplate.query(Constants.SQL_LEAVE_STATUS_HISTORY, namedParameters, mapper);
+	}
+	
+	
+	/**
+	 * 
 	 * method name  : getLeaveApproveHistory
 	 * @param requestNo
 	 * @param locale
@@ -1069,7 +1111,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				LeaveApprove	approve		=	new LeaveApprove();
 				AdminAction		action		=	new AdminAction();
 				Employee		employee	=	new Employee();
-
+				
 				action.setActionCode(rs.getString(Constants.CONST_ACTION_CODE));
 				action.setActionDesc(rs.getString(Constants.CONST_ACTION_DESC));
 				action.setActionDate(rs.getString(Constants.CONST_ACTION_DATE));

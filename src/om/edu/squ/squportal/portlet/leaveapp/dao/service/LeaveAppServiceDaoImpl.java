@@ -267,6 +267,24 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	
 	/**
 	 * 
+	 * method name  : getLeaveRequestHistory
+	 * @param requestNo
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<LeaveRequest>
+	 * 
+	 * purpose		: Leave request history
+	 *
+	 * Date    		:	Jan 14, 2013 2:11:38 PM
+	 */
+	public List<LeaveRequest>	getLeaveRequestHistory(String requestNo, Locale locale)
+	{
+		return this.leaveDbDao.getLeaveRequestHistory(requestNo, locale);
+	}
+	
+	/**
+	 * 
 	 * method name  : getLeaveApproveHistory
 	 * @param requestNo
 	 * @param locale
