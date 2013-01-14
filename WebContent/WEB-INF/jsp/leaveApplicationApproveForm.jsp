@@ -182,8 +182,8 @@ $(function(){
 			</table>
 			
 			<p/>
-			<table cellspacing="0" cellpadding="0" border="1" width="100%">
-				<caption><spring:message code="prop.leave.app.apply.form.required.details.other"/></caption>
+<!-- 			<table cellspacing="0" cellpadding="0" border="1" width="100%"> -->
+<%-- 				<caption><spring:message code="prop.leave.app.apply.form.required.details.other"/></caption> --%>
 	<!-- 			<tr> -->
 	<!-- 				<th class="PortletHeaderColor"> -->
 	<!-- 					<span class="PortletHeaderText"> -->
@@ -208,27 +208,27 @@ $(function(){
 	<!-- 				</th> -->
 	<%-- 				<td colspan="4"><form:input path="researchId"/></td> --%>
 	<!-- 			</tr> -->
-				<tr>
-					<th class="PortletHeaderColor">
-						<span class="PortletHeaderText">
-							<spring:message code="prop.leave.app.apply.form.administrative"/>:
-						</span>
-					</th>
-					<td>
-						(<font color="red"><c:out value="${leaveRequest.employee.admin2}"/></font>) / <c:out value="${leaveRequest.employee.admin}"/>
-					</td>
-					<td></td>
-					<c:if test="${not empty leaveRequest.employee.designationAddl}">
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.position"/>
-							</span>
-						</th>
-						<td><c:out value="${leaveRequest.employee.designationAddl}"/></td>
-					</c:if>			
-				</tr>
+<!-- 				<tr> -->
+<!-- 					<th class="PortletHeaderColor"> -->
+<!-- 						<span class="PortletHeaderText"> -->
+<%-- 							<spring:message code="prop.leave.app.apply.form.administrative"/>: --%>
+<!-- 						</span> -->
+<!-- 					</th> -->
+<!-- 					<td> -->
+<%-- 						(<font color="red"><c:out value="${leaveRequest.employee.admin2}"/></font>) / <c:out value="${leaveRequest.employee.admin}"/> --%>
+<!-- 					</td> -->
+<!-- 					<td></td> -->
+<%-- 					<c:if test="${not empty leaveRequest.employee.designationAddl}"> --%>
+<!-- 						<th class="PortletHeaderColor"> -->
+<!-- 							<span class="PortletHeaderText"> -->
+<%-- 								<spring:message code="prop.leave.app.apply.form.position"/> --%>
+<!-- 							</span> -->
+<!-- 						</th> -->
+<%-- 						<td><c:out value="${leaveRequest.employee.designationAddl}"/></td> --%>
+<%-- 					</c:if>			 --%>
+<!-- 				</tr> -->
+<!-- 			</table> -->
 			
-			</table>
 			<table cellspacing="0" cellpadding="0" border="1" width="100%">
 				<caption><spring:message code="prop.leave.app.apply.form.requester.details"/></caption>
 				<tr>
