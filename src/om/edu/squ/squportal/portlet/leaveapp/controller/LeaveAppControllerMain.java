@@ -210,7 +210,9 @@ public class LeaveAppControllerMain
 		{
 			logger.warn("validation error : "+result.getAllErrors());
 			
-			if(null != requestNo && ! requestNo.trim().equals(""))
+			if(null != requestNo && 
+			! requestNo.trim().equals("") && 
+			! requestNo.trim().equals(Constants.CONST_NOT_AVAILABLE) )
 			{
 				response.setRenderParameter("reqNum", requestNo);
 				response.setRenderParameter("action", "updateLeaveApply");
