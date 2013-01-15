@@ -143,13 +143,6 @@ $(function() {
 </portlet:actionURL>
 
 
-<%-- <form:hidden path="requestDate" /> --%>
-
-<%-- <form:hidden path="leaveStartDate" /> --%>
-<%-- <form:hidden path="leaveEndDate"/> --%>
-<%-- <form:hidden path="leaveRemarks"/> --%>
-
-<%-- <form:checkbox path="adminSqu"/> --%>
 
 
 	<fieldset>
@@ -214,52 +207,6 @@ $(function() {
 				</table>
 			</fieldset>
 			<p/>
-<!-- 			<table cellspacing="0" cellpadding="0" border="1" width="100%"> -->
-<%-- 				<caption><spring:message code="prop.leave.app.apply.form.required.details.other"/></caption> --%>
-	<!-- 			<tr> -->
-	<!-- 				<th class="PortletHeaderColor"> -->
-	<!-- 					<span class="PortletHeaderText"> -->
-	<%-- 						<spring:message code="prop.leave.app.apply.form.purpose"/>: --%>
-	<!-- 					</span> -->
-	<!-- 				</th> -->
-	<%-- 				<td colspan="4"><form:textarea path="leavePurpose" cssStyle="width:100%" /></td> --%>
-	<!-- 			</tr> -->
-	<!-- 			<tr> -->
-	<!-- 				<th class="PortletHeaderColor"> -->
-	<!-- 					<span class="PortletHeaderText"> -->
-	<%-- 						<spring:message code="prop.leave.app.apply.form.last.leave.return.date"/>: --%>
-	<!-- 					</span>		 -->
-	<!-- 				</th> -->
-	<%-- 				<td colspan="4"><form:input path="leaveLastReturnDate" cssClass="calendar"/></td> --%>
-	<!-- 			</tr> -->
-	<!-- 			<tr> -->
-	<!-- 				<th class="PortletHeaderColor"> -->
-	<!-- 					<span class="PortletHeaderText"> -->
-	<%-- 						<spring:message code="prop.leave.app.apply.form.research.id"/>: --%>
-	<!-- 					</span> -->
-	<!-- 				</th> -->
-	<%-- 				<td colspan="4"><form:input path="researchId"/></td> --%>
-	<!-- 			</tr> -->
-<!-- 				<tr> -->
-<!-- 					<th class="PortletHeaderColor"> -->
-<!-- 						<span class="PortletHeaderText"> -->
-<%-- 							<spring:message code="prop.leave.app.apply.form.administrative"/>: --%>
-<!-- 						</span> -->
-<!-- 					</th> -->
-<!-- 					<td> -->
-<%-- 						(<font color="red"><c:out value="${leaveRequest.employee.admin2}"/></font>) / <c:out value="${leaveRequest.employee.admin}"/> --%>
-<!-- 					</td> -->
-<!-- 					<td></td> -->
-<%-- 					<c:if test="${not empty leaveRequest.employee.designationAddl}"> --%>
-<!-- 						<th class="PortletHeaderColor"> -->
-<!-- 							<span class="PortletHeaderText"> -->
-<%-- 								<spring:message code="prop.leave.app.apply.form.position"/> --%>
-<!-- 							</span> -->
-<!-- 						</th> -->
-<%-- 						<td><c:out value="${leaveRequest.employee.designationAddl}"/></td> --%>
-<%-- 					</c:if>			 --%>
-<!-- 				</tr> -->
-<!-- 			</table> -->
 			<fieldset>
 				<legend>
 					<spring:message code="prop.leave.app.apply.form.requester.details"/>

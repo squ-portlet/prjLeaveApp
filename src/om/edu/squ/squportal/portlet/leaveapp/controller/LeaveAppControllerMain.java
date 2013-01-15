@@ -119,7 +119,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("furtherClarification", Constants.CONST_LEAVE_STATUS_FURTHER_CLARIFICATION);
 		model.addAttribute("leaveStatusApproved", Constants.CONST_LEAVE_STATUS_APPROVED);
 		model.addAttribute("leaveStatusRejected", Constants.CONST_LEAVE_STATUS_REJECTED);
-
+	
 		return Constants.PAGE_WELCOME;
 	}
 	
@@ -301,7 +301,6 @@ public class LeaveAppControllerMain
 			leaveAppModel.setApproverRemark(leaveRequest.getApprove().getApproverRemark());
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
-		
 		List<DelegatedEmp>	delegatedEmps	=	leaveAppServiceDao.getDelegations(requestNo, locale);
 		model.addAttribute("leaveRequest", leaveRequest);
 		model.addAttribute("delegatedEmps", delegatedEmps);
