@@ -306,7 +306,12 @@ public interface Constants
 																			"							TO_DATE(LVREQ.VHM_LEAVE_START_DATE,'DD/MM/YYYY') BETWEEN " +
 																			"								TO_DATE(DELG.VHM_DELEGATED_FROM_DATE,'DD/MM/YYYY')	 " +
 																			"							 AND TO_DATE(DELG.VHM_DELEGATED_TO_DATE,'DD/MM/YYYY')	 " +
-																			"						)									" +
+																			"						)															 " +
+																			"					AND DELG.VHM_LEAVE_REQ_NO IN (									 " +
+										                                    "                                            SELECT VHM_LEAVE_REQ_NO 				 " +
+										                                    "                                            FROM VHM_EMP_LEAVE_REQUEST				 " +
+										                                    "                                            WHERE VHM_STATUS_CODE = '0000000002')	 " +
+										                                    "                     AND DELG.VHM_EMP_CODE=APP.VHM_APP_EMP_CODE					 " +
 																			"					AND HIR.VHM_LEVEL >= :paramLevel		" +
 																			"				)											" +
 																			"		)													" +
