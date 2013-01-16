@@ -177,6 +177,10 @@
 						</c:otherwise>
 					</c:choose>
 					 
+					<portlet:renderURL var="varLeaveView">
+						<portlet:param name="action" value="leaveView"/>
+						<portlet:param name="reqNo" value="${req.requestNo}"/>
+					</portlet:renderURL>
 					<c:choose>
 						<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
 											(req.employee.hierarchyCode >empHierarchyAddl) ||
@@ -184,8 +188,8 @@
 							<c:choose>
 								<c:when test="${(req.status.statusCode == leaveStatusApproved || 
 										         req.status.statusCode == leaveStatusRejected) ||
-										         (req.status.statusCode == furtherClarification && req.employee.senior)}">
-									actions: '-',
+										         (req.status.statusCode == furtherClarification)}">
+									actions: '<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>',
 								</c:when>
 								<c:otherwise>
 									actions: '<c:forEach items="${adminActions}" var="admActions">'+
@@ -195,7 +199,7 @@
 									'   <portlet:param name="appActionNum" value="${admActions.actionCode}"/>'+
 									'</portlet:actionURL>'+
 									'<a href="${varLeaveAdminAction}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a> &nbsp;'+
-									'</c:forEach>',		
+									'</c:forEach>', 
 								</c:otherwise>
 							</c:choose>
 						</c:when>
@@ -207,7 +211,7 @@
 							actions:'<a href="${varLeaveClarification}"><font color="red"><spring:message code="prop.leave.app.apply.action.update"/></font></a>',
 						</c:when>
 						<c:otherwise>
-							actions:'-',
+							actions:'<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>',
 						</c:otherwise>
 					</c:choose>
 					
@@ -437,6 +441,10 @@
 				<c:out value="${req.approve.employee.empName}"/> &nbsp; (<c:out value="${req.approve.employee.empNumber}"/>)
 			</td>
 			<td>
+				<portlet:renderURL var="varLeaveView">
+					<portlet:param name="action" value="leaveView"/>
+					<portlet:param name="reqNo" value="${req.requestNo}"/>
+				</portlet:renderURL>
 				<c:choose>
 					<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
 					(req.employee.hierarchyCode >empHierarchyAddl) ||
@@ -445,7 +453,7 @@
 								<c:when test="${(req.status.statusCode == leaveStatusApproved) || 
 										         (req.status.statusCode == leaveStatusRejected) ||
 										         (req.status.statusCode == furtherClarification && req.employee.senior)}">
-									-
+									<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
 								</c:when>
 							<c:otherwise>
 								<c:forEach items="${adminActions}" var="admActions">
@@ -467,7 +475,7 @@
 							<a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a>
 					</c:when>
 					<c:otherwise>
-						-
+						<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
 					</c:otherwise>
 				</c:choose>
 			</td>

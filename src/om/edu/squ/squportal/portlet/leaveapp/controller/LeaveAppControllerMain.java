@@ -123,6 +123,53 @@ public class LeaveAppControllerMain
 		return Constants.PAGE_WELCOME;
 	}
 	
+	/**
+	 * 
+	 * method name  : leaveApplicationView
+	 * @param requestNo
+	 * @param request
+	 * @param model
+	 * @param locale
+	 * @return
+	 * LeaveAppControllerMain
+	 * return type  : String
+	 * 
+	 * purpose		: View the leave application
+	 *
+	 * Date    		:	Jan 16, 2013 8:49:25 AM
+	 */
+	@RequestMapping(params="action=leaveView")
+	private String leaveApplicationView
+		(
+			@RequestParam("reqNo") String requestNo, 
+			PortletRequest request, 
+			Model model,
+			Locale locale
+		)
+	{
+		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(requestNo, locale);
+		if(!model.containsAttribute("leaveAppModel"))
+		{
+			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
+			
+			leaveAppModel.setRequestNo(leaveRequest.getRequestNo());
+			leaveAppModel.setApproverAction(leaveRequest.getApprove().getApproverAction());
+			leaveAppModel.setApproverRemark(leaveRequest.getApprove().getApproverRemark());
+			model.addAttribute("leaveAppModel",leaveAppModel );
+		}
+		List<DelegatedEmp>	delegatedEmps	=	leaveAppServiceDao.getDelegations(requestNo, locale);
+		model.addAttribute("leaveRequest", leaveRequest);
+		model.addAttribute("delegatedEmps", delegatedEmps);
+		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
+		model.addAttribute("constActionApprove",Constants.CONST_LEAVE_ACTION_APPROVE);
+		model.addAttribute("constActionReturn", Constants.CONST_LEAVE_ACTION_RETURN);
+		model.addAttribute("constActionReject", Constants.CONST_LEAVE_ACTION_REJECT);	
+		model.addAttribute("leaveHistory", leaveAppServiceDao.getLeaveRequestHistory(requestNo, locale));
+		model.addAttribute("appHistory", leaveAppServiceDao.getLeaveApproveHistory(requestNo, locale));
+		
+		return Constants.PAGE_LEAVE_VIEW;
+	}
+	
 	
 	/**
 	 * 

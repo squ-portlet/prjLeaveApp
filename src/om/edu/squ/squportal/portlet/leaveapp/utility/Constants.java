@@ -798,6 +798,7 @@ public interface Constants
 	public static String	PAGE_WELCOME						=			"welcome";
 	public static String	PAGE_LEAVE_APPLY_FORM				=			"leaveApplicationForm";
 	public static String	PAGE_LEAVE_APPROVE_FORM				=			"leaveApplicationApproveForm";
+	public static String	PAGE_LEAVE_VIEW						=			"leaveApplicationView";
 	
 	
 	/******************************************************/

@@ -767,7 +767,10 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			approve.setEmployee(employee);
 			approve.setRequestNo(leaveRequestNo);
 			approve.setApproverRemark(UtilProperty.getMessage("prop.leave.app.apply.form.approvar.auto.remarks2", null, locale));
-			setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps,emp.getEmpNumber(),Constants.CONST_OPERATION_UPDATE);
+			if(null != delegatedEmps)
+			{
+				setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps,emp.getEmpNumber(),Constants.CONST_OPERATION_UPDATE);
+			}
 
 		}
 
