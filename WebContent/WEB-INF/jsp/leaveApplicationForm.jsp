@@ -428,8 +428,8 @@ $(function() {
 		</table>
 		<p/>
 		<c:if test="${(employee.hierarchyLevelCode != baseLevelEmp) || (not empty (employee.hierarchyAddlLevelCode) != baseLevelEmp)}" >		
-		<table cellspacing="0" cellpadding="0" border="1" width="100%">
-			<caption><spring:message code="prop.leave.app.apply.form.required.details.other"/></caption>
+<!-- 		<table cellspacing="0" cellpadding="0" border="1" width="100%"> -->
+<%-- 			<caption><spring:message code="prop.leave.app.apply.form.required.details.other"/></caption> --%>
 <!-- 			<tr> -->
 <!-- 				<th class="PortletHeaderColor"> -->
 <!-- 					<span class="PortletHeaderText"> -->
@@ -454,31 +454,31 @@ $(function() {
 <!-- 				</th> -->
 <%-- 				<td colspan="4"><form:input path="researchId"/></td> --%>
 <!-- 			</tr> -->
-			<tr>
-				<th class="PortletHeaderColor">
-					<span class="PortletHeaderText">
-						<spring:message code="prop.leave.app.apply.form.administrative"/>:
-					</span>
-				</th>
-				<td>
-					<form:checkbox path="adminSqu" />
-				</td>
-				<td></td>
-				<th class="PortletHeaderColor">
-					<span class="PortletHeaderText">
-						<spring:message code="prop.leave.app.apply.form.position"/>
-					</span>
-				</th>
-				<td>
-					<form:select path="positionAdditional">
-						<form:option value="NA"><spring:message code="prop.leave.app.dropdown.text"/></form:option>
-						<form:options items="${addlPosition}" itemLabel="desigDescription" itemValue="desigCode"/>
+<!-- 			<tr> -->
+<!-- 				<th class="PortletHeaderColor"> -->
+<!-- 					<span class="PortletHeaderText"> -->
+<%-- 						<spring:message code="prop.leave.app.apply.form.administrative"/>: --%>
+<!-- 					</span> -->
+<!-- 				</th> -->
+<!-- 				<td> -->
+<%-- 					<form:checkbox path="adminSqu" /> --%>
+<!-- 				</td> -->
+<!-- 				<td></td> -->
+<!-- 				<th class="PortletHeaderColor"> -->
+<!-- 					<span class="PortletHeaderText"> -->
+<%-- 						<spring:message code="prop.leave.app.apply.form.position"/> --%>
+<!-- 					</span> -->
+<!-- 				</th> -->
+<!-- 				<td> -->
+<%-- 					<form:select path="positionAdditional"> --%>
+<%-- 						<form:option value="NA"><spring:message code="prop.leave.app.dropdown.text"/></form:option> --%>
+<%-- 						<form:options items="${addlPosition}" itemLabel="desigDescription" itemValue="desigCode"/> --%>
 					
-					</form:select>
-				</td>			
-			</tr>
+<%-- 					</form:select> --%>
+<!-- 				</td>			 -->
+<!-- 			</tr> -->
+<!-- 		</table> -->
 		
-		</table>
 			<table cellspacing="0" cellpadding="0" border="1" width="100%">
 				<caption>
 					<spring:message code="prop.leave.app.apply.form.delegated.employees"/>
@@ -505,7 +505,7 @@ $(function() {
 				</tr>
 				<c:forEach var="i" begin="0" end="2" step="1">
 					<tr>
-						<td><form:input path="delegatedEmps[${i}].fromDate" cssClass="calendar"/>
+						<td><form:input path="delegatedEmps[${i}].fromDate" cssClass="calendar" />
 							<br><form:errors path="delegatedEmps[${i}].fromDate" cssClass="error"/>
 						</td>
 						<td><form:input path="delegatedEmps[${i}].toDate" cssClass="calendar"/>
