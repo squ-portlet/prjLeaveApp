@@ -262,10 +262,10 @@
 			datatype: "local",
 		   	colNames:[
 		   	          '<spring:message code="prop.leave.app.title.request.no"/>',
-		   	          '<spring:message code="prop.leave.app.title.request.date"/>', 
 		   	          '<spring:message code="prop.leave.app.title.request.leave.start.date"/>',
 		   	          '<spring:message code="prop.leave.app.title.request.leave.end.date"/>',
 		   	          '<spring:message code="prop.leave.app.title.request.leave.type"/>',
+		   	          '<spring:message code="prop.leave.app.title.request.date"/>',
 		   	          '<spring:message code="prop.leave.app.title.request.status"/>',
 		   	       '<spring:message code="prop.leave.app.title.request.requester"/>',
 		   	          '<spring:message code="prop.leave.app.title.request.action"/>'
@@ -273,10 +273,10 @@
 		   	          ],
 		   	colModel:[
 		   		{name:'reqNo',width:90,index:'endDate'},
-		   		{name:'reqDate',index:'reqDate', align:"right"},
 		   		{name:'startDate',index:'startDate',  align:"right"},
 		   		{name:'endDate',index:'endDate', align:"right"},
 		   		{name:'type'},		
+		   		{name:'reqDate',index:'reqDate', align:"right"},
 		   		{name:'status'},
 		   		{name:'employee'},
 		   		{name:'actions',width:200}
@@ -304,10 +304,10 @@
 			datatype: "local",
 		   	colNames:[
 		   	          '<spring:message code="prop.leave.app.title.request.no"/>',
-		   	          '<spring:message code="prop.leave.app.title.request.date"/>', 
 		   	          '<spring:message code="prop.leave.app.title.request.leave.start.date"/>',
 		   	          '<spring:message code="prop.leave.app.title.request.leave.end.date"/>',
 		   	          '<spring:message code="prop.leave.app.title.request.leave.type"/>',
+		   	          '<spring:message code="prop.leave.app.title.request.date"/>',
 		   	          '<spring:message code="prop.leave.app.title.request.status"/>',
 			   	       '<spring:message code="prop.leave.app.title.request.approver"/>',
 		   	          '<spring:message code="prop.leave.app.title.request.action"/>'
@@ -315,10 +315,10 @@
 		   	          ],
 		   	colModel:[
 		   		{name:'reqNo',width:90,index:'endDate'},
-		   		{name:'reqDate',index:'reqDate', align:"right"},
 		   		{name:'startDate',index:'startDate',  align:"right"},
 		   		{name:'endDate',index:'endDate', align:"right"},
 		   		{name:'type'},		
+		   		{name:'reqDate',index:'reqDate', align:"right"},
 		   		{name:'status'},
 		   		{name:'employee'},
 		   		{name:'actions',width:200}
@@ -420,9 +420,6 @@
 				</c:choose>
 			</td>
 			<td>
-				<c:out value="${req.requestDate}"/>
-			</td>
-			<td>
 				<c:out value="${req.leaveStartDate}"/>
 			</td>
 			<td>
@@ -430,6 +427,9 @@
 			</td>
 			<td>
 				<c:out value="${req.leaveType.typeDesc}"/>
+			</td>
+			<td>
+				<c:out value="${req.requestDate}"/>
 			</td>
 			<td>
 				<c:out value="${req.leaveStatus}"/>
