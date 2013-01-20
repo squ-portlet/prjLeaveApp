@@ -138,6 +138,70 @@ $(function(){
 	});
 });
 
+$(function(){
+	// Datepicker
+	$('.calendarStart').datepicker({
+		dateFormat:"dd/mm/yy",
+		showOn: "both",
+		buttonImage: "${urlImgCalendar}",
+		buttonImageOnly: true,
+		minDate: -<c:out value="${daysAllowed}"/>,
+		firstDay:6,
+		onClose: function( selectedDate ) {
+				$( ".calendarEnd" ).datepicker( "option", "minDate", selectedDate ); 
+				$( ".calendarDelgStart" ).datepicker( "option", "minDate", selectedDate );
+				$( ".calendarDelgEnd" ).datepicker( "option", "minDate", selectedDate );
+				}
+		//inline: true
+	});
+});
+
+
+$(function(){
+	// Datepicker
+	$('.calendarEnd').datepicker({
+		dateFormat:"dd/mm/yy",
+		showOn: "both",
+		buttonImage: "${urlImgCalendar}",
+		buttonImageOnly: true,
+		minDate: -<c:out value="${daysAllowed}"/>,
+		firstDay:6,
+	    onClose: function( selectedDate ) {
+	    		$( ".calendarStart" ).datepicker( "option", "maxDate", selectedDate );  
+	    		$( ".calendarDelgEnd" ).datepicker( "option", "maxDate", selectedDate );
+	    		$( ".calendarDelgStart" ).datepicker( "option", "maxDate", selectedDate );
+	    	}
+		//inline: true
+	});
+});
+
+
+$(function(){
+	// Datepicker
+	$('.calendarDelgStart').datepicker({
+		dateFormat:"dd/mm/yy",
+		showOn: "both",
+		buttonImage: "${urlImgCalendar}",
+		buttonImageOnly: true,
+		firstDay:6
+		//inline: true
+	});
+});
+
+$(function(){
+	// Datepicker
+	$('.calendarDelgEnd').datepicker({
+		dateFormat:"dd/mm/yy",
+		showOn: "both",
+		buttonImage: "${urlImgCalendar}",
+		buttonImageOnly: true,
+		firstDay:6
+		//inline: true
+	});
+});
+
+
+
 //reference of the code from url mentioned below :
 //http://stackoverflow.com/questions/2412311/multiple-drop-down-lists-with-the-same-behaviour-with-jquery
 //http://codeassembly.com/Simple-chained-combobox-plugin-for-jQuery/
@@ -404,7 +468,7 @@ $(function() {
 						<spring:message code="prop.leave.app.apply.form.leave.start.date"/>:
 					</span>
 				</th>
-				<td><form:input path="leaveStartDate" id="leaveStartDate" cssClass="calendar"/>
+				<td><form:input path="leaveStartDate" id="leaveStartDate" cssClass="calendarStart"/>
 					<br><form:errors path="leaveStartDate" cssClass="error" />
 				</td>
 				<td>&nbsp;</td>
@@ -413,7 +477,7 @@ $(function() {
 						<spring:message code="prop.leave.app.apply.form.leave.end.date"/>:
 					</span>
 				</th>
-				<td><form:input path="leaveEndDate" id="leaveEndDate" cssClass="calendar"/>
+				<td><form:input path="leaveEndDate" id="leaveEndDate" cssClass="calendarEnd"/>
 					<br><form:errors path="leaveEndDate" cssClass="error"/>
 				</td>
 			</tr>
@@ -505,10 +569,10 @@ $(function() {
 				</tr>
 				<c:forEach var="i" begin="0" end="2" step="1">
 					<tr>
-						<td><form:input path="delegatedEmps[${i}].fromDate" cssClass="calendar" />
+						<td><form:input path="delegatedEmps[${i}].fromDate" cssClass="calendarDelgStart" />
 							<br><form:errors path="delegatedEmps[${i}].fromDate" cssClass="error"/>
 						</td>
-						<td><form:input path="delegatedEmps[${i}].toDate" cssClass="calendar"/>
+						<td><form:input path="delegatedEmps[${i}].toDate" cssClass="calendarDelgEnd"/>
 							<br><form:errors path="delegatedEmps[${i}].toDate" cssClass="error"/>
 						</td>
 						<td><form:input path="delegatedEmps[${i}].empNumber" cssClass="txtEmpNum" id="delegatedEmps[${i}].empNumber"/>

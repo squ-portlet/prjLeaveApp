@@ -213,6 +213,7 @@ public class LeaveAppControllerMain
 		
 		model.addAttribute("reqNum", Constants.CONST_NOT_AVAILABLE);
 		model.addAttribute("leaveTypeNo", Constants.CONST_NOT_AVAILABLE);
+		model.addAttribute("daysAllowed", Constants.CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE);
 		return Constants.PAGE_LEAVE_APPLY_FORM;
 	}
 
@@ -519,6 +520,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("approver", leaveRequest.getApprove());
 		model.addAttribute("reqNum", requestNo);
 		model.addAttribute("leaveTypeNo", leaveRequest.getLeaveType().getTypeNo());
+		model.addAttribute("daysAllowed", Constants.CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE);
 		return Constants.PAGE_LEAVE_APPLY_FORM;
 	}
 	

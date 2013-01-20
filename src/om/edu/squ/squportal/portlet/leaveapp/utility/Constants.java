@@ -781,6 +781,7 @@ public interface Constants
 	public static final String	CONST_NOT_AVAILABLE				=			"NA";
 	public static final int		CONST_DELEGATION_REQ_LEAVE_DAYS	=			5;
 	
+	public static final int		CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE =		5;
 	
 	/******************************************************/
 	
@@ -817,7 +818,12 @@ public interface Constants
 	/************* PROPERTY FILE ******************************/
 	public	static	String	RESOURCE_PROPERTY_FILE_NAME			=			"messages";
 	/******************************************************/
+
 	
+	
+	//public	static	String	RESOURCE_PROPERTY_FILE_NAME			=	"mailProp";
+	public	static	String	MAIL_SMTP_HOST						=	"smtpHost";
+	public	static	String	MAIL_SMTP_PORT						=	"smtpPort";
 	
 	
 	
