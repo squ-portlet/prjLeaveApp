@@ -288,7 +288,7 @@
 		   	sortname: 'reqNo',
 		    viewrecords: true,
 		    sortorder: "desc",
-		    caption:'<spring:message code="prop.leave.app.title.request.approver.header"/>'
+		    caption:'<spring:message code="prop.leave.app.title.request.approver.header"/> (<c:out value="${empName}"/>)'
 		});
 	
 		}
@@ -330,7 +330,7 @@
 		   	sortname: 'reqNo',
 		    viewrecords: true,
 		    sortorder: "desc",
-		    caption:'<spring:message code="prop.leave.app.title.request.requester.header"/>'
+		    caption:'<spring:message code="prop.leave.app.title.request.requester.header"/> (<c:out value="${empName}"/>)' 
 		});
 		
 		}
