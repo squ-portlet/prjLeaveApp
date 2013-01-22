@@ -61,7 +61,8 @@ public class UtilProperty
 	    private static void activateResource()
 	    {
 	    	resourceBundle = new ResourceBundleMessageSource();
-		 	resourceBundle.setBasenames(new String[] {Constants.RESOURCE_PROPERTY_FILE_NAME});     
+		 	resourceBundle.setBasenames(new String[] {Constants.RESOURCE_PROPERTY_FILE_NAME});
+		 	
 
 	    }
 	    

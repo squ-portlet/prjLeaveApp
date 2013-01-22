@@ -29,9 +29,15 @@
  */
 package om.edu.squ.squportal.portlet.leaveapp.dao.service;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
+
+import javax.mail.internet.MailDateFormat;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,12 +52,15 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
+import om.edu.squ.squportal.portlet.leaveapp.bo.EmailData;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
 import om.edu.squ.squportal.portlet.leaveapp.dao.db.LeaveDbDao;
 import om.edu.squ.squportal.portlet.leaveapp.dao.ldap.LdapDao;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
+import om.edu.squ.squportal.portlet.leaveapp.utility.UtilFile;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.MailProcess;
 
 /**
  * @author Bhabesh
@@ -207,7 +216,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		{
 			leaveType.setTypeNo(allowEleaveRequestProc.getLeaveCode());
 			leaveRequest.setLeaveType(leaveType);
-			leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps(), null);
+			leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps(), locale);
 		}
 		
 		return allowEleaveRequestProc;
@@ -449,4 +458,122 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		return leaveDbDao.setLeaveApprove(approve);
 	}
 	
+	/**
+	 * 
+	 * method name  : setLeaveEmail
+	 * @param emailData
+	 * LeaveAppServiceDaoImpl
+	 * return type  : void
+	 * 
+	 * purpose		: process email template and send e-mail
+	 *
+	 * Date    		:	Jan 21, 2013 2:56:14 PM
+	 */
+	public void setLeaveEmail(EmailData emailData)
+	{
+		String emailBody	=	new UtilFile().readFile(emailData.getEmailTemplateName());
+		
+		/**
+		 * Request No
+		 */
+		if(emailBody.contains(Constants.TEMPL_PARAM_REQUEST_NO))
+		{
+			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUEST_NO, emailData.getRequestNo());
+		}
+		/**
+		 * Requester Name
+		 */
+		if(emailBody.contains(Constants.TEMPL_PARAM_REQUESTER_NAME))
+		{
+			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUESTER_NAME, emailData.getRequesterName());
+		}
+		/**
+		 * Request Date
+		 */
+		if(emailBody.contains(Constants.TEMPL_PARAM_REQUEST_DATE))
+		{
+			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUEST_DATE, emailData.getRequestDate());
+		}
+		/**
+		 * Request Start Date
+		 */
+		if(emailBody.contains(Constants.TEMPL_PARAM_REQUEST_START_DATE))
+		{
+			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUEST_START_DATE, emailData.getRequestStartDate());
+		}
+		/**
+		 * Request End Date
+		 */
+		if(emailBody.contains(Constants.TEMPL_PARAM_REQUEST_END_DATE))
+		{
+			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUEST_END_DATE, emailData.getRequestEndDate());
+		}
+		/**
+		 * Requester Remark
+		 */
+		if(emailBody.contains(Constants.TEMPL_PARAM_REQUESTER_REMARK))
+		{
+			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUESTER_REMARK, emailData.getRequesterRemark());
+		}
+		/**
+		 *  Delegate Name
+		 */
+		if(emailBody.contains(Constants.TEMPL_PARAM_DELEGATE_NAME))
+		{
+			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_DELEGATE_NAME, emailData.getDelegateName());
+		}
+		/**
+		 * Delegate Start Date
+		 */
+		if(emailBody.contains(Constants.TEMPL_PARAM_DELEGATE_START_DATE))
+		{
+			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_DELEGATE_START_DATE, emailData.getDelegationStartDate());
+		}
+		/**
+		 * Delegate End Date
+		 */
+		if(emailBody.contains(Constants.TEMPL_PARAM_DELEGATE_END_DATE))
+		{
+			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_DELEGATE_END_DATE, emailData.getDelegationEndDate());
+		}
+		/**
+		 * Approver Name
+		 */
+		if(emailBody.contains(Constants.TEMPL_PARAM_APPROVER_NAME))
+		{
+			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVER_NAME, emailData.getApproverName());
+		}
+		/**
+		 * Approve Date
+		 */
+		if(emailBody.contains(Constants.TEMPL_PARAM_APPROVE_DATE))
+		{
+			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVE_DATE, emailData.getApproveDate());
+		}
+		/**
+		 * Approver Remark
+		 */
+		if(emailBody.contains(Constants.TEMPL_PARAM_APPROVER_REMARK))
+		{
+			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVER_REMARK, emailData.getApproveDate());
+		}
+		/**
+		 * Leave URL
+		 */
+		if(emailBody.contains(Constants.TEMPL_PARAM_LEAVE_URL))
+		{
+			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_LEAVE_URL, emailData.getLeaveUrl());
+		}
+		
+		try
+		{
+			new MailProcess().sendMail(null, new String[]{emailData.getMailTo()}, null, "test", emailBody, null);
+		}
+		catch (Exception ex)
+		{
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+		}
+	}
+
 }

@@ -820,11 +820,45 @@ public interface Constants
 	/******************************************************/
 
 	
+	/************* EMAIL *********************************/
+	//public	static	String	RESOURCE_PROPERTY_FILE_NAME		=			"mailProp";
+	public	static	String	MAIL_SMTP_HOST						=			"smtpHost";
+	public	static	String	MAIL_SMTP_PORT						=			"smtpPort";
+	public	static	String	MAIL_FROM							=			"bhabesh@squ.edu.om";
+	public	static	String	MAIL_SUBJECT						=			"Leave application.";
+	public	static	String	MAIL_REQUEST_NO						=			" Request No: ";
+	public	static	boolean	IS_MAIL_SEND_ON						=			true;
+	/******************************************************/
+
+	/************* EMAIL TEMPLATE DIRECTORY ****************/
+	public	static	String	TEMPL_DIR_APPLY						=			"/email/template/apply/";
 	
-	//public	static	String	RESOURCE_PROPERTY_FILE_NAME			=	"mailProp";
-	public	static	String	MAIL_SMTP_HOST						=	"smtpHost";
-	public	static	String	MAIL_SMTP_PORT						=	"smtpPort";
+	
+	/******************************************************/
+
+	
+	/************* EMAIL TEMPLATE***************************/
+	public	static	String	TEMPL_LEAVE_APP_NEW_REQUESTER		=			"tmpLeaveAppNewRequester.txt";
 	
 	
+	/******************************************************/
+	
+	/************* EMAIL TEMPLATE PARAMETER ***************/
+	public	static	String	TEMPL_PARAM_REQUEST_NO				=			":paramReqNo";
+	public	static	String	TEMPL_PARAM_REQUESTER_NAME			=			":paramRequester";
+	public	static	String	TEMPL_PARAM_REQUEST_DATE			=			":paramReqDate";
+	public	static	String	TEMPL_PARAM_REQUEST_START_DATE		=			":paramStartDate";
+	public	static	String	TEMPL_PARAM_REQUEST_END_DATE		=			":paramEndDate";
+	public	static	String	TEMPL_PARAM_REQUESTER_REMARK		=			":paramReqRemark";
+	public	static	String	TEMPL_PARAM_DELEGATE_NAME			=			":paramDelegate";
+	public	static	String	TEMPL_PARAM_DELEGATE_START_DATE		=			":paramDelgStartDate";
+	public	static	String	TEMPL_PARAM_DELEGATE_END_DATE		=			":paramDelgEndDate";
+	public	static	String	TEMPL_PARAM_APPROVER_NAME			=			":paramApprover";
+	public	static	String	TEMPL_PARAM_APPROVE_DATE			=			":paramApproveDate";
+	public	static	String	TEMPL_PARAM_APPROVER_REMARK			=			":paramApproverRemark";
+	public	static	String	TEMPL_PARAM_LEAVE_URL				=			":paramUrl";
+	
+	/******************************************************/
+	public	static	String	LEAVE_URL							=			"https://portalnew.squ.edu.om/portal/page/portal/bhabeshPages/wsrpPrjLeaveApp51";
 	
 }

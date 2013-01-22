@@ -39,6 +39,7 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
+import om.edu.squ.squportal.portlet.leaveapp.bo.EmailData;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
@@ -316,4 +317,17 @@ public interface LeaveAppServiceDao
 	 * Date    		:	Dec 10, 2012 10:27:07 AM
 	 */
 	public int setLeaveApprove(String requestNo, String actionNo, Locale locale,Employee employee);
+	
+	/**
+	 * 
+	 * method name  : setLeaveEmail
+	 * @param emailData
+	 * LeaveAppServiceDaoImpl
+	 * return type  : void
+	 * 
+	 * purpose		:
+	 *
+	 * Date    		:	Jan 21, 2013 2:56:14 PM
+	 */
+	public void setLeaveEmail(EmailData emailData);
 }

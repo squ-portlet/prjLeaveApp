@@ -31,6 +31,10 @@ package om.edu.squ.squportal.portlet.leaveapp.controller;
 
 
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
@@ -121,7 +125,30 @@ public class LeaveAppControllerMain
 		model.addAttribute("leaveStatusApproved", Constants.CONST_LEAVE_STATUS_APPROVED);
 		model.addAttribute("leaveStatusRejected", Constants.CONST_LEAVE_STATUS_REJECTED);
 
-	
+		System.out.println("myPath : "+System.getProperty("user.dir"));
+		System.out.println("GET CONTEXT PATH : "+request.getContextPath());
+		System.out.println("GET server name : "+request.getServerName());
+		System.out.println("Portal context info : "+request.getPortalContext().getPortalInfo());
+		System.out.println("PATH  : "+getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+		System.out.println("PATH (parent) : "+new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getParent());
+
+		URL url = null;
+		try
+		{
+			url = getClass().getResource("").toURI().toURL();
+		}
+		catch (MalformedURLException ex)
+		{
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+		}
+		catch (URISyntaxException ex)
+		{
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+		}
+		String applicationDir = url.getPath();
+
 		return Constants.PAGE_WELCOME;
 	}
 	
@@ -248,6 +275,8 @@ public class LeaveAppControllerMain
 			BindingResult result,Locale locale,Model model
 			)
 	{
+		
+		
 		PortletSession			session					=	request.getPortletSession();
 		Employee				employee				=	(Employee)session.getAttribute("employee");	
 		AllowEleaveRequestProc	allowEleaveRequestProc	=	null;
@@ -311,6 +340,12 @@ public class LeaveAppControllerMain
 			}
 			
 		}
+		
+		//TODO sent mail to requester & approver
+		/*
+
+		 * 
+		 * */
 		
 	}
 

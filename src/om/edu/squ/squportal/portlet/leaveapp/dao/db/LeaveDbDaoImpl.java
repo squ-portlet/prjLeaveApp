@@ -49,6 +49,7 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
+import om.edu.squ.squportal.portlet.leaveapp.bo.EmailData;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
 import om.edu.squ.squportal.portlet.leaveapp.bo.HoD;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
@@ -59,6 +60,7 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
 import om.edu.squ.squportal.portlet.leaveapp.exception.DbNotAvailableException;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.MailProcess;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -752,6 +754,29 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		   leaveRequest.getRequestNo().trim().equals(Constants.CONST_NOT_AVAILABLE))
 		{
 			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQUEST, namedParameters);
+			
+			//TODO sent email
+			/********************************************************** EMAIL OPERATION ***********************************/
+			EmailData	emailData		= 	new EmailData();															  //
+			String		approverName	=	null;																		  //
+			emailData.setRequestNo(leaveRequestNo);																		  //
+			emailData.setRequesterName(emp.getEmpName());																  //
+			emailData.setRequestDate(leaveRequest.getRequestDate());													  //
+			emailData.setRequestStartDate(leaveRequest.getLeaveStartDate());											  //
+			emailData.setRequestEndDate(leaveRequest.getLeaveEndDate());												  //
+			emailData.setRequesterRemark(leaveRequest.getLeaveRequestRemarks());										  //
+			if(null != emp.getMyHodId() && !emp.getMyHodId().equals("") )
+			{
+				Employee approverEmp	=	getEmployee(emp.getMyHodId(),locale);
+				approverName	=	approverEmp.getEmpName();
+				approverEmp	=	null;
+			}
+			emailData.setApproverName(approverName);																  //
+			emailData.setLeaveUrl(Constants.LEAVE_URL);																	  //
+			emailData.setMailTo(emp.getEmpInternetId()+"@squ.edu.om");													  //
+			emailData.setEmailTemplateName(Constants.TEMPL_DIR_APPLY+Constants.TEMPL_LEAVE_APP_NEW_REQUESTER);			  //
+			new MailProcess().setLeaveEmail(emailData);																	  //
+			/**************************************************************************************************************/
 			
 			if(null != delegatedEmps)
 			{
