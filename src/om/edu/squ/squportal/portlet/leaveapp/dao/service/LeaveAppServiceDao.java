@@ -139,6 +139,21 @@ public interface LeaveAppServiceDao
 	
 	/**
 	 * 
+	 * method name  : getManager
+	 * @param empNumber
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : Employee
+	 * 
+	 * purpose		: Get Manager
+	 *
+	 * Date    		:	Jan 27, 2013 12:34:48 PM
+	 */
+	public Employee getManager(String empNumber, Locale locale);
+	
+	/**
+	 * 
 	 * method name  : setNewLeaveRequest
 	 * @param leaveAppModel
 	 * @param employee

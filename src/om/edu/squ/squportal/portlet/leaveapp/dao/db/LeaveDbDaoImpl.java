@@ -68,9 +68,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,6 +82,12 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	private	JdbcTemplate					jdbcTemplate;	
 	private	NamedParameterJdbcTemplate 		namedParameterJdbcTemplate;
 	private SimpleJdbcCall 					simpleJdbcCall;
+	
+	EmailData			emailData			= 	new EmailData();												  //
+	String				approverName4Email	=	null;															  //
+	Employee			empApprover4Email	=	null;															  //
+	List<LeaveApprove> 	approves4Email		=	null; 															  //
+	MailProcess			leaveEmail			=	null;															  //
 	
 	/**
 	 * 
@@ -118,7 +122,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	{
 		this.jdbcTemplate				=	new JdbcTemplate(dataSource);
 		this.namedParameterJdbcTemplate = 	new NamedParameterJdbcTemplate(dataSource); 
-		this.simpleJdbcCall				=	new SimpleJdbcCall(this.jdbcTemplate);
+		
 											
 		
 		
@@ -465,7 +469,10 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	public synchronized AllowEleaveRequestProc	getAllowEleaveRequest(LeaveRequest leaveRequest, Locale locale) 
 																				throws ParseException
 	{
+		this.simpleJdbcCall				=	new SimpleJdbcCall(this.jdbcTemplate);
+		
 		LeaveType	leaveType	=	new LeaveType();
+		Map			resultProc		=	null;	
 		
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		
@@ -498,11 +505,11 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					paramIn.put(Constants.CONST_PROC_COL_IN_P_LEAVE_START, startDate);
 					paramIn.put(Constants.CONST_PROC_COL_IN_P_LEAVE_END, endDate);
 
-		Map						result			=	simpleJdbcCall.execute(paramIn);
-		
+		resultProc			=	simpleJdbcCall.execute(paramIn);
+		logger.info("result(map): "+resultProc);
 		AllowEleaveRequestProc	requestProc		=	new AllowEleaveRequestProc();
 		if(
-				((String)result.get(Constants.CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN))
+				((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN))
 					.equalsIgnoreCase("Y")
 		  )
 		{
@@ -513,23 +520,67 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			requestProc.setAcceptLeave(false);
 		}
 
-		requestProc.setLeaveCode((String)result.get(Constants.CONST_PROC_COL_OUT_P_LEAVE_CODE));
+		requestProc.setLeaveCode((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_LEAVE_CODE));
 		if(locale.getLanguage().equals(Constants.CONST_LANG_DEFAULT_EN))
 		{
-			requestProc.setLeaveMessage((String)result.get(Constants.CONST_PROC_COL_OUT_P_MSG_ENGLISH));
+			requestProc.setLeaveMessage((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_MSG_ENGLISH));
 		}
 		else
 		{
-			requestProc.setLeaveMessage((String)result.get(Constants.CONST_PROC_COL_OUT_P_MSG_ARABIC));
+			requestProc.setLeaveMessage((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_MSG_ARABIC));
 		}
 		
 
 
 		
-		
+		resultProc	=	null;
 		
 		return requestProc;
 	}
+
+	/**
+	 * 
+	 * method name  : getManager
+	 * @param empNumber
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : Employee
+	 * 
+	 * purpose		: Get Manager
+	 *
+	 * Date    		:	Jan 27, 2013 12:34:48 PM
+	 */
+	public  Employee getManager(String empNumber, Locale locale)
+	{
+		this.simpleJdbcCall				=	new SimpleJdbcCall(this.jdbcTemplate);
+		
+		Map						result			=	null;
+		String					mgrEmpNumber	=	null;
+		Employee				mgrEmployee		=	null;
+		
+		
+		simpleJdbcCall.withProcedureName(Constants.CONST_PROC_GET_HIGHER_MGR_PROCESS);
+		simpleJdbcCall.withoutProcedureColumnMetaDataAccess();
+		simpleJdbcCall.useInParameterNames(Constants.CONST_PROC_COL_IN_P_EMP_CODE);
+		simpleJdbcCall.declareParameters(
+					new SqlParameter(Constants.CONST_PROC_COL_IN_P_EMP_CODE,Types.VARCHAR),
+					new SqlOutParameter(Constants.CONST_PROC_COL_OUT_V_MGR_EMP, Types.VARCHAR),
+					new SqlOutParameter(Constants.CONST_PROC_COL_OUT_V_HINT, Types.VARCHAR)
+		);
+		
+		Map<String,Object> 	paramIn				=	new HashMap<String, Object>();
+		paramIn.put(Constants.CONST_PROC_COL_IN_P_EMP_CODE, empNumber);
+		
+		result			=	simpleJdbcCall.execute(paramIn);
+		
+		mgrEmpNumber	=	(String)result.get(Constants.CONST_PROC_COL_OUT_V_MGR_EMP);
+		mgrEmployee		=	getEmployee(mgrEmpNumber, locale);
+		
+		result			=	null;
+		return mgrEmployee;
+	}
+	
 	
 	/**
 	 * 
@@ -748,6 +799,17 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		logger.info("request insert statement :" +Constants.SQL_INSERT_LEAVE_REQUEST);
 		logger.info("request insert param :" +namedParameters);
 		
+		//TODO sent email
+		/********************************************************** EMAIL OPERATION ***********************************/
+		this.emailData.setRequestNo(leaveRequestNo);																		  //
+		this.emailData.setRequesterName(emp.getEmpName());																  //
+		this.emailData.setRequesterEmail(emp.getEmpInternetId()+"@squ.edu.om");											  //
+		this.emailData.setRequestStartDate(leaveRequest.getLeaveStartDate());											  //
+		this.emailData.setRequestEndDate(leaveRequest.getLeaveEndDate());												  //
+		this.emailData.setRequesterRemark(leaveRequest.getLeaveRequestRemarks());										  //
+
+		this.emailData.setLeaveUrl(Constants.LEAVE_URL);																	  //
+		/**************************************************************************************************************/
 		if(
 			null == leaveRequest.getRequestNo() || 
 		   leaveRequest.getRequestNo().trim().equals("") || 
@@ -755,37 +817,74 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		{
 			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQUEST, namedParameters);
 			
-			//TODO sent email
-			/********************************************************** EMAIL OPERATION ***********************************/
-			EmailData	emailData		= 	new EmailData();															  //
-			String		approverName	=	null;																		  //
-			emailData.setRequestNo(leaveRequestNo);																		  //
-			emailData.setRequesterName(emp.getEmpName());																  //
-			emailData.setRequestDate(leaveRequest.getRequestDate());													  //
-			emailData.setRequestStartDate(leaveRequest.getLeaveStartDate());											  //
-			emailData.setRequestEndDate(leaveRequest.getLeaveEndDate());												  //
-			emailData.setRequesterRemark(leaveRequest.getLeaveRequestRemarks());										  //
-			if(null != emp.getMyHodId() && !emp.getMyHodId().equals("") )
-			{
-				Employee approverEmp	=	getEmployee(emp.getMyHodId(),locale);
-				approverName	=	approverEmp.getEmpName();
-				approverEmp	=	null;
-			}
-			emailData.setApproverName(approverName);																  //
-			emailData.setLeaveUrl(Constants.LEAVE_URL);																	  //
-			emailData.setMailTo(emp.getEmpInternetId()+"@squ.edu.om");													  //
-			emailData.setEmailTemplateName(Constants.TEMPL_DIR_APPLY+Constants.TEMPL_LEAVE_APP_NEW_REQUESTER);			  //
-			new MailProcess().setLeaveEmail(emailData);																	  //
+
+			/***************** SENDING E-MAIL TO REQUESTER *****************/
+			this.approves4Email		=	getLeaveApproveHistory(leaveRequestNo, locale);											 
+			this.empApprover4Email		=	approves4Email.get(0).getEmployee();															  
+			this.approverName4Email		=	empApprover4Email.getEmpName();																  
+			this.emailData.setApproverName(approverName4Email);																	  
+			this.emailData.setApproverEmail(empApprover4Email.getEmpInternetId()+"@squ.edu.om");									  
+			this.emailData.setMailTo(emp.getEmpInternetId()+"@squ.edu.om");													  
+			this.emailData.setEmailTemplateName(Constants.TEMPL_DIR_APPLY+Constants.TEMPL_LEAVE_APP_NEW_REQUESTER);			  
+			this.leaveEmail		=	new MailProcess();																		  
+			this.leaveEmail.setLeaveEmail(emailData);																	  	  
+																														  
+			/***************** SENDING E-MAIL TO APPROVER *****************/											  
+			//TODO replace with approver email id																		  
+			//emailData.setMailTo(empApprover.getEmpInternetId()+"@squ.edu.om");										  
+			this.emailData.setMailTo("bhabesh@squ.edu.om");																	  
+			this.emailData.setEmailTemplateName(Constants.TEMPL_DIR_APPLY+Constants.TEMPL_LEAVE_APP_NEW_APPROVER);			  
+			this.emailData.setDelegationAvilable(" ");
+			this.emailData.setDelegationDetails(" ");
 			/**************************************************************************************************************/
 			
 			if(null != delegatedEmps)
 			{
-				setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps,emp.getEmpNumber(),Constants.CONST_OPERATION_ADD);
+				setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps,emp.getEmpNumber(),locale,Constants.CONST_OPERATION_ADD);
+
 			}
+			
+			System.out.println("EMAIL DATA : "+emailData.getDelegationDetails());
+			
+			this.leaveEmail		=	new MailProcess();																		  
+			this.leaveEmail.setLeaveEmail(emailData);																	  	  
+			/**************************************************************/
 		}
 		else
 		{
+			LeaveRequest	leaveRequestCompare	=	getLeaveRequest(leaveRequestNo);
+			namedParameters.put("paramCompLeaveStatus",leaveRequestCompare.getStatus().getStatusCode());
+			
 			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_REQUEST, namedParameters);
+			
+			if(result == 0)
+			{
+				logger.error("update into request status not successful. This might happens for avoiding accidental update of requester/approver");
+			}
+			
+			logger.info("leaveUpdate : "+result);
+			logger.info("leaveUpdate parameter : "+namedParameters);
+			/**************************************************************************************************************/
+			/***************** SENDING E-MAIL TO REQUESTER *****************/
+			this.approves4Email		=	getLeaveApproveHistory(leaveRequestNo, locale);											  
+			this.empApprover4Email		=	approves4Email.get(0).getEmployee();															  
+			this.approverName4Email	=	empApprover4Email.getEmpName();																  
+			this.emailData.setApproverName(approverName4Email);																	  
+			this.emailData.setApproverEmail(empApprover4Email.getEmpInternetId()+"@squ.edu.om");									  
+			this.emailData.setMailTo(emp.getEmpInternetId()+"@squ.edu.om");													  
+			this.emailData.setEmailTemplateName(Constants.TEMPL_DIR_RETURN+Constants.TEMPL_LEAVE_APP_RETURN_UPDATE_REQUESTER); 
+			this.leaveEmail		=	new MailProcess();																		  
+			this.leaveEmail.setLeaveEmail(emailData);																	  	  
+			/***************** SENDING E-MAIL TO APPROVER *****************/											  
+
+			//TODO replace with approver email id																		  
+			//emailData.setMailTo(empApprover.getEmpInternetId()+"@squ.edu.om");										  
+			this.emailData.setMailTo("bhabesh@squ.edu.om");																	  
+			this.emailData.setEmailTemplateName(Constants.TEMPL_DIR_RETURN+Constants.TEMPL_LEAVE_APP_RETURN_UPDATE_APPROVER);  
+			this.leaveEmail		=	new MailProcess();																		  
+			this.leaveEmail.setLeaveEmail(emailData);																	  	  
+			/**************************************************************************************************************/
+			
 			LeaveApprove	approve		=	new LeaveApprove();
 			Employee		employee	=	new Employee();
 			employee.setEmpNumber(emp.getMyHodId());
@@ -794,7 +893,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			approve.setApproverRemark(UtilProperty.getMessage("prop.leave.app.apply.form.approvar.auto.remarks2", null, locale));
 			if(null != delegatedEmps)
 			{
-				setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps,emp.getEmpNumber(),Constants.CONST_OPERATION_UPDATE);
+				setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps,emp.getEmpNumber(),locale,Constants.CONST_OPERATION_UPDATE);
 			}
 
 		}
@@ -863,9 +962,11 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 * Date    		:	Dec 8, 2012 12:44:31 PM
 	 */
 	@Transactional("trLeaveDelegate")
-	private	void	setNewLeaveDelegationRequest(String requestNo, DelegatedEmp[] delegatedEmps,String orginEmpNumber,String operation)
+	private	void	setNewLeaveDelegationRequest(String requestNo, DelegatedEmp[] delegatedEmps,String orginEmpNumber,Locale locale,String operation)
 	{
 		logger.info("delegated employees length: "+delegatedEmps.length);
+		this.emailData.setDelegationAvilable(Constants.CONST_DELEGATION_AVL);
+		String tmpDelgStr	=	"----------------------------------------------------------------------------<br>";
 		try
 		{
 			if(operation.equals(Constants.CONST_OPERATION_UPDATE))
@@ -908,6 +1009,12 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					)
 						{
 							this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQ_DELEGATION, namedParameters);
+							
+							
+							tmpDelgStr = tmpDelgStr + 
+							getEmployee(delEmp.getEmpNumber() , locale).getEmpName() + " - " + 
+				 			" ("+Constants.CONST_DELEGATION_START_DATE+ delEmp.getFromDate() + 
+				 			" -- "+ Constants.CONST_DELEGATION_END_DATE+ delEmp.getToDate() + " ) " + "<br>";
 						}
 
 				}
@@ -916,6 +1023,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		{
 			logger.error("Error in Delegated employees. error description : "+ex.getMessage());
 		}
+
+		this.emailData.setDelegationDetails(tmpDelgStr);
+		
 	}
 	
 	/**
@@ -1073,7 +1183,24 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		return this.namedParameterJdbcTemplate.queryForObject(Constants.SQL_VIEW_LEAVE_REQUEST_SPECIFIC, namedParameters, mapper);
 		
 	}
-
+	
+	/**
+	 * 
+	 * method name  : getLeaveRequest
+	 * @param reqNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : LeaveRequest
+	 * 
+	 * purpose		: get leave request details for a leave request number
+	 *
+	 * Date    		:	Jan 30, 2013 12:03:42 PM
+	 */
+	private	LeaveRequest	getLeaveRequest(String reqNo)
+	{
+		return getLeaveRequest(reqNo, new Locale(Constants.CONST_LANG_DEFAULT_EN));
+	}
+	
 	/**
 	 * 
 	 * method name  : getLeaveRequestHistory
@@ -1147,6 +1274,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				
 				employee.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
 				employee.setEmpName(rs.getString(Constants.CONST_EMP_NAME));
+				employee.setEmpInternetId(rs.getString(Constants.CONST_EMP_INTERNET_ID));
 				
 				approve.setAction(action);
 				approve.setEmployee(employee);
@@ -1354,6 +1482,10 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 		
 		int result2 = setLeaveRequestStatusUpdate(approve.getRequestNo(), approve.getApproverAction());
+		if(result2 == 0)
+		{
+			logger.error("update into request status not successful. This might happens for avoiding accidental update of requester/approver");
+		}
 		logger.info("transaction status info : "+result2);
 		return result;
 		
@@ -1431,7 +1563,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	@Transactional("trLeaveAprv")
 	private int setLeaveRequestStatusUpdate(String requestNo, String approveAction)
 	{
-		String leaveStatus	=	null;
+		String 			leaveStatus		=	null;
+		LeaveRequest	leaveRequest	=	null;
+		
 		if((null== approveAction) || (approveAction.trim().equals("")))
 		{
 			leaveStatus	=	Constants.CONST_LEAVE_STATUS_WAITING_APPV;
@@ -1451,9 +1585,18 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				leaveStatus	=	Constants.CONST_LEAVE_STATUS_REJECTED;
 			}
 		}
+		
+		leaveRequest	=	getLeaveRequest(requestNo);
+		
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 		namedParameters.put("paramReqNo", requestNo);
 		namedParameters.put("paramStatusCode", leaveStatus);
+		
+		namedParameters.put("paramCompLeaveTypeFlag",leaveRequest.getLeaveTypeFlag().getTypeNo());
+		namedParameters.put("paramCompStartDate",leaveRequest.getLeaveStartDate());
+		namedParameters.put("paramCompEndDate",leaveRequest.getLeaveEndDate());
+		namedParameters.put("paramCompSuggestedHod",leaveRequest.getSuggestedHod());
+		
 		
 		logger.info("leave request status update; param: "+namedParameters);
 		logger.info("leave request status update; SQL: "+Constants.SQL_UPDATE_LEAVE_REQ_STATUS);

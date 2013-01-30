@@ -151,6 +151,12 @@
 							</jsp:attribute>
 							</portlet:param>
 						</portlet:renderURL>
+
+						<portlet:renderURL var="varLeaveClarification">
+							<portlet:param name="action" value="updateLeaveApply"/>
+							<portlet:param name="reqNum" value="${req.requestNo}"/>
+						</portlet:renderURL>
+						
 						<c:choose>
 							<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
 											(req.employee.hierarchyCode >empHierarchyAddl) ||
@@ -204,14 +210,14 @@
 							</c:choose>
 						</c:when>
 						<c:when test="${(req.status.statusCode == furtherClarification)}">
-							<portlet:renderURL var="varLeaveClarification">
-								<portlet:param name="action" value="updateLeaveApply"/>
-								<portlet:param name="reqNum" value="${req.requestNo}"/>
-							</portlet:renderURL>
+
 							actions:'<a href="${varLeaveClarification}"><font color="red"><spring:message code="prop.leave.app.apply.action.update"/></font></a>',
 						</c:when>
-						<c:otherwise>
+						<c:when test="${(req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected)}">
 							actions:'<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>',
+						</c:when>
+						<c:otherwise>
+							actions:'<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a>',
 						</c:otherwise>
 					</c:choose>
 					

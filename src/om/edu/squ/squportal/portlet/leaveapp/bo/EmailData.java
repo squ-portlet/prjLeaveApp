@@ -40,14 +40,18 @@ public class EmailData
 	private	String	emailTemplateName;
 	private String 	requestNo;
 	private	String	requesterName;
+	private	String	requesterEmail;
 	private	String	requestDate;
 	private	String	requestStartDate;
 	private	String	requestEndDate;
 	private	String	requesterRemark;
+	private	String	delegationAvilable;
+	private	String	delegationDetails;
 	private	String	delegateName;
 	private	String	delegationStartDate;
 	private	String	delegationEndDate;
 	private	String	approverName;
+	private	String	approverEmail;
 	private	String	approveDate;
 	private	String	approverRemark;
 	private	String	leaveUrl;
@@ -154,6 +158,26 @@ public class EmailData
 		this.requesterName = requesterName;
 	}
 	/**
+	 * Getter Method	: getRequesterEmail
+	 * @return the requesterEmail
+	 * 
+	 * Date				: Jan 23, 2013
+	 */
+	public String getRequesterEmail()
+	{
+		return this.requesterEmail;
+	}
+	/**
+	 * Setter method : setRequesterEmail
+	 * @param requesterEmail the requesterEmail to set
+	 * 
+	 * Date          : Jan 23, 2013 10:14:22 AM
+	 */
+	public void setRequesterEmail(String requesterEmail)
+	{
+		this.requesterEmail = requesterEmail;
+	}
+	/**
 	 * Getter Method	: getRequestDate
 	 * @return the requestDate
 	 * 
@@ -222,6 +246,46 @@ public class EmailData
 	public String getRequesterRemark()
 	{
 		return this.requesterRemark;
+	}
+	/**
+	 * Getter Method	: getDelegationAvilable
+	 * @return the delegationAvilable
+	 * 
+	 * Date				: Jan 23, 2013
+	 */
+	public String getDelegationAvilable()
+	{
+		return this.delegationAvilable;
+	}
+	/**
+	 * Setter method : setDelegationAvilable
+	 * @param delegationAvilable the delegationAvilable to set
+	 * 
+	 * Date          : Jan 23, 2013 1:54:40 PM
+	 */
+	public void setDelegationAvilable(String delegationAvilable)
+	{
+		this.delegationAvilable = delegationAvilable;
+	}
+	/**
+	 * Getter Method	: getDelegationDetails
+	 * @return the delegationDetails
+	 * 
+	 * Date				: Jan 23, 2013
+	 */
+	public String getDelegationDetails()
+	{
+		return this.delegationDetails;
+	}
+	/**
+	 * Setter method : setDelegationDetails
+	 * @param delegationDetails the delegationDetails to set
+	 * 
+	 * Date          : Jan 23, 2013 1:54:40 PM
+	 */
+	public void setDelegationDetails(String delegationDetails)
+	{
+		this.delegationDetails = delegationDetails;
 	}
 	/**
 	 * Getter Method	: getDelegateName
@@ -312,6 +376,26 @@ public class EmailData
 	public void setApproverName(String approverName)
 	{
 		this.approverName = approverName;
+	}
+	/**
+	 * Getter Method	: getApproverEmail
+	 * @return the approverEmail
+	 * 
+	 * Date				: Jan 23, 2013
+	 */
+	public String getApproverEmail()
+	{
+		return this.approverEmail;
+	}
+	/**
+	 * Setter method : setApproverEmail
+	 * @param approverEmail the approverEmail to set
+	 * 
+	 * Date          : Jan 23, 2013 10:15:17 AM
+	 */
+	public void setApproverEmail(String approverEmail)
+	{
+		this.approverEmail = approverEmail;
 	}
 	/**
 	 * Getter Method	: getApproveDate

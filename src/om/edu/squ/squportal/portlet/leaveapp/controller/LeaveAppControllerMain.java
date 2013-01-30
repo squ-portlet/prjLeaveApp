@@ -54,6 +54,7 @@ import om.edu.squ.squportal.portlet.leaveapp.dao.ldap.LdapDao;
 import om.edu.squ.squportal.portlet.leaveapp.dao.service.LeaveAppServiceDao;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
+import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
 import om.edu.squ.squportal.portlet.leaveapp.validator.LeaveAppValidator;
 
 import org.slf4j.Logger;
@@ -125,29 +126,6 @@ public class LeaveAppControllerMain
 		model.addAttribute("leaveStatusApproved", Constants.CONST_LEAVE_STATUS_APPROVED);
 		model.addAttribute("leaveStatusRejected", Constants.CONST_LEAVE_STATUS_REJECTED);
 
-		System.out.println("myPath : "+System.getProperty("user.dir"));
-		System.out.println("GET CONTEXT PATH : "+request.getContextPath());
-		System.out.println("GET server name : "+request.getServerName());
-		System.out.println("Portal context info : "+request.getPortalContext().getPortalInfo());
-		System.out.println("PATH  : "+getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
-		System.out.println("PATH (parent) : "+new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getParent());
-
-		URL url = null;
-		try
-		{
-			url = getClass().getResource("").toURI().toURL();
-		}
-		catch (MalformedURLException ex)
-		{
-			// TODO Auto-generated catch block
-			ex.printStackTrace();
-		}
-		catch (URISyntaxException ex)
-		{
-			// TODO Auto-generated catch block
-			ex.printStackTrace();
-		}
-		String applicationDir = url.getPath();
 
 		return Constants.PAGE_WELCOME;
 	}
@@ -218,7 +196,7 @@ public class LeaveAppControllerMain
 	{
 		PortletSession	session	=	request.getPortletSession();
 		Employee	employee	=	(Employee)session.getAttribute("employee");	
-		
+		String		empNumber	=	String.format("%07d", Integer.valueOf(employee.getEmpNumber()));
 		if(!model.containsAttribute("leaveAppModel"))
 		{
 			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
@@ -227,7 +205,7 @@ public class LeaveAppControllerMain
 			leaveAppModel.setOpMode(Constants.CONST_MODEL_MODE_INSERT);
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
-		model.addAttribute("empNumber", String.format("%07d", Integer.valueOf(employee.getEmpNumber())));
+		model.addAttribute("empNumber", empNumber);
 		model.addAttribute("leaveTypeFlag",leaveAppServiceDao.getLeaveTypes(employee,locale) );
 		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
 		model.addAttribute("employee",employee );
@@ -239,7 +217,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("baseHierarchyEmp", Constants.CONST_EMPLOYEE_HIERARCHY_CODE);
 		model.addAttribute("baseLevelEmp", Constants.CONST_EMPLOYEE_LEVEL);
 		model.addAttribute("opMode", Constants.CONST_MODEL_MODE_INSERT);
-		
+		model.addAttribute("mgrName", leaveAppServiceDao.getManager(empNumber, locale).getEmpName());
 		model.addAttribute("reqNum", Constants.CONST_NOT_AVAILABLE);
 		model.addAttribute("leaveTypeNo", Constants.CONST_NOT_AVAILABLE);
 		model.addAttribute("daysAllowed", Constants.CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE);
@@ -329,16 +307,17 @@ public class LeaveAppControllerMain
 					{
 						logger.error("error generating message : "+nEx);
 					}
-					response.setRenderParameter("action", "backToMain");
+					
 					logger.info("inside if ");
 				//int dbResult	=	leaveAppServiceDao.setNewLeaveRequest(leaveAppModel,employee);
 				//logger.info("db result : "+dbResult);
 			}
 			else if(operation.equals(Constants.CONST_OPERATION_UPDATE))
 			{
+				response.setRenderParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowEleaveRequestProc.getLeaveMessage());
 				//logger.info("model -- leave app model : "+leaveAppModel.toString());
 			}
-			
+			response.setRenderParameter("action", "backToMain");
 		}
 		
 		//TODO sent mail to requester & approver
@@ -425,7 +404,14 @@ public class LeaveAppControllerMain
 			)
 	{
 		Employee	employee	=	(Employee)request.getPortletSession().getAttribute("employee");
-		leaveAppServiceDao.setLeaveApprove(leaveAppModel, employee);
+		int resultApprove = leaveAppServiceDao.setLeaveApprove(leaveAppModel, employee);
+		if(resultApprove == 0)
+		{
+			response.setRenderParameter(
+										Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, 
+										UtilProperty.getMessage("error.prop.leave.app.update.blocked", null, locale
+							));
+		}
 		response.setRenderParameter("action", "backToMain");
 	}
 	
@@ -553,7 +539,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("baseHierarchyEmp", Constants.CONST_EMPLOYEE_HIERARCHY_CODE);
 		model.addAttribute("baseLevelEmp", Constants.CONST_EMPLOYEE_LEVEL);
 		model.addAttribute("opMode", Constants.CONST_MODEL_MODE_UPDATE);
-		
+		model.addAttribute("mgrName", leaveAppServiceDao.getManager(employee.getEmpNumber(), locale).getEmpName());
 		model.addAttribute("approver", leaveRequest.getApprove());
 		model.addAttribute("reqNum", requestNo);
 		model.addAttribute("leaveTypeNo", leaveRequest.getLeaveType().getTypeNo());

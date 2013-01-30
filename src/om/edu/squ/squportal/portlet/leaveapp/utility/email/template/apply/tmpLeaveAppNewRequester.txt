@@ -1,17 +1,21 @@
 Dear :paramRequester, <br>
-Your request for leave application posted for approval. <br><br>
+<b>Your request for leave application posted for approval.</b> <br><br>
 
 Details of your leave application are as below : <br><br>
 
-Request No : :paramReqNo <br>
-Request Date : :paramReqDate <br><br>
+Request No : :paramReqNo <br><br>
+
 
 Leave Start Date : :paramStartDate <br>
 Leave End Date : :paramEndDate <br><br> 
 
-Approver : :paramApprover <br><br>
+Approver : :paramApprover <br>
+Approver Email : :paramEmailApprover <br><br>
 
 Requester Remark : :paramReqRemark <br><br>
+
+:paramDelegationAvl <br>
+:paramDelegationDetails <br><br>
 
 For more details you are requested to visit following url : <a href=":paramUrl">:paramUrl</a> <br><br><br>
 
@@ -25,3 +29,4 @@ With regards <br><br>
 Portal Team | CIS <br>
 Sultan Qaboos University <br>
 Muscat | Oman <br>
+<a href="http://www.squ.edu.om">http://www.squ.edu.om</a>

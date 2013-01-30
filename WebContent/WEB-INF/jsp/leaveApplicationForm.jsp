@@ -47,21 +47,32 @@
 <c:url value="/css/images/ui-icons_cc0000_256x240.png" var="urlImgIcons2"/>
 <c:url value="/css/images/ui-icons_ffffff_256x240.png" var="urlImgIcons3"/>
 
+<c:url value="/css/images/ui-icons_454545_256x240.png" var="urlImgIcons4"/>
+<c:url value="/css/images/ui-icons_888888_256x240.png" var="urlImgIcons5"/>
+<c:url value="/css/images/ui-bg_glass_65_ffffff_1x400.png" var="urlImgBgFlat65x1"/>
+<c:url value="/css/images/ui-bg_glass_75_e6e6e6_1x400.png" var="urlImgBgFlat75e6"/>
+<c:url value="/css/images/ui-bg_glass_75_dadada_1x400.png" var="urlImgBgFlat75d1"/>
+
+
 <c:url value="/css/squPortletStyles.css" var="urlCssSquPortletStyle"/>
 <c:url value="/css/jquery-ui-1.8.18.custom.css" var="urlJQueryCSS"/>
-
-
+<c:url value="/css/jquery.ui.accordion.css" var="urlJQueryAccordionCSS"/>
+<c:url value="/css/jquery.ui.theme.css" var="urlJQueryThemeCSS"/>
 
 
 <c:url value="/js/jquery-1.7.1.min.js" var="urlJsJqueryMin"/>
 <c:url value="/js/jquery-ui-1.8.18.custom.min.js" var="urlJsJqueryCustom"/>
+<c:url value="/js/jquery.ui.accordion.js" var="urlJsJqueryAccordion"/>
 
 <link type="text/css" href="${urlJQueryCSS}" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="${urlCssSquPortletStyle}" />
+<link type="text/css" href="${urlJsJqueryAccordion}" rel="stylesheet" />
+<link type="text/css" href="${urlJQueryThemeCSS}" rel="stylesheet" />
 
 
 <script type="text/javascript" src="${urlJsJqueryMin}"></script>
 <script type="text/javascript" src="${urlJsJqueryCustom}"></script>
+<script type="text/javascript" src="${urlJsJqueryAccordion}"></script>
 
 <c:url value="/LeaveAppEmpServlet" var="servletLeave"/>
 <c:url value="/LeaveAppBranchServlet" var="servletLeaveBranch"/>
@@ -104,7 +115,7 @@
 	.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url("${urlImgIcons2}"); }
 	.ui-state-active .ui-icon {background-image: url("${urlImgIcons2}"); }
 	.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url("${urlImgIcons2}"); }
-	
+	.ui-widget-content { border: 1px solid #aaaaaa/*{borderColorContent}*/; background: #ffffff/*{bgColorContent}*/ url("${urlImgBgFlat75}")/*{bgImgUrlContent}*/ 50%/*{bgContentXPos}*/ 50%/*{bgContentYPos}*/ repeat-x/*{bgContentRepeat}*/; color: #222222/*{fcContent}*/; }
 
 
 </style>
@@ -352,7 +363,18 @@ $(function() {
 
 });
 
+/**
+ * Accordion
+ */
+$(function() {
+	$( "#accordion" ).accordion(
+			{
+			autoHeight: false
 
+			}
+			
+		);
+	});
 
 </script>
 
@@ -428,38 +450,60 @@ $(function() {
 					</span>
 				</th>
 				<td >
-				<div id="divHod" class="divHod"></div><form:errors path="hod"  cssClass="error"/>
-				<br>
-					<form:select path="branch2"  cssClass="selBranchCode" id="selBranchCode" >
-						<option><spring:message code="prop.leave.app.dropdown.text"/></option>
-						<c:forEach items="${branches}" var="branch">
-							<c:set value="" var="selct"/>
-							<c:choose>
-								<c:when test='${opMode=="u"}'>
-								<c:if test="${approver.branchCode==branch.branchCode}">
-<%-- 									<c:if test="${employee.branchCode==branch.branchCode}"> --%>
-									<c:set value="selected" var="selct"/> 
-								</c:if>
-								</c:when>
-								<c:otherwise>
-									<c:if test="${employee.branchCode==branch.branchCode}">
-										<c:set value="selected" var="selct"/> 
-									</c:if>
-								</c:otherwise>
-							</c:choose>
-							<option value="${branch.branchCode}" ${selct}>
-								<c:out value="${branch.branchDesc}"/>
-							</option>
-						</c:forEach>
-					</form:select>
-				<br>
-					<form:select path="department2" cssClass="selDeptCode2" id="selDeptCode2">
-						<option><spring:message code="prop.leave.app.dropdown.text"/></option>
-					</form:select>
-				<br>
-					<form:select path="section2" cssClass="selSectionCode2" id="selSectionCode2">
-						<option><spring:message code="prop.leave.app.dropdown.text"/></option>
-					</form:select>
+<div id="accordion" >
+				<h3>
+					<a href="#">
+						<spring:message code="prop.leave.app.apply.form.leave.manager.default"/>
+						<font color="red" size="small"><i><c:out value="${mgrName}"/></i></font>
+					</a>
+				</h3>
+				<div>
+					<spring:message code="prop.leave.app.apply.form.leave.manager"/> 
+					<div><center><font color="red"><c:out value="${mgrName}"/></font></center></div>
+					<br><br>
+					<spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/>
+				</div>
+				<h3><a href="#"><spring:message code="prop.leave.app.apply.form.leave.manager.custom"/></a></h3>				
+					<div>
+						<fieldset>
+						<legend><spring:message code="prop.leave.app.apply.form.leave.manager.select"/> </legend>
+							<div>
+									<form:select path="branch2"  cssClass="selBranchCode" id="selBranchCode" >
+										<option><spring:message code="prop.leave.app.dropdown.text"/></option>
+										<c:forEach items="${branches}" var="branch">
+											<c:set value="" var="selct"/>
+											<c:choose>
+												<c:when test='${opMode=="u"}'>
+												<c:if test="${approver.branchCode==branch.branchCode}">
+				<%-- 									<c:if test="${employee.branchCode==branch.branchCode}"> --%>
+													<c:set value="selected" var="selct"/> 
+												</c:if>
+												</c:when>
+												<c:otherwise>
+													<c:if test="${employee.branchCode==branch.branchCode}">
+														<c:set value="selected" var="selct"/> 
+													</c:if>
+												</c:otherwise>
+											</c:choose>
+											<option value="${branch.branchCode}" ${selct}>
+												<c:out value="${branch.branchDesc}"/>
+											</option>
+										</c:forEach>
+									</form:select>
+								<br>
+									<form:select path="department2" cssClass="selDeptCode2" id="selDeptCode2">
+										<option><spring:message code="prop.leave.app.dropdown.text"/></option>
+									</form:select>
+								<br>
+									<form:select path="section2" cssClass="selSectionCode2" id="selSectionCode2">
+										<option><spring:message code="prop.leave.app.dropdown.text"/></option>
+									</form:select>
+								
+									<div id="divHod" class="divHod" ></div><form:errors path="hod"  cssClass="error"/>
+							</div>
+					</fieldset>
+				</div>
+</div>				
 				</td>
 			</tr>
 			<tr>

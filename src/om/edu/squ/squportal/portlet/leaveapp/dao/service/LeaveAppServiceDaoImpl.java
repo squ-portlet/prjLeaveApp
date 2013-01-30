@@ -216,10 +216,32 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		{
 			leaveType.setTypeNo(allowEleaveRequestProc.getLeaveCode());
 			leaveRequest.setLeaveType(leaveType);
-			leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps(), locale);
+			int result = leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps(), locale);
+			if (result == 0)
+			{
+				allowEleaveRequestProc.setLeaveMessage(UtilProperty.getMessage("error.prop.leave.app.update.blocked", null, locale));
+			}
 		}
 		
 		return allowEleaveRequestProc;
+	}
+	
+	/**
+	 * 
+	 * method name  : getManager
+	 * @param empNumber
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : Employee
+	 * 
+	 * purpose		: Get Manager
+	 *
+	 * Date    		:	Jan 27, 2013 12:34:48 PM
+	 */
+	public synchronized Employee getManager(String empNumber, Locale locale)
+	{
+		return leaveDbDao.getManager(empNumber, locale);
 	}
 	
 	

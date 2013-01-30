@@ -495,6 +495,10 @@ public interface Constants
 																			"	      'en',initcap(EMP.VHM_EMP_NAME),					" +
 																			"	      'ar',EMP.VHM_EMP_NAME_ARABIC						" +
 																			"	      ) AS EMP_NAME,									" +
+																			"  SUBSTR(													" +
+																			"			VHM_EMP_SQU_EMAIL,1,							" +
+																			"			INSTRB(VHM_EMP_SQU_EMAIL, '@', 1, 1)-1			" +
+																			"		  ) AS EMP_INTERNET_ID,								" +
 																			"	TO_CHAR(VHM_APP_ACTION_DATE,'dd-mm-yyyy hh:mi AM') AS ACTION_DATE, " +
 																			"	APP.VHM_ACTION_CODE AS ACTION_CODE,						" +
 																			"	DECODE( 												" +
@@ -507,7 +511,7 @@ public interface Constants
 																			"	VHM_WORKFLOW_ACTIONS WFACTION,							" +
 																			"	VHM_EMPLOYEE EMP										" +
 																			"	WHERE APP.VHM_APP_EMP_CODE = EMP.VHM_EMP_CODE			" +
-																			"	AND APP.VHM_ACTION_CODE=WFACTION.VHM_ACTION_CODE		" +
+																			"	AND APP.VHM_ACTION_CODE=WFACTION.VHM_ACTION_CODE(+)		" +
 																			"	AND APP.VHM_LEAVE_REQ_NO = :paramReqNo					" +
 																			"	ORDER BY VHM_APP_RECEIVED_DATE DESC 					";
 	
@@ -532,14 +536,22 @@ public interface Constants
 																			" :paramGradeCode,:paramDesignationCode,:paramJobTypeCode,		" +
 																			" :paramLeaveType,:paramIsAdmin,								" +
 																			" :paramPositionCode,:paramHierarchyCode,:paramIsReqActive,		" +
-																			" :paramReqRemarks,:paramReqUserInit,SYSDATE,				" +
+																			" :paramReqRemarks,:paramReqUserInit,SYSDATE,					" +
 																			" :paramLeaveTypeFlag,:paramHodId								" +
 																			" )																";
-
+	public static final String	SQL_VIEW_ONLY_LEAVE_REQUEST_SPECIFIC	=	" SELECT 														" +
+																			" TO_CHAR(LVREQ.VHM_LEAVE_START_DATE,'DD/MM/YYYY') AS LEAVE_START_DATE,	" +
+																			" TO_CHAR(LVREQ.VHM_LEAVE_END_DATE,'DD/MM/YYYY') AS LEAVE_END_DATE,		" +
+																			" VHM_LEAVE_TYPE AS LEAVE_TYPE ,												" +
+																			" VHM_ADMIN_HOLDING_YN AS EMP_ADMIN, VHM_POSITION_CODE AS EMP_ADDITIONAL_POSITION_CODE,						" +
+																			" VHM_LEAVE_REQUEST_REMARKS AS LEAVE_REQ_REMARK,VHM_LEAVE_TYPE_FLAG AS LEAVE_TYPE_FLAG,				" +
+																			" VHM_STATUS_CODE,VHM_SUGGESTED_APP_EMP_CODE					" +
+																			" FROM VHM_EMP_LEAVE_REQUEST LVREQ								" +
+																			" WHERE VHM_LEAVE_REQ_NO = :paramReqNo							";
+	
 	public static final String	SQL_UPDATE_LEAVE_REQUEST		=			"	UPDATE  VHM_EMP_LEAVE_REQUEST								" +
 																			"	SET  														" +
 																			"		VHM_LEAVE_REQ_DATE = SYSDATE,							" +
-																			"		VHM_STATUS_CODE = :paramLeaveStatus,					" +
 																			"		VHM_EMP_CODE = :paramEmpCode,							" +
 																			"		VHM_EMP_INTERNET_USR_ID = :paramInternetId,				" +
 																			"		VHM_LEAVE_START_DATE=									" +
@@ -561,8 +573,10 @@ public interface Constants
 																			"		VHM_LEAVE_REQUEST_UPD_USR_INIT= :paramReqUserInit,		" +
 																			"		VHM_LEAVE_REQUEST_UPD_DATE=SYSDATE,						" +
 																			"		VHM_LEAVE_TYPE_FLAG = :paramLeaveTypeFlag,				" +
-																			"		VHM_SUGGESTED_APP_EMP_CODE= :paramHodId					" +
-																			"	WHERE VHM_LEAVE_REQ_NO = :paramReqNo						";
+																			"		VHM_SUGGESTED_APP_EMP_CODE= :paramHodId,				" +
+																			"		VHM_STATUS_CODE  	= :paramLeaveStatus					" +
+																			"	WHERE VHM_LEAVE_REQ_NO 	= :paramReqNo						" +
+																			"	  AND VHM_STATUS_CODE  	= :paramCompLeaveStatus					";
 	
 	public static final String	SQL_VIEW_LEAVE_REQ_DELEGATION	=			" SELECT														" + 
 																			"  REQ_DELG.VHM_LEAVE_REQ_NO AS LEAVE_REQUEST_NO,				" +
@@ -638,7 +652,11 @@ public interface Constants
 	
 	public static final String	SQL_UPDATE_LEAVE_REQ_STATUS		=			" UPDATE VHM_EMP_LEAVE_REQUEST									" +
 																			" SET VHM_STATUS_CODE=:paramStatusCode							" +
-																			" WHERE VHM_LEAVE_REQ_NO=:paramReqNo							";
+																			" WHERE VHM_LEAVE_REQ_NO=:paramReqNo							" +
+																			" AND VHM_LEAVE_TYPE_FLAG = :paramCompLeaveTypeFlag				" +
+																			" AND VHM_LEAVE_START_DATE = TO_DATE(:paramCompStartDate,'DD/MM/YYYY')" +
+																			" AND VHM_LEAVE_END_DATE = TO_DATE(:paramCompEndDate,'DD/MM/YYYY')" +
+																			" AND VHM_SUGGESTED_APP_EMP_CODE = :paramCompSuggestedHod		";
 	
 	public static final String	SQL_UPDATE_LEAVE_REQ_APPROVE	=			"	UPDATE VHM_EMP_LEAVE_REQUEST_APPROVAL						" +
 																			"	SET VHM_ACTION_CODE = :paramActionCode,						" +        
@@ -797,6 +815,10 @@ public interface Constants
 	public static final	String	CONST_PROC_COL_OUT_P_MSG_ENGLISH		=			"P_MSG_ENG";
 	public static final	String	CONST_PROC_COL_OUT_P_MSG_ARABIC			=			"P_MSG_ARB";
 	
+	public static final	String	CONST_PROC_GET_HIGHER_MGR_PROCESS		=			"GET_HIGHER_MGR_PROCESS";
+	public static final	String	CONST_PROC_COL_OUT_V_MGR_EMP			=			"V_MGR_EMP";
+	public static final	String	CONST_PROC_COL_OUT_V_HINT				=			"V_HINT";
+	
 	
 	/******************************************************/
 	
@@ -827,38 +849,52 @@ public interface Constants
 	public	static	String	MAIL_FROM							=			"bhabesh@squ.edu.om";
 	public	static	String	MAIL_SUBJECT						=			"Leave application.";
 	public	static	String	MAIL_REQUEST_NO						=			" Request No: ";
-	public	static	boolean	IS_MAIL_SEND_ON						=			true;
+	public	static	boolean	IS_MAIL_SEND_ON						=			false;
 	/******************************************************/
 
 	/************* EMAIL TEMPLATE DIRECTORY ****************/
+	public	static	String	TEMPL_EMAIL_DIR_LEAVE				=			"/email/template/";
 	public	static	String	TEMPL_DIR_APPLY						=			"/email/template/apply/";
-	
+	public	static	String	TEMPL_DIR_RETURN					=			"/email/template/returnl/";
 	
 	/******************************************************/
 
 	
 	/************* EMAIL TEMPLATE***************************/
+	public	static	String	TEMPL_LEAVE_APP						=			"tmplateLeaveAppEmail.txt";
 	public	static	String	TEMPL_LEAVE_APP_NEW_REQUESTER		=			"tmpLeaveAppNewRequester.txt";
+	public	static	String	TEMPL_LEAVE_APP_NEW_APPROVER		=			"tmpLeaveAppNewApprover.txt";
 	
+	
+	public	static	String	TEMPL_LEAVE_APP_RETURN_UPDATE_REQUESTER		=	"tmpLeaveAppReturnUpdateRequester.txt";
+	public	static	String	TEMPL_LEAVE_APP_RETURN_UPDATE_APPROVER		=	"tmpLeaveAppReturnUpdateApprover.txt";
 	
 	/******************************************************/
 	
 	/************* EMAIL TEMPLATE PARAMETER ***************/
 	public	static	String	TEMPL_PARAM_REQUEST_NO				=			":paramReqNo";
 	public	static	String	TEMPL_PARAM_REQUESTER_NAME			=			":paramRequester";
+	public	static	String	TEMPL_PARAM_REQUESTER_EMAIL			=			":paramEmailRequester";
 	public	static	String	TEMPL_PARAM_REQUEST_DATE			=			":paramReqDate";
 	public	static	String	TEMPL_PARAM_REQUEST_START_DATE		=			":paramStartDate";
 	public	static	String	TEMPL_PARAM_REQUEST_END_DATE		=			":paramEndDate";
 	public	static	String	TEMPL_PARAM_REQUESTER_REMARK		=			":paramReqRemark";
+	public	static	String	TEMPL_PARAM_DELEGATION_AVL			=			":paramDelegationAvl";
+	public	static	String	TEMPL_PARAM_DELEGATION_DETAILS		=			":paramDelegationDetails";
 	public	static	String	TEMPL_PARAM_DELEGATE_NAME			=			":paramDelegate";
 	public	static	String	TEMPL_PARAM_DELEGATE_START_DATE		=			":paramDelgStartDate";
 	public	static	String	TEMPL_PARAM_DELEGATE_END_DATE		=			":paramDelgEndDate";
 	public	static	String	TEMPL_PARAM_APPROVER_NAME			=			":paramApprover";
+	public	static	String	TEMPL_PARAM_APPROVER_EMAIL			=			":paramEmailApprover";
 	public	static	String	TEMPL_PARAM_APPROVE_DATE			=			":paramApproveDate";
-	public	static	String	TEMPL_PARAM_APPROVER_REMARK			=			":paramApproverRemark";
+	public	static	String	TEMPL_PARAM_APPROVER_REMARK			=			":paramAppRemark";
+
 	public	static	String	TEMPL_PARAM_LEAVE_URL				=			":paramUrl";
 	
 	/******************************************************/
 	public	static	String	LEAVE_URL							=			"https://portalnew.squ.edu.om/portal/page/portal/bhabeshPages/wsrpPrjLeaveApp51";
-	
+	public	static	String	CONST_DELEGATION_AVL				=			"This leave application has delegation";
+	public	static	String	CONST_DELEGATION_NAME				=			"Name : ";
+	public	static	String	CONST_DELEGATION_START_DATE			=			"Start : ";
+	public	static	String	CONST_DELEGATION_END_DATE			=			"End : ";
 }

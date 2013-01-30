@@ -95,6 +95,13 @@ import org.springframework.web.multipart.MultipartFile;
 					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUESTER_NAME, emailData.getRequesterName());
 				}
 				/**
+				 * Requester Email
+				 */
+				if(!(null == emailData.getRequesterEmail()) && emailBody.contains(Constants.TEMPL_PARAM_REQUESTER_EMAIL))
+				{
+					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUESTER_EMAIL, emailData.getRequesterEmail());
+				}
+				/**
 				 * Request Date
 				 */
 				if(!(null== emailData.getRequestDate()) && emailBody.contains(Constants.TEMPL_PARAM_REQUEST_DATE))
@@ -123,6 +130,20 @@ import org.springframework.web.multipart.MultipartFile;
 					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUESTER_REMARK, emailData.getRequesterRemark());
 				}
 				/**
+				 *  Delegation available
+				 */
+				if(!(null == emailData.getDelegationAvilable()) && emailBody.contains(Constants.TEMPL_PARAM_DELEGATION_AVL))
+				{
+					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_DELEGATION_AVL, emailData.getDelegationAvilable());
+				}
+				/**
+				 *  Delegation details
+				 */
+				if(!(null == emailData.getDelegationDetails()) && emailBody.contains(Constants.TEMPL_PARAM_DELEGATION_DETAILS))
+				{
+					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_DELEGATION_DETAILS, emailData.getDelegationDetails());
+				}
+				/**
 				 *  Delegate Name
 				 */
 				if(!(null == emailData.getDelegateName()) && emailBody.contains(Constants.TEMPL_PARAM_DELEGATE_NAME))
@@ -144,11 +165,18 @@ import org.springframework.web.multipart.MultipartFile;
 					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_DELEGATE_END_DATE, emailData.getDelegationEndDate());
 				}
 				/**
-				 * Approver Name
+				 * Approver Name 
 				 */
 				if(!(null == emailData.getApproverName()) && emailBody.contains(Constants.TEMPL_PARAM_APPROVER_NAME))
 				{
 					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVER_NAME, emailData.getApproverName());
+				}
+				/**
+				 * Approver Email
+				 */
+				if(!(null == emailData.getApproverEmail()) && emailBody.contains(Constants.TEMPL_PARAM_APPROVER_EMAIL))
+				{
+					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVER_EMAIL, emailData.getApproverEmail());
 				}
 				/**
 				 * Approve Date
