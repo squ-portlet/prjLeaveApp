@@ -657,7 +657,11 @@ public interface Constants
 																			" AND VHM_LEAVE_TYPE_FLAG = :paramCompLeaveTypeFlag				" +
 																			" AND VHM_LEAVE_START_DATE = TO_DATE(:paramCompStartDate,'DD/MM/YYYY')" +
 																			" AND VHM_LEAVE_END_DATE = TO_DATE(:paramCompEndDate,'DD/MM/YYYY')" +
-																			" AND VHM_SUGGESTED_APP_EMP_CODE = :paramCompSuggestedHod		";
+																			" AND (															" +
+																			"			VHM_SUGGESTED_APP_EMP_CODE = :paramCompSuggestedHod " +
+																			"		OR	:paramCompSuggestedHod IS NULL						" +
+																			"	   )														";
+																			
 	
 	public static final String	SQL_UPDATE_LEAVE_REQ_APPROVE	=			"	UPDATE VHM_EMP_LEAVE_REQUEST_APPROVAL						" +
 																			"	SET VHM_ACTION_CODE = :paramActionCode,						" +        
