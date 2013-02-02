@@ -89,7 +89,8 @@ public class LeaveAppValidator implements Validator
 		
 		try
 		{
-			if(null != leaveAppModel.getLeaveStartDate() && null != leaveAppModel.getLeaveEndDate() )
+			if((null != leaveAppModel.getLeaveStartDate() && leaveAppModel.getLeaveStartDate().trim().equals("")) 
+					&& (null != leaveAppModel.getLeaveEndDate() && leaveAppModel.getLeaveEndDate().trim().equals("")) )
 			{
 				dtLvStartDate		=	sdfDate.parse(leaveAppModel.getLeaveStartDate());
 				dtLvEndDate			=	sdfDate.parse(leaveAppModel.getLeaveEndDate());

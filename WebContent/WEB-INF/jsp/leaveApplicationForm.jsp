@@ -449,20 +449,41 @@ $(function() {
 						<spring:message code="prop.leave.app.apply.form.requester.approver.selection"/>
 					</span>
 				</th>
+				
 				<td >
+				
 <div id="accordion" >
-				<h3>
-					<a href="#">
-						<spring:message code="prop.leave.app.apply.form.leave.manager.default"/>
-						<font color="red" size="small"><i><c:out value="${mgrName}"/></i></font>
-					</a>
-				</h3>
-				<div>
-					<spring:message code="prop.leave.app.apply.form.leave.manager"/> 
-					<div><center><font color="red"><c:out value="${mgrName}"/></font></center></div>
-					<br><br>
-					<spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/>
-				</div>
+				<c:choose>
+					<c:when test='${opMode=="u"}'>
+						<h3>
+							<a href="#">
+								<spring:message code="prop.leave.app.apply.form.leave.manager"/>
+								<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i></font>
+							</a>
+						</h3>
+						<div>
+							<spring:message code="prop.leave.app.apply.form.leave.manager"/> 
+							<div><center><font color="red"><c:out value="${approver.employee.empName}"/></font></center></div>
+							<br><br>
+							<spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/>
+						</div>
+					</c:when>
+					<c:otherwise>
+						<h3>
+							<a href="#">
+								<spring:message code="prop.leave.app.apply.form.leave.manager.default"/>
+								<font color="red" size="small"><i><c:out value="${mgrName}"/></i></font>
+							</a>
+						</h3>
+						<div>
+							<spring:message code="prop.leave.app.apply.form.leave.manager"/> 
+							<div><center><font color="red"><c:out value="${mgrName}"/></font></center></div>
+							<br><br>
+							<spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/>
+						</div>
+					</c:otherwise>
+				</c:choose>
+				
 				<h3><a href="#"><spring:message code="prop.leave.app.apply.form.leave.manager.custom"/></a></h3>				
 					<div>
 						<fieldset>

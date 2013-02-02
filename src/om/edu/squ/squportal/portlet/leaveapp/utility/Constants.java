@@ -445,7 +445,8 @@ public interface Constants
 																			"						AS SUGGESTED_APPROVER_CODE,			" +
 																			"   EMP.VHM_EMP_BRAN_CODE AS EMP_APP_BRANCH_CODE,			" +
 																			"	EMP.VHM_EMP_DEPT_CODE AS EMP_APP_DEPARTMENT_CODE,       " +
-																			"	EMP.VHM_EMP_SECTION_CODE AS EMP_APP_SECTION_CODE		" +
+																			"	EMP.VHM_EMP_SECTION_CODE AS EMP_APP_SECTION_CODE,		" +
+																			"	LVAPRV.VHM_APP_EMP_CODE AS EMP_APP_CODE					" +
 																			"	FROM													" + 
 																			"	  VHM_EMP_LEAVE_REQUEST LVREQ,							" +
 																			"	  VHM_WORKFLOW_STATUS LVSTAT,							" +

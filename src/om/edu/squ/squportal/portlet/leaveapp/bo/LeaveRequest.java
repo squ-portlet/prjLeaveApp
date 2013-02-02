@@ -56,6 +56,7 @@ public class LeaveRequest implements Serializable
 	private	boolean			leaveRequestActive;
 	private	String			leaveRequestRemarks;
 	private	String			suggestedHod;
+	private	String			approverId;
 	/**
 	 * Getter Method	: getRequestNo
 	 * @return the requestNo
@@ -376,6 +377,26 @@ public class LeaveRequest implements Serializable
 	{
 		this.suggestedHod = suggestedHod;
 	}
+	/**
+	 * Getter Method	: getApproverId
+	 * @return the approverId
+	 * 
+	 * Date				: Feb 2, 2013
+	 */
+	public String getApproverId()
+	{
+		return this.approverId;
+	}
+	/**
+	 * Setter method : setApproverId
+	 * @param approverId the approverId to set
+	 * 
+	 * Date          : Feb 2, 2013 10:15:14 AM
+	 */
+	public void setApproverId(String approverId)
+	{
+		this.approverId = approverId;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -413,7 +434,9 @@ public class LeaveRequest implements Serializable
 				+ (this.leaveRequestRemarks != null ? "leaveRequestRemarks="
 						+ this.leaveRequestRemarks + ", " : "")
 				+ (this.suggestedHod != null ? "suggestedHod="
-						+ this.suggestedHod : "") + "]";
+						+ this.suggestedHod + ", " : "")
+				+ (this.approverId != null ? "approverId=" + this.approverId
+						: "") + "]";
 	}
 	
 	

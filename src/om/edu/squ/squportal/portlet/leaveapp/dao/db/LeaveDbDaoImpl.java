@@ -1117,6 +1117,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 */
 	public LeaveRequest	getLeaveRequest(String reqNo, Locale locale)
 	{
+		LeaveRequest	leaveRequestResult	=	null;
+		Employee		empApprover			=	null;
+		LeaveApprove	leaveApprove		=	null;
 		RowMapper<LeaveRequest> mapper	=	new RowMapper<LeaveRequest>()
 		{
 
@@ -1128,6 +1131,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				LeaveType		leaveType		=	new LeaveType();
 				LeaveType		leaveTypeFlag	=	new LeaveType();
 				Employee		employee		=	new	Employee();
+				
 				LeaveApprove	approve			=	new LeaveApprove();
 					leaveRequest.setRequestNo(rs.getString(Constants.CONST_LEAVE_REQUEST_NO));
 					leaveRequest.setRequestDate(rs.getString(Constants.CONST_LEAVE_REQ_DATE));
@@ -1167,6 +1171,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					approve.setApproverRemark(rs.getString(Constants.CONST_APPROVER_REMARK));
 					leaveRequest.setSuggestedHod(rs.getString(Constants.CONST_SUGGESTED_APPROVER_CODE));
 					leaveRequest.setApprove(approve);
+					leaveRequest.setApproverId(rs.getString(Constants.CONST_EMP_APP_CODE));
 					
 				return leaveRequest;
 			
@@ -1180,7 +1185,14 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		logger.info("sepecific leave request param : "+namedParameters);
 		logger.info("sepecific leave request SQL : "+Constants.SQL_VIEW_LEAVE_REQUEST_SPECIFIC);
 		
-		return this.namedParameterJdbcTemplate.queryForObject(Constants.SQL_VIEW_LEAVE_REQUEST_SPECIFIC, namedParameters, mapper);
+		leaveRequestResult	=	this.namedParameterJdbcTemplate.queryForObject(Constants.SQL_VIEW_LEAVE_REQUEST_SPECIFIC, namedParameters, mapper);
+			empApprover			=	getEmployee(leaveRequestResult.getApproverId(), locale);	
+				leaveApprove		=	leaveRequestResult.getApprove();
+					leaveApprove.setEmployee(empApprover);
+		
+		leaveRequestResult.setApprove(leaveApprove);
+					
+		return leaveRequestResult;
 		
 	}
 	
