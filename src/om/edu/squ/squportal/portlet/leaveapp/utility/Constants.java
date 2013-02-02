@@ -603,8 +603,8 @@ public interface Constants
 																			"    VHM_EMPLOYEE EMP											" +
 																			" WHERE															" +
 																			"    REQ_DELG.VHM_DELEGATED_EMP_CODE = EMP.VHM_EMP_CODE			" +
-																			"    AND REQ_DELG.VHM_LEAVE_REQ_NO = :paramLeaveReqNo			" +
-																			"	 AND VHM_DELEGATED_STATUS = 'A'";
+																			"    AND REQ_DELG.VHM_LEAVE_REQ_NO = :paramLeaveReqNo			";
+																			
 
 	public static final String	SQL_INSERT_LEAVE_REQ_DELEGATION	=			" INSERT INTO VHM_EMP_LEAVE_REQ_DELEGATION 						" +
 																			" (  															" +
@@ -815,6 +815,8 @@ public interface Constants
 	public static final	String	CONST_PROC_COL_IN_P_LEAVE_FLAG			=			"P_LEAVE_FLAG";
 	public static final	String	CONST_PROC_COL_IN_P_LEAVE_START			=			"P_LEAVE_START";
 	public static final	String	CONST_PROC_COL_IN_P_LEAVE_END			=			"P_LEAVE_END";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_REQ_NO		=			"P_LEAVE_REQ_NO";
+	public static final	String	CONST_PROC_COL_IN_P_SUGGESTED_APP_EMP_CODE	=		"P_SUGGESTED_APP_EMP_CODE";
 	public static final	String	CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN	=			"P_ACCEPT_LEAVE_YN";
 	public static final	String	CONST_PROC_COL_OUT_P_LEAVE_CODE			=			"P_LEAVE_CODE";
 	public static final	String	CONST_PROC_COL_OUT_P_MSG_ENGLISH		=			"P_MSG_ENG";

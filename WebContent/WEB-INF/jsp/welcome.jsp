@@ -210,8 +210,7 @@
 							</c:choose>
 						</c:when>
 						<c:when test="${(req.status.statusCode == furtherClarification)}">
-
-							actions:'<a href="${varLeaveClarification}"><font color="red"><spring:message code="prop.leave.app.apply.action.update"/></font></a>',
+							actions:'<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a>',
 						</c:when>
 						<c:when test="${(req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected)}">
 							actions:'<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>',
@@ -478,10 +477,15 @@
 							<portlet:param name="action" value="updateLeaveApply"/>
 							<portlet:param name="reqNum" value="${req.requestNo}"/>
 						</portlet:renderURL>
-							<a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a>
+							<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | 
+							<a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a> 
+					</c:when>
+					<c:when test="${(req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected)}">
+							<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
 					</c:when>
 					<c:otherwise>
-						<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
+						<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | 
+						<a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a>
 					</c:otherwise>
 				</c:choose>
 			</td>

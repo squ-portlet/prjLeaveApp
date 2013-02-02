@@ -485,7 +485,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 											Constants.CONST_PROC_COL_IN_P_EMP_CODE,
 											Constants.CONST_PROC_COL_IN_P_LEAVE_FLAG,
 											Constants.CONST_PROC_COL_IN_P_LEAVE_START,
-											Constants.CONST_PROC_COL_IN_P_LEAVE_END
+											Constants.CONST_PROC_COL_IN_P_LEAVE_END,
+											Constants.CONST_PROC_COL_IN_P_LEAVE_REQ_NO,
+											Constants.CONST_PROC_COL_IN_P_SUGGESTED_APP_EMP_CODE
 											);
 		simpleJdbcCall.declareParameters(
 											new SqlParameter(Constants.CONST_PROC_COL_IN_P_EMP_CODE, Types.VARCHAR),
@@ -495,7 +497,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN, Types.VARCHAR),
 											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_LEAVE_CODE, Types.VARCHAR),
 											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_MSG_ENGLISH, Types.VARCHAR),
-											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_MSG_ARABIC, Types.VARCHAR)
+											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_MSG_ARABIC, Types.VARCHAR),
+											new SqlOutParameter(Constants.CONST_PROC_COL_IN_P_LEAVE_REQ_NO, Types.VARCHAR),
+											new SqlOutParameter(Constants.CONST_PROC_COL_IN_P_SUGGESTED_APP_EMP_CODE, Types.VARCHAR)
 											
 										);
 
@@ -504,6 +508,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					paramIn.put(Constants.CONST_PROC_COL_IN_P_LEAVE_FLAG, leaveRequest.getLeaveTypeFlag().getTypeNo());
 					paramIn.put(Constants.CONST_PROC_COL_IN_P_LEAVE_START, startDate);
 					paramIn.put(Constants.CONST_PROC_COL_IN_P_LEAVE_END, endDate);
+					paramIn.put(Constants.CONST_PROC_COL_IN_P_LEAVE_REQ_NO, leaveRequest.getRequestNo());
+					paramIn.put(Constants.CONST_PROC_COL_IN_P_SUGGESTED_APP_EMP_CODE, leaveRequest.getSuggestedHod());
+
 
 		resultProc			=	simpleJdbcCall.execute(paramIn);
 		logger.info("result(map): "+resultProc);
