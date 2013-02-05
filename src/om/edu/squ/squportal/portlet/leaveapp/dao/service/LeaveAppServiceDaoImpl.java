@@ -29,18 +29,9 @@
  */
 package om.edu.squ.squportal.portlet.leaveapp.dao.service;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
-
-import javax.mail.internet.MailDateFormat;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
@@ -48,19 +39,21 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
+import om.edu.squ.squportal.portlet.leaveapp.bo.EmailData;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
-import om.edu.squ.squportal.portlet.leaveapp.bo.EmailData;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
 import om.edu.squ.squportal.portlet.leaveapp.dao.db.LeaveDbDao;
-import om.edu.squ.squportal.portlet.leaveapp.dao.ldap.LdapDao;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilFile;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.MailProcess;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Bhabesh
@@ -479,6 +472,65 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		approve.setEmployee(employee);
 		return leaveDbDao.setLeaveApprove(approve);
 	}
+
+
+	/**
+	 * 
+	 * method name  : removeLeaveRequest
+	 * @param requestNo
+	 * @param locale
+	 * @return
+	 * LeaveAppServiceDaoImpl
+	 * return type  : String
+	 * 
+	 * purpose		: removal of a particular leave request
+	 *
+	 * Date    		:	Feb 3, 2013 10:32:29 AM
+	 */
+	public String removeLeaveRequest(String requestNo,Locale locale)
+	{
+		String message	=	null;
+		int result	=	leaveDbDao.removeLeaveRequest(requestNo);
+		if (result != 0)
+		{
+			message	=	UtilProperty.getMessage("prop.leave.app.remove.request.success", null, locale);
+		}
+		else
+		{
+			message	=	UtilProperty.getMessage("prop.leave.app.remove.request.failure", null, locale);
+		}
+		
+		return message;
+	}
+	
+	/**
+	 * 
+	 * method name  : cancelLeaveRequest
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: Cancel the leave request
+	 *
+	 * Date    		:	Feb 3, 2013 1:54:23 PM
+	 */
+	public String cancelLeaveRequest(String requestNo, Locale locale)
+	{
+		String message	=	null;
+		int result = leaveDbDao.cancelLeaveRequest(requestNo);
+		if(result != 0)
+		{
+			message	=	UtilProperty.getMessage("prop.leave.app.cancel.request.success", new String []{requestNo}, locale);
+		}
+		else
+		{
+			message = UtilProperty.getMessage("prop.leave.app.cancel.request.failure", null, locale);
+			logger.error("Cancelation not possible for request no : "+requestNo);
+		}
+		
+		return message;
+	}
 	
 	/**
 	 * 
@@ -599,3 +651,4 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	}
 
 }
+

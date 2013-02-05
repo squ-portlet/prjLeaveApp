@@ -35,6 +35,225 @@ package om.edu.squ.squportal.portlet.leaveapp.utility;
  */
 public interface Constants
 {
+	/**********TABLE COLUMN CONSTANTS**********************/
+	
+	public static final	String	CONST_EMP_CODE					=			"EMP_CODE";
+	public static final	String	CONST_EMP_INTERNET_ID			=			"EMP_INTERNET_ID";
+	public static final	String	CONST_EMP_NAME					=			"EMP_NAME";
+	public static final	String	CONST_EMP_JOB_TYPE_CODE			=			"EMP_JOB_TYPE_CODE";
+	public static final	String	CONST_EMP_DESIGNATION_CODE		=			"EMP_DESIGNATION_CODE";
+	public static final	String	CONST_EMP_DESIGNATION			=			"EMP_DESIGNATION";
+	public static final	String	CONST_EMP_ADDL_POSITION_CODE	=			"EMP_ADDITIONAL_POSITION_CODE";
+	public static final	String	CONST_EMP_ADDL_POSITION_DESC	=			"EMP_ADDITIONAL_POSITION_DESC";
+	public static final	String	CONST_EMP_ADDL_HIERARCHY_CODE	=			"EMP_ADDITIONAL_HIERARCHY_CODE";
+	public static final	String	CONST_EMP_ADDL_LEVEL			=			"EMP_ADDITIONAL_LEVEL";
+	public static final	String	CONST_EMP_ADMIN					=			"EMP_ADMIN";
+	public static final	String	CONST_EMP_GRADE_CODE			=			"EMP_GRADE_CODE";
+	public static final	String	CONST_EMP_GRADE					=			"EMP_GRADE";
+	public static final	String	CONST_EMP_GRADE_SHORT			=			"EMP_GRADE_SHORT";
+	public static final	String	CONST_EMP_BRANCH_CODE			=			"EMP_BRANCH_CODE";
+	public static final	String	CONST_EMP_BRANCH				=			"EMP_BRANCH";
+	public static final	String	CONST_EMP_BRANCH_ADDL_CODE		=			"EMP_BRANCH_ADDL_CODE";
+	public static final	String	CONST_EMP_DEPARTMENT_CODE		=			"EMP_DEPARTMENT_CODE";
+	public static final	String	CONST_EMP_DEPARTMENT			=			"EMP_DEPARTMENT";
+	public static final	String	CONST_EMP_DEPARTMENT_ADDL_CODE	=			"EMP_DEPARTMENT_ADDL_CODE";
+	public static final	String	CONST_EMP_DEPARTMENT_SHORT		=			"EMP_DEPARTMENT_SHORT";
+	public static final	String	CONST_EMP_SECTION_CODE			=			"EMP_SECTION_CODE";
+	public static final	String	CONST_EMP_SECTION				=			"EMP_SECTION";
+	public static final	String	CONST_EMP_APP_CODE				=			"EMP_APP_CODE";
+	public static final	String	CONST_EMP_APP_NAME				=			"EMP_APP_NAME";
+	public static final	String	CONST_EMP_APP_BRANCH_CODE		=			"EMP_APP_BRANCH_CODE";
+	public static final	String	CONST_EMP_APP_DEPARTMENT_CODE	=			"EMP_APP_DEPARTMENT_CODE";
+	public static final	String	CONST_EMP_APP_SECTION_CODE		=			"EMP_APP_SECTION_CODE";
+	
+	public static final	String	CONST_EMP_JOIN_DATE				=			"EMP_JOIN_DATE";
+	public static final	String	CONST_EMP_HIERARCHY_CODE		=			"EMP_HIERARCHY_CODE";
+	public static final	String	CONST_EMP_RELIGION_CODE			=			"EMP_RELIGION_CODE";
+	public static final	String	CONST_EMP_OMANI					=			"EMP_OMANI";
+	public static final	String	CONST_EMP_SEX					=			"EMP_SEX";
+	public static final	String	CONST_EMP_LEVEL					=			"EMP_LEVEL";
+	
+	public static final	String	CONST_LEAVE_REQUEST_NO			=			"LEAVE_REQUEST_NO";
+	public static final	String	CONST_LEAVE_REQ_DATE			=			"LEAVE_REQ_DATE";
+	public static final	String	CONST_LEAVE_START_DATE			=			"LEAVE_START_DATE";
+	public static final	String	CONST_LEAVE_END_DATE			=			"LEAVE_END_DATE";
+	public static final	String	CONST_LEAVE_STATUS				=			"LEAVE_STATUS";
+	public static final	String	CONST_LEAVE_STATUS_CODE			=			"LEAVE_STATUS_CODE";
+	public static final	String	CONST_LEAVE_STATUS_DATE			=			"LEAVE_STATUS_DATE";
+	public static final	String	CONST_LEAVE_REQUEST_REMARKS		=			"LEAVE_REQUEST_REMARKS";
+	
+	public static final	String	CONST_LEAVE_TYPE				=			"LEAVE_TYPE";
+	public static final	String	CONST_LEAVE_DESC				=			"LEAVE_DESC";
+	public static final	String	CONST_LEAVE_TYPE_FLAG			=			"LEAVE_TYPE_FLAG";
+	public static final	String	CONST_LEAVE_REQ_REMARK			=			"LEAVE_REQ_REMARK";
+	public static final	String	CONST_ACTION_CODE				=			"ACTION_CODE";
+	public static final	String	CONST_ACTION_DESC				=			"ACTION_DESC";
+	public static final	String	CONST_ACTION_DATE				=			"ACTION_DATE";
+	public static final	String	CONST_APPROVER_REMARK			=			"APPROVER_REMARK";
+	public static final	String	CONST_DELEGATE_START_DATE		=			"DELEGATE_START_DATE";
+	public static final	String	CONST_DELEGATE_END_DATE			=			"DELEGATE_END_DATE";
+	public static final	String	CONST_DELEGATE_STATUS			=			"DELEGATE_STATUS";
+	public static final	String	CONST_SUGGESTED_APPROVER_CODE	=			"SUGGESTED_APPROVER_CODE";
+	
+
+	
+	public static final	String	CONST_COUNTER					=			"COUNTER";
+	
+	public static final	String	USER_WEB						=			"WEB";
+	
+	public static final	String	CONST_LEAVE_STATUS_WAITING_APPV	=			"0000000001";
+	public static final	String	CONST_LEAVE_STATUS_APPROVED		=			"0000000002";
+	public static final	String	CONST_LEAVE_STATUS_REJECTED		=			"0000000003";
+	public static final	String	CONST_LEAVE_STATUS_FURTHER_CLARIFICATION =	"0000000004";
+	public static final	String	CONST_LEAVE_STATUS_CANCEL		 =			"0000000005";
+	
+	public static final	String	CONST_LEAVE_ACTION_APPROVE		=			"0000000001";
+	public static final	String	CONST_LEAVE_ACTION_RETURN		=			"0000000002";
+	public static final	String	CONST_LEAVE_ACTION_REJECT		=			"0000000003";
+	
+	public static final	String	CONST_LEAVE_ACTION_APPROVE_DESC	=			"APPROVE";
+	public static final	String	CONST_LEAVE_ACTION_RETURN_DESC	=			"RETURN";
+	public static final	String	CONST_LEAVE_ACTION_REJECT_DESC	=			"REJECT";
+	
+	public static final	String	CONST_EMPLOYEE_HIERARCHY_CODE	=			"016";
+	public static final	String	CONST_EMPLOYEE_LEVEL			=			"10";
+	
+	/******************************************************/
+	
+	/**********CONSTANTS***********************************/
+	
+	public static final	String	CONST_OPERATION					=			"operation";
+	public static final	String	CONST_OPERATION_ADD				=			"addNew";
+	public static final	String	CONST_OPERATION_UPDATE			=			"update";
+	public static final	String	CONST_ADMIN_TRUE				=			"Y";
+	public static final	String	CONST_ADMIN_FALSE				=			"N";
+	public static final String	CONST_LEAVE_REQ_ACTIVE_TRUE		=			"Y";
+	public static final	String	CONST_LANG_DEFAULT_EN			=			"en";
+	
+	public static final	String	CONST_MUSLIM_NUM				=			"1";
+	public static final	String	CONST_MUSLIM					=			"Y";
+	public static final	String	CONST_NON_MUSLIM				=			"N";
+	
+	public static final	String	CONST_GENDER_FEMALE_NUM			=			"1";
+	public static final	String	CONST_GENDER_FEMALE				=			"Y";
+	public static final	String	CONST_GENDER_NON_FEMALE			=			"N";
+	
+	public static final	String	CONST_OMANI_NUM					=			"1";
+	public static final	String	CONST_OMANI						=			"Y";
+	public static final	String	CONST_NON_OMANI					=			"N";
+	public static final	String	CONST_EMP_SENIOR				=			"senior";
+	
+	public static final	String	CONST_ALLOW_ELEAVE_REQUEST_MSG	=			"allowELeaveRequestMsg";
+	
+	public static final int		CONST_LEVEL_COUNT				=			7;
+	public static final String	CONST_MODEL_MODE_UPDATE			=			"u";
+	public static final String	CONST_MODEL_MODE_INSERT			=			"i";
+	
+	public static final String	CONST_NOT_AVAILABLE				=			"NA";
+	public static final int		CONST_DELEGATION_REQ_LEAVE_DAYS	=			5;
+	
+	public static final int		CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE =		5;
+	
+	/******************************************************/
+	
+	
+	/***********STORED PROCEDURE**************************/
+	public static final	String	CONST_PROC_ALLOW_eLEAVE_REQUEST			=			"allow_eleave_request";
+	public static final	String	CONST_PROC_COL_IN_P_EMP_CODE			=			"P_EMP_CODE";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_FLAG			=			"P_LEAVE_FLAG";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_START			=			"P_LEAVE_START";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_END			=			"P_LEAVE_END";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_REQ_NO		=			"P_LEAVE_REQ_NO";
+	public static final	String	CONST_PROC_COL_IN_P_SUGGESTED_APP_EMP_CODE	=		"P_SUGGESTED_APP_EMP_CODE";
+	public static final	String	CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN	=			"P_ACCEPT_LEAVE_YN";
+	public static final	String	CONST_PROC_COL_OUT_P_LEAVE_CODE			=			"P_LEAVE_CODE";
+	public static final	String	CONST_PROC_COL_OUT_P_MSG_ENGLISH		=			"P_MSG_ENG";
+	public static final	String	CONST_PROC_COL_OUT_P_MSG_ARABIC			=			"P_MSG_ARB";
+	
+	public static final	String	CONST_PROC_GET_HIGHER_MGR_PROCESS		=			"GET_HIGHER_MGR_PROCESS";
+	public static final	String	CONST_PROC_COL_OUT_V_MGR_EMP			=			"V_MGR_EMP";
+	public static final	String	CONST_PROC_COL_OUT_V_HINT				=			"V_HINT";
+	
+	
+	/******************************************************/
+	
+	/**********JSP PAGES**********************************/
+	public static String	PAGE_WELCOME						=			"welcome";
+	public static String	PAGE_LEAVE_APPLY_FORM				=			"leaveApplicationForm";
+	public static String	PAGE_LEAVE_APPROVE_FORM				=			"leaveApplicationApproveForm";
+	public static String	PAGE_LEAVE_VIEW						=			"leaveApplicationView";
+	
+	
+	/******************************************************/
+	
+	/**********LDAP***************************************/
+	public	static	String	LDAP_COMMON_NAME					=			"cn";
+	public	static	String	LDAP_EMPLOYEE_NUMBER				=			"employeenumber"; 
+	public	static	String	LDAP_EMPLOYEE_NUMBER2				=			"description"; 
+	/******************************************************/
+	
+	/************* PROPERTY FILE ******************************/
+	public	static	String	RESOURCE_PROPERTY_FILE_NAME			=			"messages";
+	/******************************************************/
+
+	
+	/************* EMAIL *********************************/
+	//public	static	String	RESOURCE_PROPERTY_FILE_NAME		=			"mailProp";
+	public	static	String	MAIL_SMTP_HOST						=			"smtpHost";
+	public	static	String	MAIL_SMTP_PORT						=			"smtpPort";
+	public	static	String	MAIL_FROM							=			"bhabesh@squ.edu.om";
+	public	static	String	MAIL_SUBJECT						=			"Leave application.";
+	public	static	String	MAIL_REQUEST_NO						=			" Request No: ";
+	public	static	boolean	IS_MAIL_SEND_ON						=			false;
+	/******************************************************/
+
+	/************* EMAIL TEMPLATE DIRECTORY ****************/
+	public	static	String	TEMPL_EMAIL_DIR_LEAVE				=			"/email/template/";
+	public	static	String	TEMPL_DIR_APPLY						=			"/email/template/apply/";
+	public	static	String	TEMPL_DIR_RETURN					=			"/email/template/returnl/";
+	
+	/******************************************************/
+
+	
+	/************* EMAIL TEMPLATE***************************/
+	public	static	String	TEMPL_LEAVE_APP						=			"tmplateLeaveAppEmail.txt";
+	public	static	String	TEMPL_LEAVE_APP_NEW_REQUESTER		=			"tmpLeaveAppNewRequester.txt";
+	public	static	String	TEMPL_LEAVE_APP_NEW_APPROVER		=			"tmpLeaveAppNewApprover.txt";
+	
+	
+	public	static	String	TEMPL_LEAVE_APP_RETURN_UPDATE_REQUESTER		=	"tmpLeaveAppReturnUpdateRequester.txt";
+	public	static	String	TEMPL_LEAVE_APP_RETURN_UPDATE_APPROVER		=	"tmpLeaveAppReturnUpdateApprover.txt";
+	
+	/******************************************************/
+	
+	/************* EMAIL TEMPLATE PARAMETER ***************/
+	public	static	String	TEMPL_PARAM_REQUEST_NO				=			":paramReqNo";
+	public	static	String	TEMPL_PARAM_REQUESTER_NAME			=			":paramRequester";
+	public	static	String	TEMPL_PARAM_REQUESTER_EMAIL			=			":paramEmailRequester";
+	public	static	String	TEMPL_PARAM_REQUEST_DATE			=			":paramReqDate";
+	public	static	String	TEMPL_PARAM_REQUEST_START_DATE		=			":paramStartDate";
+	public	static	String	TEMPL_PARAM_REQUEST_END_DATE		=			":paramEndDate";
+	public	static	String	TEMPL_PARAM_REQUESTER_REMARK		=			":paramReqRemark";
+	public	static	String	TEMPL_PARAM_DELEGATION_AVL			=			":paramDelegationAvl";
+	public	static	String	TEMPL_PARAM_DELEGATION_DETAILS		=			":paramDelegationDetails";
+	public	static	String	TEMPL_PARAM_DELEGATE_NAME			=			":paramDelegate";
+	public	static	String	TEMPL_PARAM_DELEGATE_START_DATE		=			":paramDelgStartDate";
+	public	static	String	TEMPL_PARAM_DELEGATE_END_DATE		=			":paramDelgEndDate";
+	public	static	String	TEMPL_PARAM_APPROVER_NAME			=			":paramApprover";
+	public	static	String	TEMPL_PARAM_APPROVER_EMAIL			=			":paramEmailApprover";
+	public	static	String	TEMPL_PARAM_APPROVE_DATE			=			":paramApproveDate";
+	public	static	String	TEMPL_PARAM_APPROVER_REMARK			=			":paramAppRemark";
+
+	public	static	String	TEMPL_PARAM_LEAVE_URL				=			":paramUrl";
+	
+	/******************************************************/
+	public	static	String	LEAVE_URL							=			"https://portalnew.squ.edu.om/portal/page/portal/bhabeshPages/wsrpPrjLeaveApp51";
+	public	static	String	CONST_DELEGATION_AVL				=			"This leave application has delegation";
+	public	static	String	CONST_DELEGATION_NAME				=			"Name : ";
+	public	static	String	CONST_DELEGATION_START_DATE			=			"Start : ";
+	public	static	String	CONST_DELEGATION_END_DATE			=			"End : ";
+	
+	
 	/**********SQL**********************************/
 
 	public static final	String	SQL_EMPLOYEE					=			" SELECT DISTINCT EMP.VHM_EMP_CODE AS EMP_CODE, 									" +
@@ -315,6 +534,7 @@ public interface Constants
 																			"					AND HIR.VHM_LEVEL >= :paramLevel		" +
 																			"				)											" +
 																			"		)													" +
+																			"	AND LVREQ.VHM_STATUS_CODE != " + CONST_LEAVE_STATUS_CANCEL	  +
 																			"	ORDER BY LVREQ.VHM_LEAVE_REQ_NO	DESC					";
 
 	
@@ -579,6 +799,11 @@ public interface Constants
 																			"	WHERE VHM_LEAVE_REQ_NO 	= :paramReqNo						" +
 																			"	  AND VHM_STATUS_CODE  	= :paramCompLeaveStatus					";
 	
+	public static final String	SQL_CANCEL_LEAVE_REQUEST		=			"	UPDATE  VHM_EMP_LEAVE_REQUEST								" +
+																			"	SET VHM_STATUS_CODE = " +CONST_LEAVE_STATUS_CANCEL			  +
+																			" 	WHERE VHM_LEAVE_REQ_NO = :paramReqNo						" +
+																			"	AND VHM_STATUS_CODE  	= :paramCompLeaveStatus				";
+	
 	public static final String	SQL_VIEW_LEAVE_REQ_DELEGATION	=			" SELECT														" + 
 																			"  REQ_DELG.VHM_LEAVE_REQ_NO AS LEAVE_REQUEST_NO,				" +
 																			"  REQ_DELG.VHM_DELEGATED_EMP_CODE AS EMP_CODE,					" +
@@ -687,221 +912,34 @@ public interface Constants
 																			"	VHM_APP_UPD_DATE  = SYSDATE									" +
 																			"	WHERE VHM_LEAVE_REQ_NO = :paramReqNo						";
 	
-	/******************************************************/
-	/**********TABLE COLUMN CONSTANTS**********************/
+	public static final String	SQL_DELETE_LEAVE_REQ_SPECIFIC	 =			"	DELETE FROM VHM_EMP_LEAVE_REQUEST 							" +
+																			"   WHERE  VHM_LEAVE_REQ_NO = :paramEmpNo 						" +
+																			"	AND (														" +
+																			"		VHM_STATUS_CODE != " +CONST_LEAVE_STATUS_APPROVED +" OR	" +
+																			"		VHM_STATUS_CODE != " +CONST_LEAVE_STATUS_REJECTED +" OR	" +
+																			"       VHM_STATUS_CODE != " +CONST_LEAVE_STATUS_FURTHER_CLARIFICATION +
+																			" 		)														";
+																						
+	public static final String	SQL_DELETE_LEAVE_APPROVAL_SPECIFIC =		" 	DELETE FROM VHM_EMP_LEAVE_REQUEST_APPROVAL					" +
+																			"	WHERE VHM_LEAVE_REQ_NO = :paramEmpNo						" +
+																			"	AND (" +
+																			"		VHM_ACTION_CODE != " + CONST_LEAVE_ACTION_APPROVE + " OR " +
+																			"   	VHM_ACTION_CODE != " + CONST_LEAVE_ACTION_RETURN + " OR  " +
+																			" 		VHM_ACTION_CODE != " + CONST_LEAVE_ACTION_REJECT		   +
+																			"		)";			
 	
-	public static final	String	CONST_EMP_CODE					=			"EMP_CODE";
-	public static final	String	CONST_EMP_INTERNET_ID			=			"EMP_INTERNET_ID";
-	public static final	String	CONST_EMP_NAME					=			"EMP_NAME";
-	public static final	String	CONST_EMP_JOB_TYPE_CODE			=			"EMP_JOB_TYPE_CODE";
-	public static final	String	CONST_EMP_DESIGNATION_CODE		=			"EMP_DESIGNATION_CODE";
-	public static final	String	CONST_EMP_DESIGNATION			=			"EMP_DESIGNATION";
-	public static final	String	CONST_EMP_ADDL_POSITION_CODE	=			"EMP_ADDITIONAL_POSITION_CODE";
-	public static final	String	CONST_EMP_ADDL_POSITION_DESC	=			"EMP_ADDITIONAL_POSITION_DESC";
-	public static final	String	CONST_EMP_ADDL_HIERARCHY_CODE	=			"EMP_ADDITIONAL_HIERARCHY_CODE";
-	public static final	String	CONST_EMP_ADDL_LEVEL			=			"EMP_ADDITIONAL_LEVEL";
-	public static final	String	CONST_EMP_ADMIN					=			"EMP_ADMIN";
-	public static final	String	CONST_EMP_GRADE_CODE			=			"EMP_GRADE_CODE";
-	public static final	String	CONST_EMP_GRADE					=			"EMP_GRADE";
-	public static final	String	CONST_EMP_GRADE_SHORT			=			"EMP_GRADE_SHORT";
-	public static final	String	CONST_EMP_BRANCH_CODE			=			"EMP_BRANCH_CODE";
-	public static final	String	CONST_EMP_BRANCH				=			"EMP_BRANCH";
-	public static final	String	CONST_EMP_BRANCH_ADDL_CODE		=			"EMP_BRANCH_ADDL_CODE";
-	public static final	String	CONST_EMP_DEPARTMENT_CODE		=			"EMP_DEPARTMENT_CODE";
-	public static final	String	CONST_EMP_DEPARTMENT			=			"EMP_DEPARTMENT";
-	public static final	String	CONST_EMP_DEPARTMENT_ADDL_CODE	=			"EMP_DEPARTMENT_ADDL_CODE";
-	public static final	String	CONST_EMP_DEPARTMENT_SHORT		=			"EMP_DEPARTMENT_SHORT";
-	public static final	String	CONST_EMP_SECTION_CODE			=			"EMP_SECTION_CODE";
-	public static final	String	CONST_EMP_SECTION				=			"EMP_SECTION";
-	public static final	String	CONST_EMP_APP_CODE				=			"EMP_APP_CODE";
-	public static final	String	CONST_EMP_APP_NAME				=			"EMP_APP_NAME";
-	public static final	String	CONST_EMP_APP_BRANCH_CODE		=			"EMP_APP_BRANCH_CODE";
-	public static final	String	CONST_EMP_APP_DEPARTMENT_CODE	=			"EMP_APP_DEPARTMENT_CODE";
-	public static final	String	CONST_EMP_APP_SECTION_CODE		=			"EMP_APP_SECTION_CODE";
+	public static final String	SQL_DELETE_LEAVE_DELEGATION_SPECIFIC =		"	DELETE FROM VHM_EMP_LEAVE_REQ_DELEGATION					" +
+																			"	WHERE VHM_LEAVE_REQ_NO =:paramEmpNo							";
 	
-	public static final	String	CONST_EMP_JOIN_DATE				=			"EMP_JOIN_DATE";
-	public static final	String	CONST_EMP_HIERARCHY_CODE		=			"EMP_HIERARCHY_CODE";
-	public static final	String	CONST_EMP_RELIGION_CODE			=			"EMP_RELIGION_CODE";
-	public static final	String	CONST_EMP_OMANI					=			"EMP_OMANI";
-	public static final	String	CONST_EMP_SEX					=			"EMP_SEX";
-	public static final	String	CONST_EMP_LEVEL					=			"EMP_LEVEL";
-	
-	public static final	String	CONST_LEAVE_REQUEST_NO			=			"LEAVE_REQUEST_NO";
-	public static final	String	CONST_LEAVE_REQ_DATE			=			"LEAVE_REQ_DATE";
-	public static final	String	CONST_LEAVE_START_DATE			=			"LEAVE_START_DATE";
-	public static final	String	CONST_LEAVE_END_DATE			=			"LEAVE_END_DATE";
-	public static final	String	CONST_LEAVE_STATUS				=			"LEAVE_STATUS";
-	public static final	String	CONST_LEAVE_STATUS_CODE			=			"LEAVE_STATUS_CODE";
-	public static final	String	CONST_LEAVE_STATUS_DATE			=			"LEAVE_STATUS_DATE";
-	public static final	String	CONST_LEAVE_REQUEST_REMARKS		=			"LEAVE_REQUEST_REMARKS";
-	
-	public static final	String	CONST_LEAVE_TYPE				=			"LEAVE_TYPE";
-	public static final	String	CONST_LEAVE_DESC				=			"LEAVE_DESC";
-	public static final	String	CONST_LEAVE_TYPE_FLAG			=			"LEAVE_TYPE_FLAG";
-	public static final	String	CONST_LEAVE_REQ_REMARK			=			"LEAVE_REQ_REMARK";
-	public static final	String	CONST_ACTION_CODE				=			"ACTION_CODE";
-	public static final	String	CONST_ACTION_DESC				=			"ACTION_DESC";
-	public static final	String	CONST_ACTION_DATE				=			"ACTION_DATE";
-	public static final	String	CONST_APPROVER_REMARK			=			"APPROVER_REMARK";
-	public static final	String	CONST_DELEGATE_START_DATE		=			"DELEGATE_START_DATE";
-	public static final	String	CONST_DELEGATE_END_DATE			=			"DELEGATE_END_DATE";
-	public static final	String	CONST_DELEGATE_STATUS			=			"DELEGATE_STATUS";
-	public static final	String	CONST_SUGGESTED_APPROVER_CODE	=			"SUGGESTED_APPROVER_CODE";
-	
-
-	
-	public static final	String	CONST_COUNTER					=			"COUNTER";
-	
-	public static final	String	USER_WEB						=			"WEB";
-	
-	public static final	String	CONST_LEAVE_STATUS_WAITING_APPV	=			"0000000001";
-	public static final	String	CONST_LEAVE_STATUS_APPROVED		=			"0000000002";
-	public static final	String	CONST_LEAVE_STATUS_REJECTED		=			"0000000003";
-	public static final	String	CONST_LEAVE_STATUS_FURTHER_CLARIFICATION	=			"0000000004";
-	
-	public static final	String	CONST_LEAVE_ACTION_APPROVE		=			"0000000001";
-	public static final	String	CONST_LEAVE_ACTION_RETURN		=			"0000000002";
-	public static final	String	CONST_LEAVE_ACTION_REJECT		=			"0000000003";
-	
-	public static final	String	CONST_LEAVE_ACTION_APPROVE_DESC	=			"APPROVE";
-	public static final	String	CONST_LEAVE_ACTION_RETURN_DESC	=			"RETURN";
-	public static final	String	CONST_LEAVE_ACTION_REJECT_DESC	=			"REJECT";
-	
-	public static final	String	CONST_EMPLOYEE_HIERARCHY_CODE	=			"016";
-	public static final	String	CONST_EMPLOYEE_LEVEL			=			"10";
-	
-	/******************************************************/
-	
-	/**********CONSTANTS***********************************/
-	
-	public static final	String	CONST_OPERATION					=			"operation";
-	public static final	String	CONST_OPERATION_ADD				=			"addNew";
-	public static final	String	CONST_OPERATION_UPDATE			=			"update";
-	public static final	String	CONST_ADMIN_TRUE				=			"Y";
-	public static final	String	CONST_ADMIN_FALSE				=			"N";
-	public static final String	CONST_LEAVE_REQ_ACTIVE_TRUE		=			"Y";
-	public static final	String	CONST_LANG_DEFAULT_EN			=			"en";
-	
-	public static final	String	CONST_MUSLIM_NUM				=			"1";
-	public static final	String	CONST_MUSLIM					=			"Y";
-	public static final	String	CONST_NON_MUSLIM				=			"N";
-	
-	public static final	String	CONST_GENDER_FEMALE_NUM			=			"1";
-	public static final	String	CONST_GENDER_FEMALE				=			"Y";
-	public static final	String	CONST_GENDER_NON_FEMALE			=			"N";
-	
-	public static final	String	CONST_OMANI_NUM					=			"1";
-	public static final	String	CONST_OMANI						=			"Y";
-	public static final	String	CONST_NON_OMANI					=			"N";
-	public static final	String	CONST_EMP_SENIOR				=			"senior";
-	
-	public static final	String	CONST_ALLOW_ELEAVE_REQUEST_MSG	=			"allowELeaveRequestMsg";
-	
-	public static final int		CONST_LEVEL_COUNT				=			7;
-	public static final String	CONST_MODEL_MODE_UPDATE			=			"u";
-	public static final String	CONST_MODEL_MODE_INSERT			=			"i";
-	
-	public static final String	CONST_NOT_AVAILABLE				=			"NA";
-	public static final int		CONST_DELEGATION_REQ_LEAVE_DAYS	=			5;
-	
-	public static final int		CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE =		5;
-	
-	/******************************************************/
-	
-	
-	/***********STORED PROCEDURE**************************/
-	public static final	String	CONST_PROC_ALLOW_eLEAVE_REQUEST			=			"allow_eleave_request";
-	public static final	String	CONST_PROC_COL_IN_P_EMP_CODE			=			"P_EMP_CODE";
-	public static final	String	CONST_PROC_COL_IN_P_LEAVE_FLAG			=			"P_LEAVE_FLAG";
-	public static final	String	CONST_PROC_COL_IN_P_LEAVE_START			=			"P_LEAVE_START";
-	public static final	String	CONST_PROC_COL_IN_P_LEAVE_END			=			"P_LEAVE_END";
-	public static final	String	CONST_PROC_COL_IN_P_LEAVE_REQ_NO		=			"P_LEAVE_REQ_NO";
-	public static final	String	CONST_PROC_COL_IN_P_SUGGESTED_APP_EMP_CODE	=		"P_SUGGESTED_APP_EMP_CODE";
-	public static final	String	CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN	=			"P_ACCEPT_LEAVE_YN";
-	public static final	String	CONST_PROC_COL_OUT_P_LEAVE_CODE			=			"P_LEAVE_CODE";
-	public static final	String	CONST_PROC_COL_OUT_P_MSG_ENGLISH		=			"P_MSG_ENG";
-	public static final	String	CONST_PROC_COL_OUT_P_MSG_ARABIC			=			"P_MSG_ARB";
-	
-	public static final	String	CONST_PROC_GET_HIGHER_MGR_PROCESS		=			"GET_HIGHER_MGR_PROCESS";
-	public static final	String	CONST_PROC_COL_OUT_V_MGR_EMP			=			"V_MGR_EMP";
-	public static final	String	CONST_PROC_COL_OUT_V_HINT				=			"V_HINT";
-	
-	
-	/******************************************************/
-	
-	/**********JSP PAGES**********************************/
-	public static String	PAGE_WELCOME						=			"welcome";
-	public static String	PAGE_LEAVE_APPLY_FORM				=			"leaveApplicationForm";
-	public static String	PAGE_LEAVE_APPROVE_FORM				=			"leaveApplicationApproveForm";
-	public static String	PAGE_LEAVE_VIEW						=			"leaveApplicationView";
-	
-	
-	/******************************************************/
-	
-	/**********LDAP***************************************/
-	public	static	String	LDAP_COMMON_NAME					=			"cn";
-	public	static	String	LDAP_EMPLOYEE_NUMBER				=			"employeenumber"; 
-	public	static	String	LDAP_EMPLOYEE_NUMBER2				=			"description"; 
-	/******************************************************/
-	
-	/************* PROPERTY FILE ******************************/
-	public	static	String	RESOURCE_PROPERTY_FILE_NAME			=			"messages";
-	/******************************************************/
-
-	
-	/************* EMAIL *********************************/
-	//public	static	String	RESOURCE_PROPERTY_FILE_NAME		=			"mailProp";
-	public	static	String	MAIL_SMTP_HOST						=			"smtpHost";
-	public	static	String	MAIL_SMTP_PORT						=			"smtpPort";
-	public	static	String	MAIL_FROM							=			"bhabesh@squ.edu.om";
-	public	static	String	MAIL_SUBJECT						=			"Leave application.";
-	public	static	String	MAIL_REQUEST_NO						=			" Request No: ";
-	public	static	boolean	IS_MAIL_SEND_ON						=			false;
-	/******************************************************/
-
-	/************* EMAIL TEMPLATE DIRECTORY ****************/
-	public	static	String	TEMPL_EMAIL_DIR_LEAVE				=			"/email/template/";
-	public	static	String	TEMPL_DIR_APPLY						=			"/email/template/apply/";
-	public	static	String	TEMPL_DIR_RETURN					=			"/email/template/returnl/";
+	public static final String	SQL_DELETE_LEAVE_WORKFLOW_LOG_SPECIFIC =	"	DELETE FROM VHM_WORKFLOW_STATUS_LOG							  " +
+																			" 	WHERE	VHM_LEAVE_REQ_NO = :paramEmpNo						  " +
+																			"	AND (														  " +
+																			"		VHM_STATUS_CODE != " +CONST_LEAVE_STATUS_APPROVED +" OR	  " +
+																			"		VHM_STATUS_CODE != " +CONST_LEAVE_STATUS_REJECTED +" OR	  " +
+																			"       VHM_STATUS_CODE != " +CONST_LEAVE_STATUS_FURTHER_CLARIFICATION +
+																			" 		)														  "; 
+																			
 	
 	/******************************************************/
 
-	
-	/************* EMAIL TEMPLATE***************************/
-	public	static	String	TEMPL_LEAVE_APP						=			"tmplateLeaveAppEmail.txt";
-	public	static	String	TEMPL_LEAVE_APP_NEW_REQUESTER		=			"tmpLeaveAppNewRequester.txt";
-	public	static	String	TEMPL_LEAVE_APP_NEW_APPROVER		=			"tmpLeaveAppNewApprover.txt";
-	
-	
-	public	static	String	TEMPL_LEAVE_APP_RETURN_UPDATE_REQUESTER		=	"tmpLeaveAppReturnUpdateRequester.txt";
-	public	static	String	TEMPL_LEAVE_APP_RETURN_UPDATE_APPROVER		=	"tmpLeaveAppReturnUpdateApprover.txt";
-	
-	/******************************************************/
-	
-	/************* EMAIL TEMPLATE PARAMETER ***************/
-	public	static	String	TEMPL_PARAM_REQUEST_NO				=			":paramReqNo";
-	public	static	String	TEMPL_PARAM_REQUESTER_NAME			=			":paramRequester";
-	public	static	String	TEMPL_PARAM_REQUESTER_EMAIL			=			":paramEmailRequester";
-	public	static	String	TEMPL_PARAM_REQUEST_DATE			=			":paramReqDate";
-	public	static	String	TEMPL_PARAM_REQUEST_START_DATE		=			":paramStartDate";
-	public	static	String	TEMPL_PARAM_REQUEST_END_DATE		=			":paramEndDate";
-	public	static	String	TEMPL_PARAM_REQUESTER_REMARK		=			":paramReqRemark";
-	public	static	String	TEMPL_PARAM_DELEGATION_AVL			=			":paramDelegationAvl";
-	public	static	String	TEMPL_PARAM_DELEGATION_DETAILS		=			":paramDelegationDetails";
-	public	static	String	TEMPL_PARAM_DELEGATE_NAME			=			":paramDelegate";
-	public	static	String	TEMPL_PARAM_DELEGATE_START_DATE		=			":paramDelgStartDate";
-	public	static	String	TEMPL_PARAM_DELEGATE_END_DATE		=			":paramDelgEndDate";
-	public	static	String	TEMPL_PARAM_APPROVER_NAME			=			":paramApprover";
-	public	static	String	TEMPL_PARAM_APPROVER_EMAIL			=			":paramEmailApprover";
-	public	static	String	TEMPL_PARAM_APPROVE_DATE			=			":paramApproveDate";
-	public	static	String	TEMPL_PARAM_APPROVER_REMARK			=			":paramAppRemark";
-
-	public	static	String	TEMPL_PARAM_LEAVE_URL				=			":paramUrl";
-	
-	/******************************************************/
-	public	static	String	LEAVE_URL							=			"https://portalnew.squ.edu.om/portal/page/portal/bhabeshPages/wsrpPrjLeaveApp51";
-	public	static	String	CONST_DELEGATION_AVL				=			"This leave application has delegation";
-	public	static	String	CONST_DELEGATION_NAME				=			"Name : ";
-	public	static	String	CONST_DELEGATION_START_DATE			=			"Start : ";
-	public	static	String	CONST_DELEGATION_END_DATE			=			"End : ";
 }

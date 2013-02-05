@@ -45,7 +45,6 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
-import om.edu.squ.squportal.portlet.leaveapp.dao.ldap.LdapDao;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 
 /**
@@ -332,6 +331,35 @@ public interface LeaveAppServiceDao
 	 * Date    		:	Dec 10, 2012 10:27:07 AM
 	 */
 	public int setLeaveApprove(String requestNo, String actionNo, Locale locale,Employee employee);
+
+	/**
+	 * 
+	 * method name  : cancelLeaveRequest
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: Cancel the leave request
+	 *
+	 * Date    		:	Feb 3, 2013 1:54:23 PM
+	 */
+	public String cancelLeaveRequest(String requestNo, Locale locale);
+	
+	/**
+	 * 
+	 * method name  : removeLeaveRequest
+	 * @param requestNo
+	 * @param locale
+	 * @return
+	 * LeaveAppServiceDaoImpl
+	 * return type  : String
+	 * 
+	 * purpose		: removal of a particular leave request
+	 *
+	 * Date    		:	Feb 3, 2013 10:32:29 AM
+	 */
+	public String removeLeaveRequest(String requestNo,Locale locale);
 	
 	/**
 	 * 

@@ -64,6 +64,9 @@
 <c:url value="/js/jquery-ui-1.8.18.custom.min.js" var="urlJsJqueryCustom"/>
 <c:url value="/js/jquery.ui.accordion.js" var="urlJsJqueryAccordion"/>
 
+
+
+
 <link type="text/css" href="${urlJQueryCSS}" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="${urlCssSquPortletStyle}" />
 <link type="text/css" href="${urlJsJqueryAccordion}" rel="stylesheet" />
@@ -73,6 +76,8 @@
 <script type="text/javascript" src="${urlJsJqueryMin}"></script>
 <script type="text/javascript" src="${urlJsJqueryCustom}"></script>
 <script type="text/javascript" src="${urlJsJqueryAccordion}"></script>
+
+
 
 <c:url value="/LeaveAppEmpServlet" var="servletLeave"/>
 <c:url value="/LeaveAppBranchServlet" var="servletLeaveBranch"/>
@@ -376,9 +381,20 @@ $(function() {
 		);
 	});
 
+
+
+
+
+
 </script>
 
 </head>
+
+
+
+
+
+
 <portlet:actionURL var="submitRequest">
 	<portlet:param name="action" value="newApply"/>
 		<portlet:param name="operation">

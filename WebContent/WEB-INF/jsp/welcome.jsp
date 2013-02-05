@@ -61,6 +61,15 @@
 <c:url value="/js/jquery.tablednd.js"  var="urlJsJqueryTableDND"/>
 <c:url value="/js/jquery.contextmenu.js"  var="urlJsJqueryContextMenu"/>
 
+<c:url value="/js/jquery.ui.core.js" var="urlJsJqueryCore"/>
+<c:url value="/js/jquery.ui.widget.js" var="urlJsJqueryWidget"/>
+<c:url value="/js/jquery.ui.mouse.js" var="urlJsJqueryMouse"/>
+<c:url value="/js/jquery.ui.button.js" var="urlJsJqueryButton"/>
+<c:url value="/js/jquery.ui.draggable.js" var="urlJsJqueryDraggable"/>
+<c:url value="/js/jquery.ui.position.js" var="urlJsJqueryPosition"/>
+<c:url value="/js/jquery.ui.dialog.js" var="urlJsJqueryDialog"/>
+
+
 <link type="text/css" href="${urlJQueryCSS}" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="${urlJqGridCSS}" />
 
@@ -76,6 +85,15 @@
 <script type="text/javascript" src="${urlJsJqueryGridMin}"></script>
 <script type="text/javascript" src="${urlJsJqueryTableDND}"></script>
 <script type="text/javascript" src="${urlJsJqueryContextMenu}"></script>
+
+<script type="text/javascript" src="${urlJsJqueryCore}"></script>
+<script type="text/javascript" src="${urlJsJqueryWidget}"></script>
+<script type="text/javascript" src="${urlJsJqueryMouse}"></script>
+<script type="text/javascript" src="${urlJsJqueryButton}"></script>
+<script type="text/javascript" src="${urlJsJqueryDraggable}"></script>
+<script type="text/javascript" src="${urlJsJqueryPosition}"></script>
+<script type="text/javascript" src="${urlJsJqueryDialog}"></script>
+
 
 <style>
 .error
@@ -97,6 +115,7 @@
 	.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #d8dcdf; background: #eeeeee url("${urlImgBgHighLightHard1}") 50% 50% repeat-x; font-weight: bold; color: #004276; }
 	.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #cdd5da; background: #f6f6f6 url("${urlImgBgHighLightHard2}") 50% 50% repeat-x; font-weight: bold; color: #111111; }
 	
+
 	.ui-widget-header { border: 1px solid #e3a1a1; background: #cc0000 url("${urlImgBgHighLightSoft1}") 50% 50% repeat-x; color: #ffffff; font-weight: bold; }
 /* 	.ui-widget-header { border: 1px solid #e3a1a1; background: #cc0000 url("${urlImgBgHighLightSoft1}") 50% 50% repeat-x; color: #ffffff; font-weight: bold; } */
 	.ui-state-highlight .ui-icon {background-image: url("${urlImgIcons1}"); }
@@ -114,7 +133,22 @@
 	.ui-state-active .ui-icon {background-image: url("${urlImgIcons2}"); }
 	.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url("${urlImgIcons2}"); }
 	
+	 /* .myDialogClass .ui-widget-header {background: purple;} */
+	
+/* 	.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url("${urlImgBgFlat}");} */
 
+/* 	.ui-widget-header { */
+/*     background: url("${urlImgBgDots}") repeat-x scroll 50% 50% #CC0000; */
+/*     border: 1px solid #E3A1A1; */
+/*     color: #FFFFFF; */
+/*     font-weight: bold; */
+}
+
+		.dialog-title{
+		
+		background-color: #ffe7cf;
+		color:#f48000;
+		}
 
 </style>
 
@@ -132,15 +166,14 @@
 <div id="pager2" class="pagerT"></div>
 
 
+
 <c:if test="${not empty leaveRequests}">
 	<script type="text/javascript">
 	//contribution :  http://trirand.com/blog/jqgrid/jqgrid.html
-
-	
 	var countRequester = 0;
 	var countApprover = 0;
 	var mydata = [
-				<c:forEach items="${leaveRequests}" var="req" >
+				<c:forEach items="${leaveRequests}" var="req" varStatus="cnt">
 					{
 						
 						<portlet:renderURL var="varLeaveApprove">
@@ -156,6 +189,10 @@
 							<portlet:param name="action" value="updateLeaveApply"/>
 							<portlet:param name="reqNum" value="${req.requestNo}"/>
 						</portlet:renderURL>
+						<portlet:actionURL var="varLeaveCancel">
+  							<portlet:param name="action" value="leaveCancel"/>
+  							<portlet:param name="reqNum" value="${req.requestNo}"/>
+						</portlet:actionURL>
 						
 						<c:choose>
 							<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
@@ -216,8 +253,8 @@
 							actions:'<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>',
 						</c:when>
 						<c:otherwise>
-							actions:'<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a>',
-						</c:otherwise>
+							actions:'<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" index="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>',
+							</c:otherwise>
 					</c:choose>
 					
 					<c:choose>
@@ -369,14 +406,56 @@
 				}
 			}
 		});
+	
+	$(function() { 
+	    $(".mydialogCls").click(function(event) {
+	    	 								var i     = this.getAttribute("index");
+	    	 								var varReqNo = this.getAttribute("reqNo");
+	    	 								var msg	     = '<spring:message code="prop.leave.app.title.request.cancel.msg" arguments="varReqNo"/>';
+	    	 								var msgReplace	=	msg.replace("varReqNo",varReqNo);
+	    	 								$("#myDialog").html(msgReplace);
+	    	 								event.preventDefault();
+	    	 								 $("#myDialog").closest('.ui-dialog').children('.ui-dialog-titlebar').addClass("dialog-title");
+	    	 								$("#myDialog").dialog(
+	                                        {
+	                                        	resizable: false,
+	                                        	width:400,
+	                                        	height:200,
+	                                        	modal: true,
+	                            				close: function(event, ui) {
+	                            					$("#myDialog").hide();
+	                            					return false;
+	                            					},
+	                          					buttons: {
+	                          						"<spring:message code='prop.leave.app.title.request.cancel.button.remove'/>": function() {
+													window.location=i;
+	                          						$( this ).dialog( "close" );
+	                          						},
+	                          						"<spring:message code='prop.leave.app.title.request.cancel.button.exit'/>": function() {
+	                          						$( this ).dialog( "close" );
+	                          						}
+	                          						}
+	                                        }		
+	                                        ); 
+	                                       
+	                                        return false; 
+	                                        
+	                                        });
+	}); 
+	
 		
+
+	
+	
 	</script>
+
+
+   <div id="myDialog" class="myDialogClass" title='<spring:message code="prop.leave.app.title.request.cancel.title"/>' style="display:none;"> Some text</div>  
 
 <div id="backupDiv">
 <c:set value="0" var="cnt"/>
 <fieldset > 
 		<legend><spring:message code="javax.portlet.title"/></legend>
-
  <table border="1" style="border:1px solid; margin: 1em; border-collapse: collapse;">
  	<tr>
 	 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.no"/></th>
@@ -512,3 +591,4 @@
 <a href="${newApply}">
 	<spring:message code="prop.leave.app.apply.new"/>
 </a>
+ 

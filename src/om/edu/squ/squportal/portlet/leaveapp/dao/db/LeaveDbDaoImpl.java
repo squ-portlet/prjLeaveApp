@@ -1644,4 +1644,112 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		return mapStatusAction.get(reqStatus);
 	}
 	
+	/**
+	 * 
+	 * method name  : cancelLeaveRequest
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: Cancel the leave request
+	 *
+	 * Date    		:	Feb 3, 2013 1:54:23 PM
+	 */
+	public int cancelLeaveRequest(String requestNo)
+	{
+		LeaveRequest	leaveRequestCompare	=	getLeaveRequest(requestNo);
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramReqNo",requestNo);
+		namedParameters.put("paramCompLeaveStatus",leaveRequestCompare.getStatus().getStatusCode());
+		return namedParameterJdbcTemplate.update(Constants.SQL_CANCEL_LEAVE_REQUEST, namedParameters);
+	}
+	
+	/**
+	 * 
+	 * method name  : removeLeaveRequest
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: delete particular leave request
+	 *
+	 * Date    		:	Feb 3, 2013 9:48:59 AM
+	 */
+	@Transactional("trLeaveDeleteSpecific")
+	public int removeLeaveRequest(String requestNo)
+	{
+		int resultLvReq		=	0;
+		int resultLvApprv	=	0;
+		int resultLvDelegt	=	0;
+		int resultLvReqHis	=	0;
+		int result			=	0;
+		
+		resultLvReq	=	jdbcTemplate.update(Constants.SQL_DELETE_LEAVE_REQ_SPECIFIC, requestNo);
+		resultLvApprv	=	removeLeaveApproval(requestNo);
+		resultLvDelegt	=	removeLeaveDelegation(requestNo);
+		resultLvReqHis	=	removeLeaveReqHistory(requestNo);
+		
+		if (resultLvReq !=0 && resultLvApprv != 0 && resultLvDelegt != 0 && resultLvReqHis != 0)
+		{
+			result	=	1;
+		}
+		return result;
+	}
+	
+	/**
+	 * 
+	 * method name  : removeLeaveApproval
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: delete leave approval records
+	 *
+	 * Date    		:	Feb 3, 2013 9:48:22 AM
+	 */
+	@Transactional("trLeaveDeleteSpecific")
+	private	int removeLeaveApproval(String requestNo)
+	{
+		return jdbcTemplate.update(Constants.SQL_DELETE_LEAVE_APPROVAL_SPECIFIC, requestNo);
+	}
+	
+	/**
+	 * 
+	 * method name  : removeLeaveDelegation
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: delete delegation records for a particular leave request
+	 *
+	 * Date    		:	Feb 3, 2013 10:14:21 AM
+	 */
+	@Transactional("trLeaveDeleteSpecific")
+	private int removeLeaveDelegation(String requestNo)
+	{
+		return jdbcTemplate.update(Constants.SQL_DELETE_LEAVE_DELEGATION_SPECIFIC, requestNo);
+	}
+
+	/**
+	 * 
+	 * method name  : removeLeaveReqHistory
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: remove history records for a particular leave request
+	 *
+	 * Date    		:	Feb 3, 2013 10:14:59 AM
+	 */
+	@Transactional("trLeaveDeleteSpecific")
+	private int removeLeaveReqHistory(String requestNo)
+	{
+		return jdbcTemplate.update(Constants.SQL_DELETE_LEAVE_WORKFLOW_LOG_SPECIFIC, requestNo);
+	}
+	
 }

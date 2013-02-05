@@ -33,6 +33,8 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
@@ -374,5 +376,34 @@ public interface LeaveDbDao
 	 * Date    		:	Oct 3, 2012 1:58:12 PM
 	 */
 	public int setLeaveApprove(LeaveApprove approve);
+
+	/**
+	 * 
+	 * method name  : cancelLeaveRequest
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: Cancel the leave request
+	 *
+	 * Date    		:	Feb 3, 2013 1:54:23 PM
+	 */
+	public int cancelLeaveRequest(String requestNo);
+	
+	/**
+	 * 
+	 * method name  : removeLeaveRequest
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: delete particular leave request
+	 *
+	 * Date    		:	Feb 3, 2013 9:48:59 AM
+	 */
+	public int removeLeaveRequest(String requestNo);
+	
 	
 }

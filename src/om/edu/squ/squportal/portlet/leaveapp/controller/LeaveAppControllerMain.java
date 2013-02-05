@@ -417,6 +417,40 @@ public class LeaveAppControllerMain
 	
 	/**
 	 * 
+	 * method name  : leaveApplicationCancel
+	 * @param requestNo
+	 * @param request
+	 * @param response
+	 * @param req
+	 * @param leaveAppModel
+	 * @param result
+	 * @param locale
+	 * @param model
+	 * LeaveAppControllerMain
+	 * return type  : void
+	 * 
+	 * purpose		: Cancel the leave
+	 *
+	 * Date    		:	Feb 3, 2013 2:08:14 PM
+	 */
+	@RequestMapping(params="action=leaveCancel")
+	private void leaveApplicationCancel
+	(
+			@RequestParam("reqNum") String requestNo,
+			ActionRequest request,
+			ActionResponse response, PortletRequest req, 
+			@ModelAttribute("leaveAppModel") LeaveAppModel leaveAppModel,
+			BindingResult result,Locale locale,Model model		
+	)
+	{
+		String message	=	leaveAppServiceDao.cancelLeaveRequest(requestNo, locale);
+		response.setRenderParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, message);
+		response.setRenderParameter("action", "backToMain");
+	}
+	
+	
+	/**
+	 * 
 	 * method name  : leaveAppAutoAdminAction
 	 * @param requestNo
 	 * @param actionNo
