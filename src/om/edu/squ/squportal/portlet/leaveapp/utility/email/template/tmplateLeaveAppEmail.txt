@@ -1,5 +1,5 @@
--Dear :paramEmailReceiverName,<br>
--<b>:paramEmailMessage</b><br><br>
+Dear :paramEmailReceiverName,<br>
+<b>:paramEmailMessage</b><br><br>
 
 Details of the leave application are as below : <br><br>
 
