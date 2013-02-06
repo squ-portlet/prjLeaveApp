@@ -37,6 +37,7 @@ public class EmailData
 {
 	private	String	mailTo;
 	private	String	mailFrom;
+	private	String	emailReceiverName;
 	private	String	emailTemplateName;
 	private String 	requestNo;
 	private	String	requesterName;
@@ -55,7 +56,7 @@ public class EmailData
 	private	String	approveDate;
 	private	String	approverRemark;
 	private	String	leaveUrl;
-
+	private	String	emailMessage;
 	
 	/**
 	 * Getter Method	: getMailTo
@@ -96,6 +97,26 @@ public class EmailData
 	public void setMailFrom(String mailFrom)
 	{
 		this.mailFrom = mailFrom;
+	}
+	/**
+	 * Getter Method	: getEmailReceiverName
+	 * @return the emailReceiverName
+	 * 
+	 * Date				: Feb 5, 2013
+	 */
+	public String getEmailReceiverName()
+	{
+		return this.emailReceiverName;
+	}
+	/**
+	 * Setter method : setEmailReceiverName
+	 * @param emailReceiverName the emailReceiverName to set
+	 * 
+	 * Date          : Feb 5, 2013 1:10:13 PM
+	 */
+	public void setEmailReceiverName(String emailReceiverName)
+	{
+		this.emailReceiverName = emailReceiverName;
 	}
 	/**
 	 * Getter Method	: getEmailTemplateName
@@ -457,6 +478,26 @@ public class EmailData
 	{
 		this.leaveUrl = leaveUrl;
 	}
+	/**
+	 * Getter Method	: getEmailMessage
+	 * @return the emailMessage
+	 * 
+	 * Date				: Feb 5, 2013
+	 */
+	public String getEmailMessage()
+	{
+		return this.emailMessage;
+	}
+	/**
+	 * Setter method : setEmailMessage
+	 * @param emailMessage the emailMessage to set
+	 * 
+	 * Date          : Feb 5, 2013 1:22:51 PM
+	 */
+	public void setEmailMessage(String emailMessage)
+	{
+		this.emailMessage = emailMessage;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -467,12 +508,16 @@ public class EmailData
 				+ (this.mailTo != null ? "mailTo=" + this.mailTo + ", " : "")
 				+ (this.mailFrom != null ? "mailFrom=" + this.mailFrom + ", "
 						: "")
+				+ (this.emailReceiverName != null ? "emailReceiverName="
+						+ this.emailReceiverName + ", " : "")
 				+ (this.emailTemplateName != null ? "emailTemplateName="
 						+ this.emailTemplateName + ", " : "")
 				+ (this.requestNo != null ? "requestNo=" + this.requestNo
 						+ ", " : "")
 				+ (this.requesterName != null ? "requesterName="
 						+ this.requesterName + ", " : "")
+				+ (this.requesterEmail != null ? "requesterEmail="
+						+ this.requesterEmail + ", " : "")
 				+ (this.requestDate != null ? "requestDate=" + this.requestDate
 						+ ", " : "")
 				+ (this.requestStartDate != null ? "requestStartDate="
@@ -481,18 +526,28 @@ public class EmailData
 						+ this.requestEndDate + ", " : "")
 				+ (this.requesterRemark != null ? "requesterRemark="
 						+ this.requesterRemark + ", " : "")
+				+ (this.delegationAvilable != null ? "delegationAvilable="
+						+ this.delegationAvilable + ", " : "")
+				+ (this.delegationDetails != null ? "delegationDetails="
+						+ this.delegationDetails + ", " : "")
+				+ (this.delegateName != null ? "delegateName="
+						+ this.delegateName + ", " : "")
 				+ (this.delegationStartDate != null ? "delegationStartDate="
 						+ this.delegationStartDate + ", " : "")
 				+ (this.delegationEndDate != null ? "delegationEndDate="
 						+ this.delegationEndDate + ", " : "")
 				+ (this.approverName != null ? "approverName="
 						+ this.approverName + ", " : "")
+				+ (this.approverEmail != null ? "approverEmail="
+						+ this.approverEmail + ", " : "")
 				+ (this.approveDate != null ? "approveDate=" + this.approveDate
 						+ ", " : "")
 				+ (this.approverRemark != null ? "approverRemark="
 						+ this.approverRemark + ", " : "")
-				+ (this.leaveUrl != null ? "leaveUrl=" + this.leaveUrl : "")
-				+ "]";
+				+ (this.leaveUrl != null ? "leaveUrl=" + this.leaveUrl + ", "
+						: "")
+				+ (this.emailMessage != null ? "emailMessage="
+						+ this.emailMessage : "") + "]";
 	}
 	
 	

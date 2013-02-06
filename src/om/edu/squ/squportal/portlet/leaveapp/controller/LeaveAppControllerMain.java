@@ -125,6 +125,10 @@ public class LeaveAppControllerMain
 		model.addAttribute("furtherClarification", Constants.CONST_LEAVE_STATUS_FURTHER_CLARIFICATION);
 		model.addAttribute("leaveStatusApproved", Constants.CONST_LEAVE_STATUS_APPROVED);
 		model.addAttribute("leaveStatusRejected", Constants.CONST_LEAVE_STATUS_REJECTED);
+		
+		model.addAttribute("leaveActionApprove", Constants.CONST_LEAVE_ACTION_APPROVE);
+		model.addAttribute("leaveActionReturn", Constants.CONST_LEAVE_ACTION_RETURN);
+		model.addAttribute("leaveActionReject", Constants.CONST_LEAVE_ACTION_REJECT);
 
 
 		return Constants.PAGE_WELCOME;

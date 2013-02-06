@@ -1,5 +1,5 @@
-Dear :paramApprover,<br>
-<b>You received a new leave request, for approval.</b><br><br>
+-Dear :paramEmailReceiverName,<br>
+-<b>:paramEmailMessage</b><br><br>
 
 Details of the leave application are as below : <br><br>
 
@@ -11,6 +11,9 @@ Leave End Date : :paramEndDate  <br><br>
 
 requester : :paramRequester <br>
 Requester Email: :paramEmailRequester <br><br>
+
+approver : :paramApprover <br>
+Approver Email : paramEmailApprover <br><br>
 
 Requester Remark : :paramReqRemark <br><br>
 

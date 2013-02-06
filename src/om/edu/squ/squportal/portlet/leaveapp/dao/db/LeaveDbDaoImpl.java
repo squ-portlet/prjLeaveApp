@@ -832,7 +832,11 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			this.emailData.setApproverName(approverName4Email);																	  
 			this.emailData.setApproverEmail(empApprover4Email.getEmpInternetId()+"@squ.edu.om");									  
 			this.emailData.setMailTo(emp.getEmpInternetId()+"@squ.edu.om");													  
-			this.emailData.setEmailTemplateName(Constants.TEMPL_DIR_APPLY+Constants.TEMPL_LEAVE_APP_NEW_REQUESTER);			  
+			this.emailData.setEmailTemplateName(Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP);			  
+			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester",null, locale));
+			this.emailData.setDelegationAvilable(" ");
+			this.emailData.setDelegationDetails(" ");
+
 			this.leaveEmail		=	new MailProcess();																		  
 			this.leaveEmail.setLeaveEmail(emailData);																	  	  
 																														  
@@ -840,7 +844,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			//TODO replace with approver email id																		  
 			//emailData.setMailTo(empApprover.getEmpInternetId()+"@squ.edu.om");										  
 			this.emailData.setMailTo("bhabesh@squ.edu.om");																	  
-			this.emailData.setEmailTemplateName(Constants.TEMPL_DIR_APPLY+Constants.TEMPL_LEAVE_APP_NEW_APPROVER);			  
+			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver",null, locale));
 			this.emailData.setDelegationAvilable(" ");
 			this.emailData.setDelegationDetails(" ");
 			/**************************************************************************************************************/
@@ -1030,7 +1034,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		{
 			logger.error("Error in Delegated employees. error description : "+ex.getMessage());
 		}
-
+		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.delegation",null, locale));
 		this.emailData.setDelegationDetails(tmpDelgStr);
 		
 	}

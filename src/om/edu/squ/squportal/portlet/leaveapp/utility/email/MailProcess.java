@@ -88,6 +88,20 @@ import org.springframework.web.multipart.MultipartFile;
 					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUEST_NO, emailData.getRequestNo());
 				}
 				/**
+				 * Email Receiver Name
+				 */
+				if(!(null == emailData.getEmailReceiverName()) && emailBody.contains(Constants.TEMPL_PARAM_EMAIL_RECEIVER_NAME))
+				{
+					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_EMAIL_RECEIVER_NAME, emailData.getEmailReceiverName());
+				}
+				/**
+				 * Email Message
+				 */
+				if(!(null == emailData.getEmailMessage()) && emailBody.contains(Constants.TEMPL_PARAM_EMAIL_MESSAGE))
+				{
+					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_EMAIL_MESSAGE, emailData.getEmailMessage());
+				}
+				/**
 				 * Requester Name
 				 */
 				if(!(null == emailData.getRequesterName()) && emailBody.contains(Constants.TEMPL_PARAM_REQUESTER_NAME))

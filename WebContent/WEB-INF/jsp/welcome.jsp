@@ -52,6 +52,7 @@
 <c:url value="/css/ui.jqgrid.css" var="urlJqGridCSS"/>
 
 
+
 <c:url value="/js/jquery-1.7.2.min.js" var="urlJsJqueryMin"/>
 <c:url value="/js/jquery-ui-1.8.18.custom.min.js" var="urlJsJqueryCustom"/>
 <c:url value="/js/jquery.layout.js" var="urlJsJqueryLayout"/>
@@ -72,6 +73,7 @@
 
 <link type="text/css" href="${urlJQueryCSS}" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="${urlJqGridCSS}" />
+
 
 <script type="text/javascript" src="${urlJsJqueryMin}"></script>
 <script type="text/javascript" src="${urlJsJqueryCustom}"></script>
@@ -235,14 +237,20 @@
 									actions: '<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>',
 								</c:when>
 								<c:otherwise>
-									actions: '<c:forEach items="${adminActions}" var="admActions">'+
-									'<portlet:actionURL var="varLeaveAdminAction">'+
-									'   <portlet:param name="action" value="leaveAutoAdminAction"/>'+
-									'   <portlet:param name="reqNum" value="${req.requestNo}"/>'+
-									'   <portlet:param name="appActionNum" value="${admActions.actionCode}"/>'+
-									'</portlet:actionURL>'+
-									'<a href="${varLeaveAdminAction}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a> &nbsp;'+
-									'</c:forEach>', 
+									 actions: 
+										 '<c:forEach items="${adminActions}" var="admActions">'+
+											'<portlet:actionURL var="varLeaveAdminAction">'+
+											'   <portlet:param name="action" value="leaveAutoAdminAction"/>'+
+											'   <portlet:param name="reqNum" value="${req.requestNo}"/>'+
+											'   <portlet:param name="appActionNum" value="${admActions.actionCode}"/>'+
+											'</portlet:actionURL>'+
+												'<c:if test="${(admActions.actionCode == leaveActionApprove)}">'+
+													'<a href="${varLeaveAdminAction}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;'+		
+												'</c:if>'+
+												'<c:if test="${(admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">'+
+													'<a href="${varLeaveApprove}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;'+		
+												'</c:if>'+
+											'</c:forEach>',
 								</c:otherwise>
 							</c:choose>
 						</c:when>
@@ -272,23 +280,22 @@
 				</c:forEach>
 
 	      		];
-	
-	
-	var list3Data = mydata;
-	
+
 	
 	$(function(){
 		for(var i=0;i<mydata.length;i++)
 			{
-			if(mydata[i].isApprover=="y")
+			if (typeof mydata[i] !== 'undefined' && mydata[i] !== null)
 				{
-					countApprover	=	countApprover + 1;
+					if(mydata[i].isApprover=="y")
+						{
+							countApprover	=	countApprover + 1;
+						}
+					if(mydata[i].isApprover=="n")
+						{
+							countRequester	=	countRequester + 1;
+						}
 				}
-			if(mydata[i].isApprover=="n")
-				{
-					countRequester	=	countRequester + 1;
-				}
-
 			
 			}
 		
@@ -384,9 +391,12 @@
 			{
 				for(var i=0;i<mydata.length;i++)
 				{
-				if(mydata[i].isApprover=="y")
-					{
-					$('#list2').jqGrid('addRowData',i+1,mydata[i]);	
+				if (typeof mydata[i] !== 'undefined' && mydata[i] !== null)
+				{
+					if(mydata[i].isApprover=="y")
+						{
+						$('#list2').jqGrid('addRowData',i+1,mydata[i]);	
+						}
 					}
 				}
 			}
@@ -397,11 +407,14 @@
 	$(function(){  
 		if(countRequester != 0)
 			{
-				for(var i=0;i<list3Data.length;i++)
+				for(var i=0;i<mydata.length;i++)
 				{
-				if(list3Data[i].isApprover=="n")
-					{
-					$('#list3').jqGrid('addRowData',i+1,list3Data[i]);	
+				if (typeof mydata[i] !== 'undefined' && mydata[i] !== null)
+				{
+					if(mydata[i].isApprover=="n")
+						{
+						$('#list3').jqGrid('addRowData',i+1,mydata[i]);	
+						}
 					}
 				}
 			}

@@ -228,6 +228,7 @@ public interface Constants
 	
 	/************* EMAIL TEMPLATE PARAMETER ***************/
 	public	static	String	TEMPL_PARAM_REQUEST_NO				=			":paramReqNo";
+	public	static	String	TEMPL_PARAM_EMAIL_RECEIVER_NAME		=			":paramEmailReceiverName";
 	public	static	String	TEMPL_PARAM_REQUESTER_NAME			=			":paramRequester";
 	public	static	String	TEMPL_PARAM_REQUESTER_EMAIL			=			":paramEmailRequester";
 	public	static	String	TEMPL_PARAM_REQUEST_DATE			=			":paramReqDate";
@@ -243,7 +244,7 @@ public interface Constants
 	public	static	String	TEMPL_PARAM_APPROVER_EMAIL			=			":paramEmailApprover";
 	public	static	String	TEMPL_PARAM_APPROVE_DATE			=			":paramApproveDate";
 	public	static	String	TEMPL_PARAM_APPROVER_REMARK			=			":paramAppRemark";
-
+	public	static	String	TEMPL_PARAM_EMAIL_MESSAGE			=			":paramEmailMessage";
 	public	static	String	TEMPL_PARAM_LEAVE_URL				=			":paramUrl";
 	
 	/******************************************************/
