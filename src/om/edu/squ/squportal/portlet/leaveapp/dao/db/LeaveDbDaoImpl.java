@@ -809,6 +809,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		//TODO sent email
 		/********************************************************** EMAIL OPERATION ***********************************/
 		this.emailData.setRequestNo(leaveRequestNo);																		  //
+		this.emailData.setEmailReceiverName(emp.getEmpName());
 		this.emailData.setRequesterName(emp.getEmpName());																  //
 		this.emailData.setRequesterEmail(emp.getEmpInternetId()+"@squ.edu.om");											  //
 		this.emailData.setRequestStartDate(leaveRequest.getLeaveStartDate());											  //
@@ -843,7 +844,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			/***************** SENDING E-MAIL TO APPROVER *****************/											  
 			//TODO replace with approver email id																		  
 			//emailData.setMailTo(empApprover.getEmpInternetId()+"@squ.edu.om");										  
-			this.emailData.setMailTo("bhabesh@squ.edu.om");																	  
+			this.emailData.setMailTo("bhabesh@squ.edu.om");						
+			this.emailData.setEmailReceiverName(approverName4Email);
 			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver",null, locale));
 			this.emailData.setDelegationAvilable(" ");
 			this.emailData.setDelegationDetails(" ");

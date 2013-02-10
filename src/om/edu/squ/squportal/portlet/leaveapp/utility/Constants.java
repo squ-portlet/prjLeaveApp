@@ -204,7 +204,7 @@ public interface Constants
 	public	static	String	MAIL_FROM							=			"bhabesh@squ.edu.om";
 	public	static	String	MAIL_SUBJECT						=			"Leave application.";
 	public	static	String	MAIL_REQUEST_NO						=			" Request No: ";
-	public	static	boolean	IS_MAIL_SEND_ON						=			false;
+	public	static	boolean	IS_MAIL_SEND_ON						=			true;
 	/******************************************************/
 
 	/************* EMAIL TEMPLATE DIRECTORY ****************/
