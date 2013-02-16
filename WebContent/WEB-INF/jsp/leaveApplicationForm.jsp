@@ -478,10 +478,11 @@ $(function() {
 							</a>
 						</h3>
 						<div>
-							<spring:message code="prop.leave.app.apply.form.leave.manager"/> 
-							<div><center><font color="red"><c:out value="${approver.employee.empName}"/></font></center></div>
-							<br><br>
-							<spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/>
+<%-- 							<spring:message code="prop.leave.app.apply.form.leave.manager"/>  --%>
+<%-- 							<div><center><font color="red"><c:out value="${approver.employee.empName}"/></font></center></div> --%>
+							
+							<br>
+							<center><spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/></center>
 						</div>
 					</c:when>
 					<c:otherwise>
@@ -492,10 +493,11 @@ $(function() {
 							</a>
 						</h3>
 						<div>
-							<spring:message code="prop.leave.app.apply.form.leave.manager"/> 
-							<div><center><font color="red"><c:out value="${mgrName}"/></font></center></div>
-							<br><br>
-							<spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/>
+<%-- 							<spring:message code="prop.leave.app.apply.form.leave.manager"/>  --%>
+<%-- 							<div><center><font color="red"><c:out value="${mgrName}"/></font></center></div> --%>
+<!-- 							<br> -->
+							<br>
+							<center><spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/></center>
 						</div>
 					</c:otherwise>
 				</c:choose>

@@ -74,6 +74,12 @@
 
 <c:if test="${rc.locale.language=='ar'}">
 <style>
+.error
+{
+	color:Red;
+}
+
+
 	img.imgBck {
         -moz-transform: scaleX(-1);
         -o-transform: scaleX(-1);
@@ -152,6 +158,7 @@ $(function() {
 			</h3>
 		</legend>
 			<form:form modelAttribute="leaveAppModel" action="${leaveApprove}" method="post" htmlEscape="false" >	
+			<h2><form:errors path="*" cssClass="error" /></h2>
 			<form:hidden path="requestNo" />	
 			<fieldset>
 				<legend><spring:message code="prop.leave.app.apply.form.required.details"/></legend>
@@ -422,14 +429,14 @@ $(function() {
 							
 						<td>
 							<spring:message code="prop.leave.app.apply.form.approvar.actions" var="appActions"/>
-							
+							<form:errors path="approverAction" cssClass="error" />
 							<form:select path="approverAction" disabled="${varDisable}">
 								<c:if test="${empty leaveRequest.approve.approverAction}">
 									<form:option value=""><spring:message code="prop.leave.app.dropdown.text"/></form:option>
 								</c:if>
 								<form:options items="${adminActions}" itemLabel="actionDesc" itemValue="actionCode"/>
 							</form:select>
-						
+							
 						</td>
 						<td>&nbsp;</td>
 						<th class="PortletHeaderColor">
@@ -438,7 +445,9 @@ $(function() {
 							</span>
 						</th>
 						<td>
+							<form:errors path="approverRemark" cssClass="error" />
 							<form:textarea path="approverRemark" cssStyle="width:100%" disabled="${varDisable}"/>
+							
 						</td>
 					</tr>
 				</table>

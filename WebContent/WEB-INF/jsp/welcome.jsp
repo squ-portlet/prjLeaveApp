@@ -243,15 +243,21 @@
 											 actions: 
 												 '<c:forEach items="${adminActions}" var="admActions">'+
 													'<portlet:actionURL var="varLeaveAdminAction">'+
-													'   <portlet:param name="action" value="leaveAutoAdminAction"/>'+
-													'   <portlet:param name="reqNum" value="${req.requestNo}"/>'+
-													'   <portlet:param name="appActionNum" value="${admActions.actionCode}"/>'+
+													'<portlet:param name="action" value="leaveAutoAdminAction"/>'+
+													'<portlet:param name="reqNum" value="${req.requestNo}"/>'+
+													'<portlet:param name="appActionNum" value="${admActions.actionCode}"/>'+
 													'</portlet:actionURL>'+
+													
+													'<portlet:renderURL var="varLeaveApprove2">'+
+													'<portlet:param name="action" value="leaveApprove2"/>'+
+													'<portlet:param name="reqNo" value="${req.requestNo}"/>'+
+													'<portlet:param name="_approverAction" value="${admActions.actionCode}"/>'+
+													'</portlet:renderURL>'+
 														'<c:if test="${(admActions.actionCode == leaveActionApprove)}">'+
 															'<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;'+		
 														'</c:if>'+
 														'<c:if test="${(admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">'+
-															'<a href="${varLeaveApprove}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;'+		
+															'&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;'+		
 														'</c:if>'+
 													'</c:forEach>',
 										</c:otherwise>
@@ -283,36 +289,35 @@
 						</c:forEach>
 		
 			      		];
-
+	$(function() {
 			if((navigator.userAgent.toLowerCase().indexOf("msie") > -1)&& jQuery.support.boxModel == false)
 				{
-				 	
-					
 					/*Dialog for IE Quirk mode*/
 					$(function() { 
-					    
+						
 
-															$("#dialogQuirk").html('<spring:message code="error.prop.leave.app.quirk.mode.text"/>'); 
-					    	 								$("#dialogQuirk").dialog(
-					                                        {
-					                                        	resizable: false,
-					                                        	width:400,
-					                                        	height:200,
-					                                        	modal: true,
-					                            				close: function(event, ui) {
-					                            					$("#dialogQuirk").hide();
-					                            					return false;
-					                            					},
-					                          					buttons:
-					                          						{
-					                          						"<spring:message code='prop.leave.app.title.request.button.exit'/>": function() {
-					                          						$( this ).dialog( "close" );
-					                          						}
-					                          						}
-					                                        }		
-					                                        ); 
-					    	                              
-					}); 
+									$("#dialogQuirk").html('<spring:message code="error.prop.leave.app.quirk.mode.text"/>'); 
+   	 								$("#dialogQuirk").dialog(
+                                       {
+                                       	resizable: false,
+                                       	width:400,
+                                       	height:200,
+                                       	modal: true,
+                           				close: function(event, ui) {
+                           					$("#dialogQuirk").hide();
+                           					return false;
+                           					},
+                         					buttons:
+                         						{
+                         						"<spring:message code='prop.leave.app.title.request.button.exit'/>": function() {
+                         						$( this ).dialog( "close" );
+                         						}
+                         						}
+                                       }		
+                                       ); 
+   	 							return false;                         
+					});
+					
 				}
 			else
 			{
@@ -465,91 +470,88 @@
 								}
 						
 						});
-				
-					/*Dialog for cancel request*/
-					$(function() { 
-					    $(".mydialogCls").click(function(event) {
-					    	
-					    	
-					    	 								var i     = this.getAttribute("index");
-					    	 								var varReqNo = this.getAttribute("reqNo");
-					    	 								var msg	     = '<spring:message code="prop.leave.app.title.request.cancel.msg" arguments="varReqNo"/>';
-					    	 								var msgReplace	=	msg.replace("varReqNo",varReqNo);
-					    	 								$("#myDialog").html(msgReplace);
-					    	 								event.preventDefault();
-					    	 								 $("#myDialog").closest('.ui-dialog').children('.ui-dialog-titlebar').addClass("dialog-title");
-					    	 								$("#myDialog").dialog(
-					                                        {
-					                                        	resizable: false,
-					                                        	width:400,
-					                                        	height:200,
-					                                        	modal: true,
-					                            				close: function(event, ui) {
-					                            					$("#myDialog").hide();
-					                            					return false;
-					                            					},
-					                          					buttons: {
-					                          						"<spring:message code='prop.leave.app.title.request.cancel.button.remove'/>": function() {
-																	window.location=i;
-					                          						$( this ).dialog( "close" );
-					                          						},
-					                          						"<spring:message code='prop.leave.app.title.request.cancel.button.exit'/>": function() {
-					                          						$( this ).dialog( "close" );
-					                          						}
-					                          						}
-					                                        }		
-					                                        ); 
-					    	                               
-					                                        return false; 
-					    	                                    
-					                                        });
-					    
-					}); 
 					
-						
-				
-					/*Dialog for approve request*/
-					$(function() { 
-					    $(".refApproveClass").click(function(event) {
-					    	
-					    	
-					    	 								var linkRef     = this.getAttribute("linkRef");
-					    	 								var varReqNo = this.getAttribute("reqNo");
-					    	 								var msg	     = '<spring:message code="prop.leave.app.title.request.dialog.approve.msg" arguments="varReqNo"/>';
-					    	 								var msgReplace	=	msg.replace("varReqNo",varReqNo);
-					    	 								$("#dialogApprove").html(msgReplace);
-					    	 								event.preventDefault();
-					    	 								 $("#dialogApprove").closest('.ui-dialog').children('.ui-dialog-titlebar').addClass("dialog-title");
-					    	 								$("#dialogApprove").dialog(
-					                                        {
-					                                        	resizable: false,
-					                                        	width:400,
-					                                        	height:200,
-					                                        	modal: true,
-					                            				close: function(event, ui) {
-					                            					$("#dialogApprove").hide();
-					                            					return false;
-					                            					},
-					                          					buttons: {
-					                          						"<spring:message code='prop.leave.app.title.request.dialog.approve.button.yes'/>": function() {
-																	window.location=linkRef;
-					                          						$( this ).dialog( "close" );
-					                          						},
-					                          						"<spring:message code='prop.leave.app.title.request.dialog.approve.button.exit'/>": function() {
-					                          						$( this ).dialog( "close" );
-					                          						}
-					                          						}
-					                                        }		
-					                                        ); 
-					    	                              
-					                                        return false; 
-					                                        
-					                                        });
-					}); 
-						
 			}
 			
+			/*Dialog for approve request*/
+			$(function() { 
+			    $(".refApproveClass").click(function(event) {
+			    	 								var linkRef     = this.getAttribute("linkRef");
+			    	 								var varReqNo = this.getAttribute("reqNo");
+			    	 								var msg	     = '<spring:message code="prop.leave.app.title.request.dialog.approve.msg" arguments="varReqNo"/>';
+			    	 								var msgReplace	=	msg.replace("varReqNo",varReqNo);
+			    	 								$("#dialogApprove").html(msgReplace);
+			    	 								event.preventDefault();
+			    	 								 $("#dialogApprove").closest('.ui-dialog').children('.ui-dialog-titlebar').addClass("dialog-title");
+			    	 								$("#dialogApprove").dialog(
+			                                        {
+			                                        	resizable: false,
+			                                        	width:400,
+			                                        	height:200,
+			                                        	modal: true,
+			                            				close: function(event, ui) {
+			                            					$("#dialogApprove").hide();
+			                            					return false;
+			                            					},
+			                          					buttons: {
+			                          						"<spring:message code='prop.leave.app.title.request.dialog.approve.button.yes'/>": function() {
+															window.location=linkRef;
+			                          						$( this ).dialog( "close" );
+			                          						},
+			                          						"<spring:message code='prop.leave.app.title.request.dialog.approve.button.exit'/>": function() {
+			                          						$( this ).dialog( "close" );
+			                          						}
+			                          						}
+			                                        }		
+			                                        ); 
+			    	                              
+			                                        return false; 
+			                                        
+			                                        });
+			}); 
+
 			
+			/*Dialog for cancel request*/
+			$(function() { 
+			    $(".mydialogCls").click(function(event) {
+		    	
+			    	 								var i     = this.getAttribute("index");
+			    	 								var varReqNo = this.getAttribute("reqNo");
+			    	 								var msg	     = '<spring:message code="prop.leave.app.title.request.cancel.msg" arguments="varReqNo"/>';
+			    	 								var msgReplace	=	msg.replace("varReqNo",varReqNo);
+			    	 								$("#myDialog").html(msgReplace);
+			    	 								event.preventDefault();
+			    	 								 $("#myDialog").closest('.ui-dialog').children('.ui-dialog-titlebar').addClass("dialog-title");
+			    	 								$("#myDialog").dialog(
+			                                        {
+			                                        	resizable: false,
+			                                        	width:400,
+			                                        	height:200,
+			                                        	modal: true,
+			                            				close: function(event, ui) {
+			                            					$("#myDialog").hide();
+			                            					return false;
+			                            					},
+			                          					buttons: {
+			                          						"<spring:message code='prop.leave.app.title.request.cancel.button.remove'/>": function() {
+															window.location=i;
+			                          						$( this ).dialog( "close" );
+			                          						},
+			                          						"<spring:message code='prop.leave.app.title.request.cancel.button.exit'/>": function() {
+			                          						$( this ).dialog( "close" );
+			                          						}
+			                          						}
+			                                        }		
+			                                        ); 
+			    	                               
+			                                        return false; 
+			    	                                    
+			                                        });
+			    
+			}); 
+	return false;	
+	
+	});			
 			
 			
 			</script>
@@ -583,6 +585,14 @@
 					</jsp:attribute>
 					</portlet:param>
 				</portlet:renderURL>
+				<portlet:renderURL var="varLeaveClarification">
+					<portlet:param name="action" value="updateLeaveApply"/>
+					<portlet:param name="reqNum" value="${req.requestNo}"/>
+				</portlet:renderURL>
+				<portlet:actionURL var="varLeaveCancel">
+							<portlet:param name="action" value="leaveCancel"/>
+							<portlet:param name="reqNum" value="${req.requestNo}"/>
+				</portlet:actionURL>
 		
 				<c:choose> 
 					<c:when test='${(req.employee.hierarchyCode > empHierarchy) || 
@@ -653,7 +663,7 @@
 											   <portlet:param name="appActionNum" value="${admActions.actionCode}"/>
 											</portlet:actionURL>
 											<c:if test="${(admActions.actionCode == leaveActionApprove)}">
-												 <a href="${varLeaveAdminAction}"><c:out value="${admActions.actionDesc}"/> &nbsp;</a> 
+												 <a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a> &nbsp; 
 											</c:if>
 											<c:if test="${(admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">
 												<a href="${varLeaveApprove}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;
@@ -675,8 +685,9 @@
 									<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
 							</c:when>
 							<c:otherwise>
-								<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | 
+								<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> 
 								<a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a>
+								<a href="" class="mydialogCls" reqNo="${req.requestNo}" index="${varLeaveCancel}"  ><spring:message code="prop.leave.app.title.request.cancel" /></a>
 							</c:otherwise>
 						</c:choose>
 					</td>

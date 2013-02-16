@@ -56,6 +56,7 @@ import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
 import om.edu.squ.squportal.portlet.leaveapp.validator.LeaveAppValidator;
+import om.edu.squ.squportal.portlet.leaveapp.validator.LeaveAppValidatorApprove;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -346,7 +347,7 @@ public class LeaveAppControllerMain
 	 * LeaveAppControllerMain
 	 * return type  : String
 	 * 
-	 * purpose		:	leave application form
+	 * purpose		:	leave application approve form
 	 *
 	 * Date    		:	Sep 15, 2012 10:04:35 AM
 	 */
@@ -359,14 +360,51 @@ public class LeaveAppControllerMain
 			Locale locale
 		)
 	{
+		return leaveApplicationApprove(requestNo,null,request,model,locale);
+	}
+
+	/**
+	 * 
+	 * method name  : leaveApplicationApprove
+	 * @param requestNo
+	 * @param _approverAction
+	 * @param request
+	 * @param model
+	 * @param locale
+	 * @return
+	 * LeaveAppControllerMain
+	 * return type  : String
+	 * 
+	 * purpose		: leave application approve form mostly for return and reject
+	 *
+	 * Date    		:	Feb 12, 2013 2:23:25 PM
+	 */
+	@RequestMapping(params="action=leaveApprove2")
+	private String leaveApplicationApprove
+		(
+			@RequestParam("reqNo") String requestNo,
+			@RequestParam("_approverAction") String _approverAction,
+			PortletRequest request, 
+			Model model,
+			Locale locale
+		)
+	{
 		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(requestNo, locale);
 		if(!model.containsAttribute("leaveAppModel"))
 		{
 			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
 			
 			leaveAppModel.setRequestNo(leaveRequest.getRequestNo());
-			leaveAppModel.setApproverAction(leaveRequest.getApprove().getApproverAction());
-			leaveAppModel.setApproverRemark(leaveRequest.getApprove().getApproverRemark());
+			if(null != _approverAction)
+			{
+				leaveAppModel.setApproverAction(_approverAction);
+				
+			}
+			else
+			{
+				leaveAppModel.setApproverAction(leaveRequest.getApprove().getApproverAction());
+				leaveAppModel.setApproverRemark(leaveRequest.getApprove().getApproverRemark());
+			}
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
 		List<DelegatedEmp>	delegatedEmps	=	leaveAppServiceDao.getDelegations(requestNo, locale);
@@ -378,9 +416,11 @@ public class LeaveAppControllerMain
 		model.addAttribute("constActionReject", Constants.CONST_LEAVE_ACTION_REJECT);	
 		model.addAttribute("leaveHistory", leaveAppServiceDao.getLeaveRequestHistory(requestNo, locale));
 		model.addAttribute("appHistory", leaveAppServiceDao.getLeaveApproveHistory(requestNo, locale));
-		
 		return Constants.PAGE_LEAVE_APPROVE_FORM;
 	}
+
+	
+	
 	
 	/**
 	 * 
@@ -408,15 +448,26 @@ public class LeaveAppControllerMain
 			)
 	{
 		Employee	employee	=	(Employee)request.getPortletSession().getAttribute("employee");
-		int resultApprove = leaveAppServiceDao.setLeaveApprove(leaveAppModel, employee);
-		if(resultApprove == 0)
+		
+		new LeaveAppValidatorApprove().validate(leaveAppModel, result);
+		if (result.hasErrors())
 		{
-			response.setRenderParameter(
-										Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, 
-										UtilProperty.getMessage("error.prop.leave.app.update.blocked", null, locale
-							));
+			response.setRenderParameter("reqNo", leaveAppModel.getRequestNo());
+			response.setRenderParameter("_approverAction", leaveAppModel.getApproverAction());
+			response.setRenderParameter("action", "leaveApprove2");
 		}
-		response.setRenderParameter("action", "backToMain");
+		else
+		{
+			int resultApprove = leaveAppServiceDao.setLeaveApprove(leaveAppModel, employee);
+			if(resultApprove == 0)
+			{
+				response.setRenderParameter(
+											Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, 
+											UtilProperty.getMessage("error.prop.leave.app.update.blocked", null, locale
+								));
+			}
+			response.setRenderParameter("action", "backToMain");
+		}
 	}
 	
 	/**

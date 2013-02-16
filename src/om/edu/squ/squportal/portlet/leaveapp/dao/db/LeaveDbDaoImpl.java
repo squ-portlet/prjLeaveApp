@@ -494,13 +494,12 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 											new SqlParameter(Constants.CONST_PROC_COL_IN_P_LEAVE_FLAG, Types.VARCHAR),
 											new SqlParameter(Constants.CONST_PROC_COL_IN_P_LEAVE_START, Types.DATE),
 											new SqlParameter(Constants.CONST_PROC_COL_IN_P_LEAVE_END, Types.DATE),
+											new SqlParameter(Constants.CONST_PROC_COL_IN_P_LEAVE_REQ_NO, Types.VARCHAR),
+											new SqlParameter(Constants.CONST_PROC_COL_IN_P_SUGGESTED_APP_EMP_CODE, Types.VARCHAR),
 											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN, Types.VARCHAR),
 											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_LEAVE_CODE, Types.VARCHAR),
 											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_MSG_ENGLISH, Types.VARCHAR),
-											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_MSG_ARABIC, Types.VARCHAR),
-											new SqlOutParameter(Constants.CONST_PROC_COL_IN_P_LEAVE_REQ_NO, Types.VARCHAR),
-											new SqlOutParameter(Constants.CONST_PROC_COL_IN_P_SUGGESTED_APP_EMP_CODE, Types.VARCHAR)
-											
+											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_MSG_ARABIC, Types.VARCHAR)
 										);
 
 		Map<String,Object> 	paramIn				=	new HashMap<String, Object>();
@@ -511,7 +510,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					paramIn.put(Constants.CONST_PROC_COL_IN_P_LEAVE_REQ_NO, leaveRequest.getRequestNo());
 					paramIn.put(Constants.CONST_PROC_COL_IN_P_SUGGESTED_APP_EMP_CODE, leaveRequest.getSuggestedHod());
 
-
+					logger.info("result (param): "+paramIn);
 		resultProc			=	simpleJdbcCall.execute(paramIn);
 		logger.info("result(map): "+resultProc);
 		AllowEleaveRequestProc	requestProc		=	new AllowEleaveRequestProc();
@@ -615,8 +614,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				hod.setHodId(rs.getString(Constants.CONST_EMP_CODE));
 				hod.setHodName(
 						rs.getString(Constants.CONST_EMP_NAME)
-						+"<br>"+UtilProperty.getMessage("prop.leave.app.department.head", null)
-						+" "+UtilProperty.getMessage("prop.leave.app.level.no", new String[]{rs.getString(Constants.CONST_EMP_LEVEL)})
+//						+"<br>"+UtilProperty.getMessage("prop.leave.app.department.head", null)
+//						+" "+UtilProperty.getMessage("prop.leave.app.level.no", new String[]{rs.getString(Constants.CONST_EMP_LEVEL)})
 							);
 				return hod;
 			}
@@ -663,8 +662,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				HoD		hod		=	new HoD();
 						hod.setHodId(rs.getString(Constants.CONST_EMP_CODE));
 						hod.setHodName(rs.getString(Constants.CONST_EMP_NAME)
-								+"<br> "+UtilProperty.getMessage("prop.leave.app.section.head", null)
-								+" "+UtilProperty.getMessage("prop.leave.app.level.no", new String[]{rs.getString(Constants.CONST_EMP_LEVEL)})
+//								+"<br> "+UtilProperty.getMessage("prop.leave.app.section.head", null)
+//								+" "+UtilProperty.getMessage("prop.leave.app.level.no", new String[]{rs.getString(Constants.CONST_EMP_LEVEL)})
 								);
 				return hod;		
 				
@@ -712,8 +711,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				HoD		hod		=	new HoD();
 				hod.setHodId(rs.getString(Constants.CONST_EMP_CODE));
 				hod.setHodName(rs.getString(Constants.CONST_EMP_NAME)
-						+ "<br> " +UtilProperty.getMessage("prop.leave.app.higher.head", null)
-						+" "+UtilProperty.getMessage("prop.leave.app.level.no", new String[]{rs.getString(Constants.CONST_EMP_LEVEL)})
+//						+ "<br> " +UtilProperty.getMessage("prop.leave.app.higher.head", null)
+//						+" "+UtilProperty.getMessage("prop.leave.app.level.no", new String[]{rs.getString(Constants.CONST_EMP_LEVEL)})
 				);
 
 				return hod;
@@ -885,15 +884,18 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			this.emailData.setApproverName(approverName4Email);																	  
 			this.emailData.setApproverEmail(empApprover4Email.getEmpInternetId()+"@squ.edu.om");									  
 			this.emailData.setMailTo(emp.getEmpInternetId()+"@squ.edu.om");													  
-			this.emailData.setEmailTemplateName(Constants.TEMPL_DIR_RETURN+Constants.TEMPL_LEAVE_APP_RETURN_UPDATE_REQUESTER); 
+			this.emailData.setEmailTemplateName(Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP); 
+			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null, locale));
 			this.leaveEmail		=	new MailProcess();																		  
 			this.leaveEmail.setLeaveEmail(emailData);																	  	  
 			/***************** SENDING E-MAIL TO APPROVER *****************/											  
 
 			//TODO replace with approver email id																		  
 			//emailData.setMailTo(empApprover.getEmpInternetId()+"@squ.edu.om");										  
-			this.emailData.setMailTo("bhabesh@squ.edu.om");																	  
-			this.emailData.setEmailTemplateName(Constants.TEMPL_DIR_RETURN+Constants.TEMPL_LEAVE_APP_RETURN_UPDATE_APPROVER);  
+			this.emailData.setMailTo("bhabesh@squ.edu.om");	
+			this.emailData.setEmailReceiverName(approverName4Email);
+			this.emailData.setEmailTemplateName(Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP);  
+			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null, locale));
 			this.leaveEmail		=	new MailProcess();																		  
 			this.leaveEmail.setLeaveEmail(emailData);																	  	  
 			/**************************************************************************************************************/

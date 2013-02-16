@@ -798,12 +798,21 @@ public interface Constants
 																			"		VHM_SUGGESTED_APP_EMP_CODE= :paramHodId,				" +
 																			"		VHM_STATUS_CODE  	= :paramLeaveStatus					" +
 																			"	WHERE VHM_LEAVE_REQ_NO 	= :paramReqNo						" +
-																			"	  AND VHM_STATUS_CODE  	= :paramCompLeaveStatus					";
+																			"	  AND VHM_STATUS_CODE  	= :paramCompLeaveStatus				" +
+																			"	AND (														" +
+																			"			VHM_STATUS_CODE		!='" + CONST_LEAVE_STATUS_APPROVED +"'" +	
+																			" 	AND		VHM_STATUS_CODE		!='" + CONST_LEAVE_STATUS_REJECTED +"'" +
+																			"		) 														";
+
 	
 	public static final String	SQL_CANCEL_LEAVE_REQUEST		=			"	UPDATE  VHM_EMP_LEAVE_REQUEST								" +
-																			"	SET VHM_STATUS_CODE = " +CONST_LEAVE_STATUS_CANCEL			  +
+																			"	SET VHM_STATUS_CODE = '" +CONST_LEAVE_STATUS_CANCEL + "'    " +
 																			" 	WHERE VHM_LEAVE_REQ_NO = :paramReqNo						" +
-																			"	AND VHM_STATUS_CODE  	= :paramCompLeaveStatus				";
+																			"	AND VHM_STATUS_CODE  	= :paramCompLeaveStatus				" +
+																			"	AND (														" +
+																			"			VHM_STATUS_CODE		!='" + CONST_LEAVE_STATUS_APPROVED +"'" +	
+																			" 	AND		VHM_STATUS_CODE		!='" + CONST_LEAVE_STATUS_REJECTED +"'" +
+																			"		) 														";
 	
 	public static final String	SQL_VIEW_LEAVE_REQ_DELEGATION	=			" SELECT														" + 
 																			"  REQ_DELG.VHM_LEAVE_REQ_NO AS LEAVE_REQUEST_NO,				" +
@@ -916,17 +925,17 @@ public interface Constants
 	public static final String	SQL_DELETE_LEAVE_REQ_SPECIFIC	 =			"	DELETE FROM VHM_EMP_LEAVE_REQUEST 							" +
 																			"   WHERE  VHM_LEAVE_REQ_NO = :paramEmpNo 						" +
 																			"	AND (														" +
-																			"		VHM_STATUS_CODE != " +CONST_LEAVE_STATUS_APPROVED +" OR	" +
-																			"		VHM_STATUS_CODE != " +CONST_LEAVE_STATUS_REJECTED +" OR	" +
-																			"       VHM_STATUS_CODE != " +CONST_LEAVE_STATUS_FURTHER_CLARIFICATION +
+																			"		VHM_STATUS_CODE != '" +CONST_LEAVE_STATUS_APPROVED +"' OR			" +
+																			"		VHM_STATUS_CODE != '" +CONST_LEAVE_STATUS_REJECTED +"' OR			" +
+																			"       VHM_STATUS_CODE != '" +CONST_LEAVE_STATUS_FURTHER_CLARIFICATION +"' " +
 																			" 		)														";
 																						
 	public static final String	SQL_DELETE_LEAVE_APPROVAL_SPECIFIC =		" 	DELETE FROM VHM_EMP_LEAVE_REQUEST_APPROVAL					" +
 																			"	WHERE VHM_LEAVE_REQ_NO = :paramEmpNo						" +
 																			"	AND (" +
-																			"		VHM_ACTION_CODE != " + CONST_LEAVE_ACTION_APPROVE + " OR " +
-																			"   	VHM_ACTION_CODE != " + CONST_LEAVE_ACTION_RETURN + " OR  " +
-																			" 		VHM_ACTION_CODE != " + CONST_LEAVE_ACTION_REJECT		   +
+																			"		VHM_ACTION_CODE != '" + CONST_LEAVE_ACTION_APPROVE + "' OR " +
+																			"   	VHM_ACTION_CODE != '" + CONST_LEAVE_ACTION_RETURN + "' OR  " +
+																			" 		VHM_ACTION_CODE != '" + CONST_LEAVE_ACTION_REJECT + "'     " +
 																			"		)";			
 	
 	public static final String	SQL_DELETE_LEAVE_DELEGATION_SPECIFIC =		"	DELETE FROM VHM_EMP_LEAVE_REQ_DELEGATION					" +
@@ -935,9 +944,9 @@ public interface Constants
 	public static final String	SQL_DELETE_LEAVE_WORKFLOW_LOG_SPECIFIC =	"	DELETE FROM VHM_WORKFLOW_STATUS_LOG							  " +
 																			" 	WHERE	VHM_LEAVE_REQ_NO = :paramEmpNo						  " +
 																			"	AND (														  " +
-																			"		VHM_STATUS_CODE != " +CONST_LEAVE_STATUS_APPROVED +" OR	  " +
-																			"		VHM_STATUS_CODE != " +CONST_LEAVE_STATUS_REJECTED +" OR	  " +
-																			"       VHM_STATUS_CODE != " +CONST_LEAVE_STATUS_FURTHER_CLARIFICATION +
+																			"		VHM_STATUS_CODE != '" +CONST_LEAVE_STATUS_APPROVED +"' OR	  		" +
+																			"		VHM_STATUS_CODE != '" +CONST_LEAVE_STATUS_REJECTED +"' OR	  		" +
+																			"       VHM_STATUS_CODE != '" +CONST_LEAVE_STATUS_FURTHER_CLARIFICATION +"' " +
 																			" 		)														  "; 
 																			
 	
