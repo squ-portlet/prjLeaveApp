@@ -84,12 +84,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	private	JdbcTemplate					jdbcTemplate;	
 	private	NamedParameterJdbcTemplate 		namedParameterJdbcTemplate;
 	private SimpleJdbcCall 					simpleJdbcCall;
-	
-	//EmailData			emailData			= 	new EmailData();												  //
-	//String				approverName4Email	=	null;															  //
-	//Employee			empApprover4Email	=	null;															  //
-	//List<LeaveApprove> 	approves4Email		=	null; 															  //
-	//MailProcess			leaveEmail			=	null;															  //
+
 	
 	/**
 	 * 
@@ -1132,6 +1127,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveRequest.setLeaveTypeFlag(leaveTypeFlag);
 					leaveRequest.setLeaveRequestRemarks(rs.getString(Constants.CONST_LEAVE_REQ_REMARK));
 						employee.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
+						employee.setEmpName(rs.getString(Constants.CONST_EMP_NAME));
+						employee.setEmpInternetId(rs.getString(Constants.CONST_EMP_INTERNET_ID));
+						employee.setEmpSquEmail(rs.getString(Constants.CONST_EMP_EMAIL_ID));
 							if(null!= rs.getString(Constants.CONST_EMP_ADMIN) &&  
 									rs.getString(Constants.CONST_EMP_ADMIN).equalsIgnoreCase
 									(Constants.CONST_LEAVE_REQ_ACTIVE_TRUE)

@@ -630,11 +630,11 @@ public interface Constants
 																			"	LVREQ.VHM_LEAVE_REQ_NO AS LEAVE_REQUEST_NO,				" +
 																			"	TO_CHAR(LVREQ.VHM_LEAVE_REQ_DATE,'DD/MM/YYYY') 			" +
 																			"									AS LEAVE_REQ_DATE,		" +
-																			"	LVREQ.VHM_STATUS_CODE AS LEAVE_STATUS_CODE,		" +
+																			"	LVREQ.VHM_STATUS_CODE AS LEAVE_STATUS_CODE,				" +
 																			"	DECODE													" +
 																			"	  (:paramLocale,										" +
-																			"	      'en',InitCap(LVSTAT.VHM_STATUS_DESC),		" +
-																			"	      'ar',LVSTAT.VHM_STATUS_DESC_ARABIC			" +
+																			"	      'en',InitCap(LVSTAT.VHM_STATUS_DESC),				" +
+																			"	      'ar',LVSTAT.VHM_STATUS_DESC_ARABIC				" +
 																			"	  ) AS LEAVE_STATUS,									" +
 																			"	TO_CHAR(LVREQ.VHM_LEAVE_START_DATE,'DD/MM/YYYY') 		" +
 																			"									AS LEAVE_START_DATE,	" +
@@ -649,6 +649,14 @@ public interface Constants
 																			"	   ) AS LEAVE_DESC,										" +
 																			"	LVREQ.VHM_LEAVE_REQUEST_REMARKS AS LEAVE_REQ_REMARK,	" +
 																			"	LVREQ.VHM_EMP_CODE AS EMP_CODE,							" +
+																			"  DECODE(:paramLocale,                          			" +		
+																			"            'en',initCap(EMP.VHM_EMP_NAME),   				" +       	
+																			"			 'ar',EMP.VHM_EMP_NAME_ARABIC) AS EMP_NAME,		" +
+																			"	EMP.VHM_EMP_SQU_EMAIL AS EMP_MAIL_ID,					" +
+																			"  SUBSTR(													" +
+																			"			EMP.VHM_EMP_SQU_EMAIL,1,						" +
+																			"			INSTRB(EMP.VHM_EMP_SQU_EMAIL, '@', 1, 1)-1		" +
+																			"		  ) AS EMP_INTERNET_ID,								" +
 																			"	LVREQ.VHM_ADMIN_HOLDING_YN AS EMP_ADMIN,				" +
 																			"	LVREQ.VHM_DEPT_CODE AS EMP_DEPARTMENT_CODE,				" +
 																			"	DECODE 													" +
@@ -656,7 +664,7 @@ public interface Constants
 																			"	   'en',INITCAP(DEPT.VHM_DEPT_NAME),					" +
 																			"	   'ar',DEPT.VHM_DEPT_NAME_ARA							" +
 																			"	  ) AS EMP_DEPARTMENT,									" +
-																			"	LVREQ.VHM_POSITION_CODE AS EMP_ADDITIONAL_POSITION_CODE,								" +
+																			"	LVREQ.VHM_POSITION_CODE AS EMP_ADDITIONAL_POSITION_CODE, " +
 																			"	DECODE													" +
 																			"	  (:paramLocale,										" +
 																			"	   'en',INITCAP(DESIG.VHM_DESG_DESC),					" +
@@ -718,15 +726,15 @@ public interface Constants
 																			"	      :paramLocale,												" +
 																			"	      'en',initcap(EMP.VHM_EMP_NAME),					" +
 																			"	      'ar',EMP.VHM_EMP_NAME_ARABIC						" +
-																			"	      ) AS EMP_NAME,									" +
+																			"	      ) AS EMP_NAME,									" + 
 																			"  SUBSTR(													" +
-																			"			VHM_EMP_SQU_EMAIL,1,							" +
-																			"			INSTRB(VHM_EMP_SQU_EMAIL, '@', 1, 1)-1			" +
+																			"			EMP.VHM_EMP_SQU_EMAIL,1,						" +
+																			"			INSTRB(EMP.VHM_EMP_SQU_EMAIL, '@', 1, 1)-1		" +
 																			"		  ) AS EMP_INTERNET_ID,								" +
 																			"	TO_CHAR(VHM_APP_ACTION_DATE,'dd-mm-yyyy hh:mi AM') AS ACTION_DATE, " +
 																			"	APP.VHM_ACTION_CODE AS ACTION_CODE,						" +
 																			"	DECODE( 												" +
-																			"	  :paramLocale,													" +
+																			"	  :paramLocale,											" +
 																			"	  'en',initCap(VHM_ACTION_DESC),						" +
 																			"	  'ar',VHM_ACTION_DESC_ARABIC							" +
 																			"	) AS ACTION_DESC,										" +

@@ -13,7 +13,7 @@ requester : :paramRequester <br>
 Requester Email: :paramEmailRequester <br><br>
 
 approver : :paramApprover <br>
-Approver Email : paramEmailApprover <br><br>
+Approver Email : :paramEmailApprover <br><br>
 
 Requester Remark : :paramReqRemark <br><br>
 
