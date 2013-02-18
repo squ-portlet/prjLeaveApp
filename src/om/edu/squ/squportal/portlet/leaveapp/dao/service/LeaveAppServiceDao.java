@@ -361,16 +361,4 @@ public interface LeaveAppServiceDao
 	 */
 	public String removeLeaveRequest(String requestNo,Locale locale);
 	
-	/**
-	 * 
-	 * method name  : setLeaveEmail
-	 * @param emailData
-	 * LeaveAppServiceDaoImpl
-	 * return type  : void
-	 * 
-	 * purpose		:
-	 *
-	 * Date    		:	Jan 21, 2013 2:56:14 PM
-	 */
-	public void setLeaveEmail(EmailData emailData);
 }

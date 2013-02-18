@@ -40,6 +40,7 @@ public class Employee implements Serializable
 	private static final long	serialVersionUID	= 1L;
 	private String	empNumber;
 	private	String	empInternetId;
+	private	String	empSquEmail;
 	private	String	empName;
 	private	String	designationCode;
 	private	String	designation;
@@ -123,6 +124,28 @@ public class Employee implements Serializable
 	{
 		this.empInternetId = empInternetId;
 	}
+	/**
+	 * Getter Method	: getEmpSquEmail
+	 * @return the empSquEmail
+	 * 
+	 * Date				: Feb 17, 2013
+	 */
+	public String getEmpSquEmail()
+	{
+		return this.empSquEmail;
+	}
+
+	/**
+	 * Setter method : setEmpSquEmail
+	 * @param empSquEmail the empSquEmail to set
+	 * 
+	 * Date          : Feb 17, 2013 3:10:49 PM
+	 */
+	public void setEmpSquEmail(String empSquEmail)
+	{
+		this.empSquEmail = empSquEmail;
+	}
+
 	/**
 	 * Getter Method	: getEmpName
 	 * @return the empName

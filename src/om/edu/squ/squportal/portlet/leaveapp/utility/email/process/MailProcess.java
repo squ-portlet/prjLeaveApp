@@ -27,7 +27,7 @@
  *
  * 
  */
-package om.edu.squ.squportal.portlet.leaveapp.utility.email;
+package om.edu.squ.squportal.portlet.leaveapp.utility.email.process;
 
 /**
  * @author Bhabesh
@@ -76,8 +76,9 @@ import org.springframework.web.multipart.MultipartFile;
 			 *
 			 * Date    		:	Jan 21, 2013 2:56:14 PM
 			 */
-			public void setLeaveEmail(EmailData emailData)
+			public boolean setLeaveEmail(EmailData emailData)
 			{
+				boolean result	=	false; 
 				String emailBody	=	new UtilFile().readFile(emailData.getEmailTemplateName());
 				
 				/**
@@ -225,13 +226,17 @@ import org.springframework.web.multipart.MultipartFile;
 								Constants.MAIL_SUBJECT+Constants.MAIL_REQUEST_NO+emailData.getRequestNo(), 
 								emailBody, 
 								null);
+						result	=	true;
 					}
 				}
 				catch (Exception ex)
 				{
 					// TODO Auto-generated catch block
 					ex.printStackTrace();
+					result	=	false;
 				}
+				
+				return result;
 			}
 
 		    

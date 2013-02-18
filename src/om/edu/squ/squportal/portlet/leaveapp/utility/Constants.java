@@ -39,6 +39,7 @@ public interface Constants
 	
 	public static final	String	CONST_EMP_CODE					=			"EMP_CODE";
 	public static final	String	CONST_EMP_INTERNET_ID			=			"EMP_INTERNET_ID";
+	public static final	String	CONST_EMP_EMAIL_ID				=			"EMP_MAIL_ID";
 	public static final	String	CONST_EMP_NAME					=			"EMP_NAME";
 	public static final	String	CONST_EMP_JOB_TYPE_CODE			=			"EMP_JOB_TYPE_CODE";
 	public static final	String	CONST_EMP_DESIGNATION_CODE		=			"EMP_DESIGNATION_CODE";
@@ -217,12 +218,12 @@ public interface Constants
 	
 	/************* EMAIL TEMPLATE***************************/
 	public	static	String	TEMPL_LEAVE_APP						=			"tmplateLeaveAppEmail.txt";
-	public	static	String	TEMPL_LEAVE_APP_NEW_REQUESTER		=			"tmpLeaveAppNewRequester.txt";
-	public	static	String	TEMPL_LEAVE_APP_NEW_APPROVER		=			"tmpLeaveAppNewApprover.txt";
-	
-	
-	public	static	String	TEMPL_LEAVE_APP_RETURN_UPDATE_REQUESTER		=	"tmpLeaveAppReturnUpdateRequester.txt";
-	public	static	String	TEMPL_LEAVE_APP_RETURN_UPDATE_APPROVER		=	"tmpLeaveAppReturnUpdateApprover.txt";
+//	public	static	String	TEMPL_LEAVE_APP_NEW_REQUESTER		=			"tmpLeaveAppNewRequester.txt";
+//	public	static	String	TEMPL_LEAVE_APP_NEW_APPROVER		=			"tmpLeaveAppNewApprover.txt";
+//	
+//	
+//	public	static	String	TEMPL_LEAVE_APP_RETURN_UPDATE_REQUESTER		=	"tmpLeaveAppReturnUpdateRequester.txt";
+//	public	static	String	TEMPL_LEAVE_APP_RETURN_UPDATE_APPROVER		=	"tmpLeaveAppReturnUpdateApprover.txt";
 	
 	/******************************************************/
 	
@@ -262,6 +263,7 @@ public interface Constants
 																			"			VHM_EMP_SQU_EMAIL,1,													" +
 																			"			INSTRB(VHM_EMP_SQU_EMAIL, '@', 1, 1)-1									" +
 																			"		  ) AS EMP_INTERNET_ID,														" +
+																			"  VHM_EMP_SQU_EMAIL AS EMP_MAIL_ID,												" +
 																			"  DECODE(:paramLocale,                          									" +		
 																			"            'en',initCap(EMP.VHM_EMP_NAME),   										" +       	
 																			"			 'ar',EMP.VHM_EMP_NAME_ARABIC) AS EMP_NAME,								" +

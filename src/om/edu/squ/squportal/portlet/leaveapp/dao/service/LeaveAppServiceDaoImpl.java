@@ -50,7 +50,9 @@ import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilFile;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
-import om.edu.squ.squportal.portlet.leaveapp.utility.email.MailProcess;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailCancel;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailLeave;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.process.MailProcess;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -209,10 +211,25 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		{
 			leaveType.setTypeNo(allowEleaveRequestProc.getLeaveCode());
 			leaveRequest.setLeaveType(leaveType);
-			int result = leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps(), locale);
-			if (result == 0)
+			if(null != leaveAppModel.getDelegatedEmps())
 			{
-				allowEleaveRequestProc.setLeaveMessage(UtilProperty.getMessage("error.prop.leave.app.update.blocked", null, locale));
+				DelegatedEmp[] delegatedEmps	=	leaveAppModel.getDelegatedEmps();
+				for(DelegatedEmp delEmp: delegatedEmps)
+				{
+					if(!(null == delEmp.getEmpNumber() || delEmp.getEmpNumber().trim().equals("")) && 
+							!(null == delEmp.getFromDate() || delEmp.getFromDate().trim().equals("")) &&
+							!(null == delEmp.getToDate() || delEmp.getToDate().trim().equals(""))
+					)
+						{
+							delEmp.setEmpName(leaveDbDao.getEmployee(delEmp.getEmpNumber(), locale).getEmpName());
+						}
+				}
+				leaveAppModel.setDelegatedEmps(delegatedEmps);
+			int result = leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps(), locale);
+				if (result == 0)
+				{
+					allowEleaveRequestProc.setLeaveMessage(UtilProperty.getMessage("error.prop.leave.app.update.blocked", null, locale));
+				}
 			}
 		}
 		
@@ -517,11 +534,21 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 */
 	public String cancelLeaveRequest(String requestNo, Locale locale)
 	{
-		String message	=	null;
+		String 			message			=	null;
+		LeaveRequest	leaveRequest	=	null;
+		LeaveApprove	leaveApprove	=	null;
 		int result = leaveDbDao.cancelLeaveRequest(requestNo);
 		if(result != 0)
 		{
-			message	=	UtilProperty.getMessage("prop.leave.app.cancel.request.success", new String []{requestNo}, locale);
+						message			=	UtilProperty.getMessage("prop.leave.app.cancel.request.success", new String []{requestNo}, locale);
+						leaveRequest 	= leaveDbDao.getLeaveRequest(requestNo, locale);
+						leaveApprove	=	leaveDbDao.getLeaveApproveHistory(requestNo, locale).get(0);
+						logger.info("Leave request for cancel : "+leaveRequest.toString());
+			/* Sending email */
+			EmailLeave	emailLeave		=	new EmailCancel(leaveRequest, leaveApprove, locale);
+						emailLeave.sendRequesterEmail();
+						emailLeave.sendApproverEmail();
+			
 		}
 		else
 		{
@@ -530,124 +557,6 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		}
 		
 		return message;
-	}
-	
-	/**
-	 * 
-	 * method name  : setLeaveEmail
-	 * @param emailData
-	 * LeaveAppServiceDaoImpl
-	 * return type  : void
-	 * 
-	 * purpose		: process email template and send e-mail
-	 *
-	 * Date    		:	Jan 21, 2013 2:56:14 PM
-	 */
-	public void setLeaveEmail(EmailData emailData)
-	{
-		String emailBody	=	new UtilFile().readFile(emailData.getEmailTemplateName());
-		
-		/**
-		 * Request No
-		 */
-		if(emailBody.contains(Constants.TEMPL_PARAM_REQUEST_NO))
-		{
-			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUEST_NO, emailData.getRequestNo());
-		}
-		/**
-		 * Requester Name
-		 */
-		if(emailBody.contains(Constants.TEMPL_PARAM_REQUESTER_NAME))
-		{
-			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUESTER_NAME, emailData.getRequesterName());
-		}
-		/**
-		 * Request Date
-		 */
-		if(emailBody.contains(Constants.TEMPL_PARAM_REQUEST_DATE))
-		{
-			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUEST_DATE, emailData.getRequestDate());
-		}
-		/**
-		 * Request Start Date
-		 */
-		if(emailBody.contains(Constants.TEMPL_PARAM_REQUEST_START_DATE))
-		{
-			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUEST_START_DATE, emailData.getRequestStartDate());
-		}
-		/**
-		 * Request End Date
-		 */
-		if(emailBody.contains(Constants.TEMPL_PARAM_REQUEST_END_DATE))
-		{
-			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUEST_END_DATE, emailData.getRequestEndDate());
-		}
-		/**
-		 * Requester Remark
-		 */
-		if(emailBody.contains(Constants.TEMPL_PARAM_REQUESTER_REMARK))
-		{
-			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUESTER_REMARK, emailData.getRequesterRemark());
-		}
-		/**
-		 *  Delegate Name
-		 */
-		if(emailBody.contains(Constants.TEMPL_PARAM_DELEGATE_NAME))
-		{
-			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_DELEGATE_NAME, emailData.getDelegateName());
-		}
-		/**
-		 * Delegate Start Date
-		 */
-		if(emailBody.contains(Constants.TEMPL_PARAM_DELEGATE_START_DATE))
-		{
-			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_DELEGATE_START_DATE, emailData.getDelegationStartDate());
-		}
-		/**
-		 * Delegate End Date
-		 */
-		if(emailBody.contains(Constants.TEMPL_PARAM_DELEGATE_END_DATE))
-		{
-			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_DELEGATE_END_DATE, emailData.getDelegationEndDate());
-		}
-		/**
-		 * Approver Name
-		 */
-		if(emailBody.contains(Constants.TEMPL_PARAM_APPROVER_NAME))
-		{
-			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVER_NAME, emailData.getApproverName());
-		}
-		/**
-		 * Approve Date
-		 */
-		if(emailBody.contains(Constants.TEMPL_PARAM_APPROVE_DATE))
-		{
-			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVE_DATE, emailData.getApproveDate());
-		}
-		/**
-		 * Approver Remark
-		 */
-		if(emailBody.contains(Constants.TEMPL_PARAM_APPROVER_REMARK))
-		{
-			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVER_REMARK, emailData.getApproveDate());
-		}
-		/**
-		 * Leave URL
-		 */
-		if(emailBody.contains(Constants.TEMPL_PARAM_LEAVE_URL))
-		{
-			emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_LEAVE_URL, emailData.getLeaveUrl());
-		}
-		
-		try
-		{
-			new MailProcess().sendMail(null, new String[]{emailData.getMailTo()}, null, "test", emailBody, null);
-		}
-		catch (Exception ex)
-		{
-			// TODO Auto-generated catch block
-			ex.printStackTrace();
-		}
 	}
 
 }

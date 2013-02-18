@@ -25,7 +25,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *
- * .
+ * 
  */
 package om.edu.squ.squportal.portlet.leaveapp.dao.db;
 
@@ -60,7 +60,9 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
 import om.edu.squ.squportal.portlet.leaveapp.exception.DbNotAvailableException;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
-import om.edu.squ.squportal.portlet.leaveapp.utility.email.MailProcess;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailLeave;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailGeneral;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.process.MailProcess;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,11 +85,11 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	private	NamedParameterJdbcTemplate 		namedParameterJdbcTemplate;
 	private SimpleJdbcCall 					simpleJdbcCall;
 	
-	EmailData			emailData			= 	new EmailData();												  //
-	String				approverName4Email	=	null;															  //
-	Employee			empApprover4Email	=	null;															  //
-	List<LeaveApprove> 	approves4Email		=	null; 															  //
-	MailProcess			leaveEmail			=	null;															  //
+	//EmailData			emailData			= 	new EmailData();												  //
+	//String				approverName4Email	=	null;															  //
+	//Employee			empApprover4Email	=	null;															  //
+	//List<LeaveApprove> 	approves4Email		=	null; 															  //
+	//MailProcess			leaveEmail			=	null;															  //
 	
 	/**
 	 * 
@@ -253,6 +255,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				Employee	employee	=	new Employee();
 				employee.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
 				employee.setEmpInternetId(rs.getString(Constants.CONST_EMP_INTERNET_ID));
+				employee.setEmpSquEmail(rs.getString(Constants.CONST_EMP_EMAIL_ID));
 				employee.setEmpName(rs.getString(Constants.CONST_EMP_NAME));
 				employee.setJobTypeCode(rs.getString(Constants.CONST_EMP_JOB_TYPE_CODE));
 				employee.setDesignationCode(rs.getString(Constants.CONST_EMP_DESIGNATION_CODE));
@@ -747,6 +750,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	@Transactional("trLeaveReq")
 	public synchronized int setNewLeaveRequest(LeaveRequest leaveRequest, DelegatedEmp[] delegatedEmps, Locale locale )
 	{
+		EmailLeave	emailLeave				=	null;
+		EmailGeneral	emailGeneral				=	null;
 		int			result					=	0;
 		String		leaveRequestNo			=	null;
 		if (
@@ -805,62 +810,34 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		logger.info("request insert statement :" +Constants.SQL_INSERT_LEAVE_REQUEST);
 		logger.info("request insert param :" +namedParameters);
 		
-		//TODO sent email
-		/********************************************************** EMAIL OPERATION ***********************************/
-		this.emailData.setRequestNo(leaveRequestNo);																		  //
-		this.emailData.setEmailReceiverName(emp.getEmpName());
-		this.emailData.setRequesterName(emp.getEmpName());																  //
-		this.emailData.setRequesterEmail(emp.getEmpInternetId()+"@squ.edu.om");											  //
-		this.emailData.setRequestStartDate(leaveRequest.getLeaveStartDate());											  //
-		this.emailData.setRequestEndDate(leaveRequest.getLeaveEndDate());												  //
-		this.emailData.setRequesterRemark(leaveRequest.getLeaveRequestRemarks());										  //
-
-		this.emailData.setLeaveUrl(Constants.LEAVE_URL);																	  //
-		/**************************************************************************************************************/
+		
 		if(
 			null == leaveRequest.getRequestNo() || 
 		   leaveRequest.getRequestNo().trim().equals("") || 
 		   leaveRequest.getRequestNo().trim().equals(Constants.CONST_NOT_AVAILABLE))
 		{
 			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQUEST, namedParameters);
-			
 
-			/***************** SENDING E-MAIL TO REQUESTER *****************/
-			this.approves4Email		=	getLeaveApproveHistory(leaveRequestNo, locale);											 
-			this.empApprover4Email		=	approves4Email.get(0).getEmployee();															  
-			this.approverName4Email		=	empApprover4Email.getEmpName();																  
-			this.emailData.setApproverName(approverName4Email);																	  
-			this.emailData.setApproverEmail(empApprover4Email.getEmpInternetId()+"@squ.edu.om");									  
-			this.emailData.setMailTo(emp.getEmpInternetId()+"@squ.edu.om");													  
-			this.emailData.setEmailTemplateName(Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP);			  
-			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester",null, locale));
-			this.emailData.setDelegationAvilable(" ");
-			this.emailData.setDelegationDetails(" ");
+			/***************** SENDING E-MAIL TO REQUESTER & APPROVER  FOR NEW LEAVE REQUEST*****************/
 
-			this.leaveEmail		=	new MailProcess();																		  
-			this.leaveEmail.setLeaveEmail(emailData);																	  	  
-																														  
-			/***************** SENDING E-MAIL TO APPROVER *****************/											  
-			//TODO replace with approver email id																		  
-			//emailData.setMailTo(empApprover.getEmpInternetId()+"@squ.edu.om");										  
-			this.emailData.setMailTo("bhabesh@squ.edu.om");						
-			this.emailData.setEmailReceiverName(approverName4Email);
-			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver",null, locale));
-			this.emailData.setDelegationAvilable(" ");
-			this.emailData.setDelegationDetails(" ");
-			/**************************************************************************************************************/
+					emailGeneral	=	new	EmailGeneral
+									(
+											leaveRequestNo,
+											leaveRequest, 
+											getLeaveApproveHistory(leaveRequestNo, locale).get(0), 
+											delegatedEmps, locale
+									);
+					emailLeave	=	emailGeneral;
+		
+					emailLeave.sendRequesterEmail();
+					emailLeave.sendApproverEmail();
+			/**************************************************************/			
 			
 			if(null != delegatedEmps)
 			{
-				setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps,emp.getEmpNumber(),locale,Constants.CONST_OPERATION_ADD);
-
+				setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps,emp.getEmpNumber(),locale,Constants.CONST_OPERATION_ADD,emailLeave);
 			}
 			
-			System.out.println("EMAIL DATA : "+emailData.getDelegationDetails());
-			
-			this.leaveEmail		=	new MailProcess();																		  
-			this.leaveEmail.setLeaveEmail(emailData);																	  	  
-			/**************************************************************/
 		}
 		else
 		{
@@ -876,28 +853,20 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			
 			logger.info("leaveUpdate : "+result);
 			logger.info("leaveUpdate parameter : "+namedParameters);
-			/**************************************************************************************************************/
-			/***************** SENDING E-MAIL TO REQUESTER *****************/
-			this.approves4Email		=	getLeaveApproveHistory(leaveRequestNo, locale);											  
-			this.empApprover4Email		=	approves4Email.get(0).getEmployee();															  
-			this.approverName4Email	=	empApprover4Email.getEmpName();																  
-			this.emailData.setApproverName(approverName4Email);																	  
-			this.emailData.setApproverEmail(empApprover4Email.getEmpInternetId()+"@squ.edu.om");									  
-			this.emailData.setMailTo(emp.getEmpInternetId()+"@squ.edu.om");													  
-			this.emailData.setEmailTemplateName(Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP); 
-			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null, locale));
-			this.leaveEmail		=	new MailProcess();																		  
-			this.leaveEmail.setLeaveEmail(emailData);																	  	  
-			/***************** SENDING E-MAIL TO APPROVER *****************/											  
 
-			//TODO replace with approver email id																		  
-			//emailData.setMailTo(empApprover.getEmpInternetId()+"@squ.edu.om");										  
-			this.emailData.setMailTo("bhabesh@squ.edu.om");	
-			this.emailData.setEmailReceiverName(approverName4Email);
-			this.emailData.setEmailTemplateName(Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP);  
-			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null, locale));
-			this.leaveEmail		=	new MailProcess();																		  
-			this.leaveEmail.setLeaveEmail(emailData);																	  	  
+			/***************** SENDING E-MAIL TO REQUESTER & APPROVER FOR UPDATED LEAVE REQUEST*****************/
+			
+			emailGeneral	=	new	EmailGeneral
+			(
+					leaveRequest, 
+					getLeaveApproveHistory(leaveRequestNo, locale).get(0), 
+					delegatedEmps, locale
+			);
+			emailLeave	=	emailGeneral;
+			
+			emailLeave.sendRequesterEmail();
+			emailLeave.sendApproverEmail();
+																  	  
 			/**************************************************************************************************************/
 			
 			LeaveApprove	approve		=	new LeaveApprove();
@@ -908,7 +877,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			approve.setApproverRemark(UtilProperty.getMessage("prop.leave.app.apply.form.approvar.auto.remarks2", null, locale));
 			if(null != delegatedEmps)
 			{
-				setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps,emp.getEmpNumber(),locale,Constants.CONST_OPERATION_UPDATE);
+				setNewLeaveDelegationRequest(leaveRequestNo,delegatedEmps,emp.getEmpNumber(),locale,Constants.CONST_OPERATION_UPDATE,emailLeave);
 			}
 
 		}
@@ -977,11 +946,14 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 * Date    		:	Dec 8, 2012 12:44:31 PM
 	 */
 	@Transactional("trLeaveDelegate")
-	private	void	setNewLeaveDelegationRequest(String requestNo, DelegatedEmp[] delegatedEmps,String orginEmpNumber,Locale locale,String operation)
+	private	void	setNewLeaveDelegationRequest
+											(
+												String requestNo, DelegatedEmp[] delegatedEmps,
+												String orginEmpNumber,Locale locale,
+												String operation,EmailLeave emailLeave
+											)
 	{
 		logger.info("delegated employees length: "+delegatedEmps.length);
-		this.emailData.setDelegationAvilable(Constants.CONST_DELEGATION_AVL);
-		String tmpDelgStr	=	"----------------------------------------------------------------------------<br>";
 		try
 		{
 			if(operation.equals(Constants.CONST_OPERATION_UPDATE))
@@ -1024,12 +996,12 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					)
 						{
 							this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQ_DELEGATION, namedParameters);
-							
-							
-							tmpDelgStr = tmpDelgStr + 
-							getEmployee(delEmp.getEmpNumber() , locale).getEmpName() + " - " + 
-				 			" ("+Constants.CONST_DELEGATION_START_DATE+ delEmp.getFromDate() + 
-				 			" -- "+ Constants.CONST_DELEGATION_END_DATE+ delEmp.getToDate() + " ) " + "<br>";
+							if(null != emailLeave)
+							{
+								Employee delEmployee	=	getEmployee(delEmp.getEmpNumber(), locale);
+								/*E-mail to delegates*/
+								emailLeave.sendDelegateEmail(delEmployee.getEmpSquEmail(), delEmployee.getEmpName());
+							}
 						}
 
 				}
@@ -1038,9 +1010,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		{
 			logger.error("Error in Delegated employees. error description : "+ex.getMessage());
 		}
-		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.delegation",null, locale));
-		this.emailData.setDelegationDetails(tmpDelgStr);
-		
 	}
 	
 	/**
