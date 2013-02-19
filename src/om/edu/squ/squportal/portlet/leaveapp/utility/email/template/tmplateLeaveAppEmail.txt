@@ -1,3 +1,5 @@
+<h1><center> This is a test E-mail. Please Ignore it</center> </h1>
+
 Dear :paramEmailReceiverName,<br>
 <b>:paramEmailMessage</b><br><br>
 
@@ -17,7 +19,7 @@ Approver Email : :paramEmailApprover <br><br>
 
 Requester Remark : :paramReqRemark <br><br>
 
-:paramDelegationAvl <br>
+<h4>:paramDelegationAvl</h4> <br>
 :paramDelegationDetails <br><br>
 
 For more details you are requested to visit following url : <a href=":paramUrl">:paramUrl</a> <br><br><br>

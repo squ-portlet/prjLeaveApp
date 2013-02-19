@@ -305,6 +305,7 @@ public interface LeaveAppServiceDao
 	 * method name  : setLeaveApprove
 	 * @param leaveAppModel
 	 * @param employee
+	 * @param locale TODO
 	 * @return
 	 * LeaveAppServiceDao
 	 * return type  : int
@@ -313,7 +314,7 @@ public interface LeaveAppServiceDao
 	 *
 	 * Date    		:	Oct 3, 2012 2:10:02 PM
 	 */
-	public int setLeaveApprove(LeaveAppModel 	leaveAppModel, Employee employee);
+	public int setLeaveApprove(LeaveAppModel 	leaveAppModel, Employee employee, Locale locale);
 	
 	/**
 	 * 

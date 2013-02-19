@@ -48,11 +48,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class EmailDataAbstract
 {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private	EmailData		emailData			= 	new EmailData();
-	private String			emailTemplatePath	=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP;
-	private	Employee 		empRequester		=	null;
-	private	Employee		empApprover			=	null;
-	private	DelegatedEmp[] 	delegatedEmps		=	null;
+	private			EmailData		emailData					= 	new EmailData();
+	private 		String			emailTemplatePath			=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP;
+	public	static 	String			emailTemplateRequesterPath	=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_REQUESTER;
+	public 	static	String			emailTemplateApproverPath	=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_APPROVER;
+	private			Employee 		empRequester				=	null;
+	private			Employee		empApprover					=	null;
+	private			DelegatedEmp[] 	delegatedEmps				=	null;
 	/**
 	 * 
 	 * method name  : setGenaralEmailData
@@ -70,8 +72,9 @@ public class EmailDataAbstract
 		this.empRequester				=	leaveRequest.getEmployee();
 		this.empApprover				=	leaveApprove.getEmployee();
 		this.delegatedEmps				=	delegatedEmps;
+		boolean	isDelegation			=	false;
 		
-		
+		this.emailData.setRequestNo(leaveRequest.getRequestNo());
 		this.emailData.setRequesterName(empRequester.getEmpName());
 		this.emailData.setRequesterEmail(empRequester.getEmpInternetId()+"@squ.edu.om");	
 		this.emailData.setRequestStartDate(leaveRequest.getLeaveStartDate());
@@ -99,6 +102,7 @@ public class EmailDataAbstract
 						!(null == delEmp.getToDate() || delEmp.getToDate().trim().equals(""))
 				)
 					{
+					isDelegation	=	true;
 					tmpDelgStr = tmpDelgStr + 
 					delEmp.getEmpName() + " - " + 
 		 			" ("+Constants.CONST_DELEGATION_START_DATE+ delEmp.getFromDate() + 
@@ -110,8 +114,10 @@ public class EmailDataAbstract
 					this.emailData.setDelegationDetails(" ");
 				}
 			}
-			
-			this.emailData.setDelegationDetails(tmpDelgStr);
+			if(isDelegation)
+			{
+				this.emailData.setDelegationDetails(tmpDelgStr);
+			}
 		}
 		else
 		{

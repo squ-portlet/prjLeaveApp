@@ -218,13 +218,8 @@ public interface Constants
 	
 	/************* EMAIL TEMPLATE***************************/
 	public	static	String	TEMPL_LEAVE_APP						=			"tmplateLeaveAppEmail.txt";
-//	public	static	String	TEMPL_LEAVE_APP_NEW_REQUESTER		=			"tmpLeaveAppNewRequester.txt";
-//	public	static	String	TEMPL_LEAVE_APP_NEW_APPROVER		=			"tmpLeaveAppNewApprover.txt";
-//	
-//	
-//	public	static	String	TEMPL_LEAVE_APP_RETURN_UPDATE_REQUESTER		=	"tmpLeaveAppReturnUpdateRequester.txt";
-//	public	static	String	TEMPL_LEAVE_APP_RETURN_UPDATE_APPROVER		=	"tmpLeaveAppReturnUpdateApprover.txt";
-	
+	public	static	String	TEMPL_LEAVE_APP_REQUESTER			=			"tmplateLeaveAppEmailReqester.txt";
+	public	static	String	TEMPL_LEAVE_APP_APPROVER			=			"tmplateLeaveAppEmailApprover.txt";
 	/******************************************************/
 	
 	/************* EMAIL TEMPLATE PARAMETER ***************/

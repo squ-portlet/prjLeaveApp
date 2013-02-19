@@ -1434,9 +1434,13 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	public synchronized int setLeaveApprove(LeaveApprove approve)
 	{
 		int result	=	0;
+		int result2	=	0;
 		
-		Employee	employee	=	approve.getEmployee();
-
+		Employee		employee		=	approve.getEmployee();
+		LeaveRequest	leaveRequest	=	getLeaveRequest(approve.getRequestNo());
+		String			leaveStatusCode	=	leaveRequest.getStatus().getStatusCode();
+		
+		
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 			namedParameters.put("paramReqNo", approve.getRequestNo());
 			namedParameters.put("paramEmpNo", employee.getEmpNumber());
@@ -1450,7 +1454,15 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			namedParameters.put("paramActionCodeApprove", Constants.CONST_LEAVE_ACTION_APPROVE);
 			logger.info("update leave approve sql param : "+namedParameters);
 			logger.info("update leave approve sql : " +Constants.SQL_UPDATE_LEAVE_REQ_APPROVE);
-			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_REQ_APPROVE,namedParameters );
+				if	(
+					! leaveStatusCode.equals(Constants.CONST_LEAVE_STATUS_APPROVED) &&
+					! leaveStatusCode.equals(Constants.CONST_LEAVE_STATUS_REJECTED) &&
+					! leaveStatusCode.equals(Constants.CONST_LEAVE_STATUS_CANCEL) 
+					)
+				{
+					result =  this.namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_REQ_APPROVE,namedParameters );		
+				}
+			
 			logger.info("update transaction status info : "+result);
 			
 		}
@@ -1474,8 +1486,14 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 
 		logger.info("params for approval : "+namedParameters);
 		
-		
-		int result2 = setLeaveRequestStatusUpdate(approve.getRequestNo(), approve.getApproverAction());
+		if(result != 0)
+		{
+			result2 = setLeaveRequestStatusUpdate(approve.getRequestNo(), approve.getApproverAction());
+		}
+		else
+		{
+			logger.error("update not successful for approval");
+		}
 		if(result2 == 0)
 		{
 			logger.error("update into request status not successful. This might happens for avoiding accidental update of requester/approver");

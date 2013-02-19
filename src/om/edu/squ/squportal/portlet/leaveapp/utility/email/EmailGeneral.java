@@ -13,7 +13,7 @@
  * Date of creation		:	Feb 17, 2013  8:46:01 AM
  * Date of modification :	
  * 
- * Summary				:	Email to Requester
+ * Summary				:	Email to Requester & Approver for new and update leave request
  *
  *
  * Copyright 2013 the original author or authors and Organization.
@@ -52,8 +52,6 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private	EmailData		emailData			= 	null;
-	
-
 	private	Locale 			locale				=	null;
 	private	boolean			isNewEmail			=	false;
 	
@@ -95,7 +93,7 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 		emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps);
 		this.isNewEmail	=	false;
 		this.locale		=	locale;
-		this.emailData.setRequestNo(leaveRequest.getRequestNo());
+		//this.emailData.setRequestNo(leaveRequest.getRequestNo());
 		
 	}
 	
@@ -113,9 +111,10 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 	public boolean sendRequesterEmail()
 	{
 		//TODO replace with requester email id
-		//this.emailData.setMailTo(empRequester.getEmpInternetId()+"@squ.edu.om");
+		//this.emailData.setMailTo(getEmpRequester().getEmpInternetId()+"@squ.edu.om");
 		this.emailData.setMailTo("bhabesh@squ.edu.om");
 		this.emailData.setEmailReceiverName(getEmpRequester().getEmpName());
+		this.emailData.setEmailTemplateName(emailTemplateRequesterPath);	
 		if(isNewEmail)
 		{
 			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester",null, locale));
@@ -141,9 +140,10 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 	public boolean sendApproverEmail()
 	{	
 		//TODO replace with approver email id
-		//emailData.setMailTo(empApprover.getEmpInternetId()+"@squ.edu.om");
+		emailData.setMailTo(getEmpApprover().getEmpInternetId()+"@squ.edu.om");
 		this.emailData.setMailTo("bhabesh@squ.edu.om");	
 		this.emailData.setEmailReceiverName(getEmpApprover().getEmpName());
+		this.emailData.setEmailTemplateName(emailTemplateApproverPath);	
 		if(isNewEmail)
 		{
 			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver",null, locale));
@@ -177,5 +177,19 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.delegation",null, locale));
 		return sendLeaveEmail();
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailLeave#sendEmail(boolean, boolean, boolean)
+	 */
+	public boolean sendEmail
+			(
+					boolean requester, 
+					boolean approver
+			)
+	{
+		boolean result;
+		result = (requester)? sendRequesterEmail():false;
+		result = (approver)? sendApproverEmail():false;
+		return result;
+	}
 }

@@ -52,6 +52,8 @@ public class LeaveAppModel implements Serializable
 	private	String			leaveRemarks;
 	private	String			leavePurpose;
 	private	String			leaveLastReturnDate;
+	private	String			employeeNumber;
+	private	String			empLevel;
 	private	String			researchId;
 	private	boolean			adminSqu;
 	private	String			branch;
@@ -244,6 +246,46 @@ public class LeaveAppModel implements Serializable
 	public void setLeaveLastReturnDate(String leaveLastReturnDate)
 	{
 		this.leaveLastReturnDate = leaveLastReturnDate;
+	}
+	/**
+	 * Getter Method	: getEmployeeNumber
+	 * @return the employeeNumber
+	 * 
+	 * Date				: Feb 19, 2013
+	 */
+	public String getEmployeeNumber()
+	{
+		return this.employeeNumber;
+	}
+	/**
+	 * Setter method : setEmployeeNumber
+	 * @param employeeNumber the employeeNumber to set
+	 * 
+	 * Date          : Feb 19, 2013 9:11:48 AM
+	 */
+	public void setEmployeeNumber(String employeeNumber)
+	{
+		this.employeeNumber = employeeNumber;
+	}
+	/**
+	 * Getter Method	: getEmpLevel
+	 * @return the empLevel
+	 * 
+	 * Date				: Feb 19, 2013
+	 */
+	public String getEmpLevel()
+	{
+		return this.empLevel;
+	}
+	/**
+	 * Setter method : setEmpLevel
+	 * @param empLevel the empLevel to set
+	 * 
+	 * Date          : Feb 19, 2013 9:14:19 AM
+	 */
+	public void setEmpLevel(String empLevel)
+	{
+		this.empLevel = empLevel;
 	}
 	/**
 	 * Getter Method	: getResearchId
@@ -533,6 +575,10 @@ public class LeaveAppModel implements Serializable
 						+ this.leavePurpose + ", " : "")
 				+ (this.leaveLastReturnDate != null ? "leaveLastReturnDate="
 						+ this.leaveLastReturnDate + ", " : "")
+				+ (this.employeeNumber != null ? "employeeNumber="
+						+ this.employeeNumber + ", " : "")
+				+ (this.empLevel != null ? "empLevel=" + this.empLevel + ", "
+						: "")
 				+ (this.researchId != null ? "researchId=" + this.researchId
 						+ ", " : "")
 				+ "adminSqu="

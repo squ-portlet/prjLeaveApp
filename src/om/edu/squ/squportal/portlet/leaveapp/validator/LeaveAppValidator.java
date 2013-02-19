@@ -66,6 +66,7 @@ public class LeaveAppValidator implements Validator
 		LeaveAppModel	leaveAppModel	=	(LeaveAppModel) obj;
 		DelegatedEmp[]	delegatedEmps	=	leaveAppModel.getDelegatedEmps();
 		
+		/*Forcing user to select their preferred approver*/
 //		if(null == leaveAppModel.getHod()|| leaveAppModel.getHod().trim().equals(""))
 //		{
 //			err.rejectValue("hod", "error.prop.leave.app.approver.na");

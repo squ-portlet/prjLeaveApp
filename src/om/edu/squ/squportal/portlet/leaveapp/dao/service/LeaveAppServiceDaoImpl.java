@@ -50,8 +50,11 @@ import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilFile;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailApprove;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailCancel;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailLeave;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailReject;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailReturn;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.process.MailProcess;
 
 import org.slf4j.Logger;
@@ -225,12 +228,14 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 						}
 				}
 				leaveAppModel.setDelegatedEmps(delegatedEmps);
+			}
+			
 			int result = leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps(), locale);
 				if (result == 0)
 				{
 					allowEleaveRequestProc.setLeaveMessage(UtilProperty.getMessage("error.prop.leave.app.update.blocked", null, locale));
 				}
-			}
+			
 		}
 		
 		return allowEleaveRequestProc;
@@ -446,8 +451,9 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 *
 	 * Date    		:	Oct 3, 2012 2:08:24 PM
 	 */
-	public int setLeaveApprove(LeaveAppModel 	leaveAppModel, Employee employee)
+	public int setLeaveApprove(LeaveAppModel 	leaveAppModel, Employee employee, Locale locale)
 	{
+		int				result	=	0;
 		LeaveApprove	approve	=	new LeaveApprove();
 		employee.setEmpNumber(String.format("%07d", Integer.valueOf(employee.getEmpNumber())));
 		approve.setRequestNo(leaveAppModel.getRequestNo());
@@ -455,7 +461,13 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		approve.setApproverRemark(leaveAppModel.getApproverRemark());
 		approve.setEmployee(employee);
 		
-		return leaveDbDao.setLeaveApprove(approve);
+		result =  leaveDbDao.setLeaveApprove(approve);
+		/*Sending e-mail*/
+		if(result != 0)
+		{
+			sendApproveEmail(leaveAppModel.getRequestNo(), leaveAppModel.getApproverAction(), locale);
+		}
+		return result;
 	}
 	
 	/**
@@ -475,6 +487,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 */
 	public int setLeaveApprove(String requestNo, String actionNo, Locale locale,Employee employee)
 	{
+		int 			result	=	0;
 		LeaveApprove	approve	=	new LeaveApprove();
 		employee.setEmpNumber(String.format("%07d", Integer.valueOf(employee.getEmpNumber())));
 		approve.setRequestNo(requestNo);
@@ -487,7 +500,14 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 										)
 								);
 		approve.setEmployee(employee);
-		return leaveDbDao.setLeaveApprove(approve);
+		result	=	 leaveDbDao.setLeaveApprove(approve);
+		
+		/*Sending e-mail*/
+		if(result != 0)
+		{
+			sendApproveEmail(requestNo, actionNo, locale);
+		}
+		return result;
 	}
 
 
@@ -559,5 +579,43 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		return message;
 	}
 
+	/**
+	 * 
+	 * method name  : sendApproveEmail
+	 * @return
+	 * LeaveAppServiceDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: send email on approver's action (e.g. approve,return,reject)
+	 *
+	 * Date    		:	Feb 19, 2013 12:19:24 PM
+	 */
+	private boolean sendApproveEmail(String requestNo, String ApproverAction, Locale locale)
+	{
+		boolean			result			=	false;
+		EmailLeave		emailLeave		=	null;		
+		LeaveRequest	leaveRequest	=	getLeaveRequest(requestNo, locale);
+		LeaveApprove	leaveApprove	=	getLeaveApproveHistory(requestNo, locale).get(0);
+		
+		if(ApproverAction.equals(Constants.CONST_LEAVE_ACTION_APPROVE))
+		{
+			emailLeave	=	new EmailApprove(leaveRequest, leaveApprove, null, locale);
+			result		=	emailLeave.sendEmail(true, true);
+			
+		}else
+			if(ApproverAction.equals(Constants.CONST_LEAVE_ACTION_RETURN))
+			{
+				emailLeave	=	new EmailReturn(leaveRequest, leaveApprove, null, locale);
+				result		=	emailLeave.sendEmail(true, true);
+			} else
+				if(ApproverAction.equals(Constants.CONST_LEAVE_ACTION_REJECT))
+				{
+					emailLeave	=	new EmailReject(leaveRequest, leaveApprove, null, locale);
+					result		=	emailLeave.sendEmail(true, true);
+				}
+		return result;
+	}
+	
+	
 }
 

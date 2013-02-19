@@ -73,5 +73,21 @@ public interface EmailLeave
 	 * @return TODO
 	 */
 	public boolean sendDelegateEmail(String mailTo, String delegateName);
+	
+	/**
+	 * 
+	 * method name  : sendEmail
+	 * @param requester
+	 * @param approver
+	 * @param delegate
+	 * @return
+	 * EmailLeave
+	 * return type  : boolean
+	 * 
+	 * purpose		: calling related methods to send emails
+	 *
+	 * Date    		:	Feb 19, 2013 12:35:06 PM
+	 */
+	public boolean sendEmail(boolean requester, boolean approver);
 
 }

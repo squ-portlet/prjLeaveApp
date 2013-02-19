@@ -435,7 +435,7 @@ public class LeaveAppControllerMain
 	 * LeaveAppControllerMain
 	 * return type  : void
 	 * 
-	 * purpose		: leave approve
+	 * purpose		: leave approve 
 	 *
 	 * Date    		:	Dec 9, 2012 2:36:22 PM
 	 */
@@ -458,7 +458,7 @@ public class LeaveAppControllerMain
 		}
 		else
 		{
-			int resultApprove = leaveAppServiceDao.setLeaveApprove(leaveAppModel, employee);
+			int resultApprove = leaveAppServiceDao.setLeaveApprove(leaveAppModel, employee, locale);
 			if(resultApprove == 0)
 			{
 				response.setRenderParameter(
@@ -519,7 +519,7 @@ public class LeaveAppControllerMain
 	 * LeaveAppControllerMain
 	 * return type  : void
 	 * 
-	 * purpose		: action taken from grid itself
+	 * purpose		: action taken from data grid itself
 	 *
 	 * Date    		:	Jan 9, 2013 2:00:01 PM
 	 */
@@ -536,7 +536,15 @@ public class LeaveAppControllerMain
 		)
 	{
 		Employee	employee	=	(Employee)request.getPortletSession().getAttribute("employee");
-		leaveAppServiceDao.setLeaveApprove(requestNo, actionNo, locale, employee);
+		int resultApprove = leaveAppServiceDao.setLeaveApprove(requestNo, actionNo, locale, employee);
+		if(resultApprove == 0)
+		{
+			response.setRenderParameter(
+										Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, 
+										UtilProperty.getMessage("error.prop.leave.app.update.blocked", null, locale
+							));
+		}
+
 		response.setRenderParameter("action", "backToMain");
 	}
 	
