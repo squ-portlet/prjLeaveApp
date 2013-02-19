@@ -202,10 +202,11 @@ public interface Constants
 	//public	static	String	RESOURCE_PROPERTY_FILE_NAME		=			"mailProp";
 	public	static	String	MAIL_SMTP_HOST						=			"smtpHost";
 	public	static	String	MAIL_SMTP_PORT						=			"smtpPort";
-	public	static	String	MAIL_FROM							=			"bhabesh@squ.edu.om";
+	public	static	String	MAIL_FROM							=			"portal_feedback@squ.edu.om";
 	public	static	String	MAIL_SUBJECT						=			"Leave application.";
 	public	static	String	MAIL_REQUEST_NO						=			" Request No: ";
 	public	static	boolean	IS_MAIL_SEND_ON						=			true;
+	public	static	String	CONST_TEMP_EMAIL_TO					=			null;
 	/******************************************************/
 
 	/************* EMAIL TEMPLATE DIRECTORY ****************/
@@ -244,12 +245,12 @@ public interface Constants
 	public	static	String	TEMPL_PARAM_LEAVE_URL				=			":paramUrl";
 	
 	/******************************************************/
-	public	static	String	LEAVE_URL							=			"https://portalnew.squ.edu.om/portal/page/portal/bhabeshPages/wsrpPrjLeaveApp51";
+	public	static	String	LEAVE_URL							=			"https://portalnew.squ.edu.om/portal/page/portal/Portlets/wsrpLeaveApp179";
 	public	static	String	CONST_DELEGATION_AVL				=			"This leave application has delegation";
 	public	static	String	CONST_DELEGATION_NAME				=			"Name : ";
 	public	static	String	CONST_DELEGATION_START_DATE			=			"Start : ";
 	public	static	String	CONST_DELEGATION_END_DATE			=			"End : ";
-	
+
 	
 	/**********SQL**********************************/
 

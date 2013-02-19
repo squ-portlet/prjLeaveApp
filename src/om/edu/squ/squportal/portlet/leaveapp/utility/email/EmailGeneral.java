@@ -110,9 +110,14 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 	 */
 	public boolean sendRequesterEmail()
 	{
-		//TODO replace with requester email id
-		//this.emailData.setMailTo(getEmpRequester().getEmpInternetId()+"@squ.edu.om");
-		this.emailData.setMailTo("bhabesh@squ.edu.om");
+		if(null != Constants.CONST_TEMP_EMAIL_TO)
+		{
+			this.emailData.setMailTo(Constants.CONST_TEMP_EMAIL_TO);
+		}
+		else
+		{
+			this.emailData.setMailTo(getEmpRequester().getEmpInternetId()+"@squ.edu.om");
+		}
 		this.emailData.setEmailReceiverName(getEmpRequester().getEmpName());
 		this.emailData.setEmailTemplateName(emailTemplateRequesterPath);	
 		if(isNewEmail)
@@ -139,9 +144,14 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 	 */
 	public boolean sendApproverEmail()
 	{	
-		//TODO replace with approver email id
-		emailData.setMailTo(getEmpApprover().getEmpInternetId()+"@squ.edu.om");
-		this.emailData.setMailTo("bhabesh@squ.edu.om");	
+		if(null != Constants.CONST_TEMP_EMAIL_TO)
+		{
+			this.emailData.setMailTo(Constants.CONST_TEMP_EMAIL_TO);
+		}
+		else
+		{
+			emailData.setMailTo(getEmpApprover().getEmpInternetId()+"@squ.edu.om");
+		}
 		this.emailData.setEmailReceiverName(getEmpApprover().getEmpName());
 		this.emailData.setEmailTemplateName(emailTemplateApproverPath);	
 		if(isNewEmail)
@@ -170,9 +180,14 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 	 */
 	public boolean sendDelegateEmail(String mailTo, String delegateName)
 	{
-		//TODO replace with delegate email id
-		//this.emailData.setMailTo(mailTo);
-		this.emailData.setMailTo("bhabesh@squ.edu.om");	
+		if(null != Constants.CONST_TEMP_EMAIL_TO)
+		{
+			this.emailData.setMailTo(Constants.CONST_TEMP_EMAIL_TO);
+		}
+		else
+		{
+			this.emailData.setMailTo(mailTo);
+		}
 		this.emailData.setEmailReceiverName(delegateName);
 		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.delegation",null, locale));
 		return sendLeaveEmail();

@@ -247,17 +247,18 @@
 													'<portlet:param name="reqNum" value="${req.requestNo}"/>'+
 													'<portlet:param name="appActionNum" value="${admActions.actionCode}"/>'+
 													'</portlet:actionURL>'+
-													
+
 													'<portlet:renderURL var="varLeaveApprove2">'+
 													'<portlet:param name="action" value="leaveApprove2"/>'+
 													'<portlet:param name="reqNo" value="${req.requestNo}"/>'+
 													'<portlet:param name="_approverAction" value="${admActions.actionCode}"/>'+
 													'</portlet:renderURL>'+
-														'<c:if test="${(admActions.actionCode == leaveActionApprove)}">'+
-															'<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;'+		
+
+													'<c:if test="${(admActions.actionCode == leaveActionApprove)}">'+
+															'|&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;|'+		
 														'</c:if>'+
 														'<c:if test="${(admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">'+
-															'&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;'+		
+															'&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;|'+		
 														'</c:if>'+
 													'</c:forEach>',
 										</c:otherwise>

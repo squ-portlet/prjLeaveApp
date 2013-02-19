@@ -38,6 +38,7 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.EmailData;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
+import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
 
 /**
@@ -72,9 +73,14 @@ public class EmailApprove extends EmailDataAbstract implements EmailLeave
 	 */
 	public boolean sendRequesterEmail()
 	{
-		//TODO replace with requester email id
-		//this.emailData.setMailTo(getEmpRequester().getEmpInternetId()+"@squ.edu.om");
-		this.emailData.setMailTo("bhabesh@squ.edu.om");
+		if(null != Constants.CONST_TEMP_EMAIL_TO)
+		{
+			this.emailData.setMailTo(Constants.CONST_TEMP_EMAIL_TO);
+		}
+		else
+		{
+			this.emailData.setMailTo(getEmpRequester().getEmpInternetId()+"@squ.edu.om");
+		}
 		this.emailData.setEmailReceiverName(getEmpRequester().getEmpName());
 		this.emailData.setEmailTemplateName(emailTemplateRequesterPath);	
 		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.approve.requester",null, locale));
@@ -86,9 +92,14 @@ public class EmailApprove extends EmailDataAbstract implements EmailLeave
 	 */
 	public boolean sendApproverEmail()
 	{
-		//TODO replace with approver email id
-		emailData.setMailTo(getEmpApprover().getEmpInternetId()+"@squ.edu.om");
-		this.emailData.setMailTo("bhabesh@squ.edu.om");	
+		if(null != Constants.CONST_TEMP_EMAIL_TO)
+		{
+			this.emailData.setMailTo(Constants.CONST_TEMP_EMAIL_TO);
+		}
+		else
+		{
+			emailData.setMailTo(getEmpApprover().getEmpInternetId()+"@squ.edu.om");
+		}
 		this.emailData.setEmailReceiverName(getEmpApprover().getEmpName());
 		this.emailData.setEmailTemplateName(emailTemplateApproverPath);	
 		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.approve.approver",null, locale));
