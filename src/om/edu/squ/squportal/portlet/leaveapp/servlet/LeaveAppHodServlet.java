@@ -65,9 +65,6 @@ public class LeaveAppHodServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("logger inside Hod servlet");
-		System.out.println("logger inside Hod servlet");
-		
 		Locale			locale				=	request.getLocale();	
 		String			branchCode			=	request.getParameter("branchCode");
 		String			deptCode			=	request.getParameter("deptCode");
@@ -81,8 +78,7 @@ public class LeaveAppHodServlet extends HttpServlet {
 				
 		
 		LeaveDbDao		leaveDbDao	=	new LeaveDbDaoImpl(datasource);
-		
-		logger.info("--- SECTION CODE --- : "+request.getParameter("sectionCode"));
+
 		if(null != request.getParameter("sectionCode") && ! request.getParameter("sectionCode").trim().equals("") )
 		{
 			sectCode		=	request.getParameter("sectionCode");
@@ -155,7 +151,7 @@ public class LeaveAppHodServlet extends HttpServlet {
 		{
 			strJson	=	gson.toJson(hoDList);
 		}
-		logger.info("json from Hod servlet : "+strJson);
+
 		response.getWriter().print(strJson);
 	}
 	

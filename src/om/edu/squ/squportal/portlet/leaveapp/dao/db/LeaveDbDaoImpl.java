@@ -165,7 +165,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		{
 			if(null == employee.getReligionCode())
 			{
-				logger.error(" Error : Religion is null ");
+				logger.warn(" Warning : Religion is null ");
 			}
 			
 			namedParameters.put("paramMuslim", Constants.CONST_NON_MUSLIM);
@@ -178,7 +178,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		{
 			if(null == employee.getGender())
 			{
-				logger.error(" Error : Gender is null ");
+				logger.warn(" Warning : Gender is null ");
 			}
 			namedParameters.put("paramFemale", Constants.CONST_GENDER_NON_FEMALE);
 		}
@@ -297,10 +297,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		Map<String,String> namedParameters = new HashMap<String,String>();
 		namedParameters.put("paramLocale", locale.getLanguage());
 		namedParameters.put("paramEmpNumber", empNumber);
-	
-		logger.info("employee param : "+namedParameters);
-		logger.info("employee sql : "+Constants.SQL_EMPLOYEE);
-		
+
 		return this.namedParameterJdbcTemplate.queryForObject(Constants.SQL_EMPLOYEE, namedParameters, mapper);
 		
 	}
@@ -371,14 +368,14 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				}
 				catch(Exception ex)
 				{
-					logger.info("no emp data found for level : '"+i+"'; error : "+ex);
+					logger.warn("no emp data found for level : '"+i+"'; error : "+ex);
 				}
 
 			}
 		}
 		catch(Exception ex)
 		{
-			logger.info("Error generated: can not fetch employee list");
+			logger.error("Error generated: can not fetch employee list");
 		}
 		
 		
@@ -508,9 +505,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					paramIn.put(Constants.CONST_PROC_COL_IN_P_LEAVE_REQ_NO, leaveRequest.getRequestNo());
 					paramIn.put(Constants.CONST_PROC_COL_IN_P_SUGGESTED_APP_EMP_CODE, leaveRequest.getSuggestedHod());
 
-					logger.info("result (param): "+paramIn);
 		resultProc			=	simpleJdbcCall.execute(paramIn);
-		logger.info("result(map): "+resultProc);
 		AllowEleaveRequestProc	requestProc		=	new AllowEleaveRequestProc();
 		if(
 				((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN))
@@ -627,10 +622,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		}
 		namedParameters.put("paramEmpLevel", empLevel);
 		namedParameters.put("paramLocale", locale.getLanguage());
-		
-		logger.info("param HOD branch/Dept id : "+namedParameters);
-		logger.info("HOD SQL"+Constants.SQL_VIEW_DEPT_HEAD_ID);
-		
 		return this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_DEPT_HEAD_ID, namedParameters, mapper);
 	}
 	
@@ -767,7 +758,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 		
 		namedParameters.put("paramReqNo",leaveRequestNo);
-		//namedParameters.put("paramReqDate",);
 		namedParameters.put("paramLeaveStatus",leaveRequest.getLeaveStatus());
 		namedParameters.put("paramEmpCode",emp.getEmpNumber());
 		namedParameters.put("paramInternetId",emp.getEmpInternetId());
@@ -800,12 +790,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 
 		
 		namedParameters.put("paramHodId", emp.getMyHodId());
-		
-		
-		logger.info("request insert statement :" +Constants.SQL_INSERT_LEAVE_REQUEST);
-		logger.info("request insert param :" +namedParameters);
-		
-		
 		if(
 			null == leaveRequest.getRequestNo() || 
 		   leaveRequest.getRequestNo().trim().equals("") || 
@@ -846,8 +830,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				logger.error("update into request status not successful. This might happens for avoiding accidental update of requester/approver");
 			}
 			
-			logger.info("leaveUpdate : "+result);
-			logger.info("leaveUpdate parameter : "+namedParameters);
 
 			/***************** SENDING E-MAIL TO REQUESTER & APPROVER FOR UPDATED LEAVE REQUEST*****************/
 			
@@ -948,7 +930,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 												String operation,EmailLeave emailLeave
 											)
 	{
-		logger.info("delegated employees length: "+delegatedEmps.length);
 		try
 		{
 			if(operation.equals(Constants.CONST_OPERATION_UPDATE))
@@ -959,13 +940,11 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			
 			for(DelegatedEmp delEmp: delegatedEmps)
 				{
-					logger.info("delegated employee Summary : "+delEmp.toString());
 					Employee	employee	=	null;
 					String 		empNumber	=	delEmp.getEmpNumber();
 					if(null != empNumber && !empNumber.trim().equals(""))
 					{
 						employee	=	getEmployee(empNumber);
-						logger.info("delegated emplyee details : "+employee.toString());
 					}
 					else
 					{
@@ -983,7 +962,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					namedParameters.put("paramDelToDate",delEmp.getToDate());
 					namedParameters.put("paramDelCreUser",Constants.USER_WEB);
 					namedParameters.put("paramOriginEmpCode",orginEmpNumber);
-					logger.info("delegated param : "+namedParameters);
 					
 					if(!(null == delEmp.getEmpNumber() || delEmp.getEmpNumber().trim().equals("")) && 
 							!(null == delEmp.getFromDate() || delEmp.getFromDate().trim().equals("")) &&
@@ -1070,13 +1048,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramLocale", locale.getLanguage());
 		namedParameters.put("paramEmpNumber", employee.getEmpNumber());
 		namedParameters.put("paramLevel", employee.getHierarchyLevelCode());
-
-		logger.info("param : "+namedParameters);
 		
 		List<LeaveRequest>	leaveRequests	=	this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_LEAVE_REQUEST, namedParameters, mapper);
-		
-		logger.info("leave request : "+leaveRequests);
-		
 		
 		return leaveRequests;
 	}
@@ -1162,10 +1135,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 		namedParameters.put("paramLocale", locale.getLanguage());
 		namedParameters.put("paramReqNo", reqNo);
-		
-		
-		logger.info("sepecific leave request param : "+namedParameters);
-		logger.info("sepecific leave request SQL : "+Constants.SQL_VIEW_LEAVE_REQUEST_SPECIFIC);
 		
 		leaveRequestResult	=	this.namedParameterJdbcTemplate.queryForObject(Constants.SQL_VIEW_LEAVE_REQUEST_SPECIFIC, namedParameters, mapper);
 			empApprover			=	getEmployee(leaveRequestResult.getApproverId(), locale);	
@@ -1452,8 +1421,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				
 			namedParameters.put("paramUpdateUsr", Constants.USER_WEB);
 			namedParameters.put("paramActionCodeApprove", Constants.CONST_LEAVE_ACTION_APPROVE);
-			logger.info("update leave approve sql param : "+namedParameters);
-			logger.info("update leave approve sql : " +Constants.SQL_UPDATE_LEAVE_REQ_APPROVE);
 				if	(
 					! leaveStatusCode.equals(Constants.CONST_LEAVE_STATUS_APPROVED) &&
 					! leaveStatusCode.equals(Constants.CONST_LEAVE_STATUS_REJECTED) &&
@@ -1462,8 +1429,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				{
 					result =  this.namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_REQ_APPROVE,namedParameters );		
 				}
-			
-			logger.info("update transaction status info : "+result);
 			
 		}
 		else
@@ -1477,14 +1442,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			namedParameters.put("paramCreateUsr", Constants.USER_WEB);
 			namedParameters.put("paramSeqNo", String.valueOf(getLeaveApproveCounter()));
 			
-			logger.info("insert leave approve sql param : "+namedParameters);
-			logger.info("insert leave approve sql : " +Constants.SQL_INSERT_LEAVE_REQ_APPROVE);
-			
 			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQ_APPROVE,namedParameters );
-			logger.info("insert transaction status info : "+result);
-		}
 
-		logger.info("params for approval : "+namedParameters);
+		}
 		
 		if(result != 0)
 		{
@@ -1498,7 +1458,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		{
 			logger.error("update into request status not successful. This might happens for avoiding accidental update of requester/approver");
 		}
-		logger.info("transaction status info : "+result2);
+
 		return result;
 		
 	}
@@ -1608,10 +1568,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramCompStartDate",leaveRequest.getLeaveStartDate());
 		namedParameters.put("paramCompEndDate",leaveRequest.getLeaveEndDate());
 		namedParameters.put("paramCompSuggestedHod",leaveRequest.getSuggestedHod());
-		
-		
-		logger.info("leave request status update; param: "+namedParameters);
-		logger.info("leave request status update; SQL: "+Constants.SQL_UPDATE_LEAVE_REQ_STATUS);
 		
 		return namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_REQ_STATUS, namedParameters);
 	}

@@ -203,12 +203,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		leaveRequest.setLeaveEndDate(leaveAppModel.getLeaveEndDate());
 		leaveRequest.setLeaveRequestRemarks(leaveAppModel.getLeaveRemarks());
 		leaveRequest.setLeaveStatus(Constants.CONST_LEAVE_STATUS_WAITING_APPV);
-		
-		logger.info("leaveRequest : "+leaveRequest);
-
 			allowEleaveRequestProc	=	leaveDbDao.getAllowEleaveRequest(leaveRequest, locale);
-			logger.info("allowEleaveRequestProc : "+allowEleaveRequestProc );
-
 		
 		if(allowEleaveRequestProc.isAcceptLeave())
 		{
@@ -363,7 +358,6 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	public List<DelegatedEmp>	getDelegations(String leaveRequestNo, Locale locale)
 	{
 		List<DelegatedEmp>	delegatedEmps	=	leaveDbDao.getDelegations(leaveRequestNo, locale);
-		logger.info("delegated emps : " + delegatedEmps.toString());
 		return leaveDbDao.getDelegations(leaveRequestNo, locale);
 	}
 	
@@ -563,7 +557,6 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 						message			=	UtilProperty.getMessage("prop.leave.app.cancel.request.success", new String []{requestNo}, locale);
 						leaveRequest 	= leaveDbDao.getLeaveRequest(requestNo, locale);
 						leaveApprove	=	leaveDbDao.getLeaveApproveHistory(requestNo, locale).get(0);
-						logger.info("Leave request for cancel : "+leaveRequest.toString());
 			/* Sending email */
 			EmailLeave	emailLeave		=	new EmailCancel(leaveRequest, leaveApprove, locale);
 						emailLeave.sendRequesterEmail();

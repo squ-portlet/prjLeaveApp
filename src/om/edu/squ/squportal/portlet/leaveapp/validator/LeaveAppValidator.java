@@ -66,7 +66,7 @@ public class LeaveAppValidator implements Validator
 		LeaveAppModel	leaveAppModel	=	(LeaveAppModel) obj;
 		DelegatedEmp[]	delegatedEmps	=	leaveAppModel.getDelegatedEmps();
 		
-		/*Forcing user to select their preferred approver*/
+		/*Forcing user to select their preferred approver -- Don't Remove these entries, although commented, might be in need at future*/
 //		if(null == leaveAppModel.getHod()|| leaveAppModel.getHod().trim().equals(""))
 //		{
 //			err.rejectValue("hod", "error.prop.leave.app.approver.na");
@@ -118,8 +118,6 @@ public class LeaveAppValidator implements Validator
 								!(null == delEmps.getToDate() || delEmps.getToDate().trim().equals(""))
 						  )
 						{
-							System.out.println("INSIDE IF");
-							
 								if ((null == delEmps.getFromDate()) || delEmps.getFromDate().trim().equals("") )
 								{
 									err.rejectValue("delegatedEmps["+i+"].fromDate", "error.prop.leave.app.delegate.fromDate.na");
@@ -193,8 +191,6 @@ public class LeaveAppValidator implements Validator
 									{
 										DelegatedEmp	delEmps1			=	delegatedEmps[i];
 										DelegatedEmp	delEmps2			=	delegatedEmps[i+1];
-										System.out.println ("delegatedEmps[i+1] : "+delegatedEmps[i+1]);
-										
 										if((
 												null != delEmps1.getToDate() || delEmps1.getToDate().trim().equals(""))  && 
 												null != delEmps2.getFromDate() || delEmps2.getFromDate().trim().equals("") )
@@ -203,10 +199,6 @@ public class LeaveAppValidator implements Validator
 											
 												Date			dtDelgEndDate1		=	sdfDate.parse(delEmps1.getToDate());
 												Date			dtDelgStartDate2 	=	sdfDate.parse(delEmps2.getFromDate());
-												
-												System.out.println("dtDelgEndDate1 : "+dtDelgEndDate1);
-												System.out.println("dtDelgStartDate2 : "+dtDelgStartDate2);
-												System.out.println("condition : "+dtDelgStartDate2.compareTo(dtDelgEndDate1));
 												
 												if(dtDelgStartDate2.compareTo(dtDelgEndDate1)<0)
 												{
@@ -237,8 +229,6 @@ public class LeaveAppValidator implements Validator
 						}
 						else
 						{
-							System.out.println("INSIDE ELSE");
-								
 							if(((msDiffLvDate /(constTimeMilli)+1)) > Constants.CONST_DELEGATION_REQ_LEAVE_DAYS)								// delegation requirement
 									{																									// for more than 5 days
 									err.rejectValue("delegatedEmps["+i+"].fromDate", "error.prop.leave.app.delegate.limit.exceed.na", 
@@ -251,35 +241,19 @@ public class LeaveAppValidator implements Validator
 						
 							
 					} // End of for loop
-
-					
-					System.out.println("lvDateNos : "+lvDateNos);
-					System.out.println("delgDateNos : "+delgDateNos);
-					
 					if((lvDateNos  >  Constants.CONST_DELEGATION_REQ_LEAVE_DAYS) && lvDateNos != delgDateNos)
 					{
 						err.rejectValue("leaveStartDate", "error.prop.leave.app.delegate.date.not.equal");
 					}
 					
 				}
-
-				
-
-			
 			
 			}	// end if
 		}
 		catch (ParseException ex)
 		{
-			System.out.println("error : "+ex);
-			ex.printStackTrace();
-			// TODO Auto-generated catch block
 			logger.warn("date parsing issue. Detail : "+ex.getMessage());
 		}
-		
-		
-		
-		
 		
 	}
 	

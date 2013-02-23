@@ -67,9 +67,6 @@ public class LeaveAppBranchServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("logger inside branch servlet");
-		System.out.println("logger inside branch servlet");
-
 		Locale				locale		=	request.getLocale();			
 		String				strJson		=	null;
 		String				deptCode	=	null;
@@ -89,9 +86,6 @@ public class LeaveAppBranchServlet extends HttpServlet {
 			List<Section>		sections	=	leaveDbDao.getSections(deptCode, locale);
 			strJson	=	gson.toJson(sections);														//json objects for sections
 		}
-		
-		
-		logger.info("json from branch servlet : "+strJson);
 		response.getWriter().print(strJson);
 	}
 

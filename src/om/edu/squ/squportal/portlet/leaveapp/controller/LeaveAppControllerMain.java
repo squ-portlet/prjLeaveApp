@@ -258,15 +258,11 @@ public class LeaveAppControllerMain
 			BindingResult result,Locale locale,Model model
 			)
 	{
-		
-		
 		PortletSession			session					=	request.getPortletSession();
 		Employee				employee				=	(Employee)session.getAttribute("employee");	
 		AllowEleaveRequestProc	allowEleaveRequestProc	=	null;
 
 		new LeaveAppValidator().validate(leaveAppModel, result);
-		
-		logger.info("HOD value : "+leaveAppModel.getHod());
 		
 		if(result.hasErrors())
 		{
@@ -294,11 +290,9 @@ public class LeaveAppControllerMain
 																		requestNo,leaveTypeNo,
 																		leaveAppModel,employee, locale
 																	 );
-				logger.info("leave Request allow notification : "+ allowEleaveRequestProc.toString());
 			}
 			catch (ParseException ex)
 			{
-				ex.printStackTrace();
 				logger.error("exception at leave request allow notification : "+ex.getMessage());
 			}
 
@@ -312,29 +306,16 @@ public class LeaveAppControllerMain
 					{
 						logger.error("error generating message : "+nEx);
 					}
-					
-					logger.info("inside if ");
-				//int dbResult	=	leaveAppServiceDao.setNewLeaveRequest(leaveAppModel,employee);
-				//logger.info("db result : "+dbResult);
 			}
 			else if(operation.equals(Constants.CONST_OPERATION_UPDATE))
 			{
 				response.setRenderParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowEleaveRequestProc.getLeaveMessage());
-				//logger.info("model -- leave app model : "+leaveAppModel.toString());
+
 			}
 			response.setRenderParameter("action", "backToMain");
 		}
 		
-		//TODO sent mail to requester & approver
-		/*
-
-		 * 
-		 * */
-		
 	}
-
-	
-	
 	
 	
 	/**
@@ -572,12 +553,7 @@ public class LeaveAppControllerMain
 			String allowELeaveRequestMsg	=	request.getParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG);
 			if (!model.containsAttribute(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG))
 			{
-				logger.info("inside if - attribute avialable :"+allowELeaveRequestMsg);
 				model.addAttribute(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowELeaveRequestMsg);
-			}
-			else
-			{
-				logger.info("inside else - attribute value :"+allowELeaveRequestMsg);
 			}
 		}
 		return welcome(request,model,locale);

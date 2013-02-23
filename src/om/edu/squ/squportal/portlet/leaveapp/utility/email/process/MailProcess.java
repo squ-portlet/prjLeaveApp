@@ -55,12 +55,16 @@ import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilFile;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 
 
 	public class MailProcess 
 	{
+		private final Logger logger = LoggerFactory.getLogger(this.getClass());
+		
 		   	private static  String 	SMTP_HOST_NAME;
 		    private static  int 	SMTP_HOST_PORT;
 		    private static  String 	SMTP_AUTH_USER;  
@@ -344,17 +348,13 @@ import org.springframework.web.multipart.MultipartFile;
 					            message.getRecipients(Message.RecipientType.CC));
 		        	}
 		        }
-		        
-		        
-		        
 		        transport.close();
 		        mailSuccess	=	true;
 	        }
 	        catch(Exception ex)
 	        {
 	        	mailSuccess	= false;
-	        	System.out.println("Mail sending failure, Details : "+ex);
-	        	ex.printStackTrace();
+	        	logger.error("Mail sending failure, Details : "+ex);
 	        }
 	        
 	        return mailSuccess;
