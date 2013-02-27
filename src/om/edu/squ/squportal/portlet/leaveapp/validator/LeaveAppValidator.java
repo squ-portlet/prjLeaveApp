@@ -90,8 +90,8 @@ public class LeaveAppValidator implements Validator
 		
 		try
 		{
-			if((null != leaveAppModel.getLeaveStartDate() && leaveAppModel.getLeaveStartDate().trim().equals("")) 
-					&& (null != leaveAppModel.getLeaveEndDate() && leaveAppModel.getLeaveEndDate().trim().equals("")) )
+			if((null != leaveAppModel.getLeaveStartDate() && ! leaveAppModel.getLeaveStartDate().trim().equals("")) 
+					&& (null != leaveAppModel.getLeaveEndDate() && ! leaveAppModel.getLeaveEndDate().trim().equals("")) )
 			{
 				dtLvStartDate		=	sdfDate.parse(leaveAppModel.getLeaveStartDate());
 				dtLvEndDate			=	sdfDate.parse(leaveAppModel.getLeaveEndDate());
@@ -100,6 +100,11 @@ public class LeaveAppValidator implements Validator
 				long	constTimeMilli	=	1000*60*60*24;	
 				long	lvDateNos		=	(msDiffLvDate/constTimeMilli)+1;						// total number of leaves
 				long	delgDateNos		=	0;														// total number of delegation dates 
+				
+				if(msDiffLvDate <0)
+				{
+					err.rejectValue("leaveStartDate", "error.prop.leave.app.date.validation.incorrect.range");
+				}
 				
 				if(null != delegatedEmps && delegatedEmps.length != 0)
 				{

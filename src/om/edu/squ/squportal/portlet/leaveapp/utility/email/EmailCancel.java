@@ -53,7 +53,7 @@ public class EmailCancel extends EmailDataAbstract implements EmailLeave
 	public EmailCancel (LeaveRequest leaveRequest, LeaveApprove leaveApprove,Locale locale)
 	{
 		this.locale	=	locale;
-		this.emailData	=	setGeneralEmailData(leaveRequest, leaveApprove, null);
+		this.emailData	=	setGeneralEmailData(leaveRequest, leaveApprove, null,locale);
 		//this.emailData.setRequestNo(leaveRequest.getRequestNo());
 	}
 	
@@ -78,7 +78,8 @@ public class EmailCancel extends EmailDataAbstract implements EmailLeave
 		{
 			this.emailData.setMailTo(getEmpRequester().getEmpInternetId()+"@squ.edu.om");
 		}
-		this.emailData.setEmailReceiverName(getEmpRequester().getEmpName());
+		this.emailData.setEmailReceiverNameEn(getEmpRequester().getEmpNameEn());
+		this.emailData.setEmailReceiverNameAr(getEmpRequester().getEmpNameAr());
 		this.emailData.setEmailTemplateName(emailTemplateRequesterPath);
 		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.cancel.requester",null, locale));
 		return sendLeaveEmail();
@@ -106,7 +107,8 @@ public class EmailCancel extends EmailDataAbstract implements EmailLeave
 			this.emailData.setMailTo(getEmpApprover().getEmpInternetId()+"@squ.edu.om");
 		}
 		this.emailData.setMailTo("bhabesh@squ.edu.om");	
-		this.emailData.setEmailReceiverName(getEmpApprover().getEmpName());
+		this.emailData.setEmailReceiverNameEn(getEmpApprover().getEmpNameEn());
+		this.emailData.setEmailReceiverNameAr(getEmpApprover().getEmpNameAr());
 		this.emailData.setEmailTemplateName(emailTemplateApproverPath);	
 		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.cancel.approver",null, locale));
 		return sendLeaveEmail();

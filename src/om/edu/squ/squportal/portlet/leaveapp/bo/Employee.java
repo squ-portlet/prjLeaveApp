@@ -42,6 +42,8 @@ public class Employee implements Serializable
 	private	String	empInternetId;
 	private	String	empSquEmail;
 	private	String	empName;
+	private	String	empNameEn;														//	Employee Name in English
+	private	String	empNameAr;														//	Employee Name in Arabic
 	private	String	designationCode;
 	private	String	designation;
 	private	String	designationAddlCode;											// Additional designation ; if any
@@ -166,6 +168,50 @@ public class Employee implements Serializable
 	{
 		this.empName = empName;
 	}
+	/**
+	 * Getter Method	: getEmpNameEn
+	 * @return the empNameEn
+	 * 
+	 * Date				: Feb 27, 2013
+	 */
+	public String getEmpNameEn()
+	{
+		return this.empNameEn;
+	}
+
+	/**
+	 * Setter method : setEmpNameEn
+	 * @param empNameEn the empNameEn to set
+	 * 
+	 * Date          : Feb 27, 2013 3:38:23 PM
+	 */
+	public void setEmpNameEn(String empNameEn)
+	{
+		this.empNameEn = empNameEn;
+	}
+
+	/**
+	 * Getter Method	: getEmpNameAr
+	 * @return the empNameAr
+	 * 
+	 * Date				: Feb 27, 2013
+	 */
+	public String getEmpNameAr()
+	{
+		return this.empNameAr;
+	}
+
+	/**
+	 * Setter method : setEmpNameAr
+	 * @param empNameAr the empNameAr to set
+	 * 
+	 * Date          : Feb 27, 2013 3:38:23 PM
+	 */
+	public void setEmpNameAr(String empNameAr)
+	{
+		this.empNameAr = empNameAr;
+	}
+
 	/**
 	 * Getter Method	: getDesignationCode
 	 * @return the designationCode

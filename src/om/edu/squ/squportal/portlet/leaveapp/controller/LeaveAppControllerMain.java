@@ -13,7 +13,7 @@
  * Date of creation		:	Aug 4, 2012  12:02:53 PM
  * Date of modification :	
  * 
- * Summary				:	Controller for SQU Gate permit (Main)
+ * Summary				:	Main Controller for Leave Application
  *
  *
  * Copyright 2012 the original author or authors and Organization.
@@ -266,8 +266,7 @@ public class LeaveAppControllerMain
 		
 		if(result.hasErrors())
 		{
-			logger.warn("validation error : "+result.getAllErrors());
-			
+
 			if(null != requestNo && 
 			! requestNo.trim().equals("") && 
 			! requestNo.trim().equals(Constants.CONST_NOT_AVAILABLE) )

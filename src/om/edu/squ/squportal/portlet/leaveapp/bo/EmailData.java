@@ -38,9 +38,12 @@ public class EmailData
 	private	String	mailTo;
 	private	String	mailFrom;
 	private	String	emailReceiverName;
+	private	String	emailReceiverNameEn;
+	private	String	emailReceiverNameAr;
 	private	String	emailTemplateName;
 	private String 	requestNo;
 	private	String	requesterName;
+	private	String	requesterNameAr;
 	private	String	requesterEmail;
 	private	String	requestDate;
 	private	String	requestStartDate;
@@ -52,11 +55,14 @@ public class EmailData
 	private	String	delegationStartDate;
 	private	String	delegationEndDate;
 	private	String	approverName;
+	private	String	approverNameAr;
 	private	String	approverEmail;
 	private	String	approveDate;
 	private	String	approverRemark;
 	private	String	leaveUrl;
 	private	String	emailMessage;
+	private	String	emailMessageAr;
+	
 	
 	/**
 	 * Getter Method	: getMailTo
@@ -119,6 +125,46 @@ public class EmailData
 		this.emailReceiverName = emailReceiverName;
 	}
 	/**
+	 * Getter Method	: getEmailReceiverNameEn
+	 * @return the emailReceiverNameEn
+	 * 
+	 * Date				: Feb 27, 2013
+	 */
+	public String getEmailReceiverNameEn()
+	{
+		return this.emailReceiverNameEn;
+	}
+	/**
+	 * Setter method : setEmailReceiverNameEn
+	 * @param emailReceiverNameEn the emailReceiverNameEn to set
+	 * 
+	 * Date          : Feb 27, 2013 4:00:26 PM
+	 */
+	public void setEmailReceiverNameEn(String emailReceiverNameEn)
+	{
+		this.emailReceiverNameEn = emailReceiverNameEn;
+	}
+	/**
+	 * Getter Method	: getEmailReceiverNameAr
+	 * @return the emailReceiverNameAr
+	 * 
+	 * Date				: Feb 27, 2013
+	 */
+	public String getEmailReceiverNameAr()
+	{
+		return this.emailReceiverNameAr;
+	}
+	/**
+	 * Setter method : setEmailReceiverNameAr
+	 * @param emailReceiverNameAr the emailReceiverNameAr to set
+	 * 
+	 * Date          : Feb 27, 2013 4:00:26 PM
+	 */
+	public void setEmailReceiverNameAr(String emailReceiverNameAr)
+	{
+		this.emailReceiverNameAr = emailReceiverNameAr;
+	}
+	/**
 	 * Getter Method	: getEmailTemplateName
 	 * @return the emailTemplateName
 	 * 
@@ -177,6 +223,26 @@ public class EmailData
 	public void setRequesterName(String requesterName)
 	{
 		this.requesterName = requesterName;
+	}
+	/**
+	 * Getter Method	: getRequesterNameEn
+	 * @return the requesterNameAr
+	 * 
+	 * Date				: Feb 27, 2013
+	 */
+	public String getRequesterNameAr()
+	{
+		return this.requesterNameAr;
+	}
+	/**
+	 * Setter method : setRequesterNameEn
+	 * @param requesterNameAr the requesterNameAr to set
+	 * 
+	 * Date          : Feb 27, 2013 4:12:49 PM
+	 */
+	public void setRequesterNameAr(String requesterNameAr)
+	{
+		this.requesterNameAr = requesterNameAr;
 	}
 	/**
 	 * Getter Method	: getRequesterEmail
@@ -399,6 +465,26 @@ public class EmailData
 		this.approverName = approverName;
 	}
 	/**
+	 * Getter Method	: getApproverNameAr
+	 * @return the approverNameAr
+	 * 
+	 * Date				: Feb 27, 2013
+	 */
+	public String getApproverNameAr()
+	{
+		return this.approverNameAr;
+	}
+	/**
+	 * Setter method : setApproverNameAr
+	 * @param approverNameAr the approverNameAr to set
+	 * 
+	 * Date          : Feb 27, 2013 4:24:11 PM
+	 */
+	public void setApproverNameAr(String approverNameAr)
+	{
+		this.approverNameAr = approverNameAr;
+	}
+	/**
 	 * Getter Method	: getApproverEmail
 	 * @return the approverEmail
 	 * 
@@ -498,6 +584,26 @@ public class EmailData
 	{
 		this.emailMessage = emailMessage;
 	}
+	/**
+	 * Getter Method	: getEmailMessageAr
+	 * @return the emailMessageAr
+	 * 
+	 * Date				: Feb 27, 2013
+	 */
+	public String getEmailMessageAr()
+	{
+		return this.emailMessageAr;
+	}
+	/**
+	 * Setter method : setEmailMessageAr
+	 * @param emailMessageAr the emailMessageAr to set
+	 * 
+	 * Date          : Feb 27, 2013 1:13:18 PM
+	 */
+	public void setEmailMessageAr(String emailMessageAr)
+	{
+		this.emailMessageAr = emailMessageAr;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -510,12 +616,18 @@ public class EmailData
 						: "")
 				+ (this.emailReceiverName != null ? "emailReceiverName="
 						+ this.emailReceiverName + ", " : "")
+				+ (this.emailReceiverNameEn != null ? "emailReceiverNameEn="
+						+ this.emailReceiverNameEn + ", " : "")
+				+ (this.emailReceiverNameAr != null ? "emailReceiverNameAr="
+						+ this.emailReceiverNameAr + ", " : "")
 				+ (this.emailTemplateName != null ? "emailTemplateName="
 						+ this.emailTemplateName + ", " : "")
 				+ (this.requestNo != null ? "requestNo=" + this.requestNo
 						+ ", " : "")
 				+ (this.requesterName != null ? "requesterName="
 						+ this.requesterName + ", " : "")
+				+ (this.requesterNameAr != null ? "requesterNameAr="
+						+ this.requesterNameAr + ", " : "")
 				+ (this.requesterEmail != null ? "requesterEmail="
 						+ this.requesterEmail + ", " : "")
 				+ (this.requestDate != null ? "requestDate=" + this.requestDate
@@ -538,6 +650,8 @@ public class EmailData
 						+ this.delegationEndDate + ", " : "")
 				+ (this.approverName != null ? "approverName="
 						+ this.approverName + ", " : "")
+				+ (this.approverNameAr != null ? "approverNameAr="
+						+ this.approverNameAr + ", " : "")
 				+ (this.approverEmail != null ? "approverEmail="
 						+ this.approverEmail + ", " : "")
 				+ (this.approveDate != null ? "approveDate=" + this.approveDate
@@ -547,7 +661,9 @@ public class EmailData
 				+ (this.leaveUrl != null ? "leaveUrl=" + this.leaveUrl + ", "
 						: "")
 				+ (this.emailMessage != null ? "emailMessage="
-						+ this.emailMessage : "") + "]";
+						+ this.emailMessage + ", " : "")
+				+ (this.emailMessageAr != null ? "emailMessageAr="
+						+ this.emailMessageAr : "") + "]";
 	}
 	
 	

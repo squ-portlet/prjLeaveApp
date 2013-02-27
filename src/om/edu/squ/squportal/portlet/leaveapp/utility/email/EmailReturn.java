@@ -62,7 +62,7 @@ public class EmailReturn extends EmailDataAbstract implements EmailLeave
 	 */
 	public EmailReturn(LeaveRequest leaveRequest, LeaveApprove leaveApprove,DelegatedEmp[] delegatedEmps,Locale locale)
 	{
-		this.emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps);
+		this.emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps,locale);
 		this.locale		=	locale;
 	}
 	
@@ -79,7 +79,8 @@ public class EmailReturn extends EmailDataAbstract implements EmailLeave
 		{
 			this.emailData.setMailTo(getEmpRequester().getEmpInternetId()+"@squ.edu.om");
 		}
-		this.emailData.setEmailReceiverName(getEmpRequester().getEmpName());
+		this.emailData.setEmailReceiverNameEn(getEmpRequester().getEmpNameEn());
+		this.emailData.setEmailReceiverNameAr(getEmpRequester().getEmpNameAr());
 		this.emailData.setEmailTemplateName(emailTemplateRequesterPath);	
 		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.new.requester",null, locale));
 		return sendLeaveEmail();
@@ -99,7 +100,8 @@ public class EmailReturn extends EmailDataAbstract implements EmailLeave
 		{
 			emailData.setMailTo(getEmpApprover().getEmpInternetId()+"@squ.edu.om");
 		}
-		this.emailData.setEmailReceiverName(getEmpApprover().getEmpName());
+		this.emailData.setEmailReceiverNameEn(getEmpApprover().getEmpNameEn());
+		this.emailData.setEmailReceiverNameAr(getEmpApprover().getEmpNameAr());
 		this.emailData.setEmailTemplateName(emailTemplateApproverPath);	
 		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.new.approver",null, locale));
 		return sendLeaveEmail();

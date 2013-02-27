@@ -83,8 +83,8 @@ import org.springframework.web.multipart.MultipartFile;
 			public boolean setLeaveEmail(EmailData emailData)
 			{
 				boolean result	=	false; 
-				String emailBody	=	new UtilFile().readFile(emailData.getEmailTemplateName());
-				
+				String emailBody	=	new UtilFile().readUniCodeFile(emailData.getEmailTemplateName()); //new UtilFile().readFile(emailData.getEmailTemplateName());
+					
 				/**
 				 * Request No
 				 */
@@ -100,6 +100,20 @@ import org.springframework.web.multipart.MultipartFile;
 					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_EMAIL_RECEIVER_NAME, emailData.getEmailReceiverName());
 				}
 				/**
+				 * Email Receiver Name English
+				 */
+				if(!(null == emailData.getEmailReceiverNameEn()) && emailBody.contains(Constants.TEMPL_PARAM_EMAIL_RECEIVER_NAME_EN))
+				{
+					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_EMAIL_RECEIVER_NAME_EN, emailData.getEmailReceiverNameEn());
+				}
+				/**
+				 * Email Receiver Name Arabic
+				 */
+				if(!(null == emailData.getEmailReceiverNameAr()) && emailBody.contains(Constants.TEMPL_PARAM_EMAIL_RECEIVER_NAME_AR))
+				{
+					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_EMAIL_RECEIVER_NAME_AR, emailData.getEmailReceiverNameAr());
+				}
+				/**
 				 * Email Message
 				 */
 				if(!(null == emailData.getEmailMessage()) && emailBody.contains(Constants.TEMPL_PARAM_EMAIL_MESSAGE))
@@ -107,11 +121,25 @@ import org.springframework.web.multipart.MultipartFile;
 					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_EMAIL_MESSAGE, emailData.getEmailMessage());
 				}
 				/**
+				 * Email Message arabic
+				 */
+				if(!(null == emailData.getEmailMessageAr()) && emailBody.contains(Constants.TEMPL_PARAM_EMAIL_MESSAGE_AR))
+				{
+					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_EMAIL_MESSAGE_AR, emailData.getEmailMessageAr());
+				}
+				/**
 				 * Requester Name
 				 */
 				if(!(null == emailData.getRequesterName()) && emailBody.contains(Constants.TEMPL_PARAM_REQUESTER_NAME))
 				{
 					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUESTER_NAME, emailData.getRequesterName());
+				}
+				/**
+				 * Requester Name in arabic
+				 */
+				if(!(null == emailData.getRequesterNameAr()) && emailBody.contains(Constants.TEMPL_PARAM_REQUESTER_NAME_AR))
+				{
+					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUESTER_NAME_AR, emailData.getRequesterNameAr());
 				}
 				/**
 				 * Requester Email
@@ -189,6 +217,13 @@ import org.springframework.web.multipart.MultipartFile;
 				if(!(null == emailData.getApproverName()) && emailBody.contains(Constants.TEMPL_PARAM_APPROVER_NAME))
 				{
 					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVER_NAME, emailData.getApproverName());
+				}
+				/**
+				 * Approver Name in arabic
+				 */
+				if(!(null == emailData.getApproverNameAr()) && emailBody.contains(Constants.TEMPL_PARAM_APPROVER_NAME_AR))
+				{
+					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVER_NAME_AR, emailData.getApproverNameAr());
 				}
 				/**
 				 * Approver Email

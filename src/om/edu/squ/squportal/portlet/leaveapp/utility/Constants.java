@@ -41,6 +41,8 @@ public interface Constants
 	public static final	String	CONST_EMP_INTERNET_ID			=			"EMP_INTERNET_ID";
 	public static final	String	CONST_EMP_EMAIL_ID				=			"EMP_MAIL_ID";
 	public static final	String	CONST_EMP_NAME					=			"EMP_NAME";
+	public static final	String	CONST_EMP_NAME_EN				=			"EMP_NAME_EN";
+	public static final	String	CONST_EMP_NAME_AR				=			"EMP_NAME_AR";
 	public static final	String	CONST_EMP_JOB_TYPE_CODE			=			"EMP_JOB_TYPE_CODE";
 	public static final	String	CONST_EMP_DESIGNATION_CODE		=			"EMP_DESIGNATION_CODE";
 	public static final	String	CONST_EMP_DESIGNATION			=			"EMP_DESIGNATION";
@@ -130,6 +132,7 @@ public interface Constants
 	public static final	String	CONST_ADMIN_FALSE				=			"N";
 	public static final String	CONST_LEAVE_REQ_ACTIVE_TRUE		=			"Y";
 	public static final	String	CONST_LANG_DEFAULT_EN			=			"en";
+	public static final	String	CONST_LANG_DEFAULT_AR			=			"ar";
 	
 	public static final	String	CONST_MUSLIM_NUM				=			"1";
 	public static final	String	CONST_MUSLIM					=			"Y";
@@ -216,17 +219,23 @@ public interface Constants
 	
 	/******************************************************/
 
-	
 	/************* EMAIL TEMPLATE***************************/
 	public	static	String	TEMPL_LEAVE_APP						=			"tmplateLeaveAppEmail.txt";
 	public	static	String	TEMPL_LEAVE_APP_REQUESTER			=			"tmplateLeaveAppEmailReqester.txt";
 	public	static	String	TEMPL_LEAVE_APP_APPROVER			=			"tmplateLeaveAppEmailApprover.txt";
+	
+	public	static	String	TEMPL_LEAVE_APP_AR					=			"tmplateLeaveAppEmail_ar.txt";
+	public	static	String	TEMPL_LEAVE_APP_REQUESTER_AR		=			"tmplateLeaveAppEmailReqester_ar.txt";
+	public	static	String	TEMPL_LEAVE_APP_APPROVER_AR			=			"tmplateLeaveAppEmailApprover_ar.txt";
 	/******************************************************/
 	
 	/************* EMAIL TEMPLATE PARAMETER ***************/
 	public	static	String	TEMPL_PARAM_REQUEST_NO				=			":paramReqNo";
 	public	static	String	TEMPL_PARAM_EMAIL_RECEIVER_NAME		=			":paramEmailReceiverName";
+	public	static	String	TEMPL_PARAM_EMAIL_RECEIVER_NAME_EN	=			":paramEmailReceiverEnglishName";
+	public	static	String	TEMPL_PARAM_EMAIL_RECEIVER_NAME_AR	=			":paramEmailReceiverArabicName";
 	public	static	String	TEMPL_PARAM_REQUESTER_NAME			=			":paramRequester";
+	public	static	String	TEMPL_PARAM_REQUESTER_NAME_AR		=			":paramArabicRequester";
 	public	static	String	TEMPL_PARAM_REQUESTER_EMAIL			=			":paramEmailRequester";
 	public	static	String	TEMPL_PARAM_REQUEST_DATE			=			":paramReqDate";
 	public	static	String	TEMPL_PARAM_REQUEST_START_DATE		=			":paramStartDate";
@@ -238,10 +247,13 @@ public interface Constants
 	public	static	String	TEMPL_PARAM_DELEGATE_START_DATE		=			":paramDelgStartDate";
 	public	static	String	TEMPL_PARAM_DELEGATE_END_DATE		=			":paramDelgEndDate";
 	public	static	String	TEMPL_PARAM_APPROVER_NAME			=			":paramApprover";
+	public	static	String	TEMPL_PARAM_APPROVER_NAME_AR		=			":paramArabicApprover";
 	public	static	String	TEMPL_PARAM_APPROVER_EMAIL			=			":paramEmailApprover";
 	public	static	String	TEMPL_PARAM_APPROVE_DATE			=			":paramApproveDate";
 	public	static	String	TEMPL_PARAM_APPROVER_REMARK			=			":paramAppRemark";
 	public	static	String	TEMPL_PARAM_EMAIL_MESSAGE			=			":paramEmailMessage";
+	public	static	String	TEMPL_PARAM_EMAIL_MESSAGE_AR		=			":paramEmailMsgAr";
+	
 	public	static	String	TEMPL_PARAM_LEAVE_URL				=			":paramUrl";
 	
 	/******************************************************/
@@ -263,6 +275,8 @@ public interface Constants
 																			"  DECODE(:paramLocale,                          									" +		
 																			"            'en',initCap(EMP.VHM_EMP_NAME),   										" +       	
 																			"			 'ar',EMP.VHM_EMP_NAME_ARABIC) AS EMP_NAME,								" +
+																			"	initCap(EMP.VHM_EMP_NAME) AS EMP_NAME_EN,										" +
+																			"	EMP.VHM_EMP_NAME_ARABIC	AS EMP_NAME_AR,											" +
 																			"	EMP.VHM_EMP_JOB_TYPE AS EMP_JOB_TYPE_CODE,										" +
 																			"	EMP.VHM_EMP_DESG_CODE AS EMP_DESIGNATION_CODE,									" +
 																			"  DECODE(:paramLocale,                          									" +
@@ -722,7 +736,9 @@ public interface Constants
 																			"	      :paramLocale,												" +
 																			"	      'en',initcap(EMP.VHM_EMP_NAME),					" +
 																			"	      'ar',EMP.VHM_EMP_NAME_ARABIC						" +
-																			"	      ) AS EMP_NAME,									" + 
+																			"	      ) AS EMP_NAME,									" +
+																			"	initcap(EMP.VHM_EMP_NAME) AS EMP_NAME_EN,				" +
+																			"	EMP.VHM_EMP_NAME_ARABIC AS EMP_NAME_AR,					" + 
 																			"  SUBSTR(													" +
 																			"			EMP.VHM_EMP_SQU_EMAIL,1,						" +
 																			"			INSTRB(EMP.VHM_EMP_SQU_EMAIL, '@', 1, 1)-1		" +

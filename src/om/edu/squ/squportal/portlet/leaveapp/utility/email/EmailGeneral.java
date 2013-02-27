@@ -31,18 +31,15 @@ package om.edu.squ.squportal.portlet.leaveapp.utility.email;
 
 import java.util.Locale;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
-
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.EmailData;
-import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
-import om.edu.squ.squportal.portlet.leaveapp.utility.email.process.MailProcess;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Bhabesh
@@ -70,7 +67,7 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 	 */
 	public EmailGeneral(String leaveRequestNo, LeaveRequest leaveRequest, LeaveApprove leaveApprove,DelegatedEmp[] delegatedEmps,Locale locale)
 	{
-		this.emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps);
+		this.emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps,locale);
 		this.isNewEmail	=	true;
 		this.locale		=	locale;
 		this.emailData.setRequestNo(leaveRequestNo);
@@ -90,7 +87,7 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 	 */
 	public EmailGeneral(LeaveRequest leaveRequest, LeaveApprove leaveApprove,DelegatedEmp[] delegatedEmps,Locale locale)
 	{
-		emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps);
+		emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps,locale);
 		this.isNewEmail	=	false;
 		this.locale		=	locale;
 		//this.emailData.setRequestNo(leaveRequest.getRequestNo());
@@ -118,15 +115,18 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 		{
 			this.emailData.setMailTo(getEmpRequester().getEmpInternetId()+"@squ.edu.om");
 		}
-		this.emailData.setEmailReceiverName(getEmpRequester().getEmpName());
+		this.emailData.setEmailReceiverNameEn(getEmpRequester().getEmpNameEn());
+		this.emailData.setEmailReceiverNameAr(getEmpRequester().getEmpNameAr());
 		this.emailData.setEmailTemplateName(emailTemplateRequesterPath);	
 		if(isNewEmail)
 		{
-			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester",null, locale));
+			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester",null));
+			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester",null, locale));
 		}
 		else
 		{
-			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null, locale));
+			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null));
+			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null, locale));
 		}
 		
 		return sendLeaveEmail();
@@ -152,15 +152,18 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 		{
 			emailData.setMailTo(getEmpApprover().getEmpInternetId()+"@squ.edu.om");
 		}
-		this.emailData.setEmailReceiverName(getEmpApprover().getEmpName());
+		this.emailData.setEmailReceiverNameEn(getEmpApprover().getEmpNameEn());
+		this.emailData.setEmailReceiverNameAr(getEmpApprover().getEmpNameAr());
 		this.emailData.setEmailTemplateName(emailTemplateApproverPath);	
 		if(isNewEmail)
 		{
-			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver",null, locale));
+			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver",null));
+			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver",null, locale));
 		}
 		else
 		{
-			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null, locale));
+			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null));
+			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null, locale));
 		}
 		
 		return sendLeaveEmail();
@@ -188,8 +191,10 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 		{
 			this.emailData.setMailTo(mailTo);
 		}
-		this.emailData.setEmailReceiverName(delegateName);
-		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.delegation",null, locale));
+		this.emailData.setEmailReceiverNameEn(delegateName);
+		this.emailData.setEmailReceiverNameAr(delegateName);
+		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.delegation",null));
+		this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.delegation",null, locale));
 		return sendLeaveEmail();
 	}
 

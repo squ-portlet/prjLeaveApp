@@ -30,9 +30,13 @@
 package om.edu.squ.squportal.portlet.leaveapp.utility;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -101,4 +105,85 @@ public class UtilFile
 				}
 	    	return strText;
 	    }
+	  
+	  public synchronized String readUniCodeFile(String fileName)
+	  {
+		  	URL 		url 	=	null;
+		  	FileReader	fr		=	null;
+		  	String 		strText = 	"";
+		  	strText = readInput(fileName);
+		  	
+
+		  	
+
+		  	
+			try
+			{
+				byte[] by1252 = strText.getBytes("Cp1252");
+				strText = new String(by1252, "Cp1256");
+			}
+			catch (UnsupportedEncodingException ex)
+			{
+				// TODO Auto-generated catch block
+				ex.printStackTrace();
+			}
+
+		  	
+		  	
+		  	return strText;
+	  }
+	  
+	  private  String readInput(String fileName) {
+		    StringBuffer buffer = new StringBuffer();
+		    try {
+		        FileInputStream fis = new FileInputStream(getLocationUrl().getPath()+fileName);
+		        InputStreamReader isr = new InputStreamReader(fis, "Cp1252");
+		        Reader in = new BufferedReader(isr);
+		        int ch;
+		        while ((ch = in.read()) > -1) {
+		            buffer.append((char)ch);
+		        }
+		        in.close();
+		        return buffer.toString();
+		    } 
+		    catch (IOException e) {
+		        e.printStackTrace();
+		        return null;
+		    }
+		}
+	  
+	  /**
+	   * 
+	   * method name  : getLocationUrl
+	   * @return
+	   * UtilFile
+	   * return type  : URL
+	   * 
+	   * purpose		: Get the physical location url 
+	   *
+	   * Date    		:	Feb 26, 2013 10:48:14 AM
+	   */
+	  private URL getLocationUrl()
+	  {
+		  URL 		url 	=	null;
+		  
+	    	try
+			{
+				url = getClass().getResource("").toURI().toURL();
+			}
+			catch (MalformedURLException ex)
+			{
+				// TODO Auto-generated catch block
+				ex.printStackTrace();
+			}
+			catch (URISyntaxException ex)
+			{
+				// TODO Auto-generated catch block
+				ex.printStackTrace();
+			}
+
+		  
+		  return url;
+	  }
+	  
 }

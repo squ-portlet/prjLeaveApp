@@ -29,6 +29,8 @@
  */
 package om.edu.squ.squportal.portlet.leaveapp.utility.email;
 
+import java.util.Locale;
+
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.EmailData;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
@@ -48,10 +50,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class EmailDataAbstract
 {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private			EmailData		emailData					= 	new EmailData();
-	private 		String			emailTemplatePath			=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP;
-	public	static 	String			emailTemplateRequesterPath	=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_REQUESTER;
-	public 	static	String			emailTemplateApproverPath	=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_APPROVER;
+	private			EmailData		emailData						= 	new EmailData();
+
+	public 			String			emailTemplatePath				=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP;
+	public	 		String			emailTemplateRequesterPath		=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_REQUESTER;
+	public 			String			emailTemplateApproverPath		=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_APPROVER;
+
+	private			String			emailTemplatePath_ar			=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_AR;
+	private		 	String			emailTemplateRequesterPath_ar	=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_REQUESTER_AR;
+	private			String			emailTemplateApproverPath_ar	=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_APPROVER_AR;	
+	
 	private			Employee 		empRequester				=	null;
 	private			Employee		empApprover					=	null;
 	private			DelegatedEmp[] 	delegatedEmps				=	null;
@@ -65,17 +73,19 @@ public class EmailDataAbstract
 	 *
 	 * Date    		:	Feb 18, 2013 8:54:44 AM
 	 */
-	protected EmailData setGeneralEmailData(LeaveRequest leaveRequest, LeaveApprove leaveApprove,DelegatedEmp[] delegatedEmps)
+	protected EmailData setGeneralEmailData(LeaveRequest leaveRequest, LeaveApprove leaveApprove,DelegatedEmp[] delegatedEmps,Locale locale)
 	{
 		String tmpDelgStr	=	"----------------------------------------------------------------------------<br>";
 		
+
 		this.empRequester				=	leaveRequest.getEmployee();
 		this.empApprover				=	leaveApprove.getEmployee();
 		this.delegatedEmps				=	delegatedEmps;
 		boolean	isDelegation			=	false;
 		
 		this.emailData.setRequestNo(leaveRequest.getRequestNo());
-		this.emailData.setRequesterName(empRequester.getEmpName());
+		this.emailData.setRequesterName(empRequester.getEmpNameEn());
+		this.emailData.setRequesterNameAr(empRequester.getEmpNameAr());
 		this.emailData.setRequesterEmail(empRequester.getEmpInternetId()+"@squ.edu.om");	
 		this.emailData.setRequestStartDate(leaveRequest.getLeaveStartDate());
 		this.emailData.setRequestEndDate(leaveRequest.getLeaveEndDate());
@@ -87,7 +97,8 @@ public class EmailDataAbstract
 		{
 			this.emailData.setRequesterRemark("");
 		}
-		this.emailData.setApproverName(empApprover.getEmpName());
+		this.emailData.setApproverName(empApprover.getEmpNameEn());
+		this.emailData.setApproverNameAr(empApprover.getEmpNameAr());
 		this.emailData.setApproverEmail(empApprover.getEmpInternetId()+"@squ.edu.om");	
 		this.emailData.setEmailTemplateName(emailTemplatePath);	
 		this.emailData.setLeaveUrl(Constants.LEAVE_URL);

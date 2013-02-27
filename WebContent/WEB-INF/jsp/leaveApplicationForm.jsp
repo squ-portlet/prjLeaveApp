@@ -64,7 +64,13 @@
 <c:url value="/js/jquery-ui-1.8.18.custom.min.js" var="urlJsJqueryCustom"/>
 <c:url value="/js/jquery.ui.accordion.js" var="urlJsJqueryAccordion"/>
 
-
+<c:url value="/js/jquery.ui.core.js" var="urlJsJqueryCore"/>
+<c:url value="/js/jquery.ui.widget.js" var="urlJsJqueryWidget"/>
+<c:url value="/js/jquery.ui.mouse.js" var="urlJsJqueryMouse"/>
+<c:url value="/js/jquery.ui.button.js" var="urlJsJqueryButton"/>
+<c:url value="/js/jquery.ui.draggable.js" var="urlJsJqueryDraggable"/>
+<c:url value="/js/jquery.ui.position.js" var="urlJsJqueryPosition"/>
+<c:url value="/js/jquery.ui.dialog.js" var="urlJsJqueryDialog"/>
 
 
 <link type="text/css" href="${urlJQueryCSS}" rel="stylesheet" />
@@ -82,6 +88,16 @@
 <c:url value="/LeaveAppEmpServlet" var="servletLeave"/>
 <c:url value="/LeaveAppBranchServlet" var="servletLeaveBranch"/>
 <c:url value="/LeaveAppHodServlet" var="servletLeaveHOD"/>
+
+
+<script type="text/javascript" src="${urlJsJqueryCore}"></script>
+<script type="text/javascript" src="${urlJsJqueryWidget}"></script>
+<script type="text/javascript" src="${urlJsJqueryMouse}"></script>
+<script type="text/javascript" src="${urlJsJqueryButton}"></script>
+<script type="text/javascript" src="${urlJsJqueryDraggable}"></script>
+<script type="text/javascript" src="${urlJsJqueryPosition}"></script>
+<script type="text/javascript" src="${urlJsJqueryDialog}"></script>
+
 
 
 <style>
@@ -141,6 +157,7 @@
 </c:if>
 
 <script>
+var resDtIssueOK	=	true;
 $(function(){
 	// Datepicker
 	$('.calendar').datepicker({
@@ -164,9 +181,13 @@ $(function(){
 		minDate: -<c:out value="${daysAllowed}"/>,
 		firstDay:6,
 		onClose: function( selectedDate ) {
-				$( ".calendarEnd" ).datepicker( "option", "minDate", selectedDate ); 
-				$( ".calendarDelgStart" ).datepicker( "option", "minDate", selectedDate );
-				$( ".calendarDelgEnd" ).datepicker( "option", "minDate", selectedDate );
+			resDtIssueOK = diffLeaveDate();	
+			if(resDtIssueOK)
+					{
+						$( ".calendarEnd" ).datepicker( "option", "minDate", selectedDate ); 
+						$( ".calendarDelgStart" ).datepicker( "option", "minDate", selectedDate );
+						$( ".calendarDelgEnd" ).datepicker( "option", "minDate", selectedDate );
+					}
 				}
 		//inline: true
 	});
@@ -183,13 +204,35 @@ $(function(){
 		minDate: -<c:out value="${daysAllowed}"/>,
 		firstDay:6,
 	    onClose: function( selectedDate ) {
-	    		$( ".calendarStart" ).datepicker( "option", "maxDate", selectedDate );  
+	    	resDtIssueOK = diffLeaveDate();
+	    	if(resDtIssueOK)
+			{
+		    	$( ".calendarStart" ).datepicker( "option", "maxDate", selectedDate );  
 	    		$( ".calendarDelgEnd" ).datepicker( "option", "maxDate", selectedDate );
 	    		$( ".calendarDelgStart" ).datepicker( "option", "maxDate", selectedDate );
-	    	}
-		//inline: true
+			}    		
+	    		
+	    }
 	});
+
 });
+
+// $(function(){
+
+// 	$('#leaveStartDate').keydown(
+// 				function(e){ 
+// 					resDtIssueOK = diffLeaveDate();
+// 					 return resDtIssueOK;
+// 				});
+			
+// 	$('#leaveEndDate').keydown(
+// 			function(e){ 
+// 				resDtIssueOK = diffLeaveDate();
+// 				 return resDtIssueOK;
+// 			});
+	
+	
+// });
 
 
 $(function(){
@@ -381,19 +424,58 @@ $(function() {
 		);
 	});
 
+	function diffLeaveDate()
+		{
+			
+// 			var startDt	=	Date.parse(document.getElementById("leaveStartDate").value);
+// 			var	endDt	=	Date.parse(document.getElementById("leaveEndDate").value);
 
-
-
-
+ 			var startDt	=	$( ".calendarStart" ).datepicker( "getDate" );
+ 			var	endDt	=	$( ".calendarEnd" ).datepicker( "getDate" );
+ 			
+			var result	=	null;
+			if(null != startDt && null != endDt)
+				{
+						if(startDt > endDt)
+						{
+						$(function() { 
+							$("#dialogDate").html('<spring:message code="error.prop.leave.app.date.incorrect.range"/>'); 
+								$("#dialogDate").dialog(
+				               {
+				               	resizable: false,
+				               	width:400,
+				               	height:200,
+				               	modal: true,
+				               	closeOnEscape: false, 
+				   				close: function(event, ui) {
+				   					$("#dialogDate").hide();
+				   					return false;
+				   					},
+				 					buttons:
+				 						{
+				 						"<spring:message code='prop.leave.app.title.request.button.exit'/>": function() {
+				 						$( this ).dialog( "close" );
+				 						}
+				 						}
+				               }		
+				               ); 
+							return false;                         
+						});
+							
+							result = false;
+						}
+					else 
+						{
+						result = true;
+						}
+				}
+			return result;
+			
+		}
 
 </script>
 
 </head>
-
-
-
-
-
 
 <portlet:actionURL var="submitRequest">
 	<portlet:param name="action" value="newApply"/>
@@ -417,7 +499,7 @@ $(function() {
 	</a>
 </div>
 
-
+<div id="dialogDate" class="dialogApproveClass" title='<spring:message code="error.prop.leave.app.warning.dialogue.title"/>' style="display:none;"></div>
 
 <form:form modelAttribute="leaveAppModel"  action="${submitRequest}" method="post" htmlEscape="false" >
 <h2><font color="red"><form:errors path="*" /></font></h2>
@@ -477,13 +559,6 @@ $(function() {
 								<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i></font>
 							</a>
 						</h3>
-						<div>
-<%-- 							<spring:message code="prop.leave.app.apply.form.leave.manager"/>  --%>
-<%-- 							<div><center><font color="red"><c:out value="${approver.employee.empName}"/></font></center></div> --%>
-							
-							<br>
-							<center><spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/></center>
-						</div>
 					</c:when>
 					<c:otherwise>
 						<h3>
@@ -493,16 +568,11 @@ $(function() {
 							</a>
 						</h3>
 						<div>
-<%-- 							<spring:message code="prop.leave.app.apply.form.leave.manager"/>  --%>
-<%-- 							<div><center><font color="red"><c:out value="${mgrName}"/></font></center></div> --%>
-<!-- 							<br> -->
 							<br>
 							<center><spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/></center>
 						</div>
-					</c:otherwise>
-				</c:choose>
-				
-				<h3><a href="#"><spring:message code="prop.leave.app.apply.form.leave.manager.custom"/></a></h3>				
+						
+					<h3><a href="#"><spring:message code="prop.leave.app.apply.form.leave.manager.custom"/></a></h3>				
 					<div>
 						<fieldset>
 						<legend><spring:message code="prop.leave.app.apply.form.leave.manager.select"/> </legend>
@@ -542,6 +612,14 @@ $(function() {
 							</div>
 					</fieldset>
 				</div>
+
+					</c:otherwise>
+				</c:choose>
+				
+				<c:choose>
+				<c:when test='${opMode!= "u"}'>
+				</c:when>
+			</c:choose>
 </div>				
 				</td>
 			</tr>
@@ -551,7 +629,7 @@ $(function() {
 						<spring:message code="prop.leave.app.apply.form.leave.start.date"/>:
 					</span>
 				</th>
-				<td><form:input path="leaveStartDate" id="leaveStartDate" cssClass="calendarStart"/>
+				<td><form:input path="leaveStartDate" id="leaveStartDate" cssClass="calendarStart" />
 					<br><form:errors path="leaveStartDate" cssClass="error" />
 				</td>
 				<td>&nbsp;</td>
@@ -560,7 +638,7 @@ $(function() {
 						<spring:message code="prop.leave.app.apply.form.leave.end.date"/>:
 					</span>
 				</th>
-				<td><form:input path="leaveEndDate" id="leaveEndDate" cssClass="calendarEnd"/>
+				<td><form:input path="leaveEndDate" id="leaveEndDate" cssClass="calendarEnd" />
 					<br><form:errors path="leaveEndDate" cssClass="error"/>
 				</td>
 			</tr>

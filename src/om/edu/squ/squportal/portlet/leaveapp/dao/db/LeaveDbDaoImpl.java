@@ -252,6 +252,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				employee.setEmpInternetId(rs.getString(Constants.CONST_EMP_INTERNET_ID));
 				employee.setEmpSquEmail(rs.getString(Constants.CONST_EMP_EMAIL_ID));
 				employee.setEmpName(rs.getString(Constants.CONST_EMP_NAME));
+				employee.setEmpNameEn(rs.getString(Constants.CONST_EMP_NAME_EN));
+				employee.setEmpNameAr(rs.getString(Constants.CONST_EMP_NAME_AR));
 				employee.setJobTypeCode(rs.getString(Constants.CONST_EMP_JOB_TYPE_CODE));
 				employee.setDesignationCode(rs.getString(Constants.CONST_EMP_DESIGNATION_CODE));
 				employee.setDesignation(rs.getString(Constants.CONST_EMP_DESIGNATION));
@@ -858,10 +860,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			}
 
 		}
-
-		
-
-		
 		return result;
 		
 	}
@@ -1237,6 +1235,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				
 				employee.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
 				employee.setEmpName(rs.getString(Constants.CONST_EMP_NAME));
+				employee.setEmpNameEn(rs.getString(Constants.CONST_EMP_NAME_EN));
+				employee.setEmpNameAr(rs.getString(Constants.CONST_EMP_NAME_AR));
 				employee.setEmpInternetId(rs.getString(Constants.CONST_EMP_INTERNET_ID));
 				
 				approve.setAction(action);
