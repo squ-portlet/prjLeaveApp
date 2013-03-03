@@ -62,6 +62,7 @@
 <c:url value="/js/jquery-1.7.1.min.js" var="urlJsJqueryMin"/>
 <c:url value="/js/jquery-ui-1.8.18.custom.min.js" var="urlJsJqueryCustom"/>
 <c:url value="/js/jquery.ui.accordion.js" var="urlJsJqueryAccordion"/>
+<c:url value="/js/jquery.ddslick.js" var="urlJsJqueryDdslick"/>
 
 <link type="text/css" href="${urlJQueryCSS}" rel="stylesheet" />
 <link rel="Stylesheet" type="text/css" href="${urlCssSquPortletStyle}" />
@@ -71,6 +72,8 @@
 <script type="text/javascript" src="${urlJsJqueryMin}"></script>
 <script type="text/javascript" src="${urlJsJqueryCustom}"></script>
 <script type="text/javascript" src="${urlJsJqueryAccordion}"></script>
+
+<script type="text/javascript" src="${urlJsJqueryDdslick}"></script>
 
 <c:if test="${rc.locale.language=='ar'}">
 <style>
@@ -124,7 +127,14 @@ $(function() {
 	);
 	});
 
-
+/**
+dropdown combobox
+This code taken from 
+http://designwithpc.com/Plugins/ddSlick
+*/
+$(function() {
+ $("#approverAction").ddslick();
+});	
 </script>
 
 

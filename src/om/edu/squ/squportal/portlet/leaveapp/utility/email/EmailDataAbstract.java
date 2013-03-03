@@ -50,19 +50,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class EmailDataAbstract
 {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private			EmailData		emailData						= 	new EmailData();
+	public static final Locale 			ARABIC 							= new Locale("ar");
+	private				EmailData		emailData						= 	new EmailData();
 
-	public 			String			emailTemplatePath				=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP;
-	public	 		String			emailTemplateRequesterPath		=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_REQUESTER;
-	public 			String			emailTemplateApproverPath		=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_APPROVER;
+	public 				String			emailTemplatePath				=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP;
+	public	 			String			emailTemplateRequesterPath		=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_REQUESTER;
+	public 				String			emailTemplateApproverPath		=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_APPROVER;
 
-	private			String			emailTemplatePath_ar			=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_AR;
-	private		 	String			emailTemplateRequesterPath_ar	=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_REQUESTER_AR;
-	private			String			emailTemplateApproverPath_ar	=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_APPROVER_AR;	
+	private				String			emailTemplatePath_ar			=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_AR;
+	private		 		String			emailTemplateRequesterPath_ar	=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_REQUESTER_AR;
+	private				String			emailTemplateApproverPath_ar	=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_APPROVER_AR;	
 	
-	private			Employee 		empRequester				=	null;
-	private			Employee		empApprover					=	null;
-	private			DelegatedEmp[] 	delegatedEmps				=	null;
+	private				Employee 		empRequester				=	null;
+	private				Employee		empApprover					=	null;
+	private				DelegatedEmp[] 	delegatedEmps				=	null;
 	/**
 	 * 
 	 * method name  : setGenaralEmailData
@@ -75,6 +76,7 @@ public class EmailDataAbstract
 	 */
 	protected EmailData setGeneralEmailData(LeaveRequest leaveRequest, LeaveApprove leaveApprove,DelegatedEmp[] delegatedEmps,Locale locale)
 	{
+		
 		String tmpDelgStr	=	"----------------------------------------------------------------------------<br>";
 		
 

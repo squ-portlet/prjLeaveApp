@@ -121,12 +121,12 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 		if(isNewEmail)
 		{
 			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester",null));
-			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester",null, locale));
+			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester",null, ARABIC));
 		}
 		else
 		{
 			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null));
-			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null, locale));
+			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null, ARABIC));
 		}
 		
 		return sendLeaveEmail();
@@ -158,12 +158,12 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 		if(isNewEmail)
 		{
 			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver",null));
-			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver",null, locale));
+			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver",null, ARABIC));
 		}
 		else
 		{
 			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null));
-			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null, locale));
+			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null, ARABIC));
 		}
 		
 		return sendLeaveEmail();
@@ -194,7 +194,7 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 		this.emailData.setEmailReceiverNameEn(delegateName);
 		this.emailData.setEmailReceiverNameAr(delegateName);
 		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.delegation",null));
-		this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.delegation",null, locale));
+		this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.delegation",null, ARABIC));
 		return sendLeaveEmail();
 	}
 

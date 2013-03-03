@@ -53,12 +53,14 @@
 <c:url value="/css/images/ui-bg_glass_75_e6e6e6_1x400.png" var="urlImgBgFlat75e6"/>
 <c:url value="/css/images/ui-bg_glass_75_dadada_1x400.png" var="urlImgBgFlat75d1"/>
 
+<%-- <spring:url value="/css/images/dk_arrows.png" var="urlImgDkArrow"/> --%>
 
 <c:url value="/css/squPortletStyles.css" var="urlCssSquPortletStyle"/>
 <c:url value="/css/jquery-ui-1.8.18.custom.css" var="urlJQueryCSS"/>
 <c:url value="/css/jquery.ui.accordion.css" var="urlJQueryAccordionCSS"/>
 <c:url value="/css/jquery.ui.theme.css" var="urlJQueryThemeCSS"/>
 
+<%-- <c:url value="/css/dropkick.css" var="urlDropkickCSS"/> --%>
 
 <c:url value="/js/jquery-1.7.1.min.js" var="urlJsJqueryMin"/>
 <c:url value="/js/jquery-ui-1.8.18.custom.min.js" var="urlJsJqueryCustom"/>
@@ -72,23 +74,20 @@
 <c:url value="/js/jquery.ui.position.js" var="urlJsJqueryPosition"/>
 <c:url value="/js/jquery.ui.dialog.js" var="urlJsJqueryDialog"/>
 
+<%-- <c:url value="/js/jquery.dropkick-1.0.0.js" var="urlJsDropKick"/> --%>
+<c:url value="/js/jquery.ddslick.js" var="urlJsJqueryDdslick"/>
+
 
 <link type="text/css" href="${urlJQueryCSS}" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="${urlCssSquPortletStyle}" />
 <link type="text/css" href="${urlJsJqueryAccordion}" rel="stylesheet" />
 <link type="text/css" href="${urlJQueryThemeCSS}" rel="stylesheet" />
 
+<%-- <link type="text/css" href="${urlDropkickCSS}" rel="stylesheet" /> --%>
 
 <script type="text/javascript" src="${urlJsJqueryMin}"></script>
 <script type="text/javascript" src="${urlJsJqueryCustom}"></script>
 <script type="text/javascript" src="${urlJsJqueryAccordion}"></script>
-
-
-
-<c:url value="/LeaveAppEmpServlet" var="servletLeave"/>
-<c:url value="/LeaveAppBranchServlet" var="servletLeaveBranch"/>
-<c:url value="/LeaveAppHodServlet" var="servletLeaveHOD"/>
-
 
 <script type="text/javascript" src="${urlJsJqueryCore}"></script>
 <script type="text/javascript" src="${urlJsJqueryWidget}"></script>
@@ -97,6 +96,14 @@
 <script type="text/javascript" src="${urlJsJqueryDraggable}"></script>
 <script type="text/javascript" src="${urlJsJqueryPosition}"></script>
 <script type="text/javascript" src="${urlJsJqueryDialog}"></script>
+
+<%-- <script type="text/javascript" src="${urlJsDropKick}"></script> --%>
+<script type="text/javascript" src="${urlJsJqueryDdslick}"></script>
+
+<c:url value="/LeaveAppEmpServlet" var="servletLeave"/>
+<c:url value="/LeaveAppBranchServlet" var="servletLeaveBranch"/>
+<c:url value="/LeaveAppHodServlet" var="servletLeaveHOD"/>
+
 
 
 
@@ -138,6 +145,7 @@
 	.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url("${urlImgIcons2}"); }
 	.ui-widget-content { border: 1px solid #aaaaaa/*{borderColorContent}*/; background: #ffffff/*{bgColorContent}*/ url("${urlImgBgFlat75}")/*{bgImgUrlContent}*/ 50%/*{bgContentXPos}*/ 50%/*{bgContentYPos}*/ repeat-x/*{bgContentRepeat}*/; color: #222222/*{fcContent}*/; }
 
+	/*.dk_toggle {background-image: url("${urlImgDkArrow}");}*/
 
 </style>
 
@@ -473,6 +481,14 @@ $(function() {
 			
 		}
 
+	/**
+		dropdown combobox
+		This code taken from 
+		http://designwithpc.com/Plugins/ddSlick
+	*/
+	$(function() {
+		 $("#leaveTypeFlag").ddslick();
+		});	
 </script>
 
 </head>
@@ -534,7 +550,7 @@ $(function() {
 					</span>
 				</th>
 				<td style="vertical-align: top;">
-					<form:select path="leaveTypeFlag">
+					<form:select path="leaveTypeFlag" cssClass="leaveOptions">
 						<form:option value="">Select</form:option>
 						<form:options items="${leaveTypeFlag}" itemLabel="typeDesc" itemValue="typeNo"/>
 					</form:select>
@@ -550,10 +566,10 @@ $(function() {
 				
 				<td >
 				
-<div id="accordion" >
+<div id="accordion" class="ui-accordion ui-widget ui-helper-reset">
 				<c:choose>
 					<c:when test='${opMode=="u"}'>
-						<h3>
+						<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
 							<a href="#">
 								<spring:message code="prop.leave.app.apply.form.leave.manager"/>
 								<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i></font>
@@ -561,7 +577,7 @@ $(function() {
 						</h3>
 					</c:when>
 					<c:otherwise>
-						<h3>
+						<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons">
 							<a href="#">
 								<spring:message code="prop.leave.app.apply.form.leave.manager.default"/>
 								<font color="red" size="small"><i><c:out value="${mgrName}"/></i></font>
@@ -572,12 +588,15 @@ $(function() {
 							<center><spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/></center>
 						</div>
 						
-					<h3><a href="#"><spring:message code="prop.leave.app.apply.form.leave.manager.custom"/></a></h3>				
+					<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
+						<a href="#"><spring:message code="prop.leave.app.apply.form.leave.manager.custom"/></a>
+					</h3>				
 					<div>
 						<fieldset>
 						<legend><spring:message code="prop.leave.app.apply.form.leave.manager.select"/> </legend>
-							<div>
-									<form:select path="branch2"  cssClass="selBranchCode" id="selBranchCode" >
+							
+								<div style="float: none;">
+									<form:select path="branch2"  cssClass="selBranchCode leaveOptions" id="selBranchCode" >
 										<option><spring:message code="prop.leave.app.dropdown.text"/></option>
 										<c:forEach items="${branches}" var="branch">
 											<c:set value="" var="selct"/>
@@ -599,27 +618,28 @@ $(function() {
 											</option>
 										</c:forEach>
 									</form:select>
+									</div>
 								<br>
-									<form:select path="department2" cssClass="selDeptCode2" id="selDeptCode2">
+								<div style="float: none;">
+									<form:select path="department2" cssClass="selDeptCode2 leaveOptions" id="selDeptCode2">
 										<option><spring:message code="prop.leave.app.dropdown.text"/></option>
 									</form:select>
+								</div>
 								<br>
-									<form:select path="section2" cssClass="selSectionCode2" id="selSectionCode2">
+								<div style="float: none;">
+									<form:select path="section2" cssClass="selSectionCode2 leaveOptions" id="selSectionCode2">
 										<option><spring:message code="prop.leave.app.dropdown.text"/></option>
 									</form:select>
-								
+								</div>
 									<div id="divHod" class="divHod" ></div><form:errors path="hod"  cssClass="error"/>
-							</div>
+							
 					</fieldset>
 				</div>
 
 					</c:otherwise>
 				</c:choose>
 				
-				<c:choose>
-				<c:when test='${opMode!= "u"}'>
-				</c:when>
-			</c:choose>
+
 </div>				
 				</td>
 			</tr>
