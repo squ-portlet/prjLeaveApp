@@ -115,7 +115,7 @@ public class EmailCancel extends EmailDataAbstract implements EmailLeave
 		this.emailData.setEmailReceiverNameAr(getEmpApprover().getEmpNameAr());
 		this.emailData.setEmailTemplateName(emailTemplateApproverPath);	
 		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.cancel.approver",null));
-		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.cancel.approver",null, ARABIC));
+		this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.cancel.approver",null, ARABIC));
 		return sendLeaveEmail();
 	}
 	

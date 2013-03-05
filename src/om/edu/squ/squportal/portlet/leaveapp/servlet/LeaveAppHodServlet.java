@@ -111,7 +111,6 @@ public class LeaveAppHodServlet extends HttpServlet {
 				
 				if(hoDList.size() == 0)
 				{
-					logger.warn("HOD list empty at department level, go next level onwards for branch : "+branchCode);
 					for (int i = 1; i<Constants.CONST_LEVEL_COUNT; i++)
 					{
 						try

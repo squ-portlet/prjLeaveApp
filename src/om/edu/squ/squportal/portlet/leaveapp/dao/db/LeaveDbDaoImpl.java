@@ -1110,6 +1110,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveRequest.setLeaveRequestRemarks(rs.getString(Constants.CONST_LEAVE_REQ_REMARK));
 						employee.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
 						employee.setEmpName(rs.getString(Constants.CONST_EMP_NAME));
+						employee.setEmpNameEn(rs.getString(Constants.CONST_EMP_NAME_EN));
+						employee.setEmpNameAr(rs.getString(Constants.CONST_EMP_NAME_AR));
 						employee.setEmpInternetId(rs.getString(Constants.CONST_EMP_INTERNET_ID));
 						employee.setEmpSquEmail(rs.getString(Constants.CONST_EMP_EMAIL_ID));
 							if(null!= rs.getString(Constants.CONST_EMP_ADMIN) &&  

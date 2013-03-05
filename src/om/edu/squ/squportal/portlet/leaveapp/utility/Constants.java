@@ -212,51 +212,13 @@ public interface Constants
 	public	static	String	CONST_TEMP_EMAIL_TO					=			"bhabesh@squ.edu.om";
 	/******************************************************/
 
-	/************* EMAIL TEMPLATE DIRECTORY ****************/
-	public	static	String	TEMPL_EMAIL_DIR_LEAVE				=			"/email/template/";
-	public	static	String	TEMPL_DIR_APPLY						=			"/email/template/apply/";
-	public	static	String	TEMPL_DIR_RETURN					=			"/email/template/returnl/";
-	
+	/************* EMAIL TEMPLATE***************************/
+	public	static	String	TEMPL_LEAVE_APP						=			"TEMPLATE_EMAIL_OTHER";  
+	public	static	String	TEMPL_LEAVE_APP_REQUESTER			=			"TEMPLATE_EMAIL_REQUESTER";	
+	public	static	String	TEMPL_LEAVE_APP_APPROVER			=			"TEMPLATE_EMAIL_APPROVER"; 
+
 	/******************************************************/
 
-	/************* EMAIL TEMPLATE***************************/
-	public	static	String	TEMPL_LEAVE_APP						=			"TEMPLATE_EMAIL_OTHER";  //"tmplateLeaveAppEmail.txt";
-	public	static	String	TEMPL_LEAVE_APP_REQUESTER			=			"TEMPLATE_EMAIL_REQUESTER";	//"tmplateLeaveAppEmailReqester.txt";
-	public	static	String	TEMPL_LEAVE_APP_APPROVER			=			"TEMPLATE_EMAIL_APPROVER"; //"tmplateLeaveAppEmailApprover.txt";
-	
-	public	static	String	TEMPL_LEAVE_APP_AR					=			"tmplateLeaveAppEmail_ar.txt";
-	public	static	String	TEMPL_LEAVE_APP_REQUESTER_AR		=			"tmplateLeaveAppEmailReqester_ar.txt";
-	public	static	String	TEMPL_LEAVE_APP_APPROVER_AR			=			"tmplateLeaveAppEmailApprover_ar.txt";
-	/******************************************************/
-	
-	/************* EMAIL TEMPLATE PARAMETER ***************/
-	public	static	String	TEMPL_PARAM_REQUEST_NO				=			":paramReqNo";
-	public	static	String	TEMPL_PARAM_EMAIL_RECEIVER_NAME		=			":paramEmailReceiverName";
-	public	static	String	TEMPL_PARAM_EMAIL_RECEIVER_NAME_EN	=			":paramEmailReceiverEnglishName";
-	public	static	String	TEMPL_PARAM_EMAIL_RECEIVER_NAME_AR	=			":paramEmailReceiverArabicName";
-	public	static	String	TEMPL_PARAM_REQUESTER_NAME			=			":paramRequester";
-	public	static	String	TEMPL_PARAM_REQUESTER_NAME_AR		=			":paramArabicRequester";
-	public	static	String	TEMPL_PARAM_REQUESTER_EMAIL			=			":paramEmailRequester";
-	public	static	String	TEMPL_PARAM_REQUEST_DATE			=			":paramReqDate";
-	public	static	String	TEMPL_PARAM_REQUEST_START_DATE		=			":paramStartDate";
-	public	static	String	TEMPL_PARAM_REQUEST_END_DATE		=			":paramEndDate";
-	public	static	String	TEMPL_PARAM_REQUESTER_REMARK		=			":paramReqRemark";
-	public	static	String	TEMPL_PARAM_DELEGATION_AVL			=			":paramDelegationAvl";
-	public	static	String	TEMPL_PARAM_DELEGATION_DETAILS		=			":paramDelegationDetails";
-	public	static	String	TEMPL_PARAM_DELEGATE_NAME			=			":paramDelegate";
-	public	static	String	TEMPL_PARAM_DELEGATE_START_DATE		=			":paramDelgStartDate";
-	public	static	String	TEMPL_PARAM_DELEGATE_END_DATE		=			":paramDelgEndDate";
-	public	static	String	TEMPL_PARAM_APPROVER_NAME			=			":paramApprover";
-	public	static	String	TEMPL_PARAM_APPROVER_NAME_AR		=			":paramArabicApprover";
-	public	static	String	TEMPL_PARAM_APPROVER_EMAIL			=			":paramEmailApprover";
-	public	static	String	TEMPL_PARAM_APPROVE_DATE			=			":paramApproveDate";
-	public	static	String	TEMPL_PARAM_APPROVER_REMARK			=			":paramAppRemark";
-	public	static	String	TEMPL_PARAM_EMAIL_MESSAGE			=			":paramEmailMessage";
-	public	static	String	TEMPL_PARAM_EMAIL_MESSAGE_AR		=			":paramEmailMsgAr";
-	
-	public	static	String	TEMPL_PARAM_LEAVE_URL				=			":paramUrl";
-	
-	/******************************************************/
 	public	static	String	LEAVE_URL							=			"https://portalnew.squ.edu.om/portal/page/portal/Portlets/wsrpLeaveApp179";
 	public	static	String	CONST_DELEGATION_AVL				=			"This leave application has delegation";
 	public	static	String	CONST_DELEGATION_NAME				=			"Name : ";
@@ -682,6 +644,8 @@ public interface Constants
 																			"  DECODE(:paramLocale,                          			" +		
 																			"            'en',initCap(EMP.VHM_EMP_NAME),   				" +       	
 																			"			 'ar',EMP.VHM_EMP_NAME_ARABIC) AS EMP_NAME,		" +
+																			"	initCap(EMP.VHM_EMP_NAME) AS EMP_NAME_EN,				" +
+																			" 	EMP.VHM_EMP_NAME_ARABIC AS EMP_NAME_AR,					" +
 																			"	EMP.VHM_EMP_SQU_EMAIL AS EMP_MAIL_ID,					" +
 																			"  SUBSTR(													" +
 																			"			EMP.VHM_EMP_SQU_EMAIL,1,						" +

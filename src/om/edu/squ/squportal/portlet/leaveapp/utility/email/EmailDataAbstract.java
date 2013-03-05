@@ -185,13 +185,11 @@ public class EmailDataAbstract
 		boolean	result	=	false;
 		try
 		{
-			//result = new MailProcess().setLeaveEmail(emailData);
 			result	=	emailService.setLeaveEmail(emailData);
 		}
 		catch(Exception ex)
 		{
 			logger.error("Error in sending e-mail. Detail error : "+ex);
-			ex.printStackTrace();
 		}
 		return result;
 	}
