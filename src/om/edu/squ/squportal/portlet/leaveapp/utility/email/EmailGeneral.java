@@ -65,9 +65,14 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 	 * purpose : Constructor for new leave
 	 *
 	 */
-	public EmailGeneral(String leaveRequestNo, LeaveRequest leaveRequest, LeaveApprove leaveApprove,DelegatedEmp[] delegatedEmps,Locale locale)
+	public EmailGeneral
+						(
+								String leaveRequestNo, LeaveRequest leaveRequest, 
+								LeaveApprove leaveApprove,DelegatedEmp[] delegatedEmps, 
+								EmailService emailService,Locale locale
+						)
 	{
-		this.emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps,locale);
+		this.emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps,emailService,locale);
 		this.isNewEmail	=	true;
 		this.locale		=	locale;
 		this.emailData.setRequestNo(leaveRequestNo);
@@ -85,9 +90,14 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 	 * purpose : Constructor for updated leave
 	 *
 	 */
-	public EmailGeneral(LeaveRequest leaveRequest, LeaveApprove leaveApprove,DelegatedEmp[] delegatedEmps,Locale locale)
+	public EmailGeneral
+						(
+								LeaveRequest leaveRequest, LeaveApprove leaveApprove,
+								DelegatedEmp[] delegatedEmps, EmailService emailService, 
+								Locale locale
+						)
 	{
-		emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps,locale);
+		emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps,emailService,locale);
 		this.isNewEmail	=	false;
 		this.locale		=	locale;
 		//this.emailData.setRequestNo(leaveRequest.getRequestNo());

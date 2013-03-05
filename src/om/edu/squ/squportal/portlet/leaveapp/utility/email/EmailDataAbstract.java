@@ -41,6 +41,7 @@ import om.edu.squ.squportal.portlet.leaveapp.utility.email.process.MailProcess;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -50,17 +51,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class EmailDataAbstract
 {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	private 			EmailService emailService;
+	
 	public static final Locale 			ARABIC 							= new Locale("ar");
 	private				EmailData		emailData						= 	new EmailData();
 
-	public 				String			emailTemplatePath				=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP;
-	public	 			String			emailTemplateRequesterPath		=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_REQUESTER;
-	public 				String			emailTemplateApproverPath		=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_APPROVER;
+	public 				String			emailTemplatePath				=	Constants.TEMPL_LEAVE_APP;
+	public	 			String			emailTemplateRequesterPath		=	Constants.TEMPL_LEAVE_APP_REQUESTER;
+	public 				String			emailTemplateApproverPath		=	Constants.TEMPL_LEAVE_APP_APPROVER;
 
-	private				String			emailTemplatePath_ar			=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_AR;
-	private		 		String			emailTemplateRequesterPath_ar	=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_REQUESTER_AR;
-	private				String			emailTemplateApproverPath_ar	=	Constants.TEMPL_EMAIL_DIR_LEAVE+Constants.TEMPL_LEAVE_APP_APPROVER_AR;	
-	
 	private				Employee 		empRequester				=	null;
 	private				Employee		empApprover					=	null;
 	private				DelegatedEmp[] 	delegatedEmps				=	null;
@@ -74,7 +74,12 @@ public class EmailDataAbstract
 	 *
 	 * Date    		:	Feb 18, 2013 8:54:44 AM
 	 */
-	protected EmailData setGeneralEmailData(LeaveRequest leaveRequest, LeaveApprove leaveApprove,DelegatedEmp[] delegatedEmps,Locale locale)
+	protected EmailData setGeneralEmailData
+											(
+													LeaveRequest leaveRequest, LeaveApprove leaveApprove,
+													DelegatedEmp[] delegatedEmps,EmailService emailService, 
+													Locale locale
+											)
 	{
 		
 		String tmpDelgStr	=	"----------------------------------------------------------------------------<br>";
@@ -138,6 +143,7 @@ public class EmailDataAbstract
 			this.emailData.setDelegationDetails(" ");
 		}
 		
+		this.emailService	=	emailService;
 		return emailData;
 	}
 	/**
@@ -173,19 +179,23 @@ public class EmailDataAbstract
 	 * Date    		:	Feb 18, 2013 1:17:18 PM
 	 */
 	@Transactional("trLeaveReq")
-	protected boolean sendLeaveEmail()
+	public boolean sendLeaveEmail()
 	{
+
 		boolean	result	=	false;
 		try
 		{
-			result = new MailProcess().setLeaveEmail(emailData);
+			//result = new MailProcess().setLeaveEmail(emailData);
+			result	=	emailService.setLeaveEmail(emailData);
 		}
 		catch(Exception ex)
 		{
 			logger.error("Error in sending e-mail. Detail error : "+ex);
+			ex.printStackTrace();
 		}
 		return result;
 	}
+
 	
 	
 }

@@ -55,6 +55,7 @@ import om.edu.squ.squportal.portlet.leaveapp.dao.service.LeaveAppServiceDao;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailService;
 import om.edu.squ.squportal.portlet.leaveapp.validator.LeaveAppValidator;
 import om.edu.squ.squportal.portlet.leaveapp.validator.LeaveAppValidatorApprove;
 
@@ -84,6 +85,8 @@ public class LeaveAppControllerMain
 	LeaveDbDao leaveDbDao;
 	@Autowired 
 	LeaveAppServiceDao leaveAppServiceDao;
+
+	
 	
 	/**
 	 * 
@@ -131,7 +134,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("leaveActionReturn", Constants.CONST_LEAVE_ACTION_RETURN);
 		model.addAttribute("leaveActionReject", Constants.CONST_LEAVE_ACTION_REJECT);
 
-
+		
 		return Constants.PAGE_WELCOME;
 	}
 	
@@ -216,8 +219,8 @@ public class LeaveAppControllerMain
 		model.addAttribute("employee",employee );
 		model.addAttribute("addlPosition", leaveAppServiceDao.getAdditionalDesignation(employee.getEmpNumber(),locale));
 		model.addAttribute(Constants.CONST_OPERATION,Constants.CONST_OPERATION_ADD);
-		model.addAttribute("branches",leaveAppServiceDao.getBranches(locale));
-		model.addAttribute("branchesEmpno",leaveAppServiceDao.getBranches(employee.getEmpNumber(),locale));
+		model.addAttribute("branches",leaveAppServiceDao.getBranches(employee.getBranchCode(),locale));
+		model.addAttribute("branchesEmpno",leaveAppServiceDao.getEmpBranches(employee.getEmpNumber(),locale));
 		model.addAttribute("departments",leaveAppServiceDao.getDepartments(employee.getBranchCode(),locale));
 		model.addAttribute("baseHierarchyEmp", Constants.CONST_EMPLOYEE_HIERARCHY_CODE);
 		model.addAttribute("baseLevelEmp", Constants.CONST_EMPLOYEE_LEVEL);
@@ -605,8 +608,8 @@ public class LeaveAppControllerMain
 		model.addAttribute("employee",employee );
 		model.addAttribute("addlPosition", leaveAppServiceDao.getAdditionalDesignation(employee.getEmpNumber(),locale));
 		model.addAttribute(Constants.CONST_OPERATION,Constants.CONST_OPERATION_UPDATE);
-		model.addAttribute("branches",leaveAppServiceDao.getBranches(locale));
-		model.addAttribute("branchesEmpno",leaveAppServiceDao.getBranches(employee.getEmpNumber(),locale));
+		model.addAttribute("branches",leaveAppServiceDao.getBranches(employee.getBranchCode(),locale));
+		model.addAttribute("branchesEmpno",leaveAppServiceDao.getEmpBranches(employee.getEmpNumber(),locale));
 		model.addAttribute("departments",leaveAppServiceDao.getDepartments(employee.getBranchCode(),locale));
 		model.addAttribute("baseHierarchyEmp", Constants.CONST_EMPLOYEE_HIERARCHY_CODE);
 		model.addAttribute("baseLevelEmp", Constants.CONST_EMPLOYEE_LEVEL);

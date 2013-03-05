@@ -316,7 +316,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Nov 24, 2012 2:07:46 PM
 	 */
-	public List<Branch>	getBranches(Locale locale);
+	public List<Branch>	getBranches(String branchId, Locale locale);
 	
 	/**
 	 * 
@@ -331,7 +331,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Dec 19, 2012 10:17:04 AM
 	 */
-	public List<Branch> getBranches (String empNumber, Locale locale);
+	public List<Branch> getEmpBranches (String empNumber, Locale locale);
 	
 	/**
 	 * 

@@ -49,7 +49,6 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
-import om.edu.squ.squportal.portlet.leaveapp.bo.EmailData;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
 import om.edu.squ.squportal.portlet.leaveapp.bo.HoD;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
@@ -60,9 +59,9 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
 import om.edu.squ.squportal.portlet.leaveapp.exception.DbNotAvailableException;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
-import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailLeave;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailGeneral;
-import om.edu.squ.squportal.portlet.leaveapp.utility.email.process.MailProcess;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailLeave;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +83,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	private	JdbcTemplate					jdbcTemplate;	
 	private	NamedParameterJdbcTemplate 		namedParameterJdbcTemplate;
 	private SimpleJdbcCall 					simpleJdbcCall;
-
+	private	EmailService					emailService;
 	
 	/**
 	 * 
@@ -119,11 +118,23 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	{
 		this.jdbcTemplate				=	new JdbcTemplate(dataSource);
 		this.namedParameterJdbcTemplate = 	new NamedParameterJdbcTemplate(dataSource); 
-		
-											
-		
-		
 		;
+	}
+	
+	/**
+	 * 
+	 * method name  : setEmailService
+	 * @param emailService
+	 * LeaveDbDaoImpl
+	 * return type  : void
+	 * 
+	 * purpose		: set Email service bean
+	 *
+	 * Date    		:	Mar 5, 2013 11:57:21 AM
+	 */
+	public void setEmailService(EmailService emailService)
+	{
+		this.emailService	=	emailService;
 	}
 
 	/**
@@ -806,7 +817,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 											leaveRequestNo,
 											leaveRequest, 
 											getLeaveApproveHistory(leaveRequestNo, locale).get(0), 
-											delegatedEmps, locale
+											delegatedEmps, emailService, locale
 									);
 					emailLeave	=	emailGeneral;
 		
@@ -839,7 +850,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			(
 					leaveRequest, 
 					getLeaveApproveHistory(leaveRequestNo, locale).get(0), 
-					delegatedEmps, locale
+					delegatedEmps, emailService, locale
 			);
 			emailLeave	=	emailGeneral;
 			
@@ -1264,7 +1275,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Nov 24, 2012 2:07:46 PM
 	 */
-	public List<Branch>	getBranches(Locale locale)
+	public List<Branch>	getBranches(String branchId, Locale locale)
 	{
 		RowMapper<Branch> mapper	=	new RowMapper<Branch>()
 		{
@@ -1281,6 +1292,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 		namedParameters.put("paramLocale", locale.getLanguage());
+		namedParameters.put("paramBranchId", branchId);
 		return this.namedParameterJdbcTemplate.query(Constants.SQL_BRANCH, namedParameters, mapper);
 	}
 	
@@ -1297,7 +1309,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Dec 19, 2012 10:17:04 AM
 	 */
-	public List<Branch> getBranches (String empNumber, Locale locale)
+	public List<Branch> getEmpBranches (String empNumber, Locale locale)
 	{
 		RowMapper<Branch> mapper	=	new RowMapper<Branch>()
 		{

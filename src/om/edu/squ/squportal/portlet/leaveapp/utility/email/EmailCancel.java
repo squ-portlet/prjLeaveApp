@@ -50,10 +50,13 @@ public class EmailCancel extends EmailDataAbstract implements EmailLeave
 	private	EmailData	emailData			= 	null;
 	private	Locale		locale				=	null;
 	
-	public EmailCancel (LeaveRequest leaveRequest, LeaveApprove leaveApprove,Locale locale)
+	public EmailCancel 
+						(
+								LeaveRequest leaveRequest, LeaveApprove leaveApprove, 
+								EmailService	emailService,Locale locale)
 	{
 		this.locale	=	locale;
-		this.emailData	=	setGeneralEmailData(leaveRequest, leaveApprove, null,locale);
+		this.emailData	=	setGeneralEmailData(leaveRequest, leaveApprove, null,emailService,locale);
 		//this.emailData.setRequestNo(leaveRequest.getRequestNo());
 	}
 	
@@ -81,7 +84,8 @@ public class EmailCancel extends EmailDataAbstract implements EmailLeave
 		this.emailData.setEmailReceiverNameEn(getEmpRequester().getEmpNameEn());
 		this.emailData.setEmailReceiverNameAr(getEmpRequester().getEmpNameAr());
 		this.emailData.setEmailTemplateName(emailTemplateRequesterPath);
-		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.cancel.requester",null, locale));
+		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.cancel.requester",null));
+		this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.cancel.requester",null,ARABIC));
 		return sendLeaveEmail();
 	}
 	
@@ -110,7 +114,8 @@ public class EmailCancel extends EmailDataAbstract implements EmailLeave
 		this.emailData.setEmailReceiverNameEn(getEmpApprover().getEmpNameEn());
 		this.emailData.setEmailReceiverNameAr(getEmpApprover().getEmpNameAr());
 		this.emailData.setEmailTemplateName(emailTemplateApproverPath);	
-		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.cancel.approver",null, locale));
+		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.cancel.approver",null));
+		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.cancel.approver",null, ARABIC));
 		return sendLeaveEmail();
 	}
 	

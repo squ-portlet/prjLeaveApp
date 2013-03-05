@@ -220,9 +220,9 @@ public interface Constants
 	/******************************************************/
 
 	/************* EMAIL TEMPLATE***************************/
-	public	static	String	TEMPL_LEAVE_APP						=			"tmplateLeaveAppEmail.txt";
-	public	static	String	TEMPL_LEAVE_APP_REQUESTER			=			"tmplateLeaveAppEmailReqester.txt";
-	public	static	String	TEMPL_LEAVE_APP_APPROVER			=			"tmplateLeaveAppEmailApprover.txt";
+	public	static	String	TEMPL_LEAVE_APP						=			"TEMPLATE_EMAIL_OTHER";  //"tmplateLeaveAppEmail.txt";
+	public	static	String	TEMPL_LEAVE_APP_REQUESTER			=			"TEMPLATE_EMAIL_REQUESTER";	//"tmplateLeaveAppEmailReqester.txt";
+	public	static	String	TEMPL_LEAVE_APP_APPROVER			=			"TEMPLATE_EMAIL_APPROVER"; //"tmplateLeaveAppEmailApprover.txt";
 	
 	public	static	String	TEMPL_LEAVE_APP_AR					=			"tmplateLeaveAppEmail_ar.txt";
 	public	static	String	TEMPL_LEAVE_APP_REQUESTER_AR		=			"tmplateLeaveAppEmailReqester_ar.txt";
@@ -359,13 +359,33 @@ public interface Constants
 																			"  AND VHM_EMP_ACTIVE = 'Y'									" +
 																			"  AND HIR.VHM_LEVEL = :paramLevel							";
 	
-	public static final String SQL_BRANCH						=			"	SELECT VHM_BRANCH_CODE AS EMP_BRANCH_CODE,				" +
-																			"	DECODE(:paramLocale,									" +
-																			"			'en',initCap(VHM_BRANCH_NAME),					" +
-																			"			'ar',VHM_BRANCH_NAME_ARABIC) AS EMP_BRANCH		" +
-																			"	FROM VHM_BRANCH											" +
-																			"	WHERE VHM_BRANCH_ACTIVE = 'Y'							" +
-																			"	ORDER BY VHM_BRANCH_CODE								";
+	public static final String SQL_BRANCH						=			"	SELECT VHM_BRANCH_CODE AS EMP_BRANCH_CODE,				" +				
+																			"	DECODE(:paramLocale,									" +									
+																			"			'en',initCap(VHM_BRANCH_NAME),					" +					
+																			"			'ar',VHM_BRANCH_NAME_ARABIC) AS EMP_BRANCH		" +		
+																			"	FROM VHM_BRANCH											" +											
+																			"	WHERE VHM_BRANCH_ACTIVE = 'Y'							" +	
+																			"		AND VHM_BRANCH_CODE = :paramBranchId				" +
+																			" UNION														" +
+																			"	SELECT VHM_BRANCH_CODE AS EMP_BRANCH_CODE,				" +		
+																			"		DECODE(:paramLocale,								" +									
+																			"				'en',initCap(VHM_BRANCH_NAME),				" +					
+																			"				'ar',VHM_BRANCH_NAME_ARABIC) AS EMP_BRANCH	" +		
+																			"		FROM VHM_BRANCH										" +											
+																			"		WHERE VHM_BRANCH_ACTIVE = 'Y'						" +	
+																			"			AND VHM_BRANCH_CODE IN							" + 
+																			"			(												" +
+																			"				SELECT VHM_BRANCH_CODE						" + 
+																			"				FROM VHM_DEPARTMENT							" +	
+																			"				WHERE VHM_DEPT_CODE IN						" +
+																			"					(										" +
+																			"						SELECT VHM_BRANCH_MGR_DEPT_CODE		" +
+																			"						FROM VHM_BRANCH						" +	
+																			"						WHERE VHM_BRANCH_CODE= :paramBranchId " +
+																			"					)										" +	
+																			"			)												";
+
+
 	
 	public static final String SQL_BRANCH_USING_EMPNO			=			"	SELECT VHM_BRANCH_CODE AS EMP_BRANCH_CODE,				" +				
 																			"  DECODE(:paramLocale,												" +								

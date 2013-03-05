@@ -60,9 +60,14 @@ public class EmailReject extends EmailDataAbstract implements EmailLeave
 	 * @param locale
 	 *
 	 */
-	public EmailReject(LeaveRequest leaveRequest, LeaveApprove leaveApprove,DelegatedEmp[] delegatedEmps,Locale locale)
+	public EmailReject
+						(
+							LeaveRequest leaveRequest, LeaveApprove leaveApprove,
+							DelegatedEmp[] delegatedEmps,EmailService emailService,
+							Locale locale
+						)
 	{
-		this.emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps,locale);
+		this.emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps,emailService,locale);
 		this.locale		=	locale;
 	}
 
@@ -82,7 +87,8 @@ public class EmailReject extends EmailDataAbstract implements EmailLeave
 		this.emailData.setEmailReceiverNameEn(getEmpRequester().getEmpNameEn());
 		this.emailData.setEmailReceiverNameAr(getEmpRequester().getEmpNameAr());
 		this.emailData.setEmailTemplateName(emailTemplateRequesterPath);	
-		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.reject.requester",null, locale));
+		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.reject.requester",null));
+		this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.reject.requester",null, ARABIC));
 		return sendLeaveEmail();
 	}
 	
@@ -102,7 +108,8 @@ public class EmailReject extends EmailDataAbstract implements EmailLeave
 		this.emailData.setEmailReceiverNameEn(getEmpApprover().getEmpNameEn());
 		this.emailData.setEmailReceiverNameAr(getEmpApprover().getEmpNameAr());
 		this.emailData.setEmailTemplateName(emailTemplateApproverPath);	
-		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.reject.approver",null, locale));
+		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.reject.approver",null));
+		this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.reject.approver",null, ARABIC));
 		return sendLeaveEmail();
 	}
 	

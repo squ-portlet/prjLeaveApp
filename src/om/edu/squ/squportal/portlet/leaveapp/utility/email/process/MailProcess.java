@@ -34,6 +34,7 @@ package om.edu.squ.squportal.portlet.leaveapp.utility.email.process;
  *
  */
 
+import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -52,16 +53,18 @@ import javax.mail.util.ByteArrayDataSource;
 
 import om.edu.squ.squportal.portlet.leaveapp.bo.EmailData;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
-import om.edu.squ.squportal.portlet.leaveapp.utility.UtilFile;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailService;
 
+import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.StringTemplateGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 
 
-	public class MailProcess 
+	public class MailProcess implements EmailService
 	{
 		private final Logger logger = LoggerFactory.getLogger(this.getClass());
 		
@@ -69,7 +72,22 @@ import org.springframework.web.multipart.MultipartFile;
 		    private static  int 	SMTP_HOST_PORT;
 		    private static  String 	SMTP_AUTH_USER;  
 
-			/**
+	
+			private StringTemplateGroup stringTemplateGroup;
+			private Map<String,String> stringTemplateMap;
+			
+			public void setStringTemplateMap(Map<String,String> stringTemplateMap) {
+				this.stringTemplateMap = stringTemplateMap;
+			}
+			public void setStringTemplateGroup(StringTemplateGroup stringTemplateGroup) {
+				this.stringTemplateGroup = stringTemplateGroup;
+			}
+
+		    
+		    
+		    
+		    
+		    /**
 			 * 
 			 * method name  : setLeaveEmail
 			 * @param emailData
@@ -83,177 +101,11 @@ import org.springframework.web.multipart.MultipartFile;
 			public boolean setLeaveEmail(EmailData emailData)
 			{
 				boolean result	=	false; 
-				String emailBody	=	new UtilFile().readUniCodeFile(emailData.getEmailTemplateName()); //new UtilFile().readFile(emailData.getEmailTemplateName());
-					
-				/**
-				 * Request No
-				 */
-				if(!(null == emailData.getRequestNo()) && emailBody.contains(Constants.TEMPL_PARAM_REQUEST_NO))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUEST_NO, emailData.getRequestNo());
-				}
-				/**
-				 * Email Receiver Name
-				 */
-				if(!(null == emailData.getEmailReceiverName()) && emailBody.contains(Constants.TEMPL_PARAM_EMAIL_RECEIVER_NAME))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_EMAIL_RECEIVER_NAME, emailData.getEmailReceiverName());
-				}
-				/**
-				 * Email Receiver Name English
-				 */
-				if(!(null == emailData.getEmailReceiverNameEn()) && emailBody.contains(Constants.TEMPL_PARAM_EMAIL_RECEIVER_NAME_EN))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_EMAIL_RECEIVER_NAME_EN, emailData.getEmailReceiverNameEn());
-				}
-				/**
-				 * Email Receiver Name Arabic
-				 */
-				if(!(null == emailData.getEmailReceiverNameAr()) && emailBody.contains(Constants.TEMPL_PARAM_EMAIL_RECEIVER_NAME_AR))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_EMAIL_RECEIVER_NAME_AR, emailData.getEmailReceiverNameAr());
-				}
-				/**
-				 * Email Message
-				 */
-				if(!(null == emailData.getEmailMessage()) && emailBody.contains(Constants.TEMPL_PARAM_EMAIL_MESSAGE))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_EMAIL_MESSAGE, emailData.getEmailMessage());
-				}
-				/**
-				 * Email Message arabic
-				 */
-				if(!(null == emailData.getEmailMessageAr()) && emailBody.contains(Constants.TEMPL_PARAM_EMAIL_MESSAGE_AR))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_EMAIL_MESSAGE_AR, emailData.getEmailMessageAr());
-				}
-				/**
-				 * Requester Name
-				 */
-				if(!(null == emailData.getRequesterName()) && emailBody.contains(Constants.TEMPL_PARAM_REQUESTER_NAME))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUESTER_NAME, emailData.getRequesterName());
-				}
-				/**
-				 * Requester Name in arabic
-				 */
-				if(!(null == emailData.getRequesterNameAr()) && emailBody.contains(Constants.TEMPL_PARAM_REQUESTER_NAME_AR))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUESTER_NAME_AR, emailData.getRequesterNameAr());
-				}
-				/**
-				 * Requester Email
-				 */
-				if(!(null == emailData.getRequesterEmail()) && emailBody.contains(Constants.TEMPL_PARAM_REQUESTER_EMAIL))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUESTER_EMAIL, emailData.getRequesterEmail());
-				}
-				/**
-				 * Request Date
-				 */
-				if(!(null== emailData.getRequestDate()) && emailBody.contains(Constants.TEMPL_PARAM_REQUEST_DATE))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUEST_DATE, emailData.getRequestDate());
-				}
-				/**
-				 * Request Start Date
-				 */
-				if(!(null == emailData.getRequestStartDate()) && emailBody.contains(Constants.TEMPL_PARAM_REQUEST_START_DATE))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUEST_START_DATE, emailData.getRequestStartDate());
-				}
-				/**
-				 * Request End Date
-				 */
-				if(!(null == emailData.getRequestEndDate()) && emailBody.contains(Constants.TEMPL_PARAM_REQUEST_END_DATE))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUEST_END_DATE, emailData.getRequestEndDate());
-				}
-				/**
-				 * Requester Remark
-				 */
-				if(!(null == emailData.getRequesterRemark()) && emailBody.contains(Constants.TEMPL_PARAM_REQUESTER_REMARK))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_REQUESTER_REMARK, emailData.getRequesterRemark());
-				}
-				/**
-				 *  Delegation available
-				 */
-				if(!(null == emailData.getDelegationAvilable()) && emailBody.contains(Constants.TEMPL_PARAM_DELEGATION_AVL))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_DELEGATION_AVL, emailData.getDelegationAvilable());
-				}
-				/**
-				 *  Delegation details
-				 */
-				if(!(null == emailData.getDelegationDetails()) && emailBody.contains(Constants.TEMPL_PARAM_DELEGATION_DETAILS))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_DELEGATION_DETAILS, emailData.getDelegationDetails());
-				}
-				/**
-				 *  Delegate Name
-				 */
-				if(!(null == emailData.getDelegateName()) && emailBody.contains(Constants.TEMPL_PARAM_DELEGATE_NAME))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_DELEGATE_NAME, emailData.getDelegateName());
-				}
-				/**
-				 * Delegate Start Date
-				 */
-				if(!(null == emailData.getDelegationStartDate()) && emailBody.contains(Constants.TEMPL_PARAM_DELEGATE_START_DATE))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_DELEGATE_START_DATE, emailData.getDelegationStartDate());
-				}
-				/**
-				 * Delegate End Date
-				 */
-				if(!(null == emailData.getDelegationEndDate()) && emailBody.contains(Constants.TEMPL_PARAM_DELEGATE_END_DATE))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_DELEGATE_END_DATE, emailData.getDelegationEndDate());
-				}
-				/**
-				 * Approver Name 
-				 */
-				if(!(null == emailData.getApproverName()) && emailBody.contains(Constants.TEMPL_PARAM_APPROVER_NAME))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVER_NAME, emailData.getApproverName());
-				}
-				/**
-				 * Approver Name in arabic
-				 */
-				if(!(null == emailData.getApproverNameAr()) && emailBody.contains(Constants.TEMPL_PARAM_APPROVER_NAME_AR))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVER_NAME_AR, emailData.getApproverNameAr());
-				}
-				/**
-				 * Approver Email
-				 */
-				if(!(null == emailData.getApproverEmail()) && emailBody.contains(Constants.TEMPL_PARAM_APPROVER_EMAIL))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVER_EMAIL, emailData.getApproverEmail());
-				}
-				/**
-				 * Approve Date
-				 */
-				if(!(null == emailData.getApproveDate()) && emailBody.contains(Constants.TEMPL_PARAM_APPROVE_DATE))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVE_DATE, emailData.getApproveDate());
-				}
-				/**
-				 * Approver Remark
-				 */
-				if(!(null == emailData.getApproverRemark()) && emailBody.contains(Constants.TEMPL_PARAM_APPROVER_REMARK))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_APPROVER_REMARK, emailData.getApproverRemark());
-				}
-				/**
-				 * Leave URL
-				 */
-				if(!(null == emailData.getLeaveUrl()) && emailBody.contains(Constants.TEMPL_PARAM_LEAVE_URL))
-				{
-					emailBody	=	emailBody.replaceAll(Constants.TEMPL_PARAM_LEAVE_URL, emailData.getLeaveUrl());
-				}
-				
+
+				StringTemplate template = stringTemplateGroup
+			  								.getInstanceOf(stringTemplateMap.get(emailData.getEmailTemplateName())); 
+			  template.setAttribute("emailData", emailData);
+			  
 				try
 				{
 					if(Constants.IS_MAIL_SEND_ON)
@@ -263,7 +115,7 @@ import org.springframework.web.multipart.MultipartFile;
 								new String[]{emailData.getMailTo()}, 
 								null, 
 								Constants.MAIL_SUBJECT+Constants.MAIL_REQUEST_NO+emailData.getRequestNo(), 
-								emailBody, 
+								template.toString(), 
 								null);
 						result	=	true;
 					}

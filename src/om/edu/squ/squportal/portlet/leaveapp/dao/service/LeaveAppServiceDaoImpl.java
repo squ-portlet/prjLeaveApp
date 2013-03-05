@@ -55,6 +55,7 @@ import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailCancel;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailLeave;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailReject;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailReturn;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailService;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.process.MailProcess;
 
 import org.slf4j.Logger;
@@ -67,7 +68,8 @@ import org.slf4j.LoggerFactory;
 public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private LeaveDbDao	leaveDbDao;
+	private LeaveDbDao		leaveDbDao;
+	private	EmailService	emailService;
 
 	/**
 	 * Setter method : setLeaveDbDao
@@ -80,6 +82,19 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		this.leaveDbDao = leaveDbDao;
 	}
 	
+	/**
+	 * Setter method : setEmailService
+	 * @param emailService the emailService to set
+	 * 
+	 * Date          : Mar 5, 2013 11:59:16 AM
+	 */
+	public void setEmailService(EmailService emailService)
+	{
+		this.emailService = emailService;
+	}
+
+
+
 	/**
 	 * 
 	 * method name  : getLeaveTypes
@@ -373,9 +388,9 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 *
 	 * Date    		:	Nov 24, 2012 2:07:46 PM
 	 */
-	public List<Branch>	getBranches(Locale locale)
+	public List<Branch>	getBranches(String branchId, Locale locale)
 	{
-		return leaveDbDao.getBranches(locale);
+		return leaveDbDao.getBranches(branchId,locale);
 	}
 	
 	/**
@@ -391,10 +406,10 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 *
 	 * Date    		:	Dec 19, 2012 10:17:04 AM
 	 */
-	public List<Branch> getBranches (String empNumber, Locale locale)
+	public List<Branch> getEmpBranches (String empNumber, Locale locale)
 	{
 		empNumber = String.format("%07d", Integer.valueOf(empNumber));
-		return leaveDbDao.getBranches(empNumber, locale);
+		return leaveDbDao.getEmpBranches(empNumber, locale);
 	}
 	
 	/**
@@ -558,7 +573,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 						leaveRequest 	= leaveDbDao.getLeaveRequest(requestNo, locale);
 						leaveApprove	=	leaveDbDao.getLeaveApproveHistory(requestNo, locale).get(0);
 			/* Sending email */
-			EmailLeave	emailLeave		=	new EmailCancel(leaveRequest, leaveApprove, locale);
+			EmailLeave	emailLeave		=	new EmailCancel(leaveRequest, leaveApprove, emailService,locale);
 						emailLeave.sendRequesterEmail();
 						emailLeave.sendApproverEmail();
 			
@@ -592,18 +607,18 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		
 		if(ApproverAction.equals(Constants.CONST_LEAVE_ACTION_APPROVE))
 		{
-			emailLeave	=	new EmailApprove(leaveRequest, leaveApprove, null, locale);
+			emailLeave	=	new EmailApprove(leaveRequest, leaveApprove, null, emailService,locale);
 			result		=	emailLeave.sendEmail(true, true);
 			
 		}else
 			if(ApproverAction.equals(Constants.CONST_LEAVE_ACTION_RETURN))
 			{
-				emailLeave	=	new EmailReturn(leaveRequest, leaveApprove, null, locale);
+				emailLeave	=	new EmailReturn(leaveRequest, leaveApprove, null, emailService, locale);
 				result		=	emailLeave.sendEmail(true, true);
 			} else
 				if(ApproverAction.equals(Constants.CONST_LEAVE_ACTION_REJECT))
 				{
-					emailLeave	=	new EmailReject(leaveRequest, leaveApprove, null, locale);
+					emailLeave	=	new EmailReject(leaveRequest, leaveApprove, null, emailService, locale);
 					result		=	emailLeave.sendEmail(true, true);
 				}
 		return result;

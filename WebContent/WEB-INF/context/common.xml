@@ -46,7 +46,17 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<!-- Message source for this context, loaded from localized "messages_xx" files -->
+<!-- 	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer"> -->
+<!-- 		<property name="resourceLoaderPath" value="/WEB-INF/velocity/"/> -->
+<!-- 	</bean> -->
+
+<!-- 	 <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver"> -->
+<!--         <property name="cache" value="true" /> -->
+<!--         <property name="prefix" value="" /> -->
+<!--         <property name="suffix" value=".vm" /> -->
+<!--         <property name="exposeSpringMacroHelpers" value="true" /> -->
+<!--     </bean> -->
+			<!-- Message source for this context, loaded from localized "messages_xx" files -->
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">
 			<list>
@@ -54,7 +64,30 @@
 			</list>
 		</property>	
 	</bean>
+
+		<!-- email-based notification service that uses a basic spring mail service -->
+	<bean id="emailService"
+		class="om.edu.squ.squportal.portlet.leaveapp.utility.email.process.MailProcess">
+		<property name="stringTemplateGroup"> 
+	        <bean id="stringTemplateGroup" class="org.antlr.stringtemplate.StringTemplateGroup">
+	            <constructor-arg type="java.lang.String" value="GroupName"/>
+	        </bean>
+	    </property>
+		<property name="stringTemplateMap">
+	        <map>
+	            <entry key="TEMPLATE_EMAIL_REQUESTER" 
+	                value="om/edu/squ/squportal/portlet/leaveapp/utility/email/template/tmplateLeaveAppEmailReqester"/>
+	            	            <entry key="TEMPLATE_EMAIL_APPROVER" 
+	                value="om/edu/squ/squportal/portlet/leaveapp/utility/email/template/tmplateLeaveAppEmailApprover"/>
+	            	            <entry key="TEMPLATE_EMAIL_OTHER" 
+	                value="om/edu/squ/squportal/portlet/leaveapp/utility/email/template/tmplateLeaveAppEmail"/>
+	        </map>
+	    </property>
+	</bean>
 	
+
+	
+		
 	<!-- LDAP source for this context, loaded from "ldap.properties" files -->
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
@@ -101,10 +134,12 @@
 	
  	<bean id="leaveDbDao"	class="om.edu.squ.squportal.portlet.leaveapp.dao.db.LeaveDbDaoImpl">
 		<property name="dataSource" ref="dataSource"/>
+		<property name="emailService" ref="emailService"/>
 	</bean>	
 
 	<bean id="leaveAppServiceDao"	class="om.edu.squ.squportal.portlet.leaveapp.dao.service.LeaveAppServiceDaoImpl">
 		<property name="leaveDbDao" ref="leaveDbDao"/>
+		<property name="emailService" ref="emailService"/>
 	</bean>
 <!-- LDAP - SQU Oracle Internet Directory Configuration -->
 	<!-- PRIMARY LDAP - SQU Oracle Internet Directory Configuration -->
