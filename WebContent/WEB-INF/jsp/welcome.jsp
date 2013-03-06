@@ -201,8 +201,8 @@
 								
 								<c:choose>
 									<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
-													(req.employee.hierarchyCode >empHierarchyAddl) ||
-														(!req.employee.senior && (req.employee.empNumber != empNumber))}">
+													((req.employee.hierarchyCode >empHierarchyAddl) &&
+														(!req.employee.senior && (req.employee.empNumber != empNumber)))}">
 										reqNo:'<a href="${varLeaveApprove}"><font color="red"><c:out value="${req.requestNo}"/></font></a>',
 									</c:when>
 									<c:otherwise>
@@ -216,8 +216,8 @@
 							 status:'<c:out value="${req.leaveStatus}"/>',
 								<c:choose>
 								<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
-												(req.employee.hierarchyCode >empHierarchyAddl) ||
-													(!req.employee.senior && (req.employee.empNumber != empNumber))}">
+												((req.employee.hierarchyCode >empHierarchyAddl) &&
+													(!req.employee.senior && (req.employee.empNumber != empNumber)))}">
 									employee:'<c:out value="${req.employee.empName}"/> &nbsp; (<c:out value="${req.employee.empNumber}"/>)',
 								</c:when>
 								<c:otherwise>
@@ -231,8 +231,8 @@
 							</portlet:renderURL>
 							<c:choose>
 								<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
-													(req.employee.hierarchyCode >empHierarchyAddl) ||
-													(!req.employee.senior && (req.employee.empNumber != empNumber))}">
+													((req.employee.hierarchyCode >empHierarchyAddl) &&
+													(!req.employee.senior && (req.employee.empNumber != empNumber)))}">
 									<c:choose>
 										<c:when test="${(req.status.statusCode == leaveStatusApproved || 
 												         req.status.statusCode == leaveStatusRejected) ||
@@ -255,10 +255,10 @@
 													'</portlet:renderURL>'+
 
 													'<c:if test="${(admActions.actionCode == leaveActionApprove)}">'+
-															'|&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;|'+		
+															'|&nbsp;&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|'+		
 														'</c:if>'+
 														'<c:if test="${(admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">'+
-															'&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;|'+		
+															'&nbsp;&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|'+		
 														'</c:if>'+
 													'</c:forEach>',
 										</c:otherwise>
@@ -277,8 +277,8 @@
 							
 							<c:choose>
 							<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
-											(req.employee.hierarchyCode >empHierarchyAddl) ||
-												(!req.employee.senior && (req.employee.empNumber != empNumber))}">
+											((req.employee.hierarchyCode >empHierarchyAddl) &&
+												(!req.employee.senior && (req.employee.empNumber != empNumber)))}">
 							isApprover:'y'
 							</c:when>
 							<c:otherwise>
@@ -611,8 +611,8 @@
 					<td>
 						<c:choose>
 							<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
-											(req.employee.hierarchyCode >empHierarchyAddl) ||
-												(!req.employee.senior && (req.employee.empNumber != empNumber))}">
+											((req.employee.hierarchyCode >empHierarchyAddl) &&
+												(!req.employee.senior && (req.employee.empNumber != empNumber)))}">
 								<a href="${varLeaveApprove}"><c:out value="${req.requestNo}"/></a>
 							</c:when>
 							<c:otherwise>
@@ -648,8 +648,8 @@
 						</portlet:renderURL>
 						<c:choose>
 							<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
-							(req.employee.hierarchyCode >empHierarchyAddl) ||
-								(!req.employee.senior && (req.employee.empNumber != empNumber))}">
+							((req.employee.hierarchyCode >empHierarchyAddl) &&
+								(!req.employee.senior && (req.employee.empNumber != empNumber)))}">
 								<c:choose>
 										<c:when test="${(req.status.statusCode == leaveStatusApproved) || 
 												         (req.status.statusCode == leaveStatusRejected) ||

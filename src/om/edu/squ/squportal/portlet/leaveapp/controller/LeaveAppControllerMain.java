@@ -133,8 +133,6 @@ public class LeaveAppControllerMain
 		model.addAttribute("leaveActionApprove", Constants.CONST_LEAVE_ACTION_APPROVE);
 		model.addAttribute("leaveActionReturn", Constants.CONST_LEAVE_ACTION_RETURN);
 		model.addAttribute("leaveActionReject", Constants.CONST_LEAVE_ACTION_REJECT);
-
-		
 		return Constants.PAGE_WELCOME;
 	}
 	
