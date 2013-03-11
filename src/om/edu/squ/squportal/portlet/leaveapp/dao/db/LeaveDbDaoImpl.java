@@ -507,7 +507,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN, Types.VARCHAR),
 											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_LEAVE_CODE, Types.VARCHAR),
 											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_MSG_ENGLISH, Types.VARCHAR),
-											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_MSG_ARABIC, Types.VARCHAR)
+											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_MSG_ARABIC, Types.VARCHAR),
+											new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_CHECKED_APP_EMP_CODE, Types.VARCHAR)
 										);
 
 		Map<String,Object> 	paramIn				=	new HashMap<String, Object>();
@@ -541,9 +542,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		{
 			requestProc.setLeaveMessage((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_MSG_ARABIC));
 		}
-		
+		requestProc.setCheckedAprroverEmpCode((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_CHECKED_APP_EMP_CODE));
 
-
+		logger.info("APPROVER ID : "+requestProc.getCheckedAprroverEmpCode());
 		
 		resultProc	=	null;
 		

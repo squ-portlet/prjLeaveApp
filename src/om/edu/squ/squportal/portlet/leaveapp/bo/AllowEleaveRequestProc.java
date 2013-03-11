@@ -38,6 +38,7 @@ public class AllowEleaveRequestProc
 	private	boolean acceptLeave;
 	private	String	leaveCode;
 	private	String	leaveMessage;
+	private	String	checkedAprroverEmpCode;
 	/**
 	 * Getter Method	: isAcceptLeave
 	 * @return the acceptLeave
@@ -98,6 +99,26 @@ public class AllowEleaveRequestProc
 	{
 		this.leaveMessage = leaveMessage;
 	}
+	/**
+	 * Getter Method	: getCheckedAprroverEmpCode
+	 * @return the checkedAprroverEmpCode
+	 * 
+	 * Date				: Mar 10, 2013
+	 */
+	public String getCheckedAprroverEmpCode()
+	{
+		return this.checkedAprroverEmpCode;
+	}
+	/**
+	 * Setter method : setCheckedAprroverEmpCode
+	 * @param checkedAprroverEmpCode the checkedAprroverEmpCode to set
+	 * 
+	 * Date          : Mar 10, 2013 9:37:55 AM
+	 */
+	public void setCheckedAprroverEmpCode(String checkedAprroverEmpCode)
+	{
+		this.checkedAprroverEmpCode = checkedAprroverEmpCode;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -110,7 +131,10 @@ public class AllowEleaveRequestProc
 				+ (this.leaveCode != null ? "leaveCode=" + this.leaveCode
 						+ ", " : "")
 				+ (this.leaveMessage != null ? "leaveMessage="
-						+ this.leaveMessage : "") + "]";
+						+ this.leaveMessage + ", " : "")
+				+ (this.checkedAprroverEmpCode != null ? "checkedAprroverEmpCode="
+						+ this.checkedAprroverEmpCode
+						: "") + "]";
 	}
 	
 	
