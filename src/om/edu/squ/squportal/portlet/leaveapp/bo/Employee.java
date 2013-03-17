@@ -960,6 +960,33 @@ public class Employee implements Serializable
 				+ "senior=" + this.senior + ", "
 				+ (this.myHodId != null ? "myHodId=" + this.myHodId : "") + "]";
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode()
+	{
+		// TODO Auto-generated method stub
+		 return empNumber.hashCode();
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Employee)) {
+            return false;
+        }
+        Employee emp = (Employee) obj;
+        return this.empNumber.equals(emp.empNumber);
+    }
+		
+	
 	
 	
 	

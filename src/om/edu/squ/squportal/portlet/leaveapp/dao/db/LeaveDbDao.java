@@ -362,6 +362,18 @@ public interface LeaveDbDao
 	 */
 	public List<Section> getSections(String departmentCode, Locale locale);
 	
+	/**
+	 * 
+	 * method name  : getLeaveRequestCounter
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : long
+	 * 
+	 * purpose		: Get the next higher number for leave request
+	 *
+	 * Date    		:	Sep 8, 2012 12:53:38 PM
+	 */
+	public long getLeaveRequestCounter();
 	
 	/**
 	 * 

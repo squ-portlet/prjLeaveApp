@@ -150,6 +150,7 @@ public interface Constants
 	public static final	String	CONST_ALLOW_ELEAVE_REQUEST_MSG	=			"allowELeaveRequestMsg";
 	
 	public static final int		CONST_LEVEL_COUNT				=			7;
+	public static final int		CONST_DELEGATION_LEVEL_COUNT	=			2;
 	public static final String	CONST_MODEL_MODE_UPDATE			=			"u";
 	public static final String	CONST_MODEL_MODE_INSERT			=			"i";
 	
@@ -158,34 +159,50 @@ public interface Constants
 	
 	public static final int		CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE =		5;
 	
+	public static final String	CONST_YES_CAPITAL					 =		"Y";
+	public static final String	CONST_NO_CAPITAL					 =		"N";
+	
 	/******************************************************/
 	
 	
 	/***********STORED PROCEDURE**************************/
-	public static final	String	CONST_PROC_ALLOW_eLEAVE_REQUEST			=			"allow_eleave_request";
-	public static final	String	CONST_PROC_COL_IN_P_EMP_CODE			=			"P_EMP_CODE";
-	public static final	String	CONST_PROC_COL_IN_P_LEAVE_FLAG			=			"P_LEAVE_FLAG";
-	public static final	String	CONST_PROC_COL_IN_P_LEAVE_START			=			"P_LEAVE_START";
-	public static final	String	CONST_PROC_COL_IN_P_LEAVE_END			=			"P_LEAVE_END";
-	public static final	String	CONST_PROC_COL_IN_P_LEAVE_REQ_NO		=			"P_LEAVE_REQ_NO";
-	public static final	String	CONST_PROC_COL_IN_P_SUGGESTED_APP_EMP_CODE	=		"P_SUGGESTED_APP_EMP_CODE";
-	public static final	String	CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN	=			"P_ACCEPT_LEAVE_YN";
-	public static final	String	CONST_PROC_COL_OUT_P_LEAVE_CODE			=			"P_LEAVE_CODE";
-	public static final	String	CONST_PROC_COL_OUT_P_MSG_ENGLISH		=			"P_MSG_ENG";
-	public static final	String	CONST_PROC_COL_OUT_P_MSG_ARABIC			=			"P_MSG_ARB";
+	public static final	String	CONST_PROC_ALLOW_eLEAVE_REQUEST				=			"allow_eleave_request";
+	public static final	String	CONST_PROC_COL_IN_P_EMP_CODE				=			"P_EMP_CODE";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_FLAG				=			"P_LEAVE_FLAG";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_START				=			"P_LEAVE_START";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_END				=			"P_LEAVE_END";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_REQ_NO			=			"P_LEAVE_REQ_NO";
+	public static final	String	CONST_PROC_COL_IN_P_SUGGESTED_APP_EMP_CODE	=			"P_SUGGESTED_APP_EMP_CODE";
+	public static final	String	CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN		=			"P_ACCEPT_LEAVE_YN";
+	public static final	String	CONST_PROC_COL_OUT_P_LEAVE_CODE				=			"P_LEAVE_CODE";
+	public static final	String	CONST_PROC_COL_OUT_P_MSG_ENGLISH			=			"P_MSG_ENG";
+	public static final	String	CONST_PROC_COL_OUT_P_MSG_ARABIC				=			"P_MSG_ARB";
+	public static final	String	CONST_PROC_COL_OUT_P_CHECKED_APP_EMP_CODE	=			"P_CHECKED_APP_EMP_CODE";
 	
-	public static final	String	CONST_PROC_GET_HIGHER_MGR_PROCESS		=			"GET_HIGHER_MGR_PROCESS";
-	public static final	String	CONST_PROC_COL_OUT_V_MGR_EMP			=			"V_MGR_EMP";
-	public static final	String	CONST_PROC_COL_OUT_V_HINT				=			"V_HINT";
+	public static final	String	CONST_PROC_GET_HIGHER_MGR_PROCESS			=			"GET_HIGHER_MGR_PROCESS";
+	public static final	String	CONST_PROC_COL_OUT_V_MGR_EMP				=			"V_MGR_EMP";
+	public static final	String	CONST_PROC_COL_OUT_V_HINT					=			"V_HINT";
+	
+	
+	/**************************************STORED PROCEDURE - Check Delegation**************************/
+	public static final	String	CONST_PROC_CHECK_ELEAVE_DELEGATION			=			"check_eleave_delegation";
+	public static final	String	CONST_PROC_COL_IN_P_DLG_EMP_CODE			=			"P_DLG_EMP_CODE";
+	public static final	String	CONST_PROC_COL_IN_P_DLG_START				=			"P_DLG_START";
+	public static final	String	CONST_PROC_COL_IN_P_DLG_END					=			"P_DLG_END";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_REQ_NO_2			=			"P_LEAVE_REQ_NO";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_EMP_CODE			=			"P_LEAVE_EMP_CODE";
+	public static final	String	CONST_PROC_COL_OUT_P_ACCEPT_DLG_YN			=			"P_ACCEPT_DLG_YN";
+	public static final	String	CONST_PROC_COL_OUT_P_MSG_ENG				=			"P_MSG_ENG";
+	public static final	String	CONST_PROC_COL_OUT_P_MSG_ARB				=			"P_MSG_ARB";
 	
 	
 	/******************************************************/
 	
 	/**********JSP PAGES**********************************/
-	public static String	PAGE_WELCOME						=			"welcome";
-	public static String	PAGE_LEAVE_APPLY_FORM				=			"leaveApplicationForm";
-	public static String	PAGE_LEAVE_APPROVE_FORM				=			"leaveApplicationApproveForm";
-	public static String	PAGE_LEAVE_VIEW						=			"leaveApplicationView";
+	public static String	PAGE_WELCOME									=			"welcome";
+	public static String	PAGE_LEAVE_APPLY_FORM							=			"leaveApplicationForm";
+	public static String	PAGE_LEAVE_APPROVE_FORM							=			"leaveApplicationApproveForm";
+	public static String	PAGE_LEAVE_VIEW									=			"leaveApplicationView";
 	
 	
 	/******************************************************/
@@ -304,7 +321,7 @@ public interface Constants
 																			"	AND HIR.VHM_HIERARCHY_CODE = DESG.VHM_HIERARCHY_CODE (+)						" +
 																			"   AND EMP.VHM_EMP_CODE = ADESIG.VEAT_EMP_CODE(+)									";
 	
-	public static final	String	SQL_EMP_BRANCH_DEPT_SHORT		= 			" SELECT VHM_EMP_CODE AS EMP_CODE,							" +							
+	 public static final	String	SQL_EMP_BRANCH_DEPT_SHORT		= 		" SELECT VHM_EMP_CODE AS EMP_CODE,							" +							
 																			"     DECODE(												" +	
 																			"       :paramLocale,	              						" +
 																			"       'en',initCap(EMP.VHM_EMP_NAME),   					" +	       	
@@ -319,7 +336,26 @@ public interface Constants
 																			"  AND HIR.VHM_HIERARCHY_CODE = DESG.VHM_HIERARCHY_CODE (+)	" +
 																			"  AND EMP.VHM_EMP_DEPT_CODE LIKE nvl(:paramDept,'%')		" +
 																			"  AND VHM_EMP_ACTIVE = 'Y'									" +
+																			"  AND EMP.VHM_EMP_CODE <> :paramEmpNumber					" +
+																			"  AND HIR.VHM_LEVEL = :paramLevel							"; 
+																			
+
+	public static final	String	SQL_EMP_BRANCH_SHORT			= 			" SELECT VHM_EMP_CODE AS EMP_CODE,							" +							
+																			"     DECODE(												" +	
+																			"       :paramLocale,	              						" +
+																			"       'en',initCap(EMP.VHM_EMP_NAME),   					" +	       	
+																			"        'ar',EMP.VHM_EMP_NAME_ARABIC						" +
+																			"   ) AS EMP_NAME											" +
+																			"  FROM 													" +
+																			"   VHM_EMPLOYEE EMP,										" +
+																			"   VHM_DESIGNATION DESG,									" +
+																			"   VHM_HIERARCHY HIR										" +
+																			"  WHERE VHM_EMP_BRAN_CODE =:paramBranchCode				" +
+																			"  AND EMP.VHM_EMP_DESG_CODE = DESG.VHM_DESG_CODE			" +
+																			"  AND HIR.VHM_HIERARCHY_CODE = DESG.VHM_HIERARCHY_CODE (+)	" +
+																			"  AND VHM_EMP_ACTIVE = 'Y'									" +
 																			"  AND HIR.VHM_LEVEL = :paramLevel							";
+																			
 	
 	public static final String SQL_BRANCH						=			"	SELECT VHM_BRANCH_CODE AS EMP_BRANCH_CODE,				" +				
 																			"	DECODE(:paramLocale,									" +									

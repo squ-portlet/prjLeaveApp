@@ -278,6 +278,7 @@ $(function() {
         var branchCode=$(this).val();
         var empNumber = "${empNumber}";
         $('txtEmpNum').val='';
+        currentDropdown.closest('tr').find("select.selEmpNum").empty().append('<option value=""><spring:message code="prop.leave.app.dropdown.text"/></option>');
         $.ajax({
             type: "GET",
             //contentType: "application/json; charset=utf-8",
@@ -286,13 +287,61 @@ $(function() {
             data: 'branchCode='+branchCode+'&empNumber='+empNumber,
             dataType: "json",
             success: function(data) {
-                var options = "<option value=''><spring:message code="prop.leave.app.dropdown.text"/></option>"; 
-                for (index in data) {
-                	var emp = data[index];
-                	options += "<option value='" + emp.empNumber + "'>" + emp.empName + "</option>";
-                }
 
-                currentDropdown.closest('tr').find("select.selEmpNum").html(options);
+            	currentDropdown.closest('tr').find("select.selEmpNum").empty().append('<option value=""><spring:message code="prop.leave.app.dropdown.text"/></option>');
+            	
+            	if(data.length==1)
+            	{
+            		//$('#selEmpNum').empty();
+            		var empData=data[0];
+            		
+            		$(empData).each(function(i,item){
+            			var opt=$('<option></option>');
+            			$(opt).val(item.empNumber);
+            			$(opt).html(item.empName);
+            			//$('#selEmpNum').append(opt);
+            			currentDropdown.closest('tr').find("select.selEmpNum").append(opt);
+            		});
+            		
+            	}
+            	else if(data.length>1) 
+            	{
+            		var sameDept=data[0];
+            		var otherDept=data[1];
+            		
+            		var optGroup=$('<optgroup></optgroup>');
+
+        			$(optGroup).attr('label','<spring:message code="prop.leave.app.dropdown.delg.emp.group1"/>');
+            		$(sameDept).each(function(i,item){          			
+            			var opt=$('<option></option>');
+            			$(opt).val(item.empNumber);
+            			$(opt).html(item.empName);
+            			$(optGroup).append(opt);
+            		});            		
+            		currentDropdown.closest('tr').find("select.selEmpNum").append(optGroup);
+            		//$('#selEmpNum').append(optGroup);
+            		
+            		
+            		
+            		var optGroup=$('<optgroup></optgroup>');
+            		//$(opt).html(<spring:message code="prop.leave.app.dropdown.text"/>);
+        			$(optGroup).attr('label','<spring:message code="prop.leave.app.dropdown.delg.emp.group2"/>');
+        			
+            		$(otherDept).each(function(i,item){          			
+            			var opt=$('<option></option>');
+            			$(opt).val(item.empNumber);
+            			$(opt).html(item.empName);
+            			$(optGroup).append(opt);
+            		});            		
+            		//$('#selEmpNum').append(optGroup);
+            		currentDropdown.closest('tr').find("select.selEmpNum").append(optGroup);
+            	}
+            	else
+            	{
+            		
+            	}
+            
+
             }
         }
         );

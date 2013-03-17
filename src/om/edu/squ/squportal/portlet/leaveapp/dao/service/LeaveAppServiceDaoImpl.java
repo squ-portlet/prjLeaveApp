@@ -240,6 +240,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 				leaveAppModel.setDelegatedEmps(delegatedEmps);
 			}
 			
+			
 			int result = leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps(), locale);
 				if (result == 0)
 				{

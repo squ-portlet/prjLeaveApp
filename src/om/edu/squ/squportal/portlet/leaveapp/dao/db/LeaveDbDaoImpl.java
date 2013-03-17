@@ -36,6 +36,7 @@ import java.sql.Types;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -46,6 +47,7 @@ import javax.sql.DataSource;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
+import om.edu.squ.squportal.portlet.leaveapp.bo.CheckLeaveDelegation;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
@@ -331,10 +333,13 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 */
 	public List<Employee>	getEmployee(String empNumber, String branchCode,  Locale locale )
 	{
-		String			deptCode		=	null;
-		String			empLevelCode	=	null;
-		int 			intEmpLevelCode	=	0;		
-		List<Employee>	lstEmployees	=	null;
+		String			deptCode			=	null;
+		String			empLevelCode		=	null;
+		int 			intEmpLevelCode		=	0;		
+		List<Employee>	lstEmployees		=	null;
+		List<Employee>	lstLevelEmployees	=	new ArrayList<Employee>();
+		List<Employee>	lstDeptEmployees	=	new ArrayList<Employee>();
+		List			lstResult				=	new ArrayList();
 		try
 		{
 			Employee	employee	=	getEmployee(empNumber);
@@ -345,6 +350,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			}
 			else if(employee.getBranchAddlCode().equals(branchCode))
 			{
+				deptCode		=	employee.getDepartmentAddlCode();
 				empLevelCode	=	employee.getHierarchyAddlLevelCode();
 			}
 			
@@ -364,35 +370,120 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				}
 			};
 			
-			for (int i=intEmpLevelCode+1; i<=Integer.parseInt(Constants.CONST_EMPLOYEE_LEVEL);i++)
+			/**
+			 * Fetch employee list based on level
+			 */
+			int delegationLevelCounter	=	0;
+			for (int i=intEmpLevelCode+1; i<Integer.parseInt(Constants.CONST_EMPLOYEE_LEVEL);i++)
 			{
 				Map<String,String> namedParameters = new HashMap<String,String>();
 				namedParameters.put("paramLocale", locale.getLanguage());
 				namedParameters.put("paramBranchCode", branchCode);
-				namedParameters.put("paramDept", deptCode);
 				namedParameters.put("paramLevel", String.valueOf(i));
+				
+				logger.info("SQL_EMP_BRANCH_SHORT : "+Constants.SQL_EMP_BRANCH_SHORT);
+				logger.info("namedParameters : "+namedParameters);
+				
 				try
 				{
+					lstEmployees	=	this.namedParameterJdbcTemplate.query(Constants.SQL_EMP_BRANCH_SHORT, namedParameters, mapper);
+					if(lstEmployees.size() != 0)
+					{
+						List<Employee>	lstTemp	=	new ArrayList<Employee>();
+										lstTemp.addAll(lstEmployees);
+						lstLevelEmployees.addAll(lstTemp);
+						lstTemp	=	null;
+						delegationLevelCounter++;
+						if(delegationLevelCounter == Constants.CONST_DELEGATION_LEVEL_COUNT)
+						{
+							break;
+						}
+						
+					}
+				}
+				catch(Exception ex)
+				{
+					logger.warn("no delegated emp data found for level : '"+i+"'; error : "+ex);
+				}
+
+			}
+					lstEmployees	=	null;
+			
+			/**
+			 * Fetch employee list from own department
+			 */
+			
+			try
+			{
+				for (int i=intEmpLevelCode+1; i<=Integer.parseInt(Constants.CONST_EMPLOYEE_LEVEL);i++)
+				{
+					Map<String,String> namedParameters = new HashMap<String,String>();
+					namedParameters.put("paramLocale", locale.getLanguage());
+					namedParameters.put("paramBranchCode", branchCode);
+					namedParameters.put("paramDept", deptCode);
+					namedParameters.put("paramEmpNumber", empNumber);
+					namedParameters.put("paramLevel", String.valueOf(i));
+					
+					logger.info("SQL_EMP_BRANCH_DEPT_SHORT : "+Constants.SQL_EMP_BRANCH_DEPT_SHORT);
+					logger.info("namedParameters : "+namedParameters);
+					
 					lstEmployees	=	this.namedParameterJdbcTemplate.query(Constants.SQL_EMP_BRANCH_DEPT_SHORT, namedParameters, mapper);
+					lstDeptEmployees.addAll(lstEmployees);
 					if(lstEmployees.size() != 0)
 					{
 						break;
 					}
 				}
-				catch(Exception ex)
-				{
-					logger.warn("no emp data found for level : '"+i+"'; error : "+ex);
-				}
-
 			}
+			catch(Exception ex)
+			{
+				logger.warn("no delegated emp data found for department : '"+deptCode+"' -- error : "+ex);
+				
+			}
+			
 		}
 		catch(Exception ex)
 		{
 			logger.error("Error generated: can not fetch employee list");
 		}
 		
+
+			/**
+			 * Remove the similar employee object from lstLevelEmployeesList
+			 */
+		try{
+			for(int i=0; i<lstDeptEmployees.size(); i++)
+			{
+				Employee	deptEmp = lstDeptEmployees.get(i);
+				for(int j=0; j<lstLevelEmployees.size(); j++)
+				{
+					Employee levelEmp	=	lstLevelEmployees.get(j);
+					if(deptEmp.equals(levelEmp))
+					{
+						lstLevelEmployees.remove(j);
+						break;
+					}
+					
+				}
+				
+			}
+		}
+		catch(Exception ex)
+		{
+			logger.warn("issues with comparing two employee object list, for preparing final delegation list" );
+		}
 		
-		return	lstEmployees;
+		if(lstDeptEmployees.size() != 0)
+		{
+			lstResult.add(lstDeptEmployees);
+		}
+		if(lstLevelEmployees.size() != 0)
+		{
+			lstResult.add(lstLevelEmployees);
+		}
+
+		
+		return	lstResult;
 		
 	}
 	
@@ -523,7 +614,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		AllowEleaveRequestProc	requestProc		=	new AllowEleaveRequestProc();
 		if(
 				((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN))
-					.equalsIgnoreCase("Y")
+					.equalsIgnoreCase(Constants.CONST_YES_CAPITAL)
 		  )
 		{
 			requestProc.setAcceptLeave(true);
@@ -550,6 +641,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 		return requestProc;
 	}
+
 
 	/**
 	 * 
@@ -592,6 +684,137 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 		result			=	null;
 		return mgrEmployee;
+	}
+	
+	/**
+	 * 
+	 * method name  : getCheckEleaveDelegations
+	 * @param requestNo
+	 * @param delegatedEmps
+	 * @param empNumber
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : CheckLeaveDelegation
+	 * 
+	 * purpose		: Check delegation status
+	 *
+	 * Date    		:	Mar 13, 2013 2:07:33 PM
+	 */
+	@Transactional("trLeaveReq")
+	public synchronized CheckLeaveDelegation	getCheckEleaveDelegations
+																		(
+																			String requestNo, DelegatedEmp[] delegatedEmps,
+																			String empNumber,Locale locale
+																		)
+	{
+		CheckLeaveDelegation	checkLeaveDelegation	=	null;
+		for(DelegatedEmp delEmp: delegatedEmps)
+		{
+			if(!(null == delEmp.getEmpNumber() || delEmp.getEmpNumber().trim().equals("")) && 
+					!(null == delEmp.getFromDate() || delEmp.getFromDate().trim().equals("")) &&
+					!(null == delEmp.getToDate() || delEmp.getToDate().trim().equals(""))
+			)
+				{
+					checkLeaveDelegation	=	checkEleaveDelegation(requestNo,delEmp,empNumber,locale);
+					
+					if((null == checkLeaveDelegation ) || (! checkLeaveDelegation.isAcceptDelegation()))
+					{
+						break;
+					}
+				}
+		}
+		return checkLeaveDelegation;
+	}
+	
+	
+	/**
+	 * 
+	 * method name  : checkEleaveDelegation
+	 * @param requestNo
+	 * @param delEmp
+	 * @param empNumber
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : CheckLeaveDelegation
+	 * 
+	 * purpose		: Check Delegation leave status
+	 *
+	 * Date    		:	Mar 13, 2013 1:54:35 PM
+	 */
+	private synchronized CheckLeaveDelegation	checkEleaveDelegation
+	(
+		String requestNo, DelegatedEmp  delEmp,
+		String empNumber,Locale locale
+	)
+	{
+		
+		this.simpleJdbcCall								=	new SimpleJdbcCall(this.jdbcTemplate);
+		CheckLeaveDelegation	checkLeaveDelegation	=	new CheckLeaveDelegation();
+		Map						result					=	null;
+		simpleJdbcCall.withProcedureName(Constants.CONST_PROC_CHECK_ELEAVE_DELEGATION);
+		simpleJdbcCall.withoutProcedureColumnMetaDataAccess();
+		simpleJdbcCall.useInParameterNames(
+				Constants.CONST_PROC_COL_IN_P_DLG_EMP_CODE,
+				Constants.CONST_PROC_COL_IN_P_DLG_START,
+				Constants.CONST_PROC_COL_IN_P_DLG_END,
+				Constants.CONST_PROC_COL_IN_P_LEAVE_REQ_NO_2,
+				Constants.CONST_PROC_COL_IN_P_LEAVE_EMP_CODE
+				);
+		
+		simpleJdbcCall.declareParameters(
+				new SqlParameter(Constants.CONST_PROC_COL_IN_P_DLG_EMP_CODE, Types.VARCHAR),
+				new SqlParameter(Constants.CONST_PROC_COL_IN_P_DLG_START, Types.DATE),
+				new SqlParameter(Constants.CONST_PROC_COL_IN_P_DLG_END, Types.DATE),
+				new SqlParameter(Constants.CONST_PROC_COL_IN_P_LEAVE_REQ_NO_2, Types.VARCHAR),
+				new SqlParameter(Constants.CONST_PROC_COL_IN_P_LEAVE_EMP_CODE, Types.VARCHAR),
+				new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_ACCEPT_DLG_YN, Types.VARCHAR),
+				new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_MSG_ENG, Types.VARCHAR),
+				new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_MSG_ARB, Types.VARCHAR)
+			);
+		
+		Map<String,Object> 	paramIn				=	new HashMap<String, Object>();
+			paramIn.put(Constants.CONST_PROC_COL_IN_P_DLG_EMP_CODE,delEmp.getEmpNumber());
+			paramIn.put(Constants.CONST_PROC_COL_IN_P_DLG_START, delEmp.getFromDate());
+			paramIn.put(Constants.CONST_PROC_COL_IN_P_DLG_END, delEmp.getToDate());
+			paramIn.put(Constants.CONST_PROC_COL_IN_P_LEAVE_REQ_NO_2,requestNo );
+			paramIn.put(Constants.CONST_PROC_COL_IN_P_LEAVE_EMP_CODE,empNumber );
+			
+			try
+			{
+				result			=	simpleJdbcCall.execute(paramIn);	
+		
+				if(
+						((String)result.get(Constants.CONST_PROC_COL_OUT_P_ACCEPT_DLG_YN))
+							.equalsIgnoreCase(Constants.CONST_YES_CAPITAL)
+				  )
+				{
+					checkLeaveDelegation.setAcceptDelegation(true);
+				}
+				else
+				{
+					checkLeaveDelegation.setAcceptDelegation(false);
+				}
+				
+				if(locale.getLanguage().equals(Constants.CONST_LANG_DEFAULT_EN))
+				{
+					checkLeaveDelegation.setMessage((String)result.get(Constants.CONST_PROC_COL_OUT_P_MSG_ENG));
+				}
+				else
+				{
+					checkLeaveDelegation.setMessage((String)result.get(Constants.CONST_PROC_COL_OUT_P_MSG_ARB));
+				}
+				checkLeaveDelegation.setEmpCodeDlg(delEmp.getEmpNumber());
+				checkLeaveDelegation.setEmpCodeLeave(empNumber);
+			}
+			catch(Exception ex)
+			{
+				checkLeaveDelegation = null;
+				logger.warn("delegation of : "+delEmp.getEmpNumber()+" not possible for delegator : "+empNumber);
+			}
+		
+		return checkLeaveDelegation;
 	}
 	
 	
@@ -1491,7 +1714,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Sep 8, 2012 12:53:38 PM
 	 */
-	private long getLeaveRequestCounter()
+	public long getLeaveRequestCounter()
 	{
 		
 		return jdbcTemplate.queryForLong(Constants.SQL_COUNTER_LEAVE_REQUEST);
