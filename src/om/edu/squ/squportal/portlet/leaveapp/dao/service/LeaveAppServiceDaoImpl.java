@@ -218,10 +218,14 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		leaveRequest.setLeaveEndDate(leaveAppModel.getLeaveEndDate());
 		leaveRequest.setLeaveRequestRemarks(leaveAppModel.getLeaveRemarks());
 		leaveRequest.setLeaveStatus(Constants.CONST_LEAVE_STATUS_WAITING_APPV);
+		leaveRequest.setResearchId(leaveAppModel.getResearchId());
+
 			allowEleaveRequestProc	=	leaveDbDao.getAllowEleaveRequest(leaveRequest, locale);
 		
 		if(allowEleaveRequestProc.isAcceptLeave())
 		{
+			employee.setMyHodId(allowEleaveRequestProc.getCheckedAprroverEmpCode());
+			leaveRequest.setEmployee(employee);
 			leaveType.setTypeNo(allowEleaveRequestProc.getLeaveCode());
 			leaveRequest.setLeaveType(leaveType);
 			if(null != leaveAppModel.getDelegatedEmps())
@@ -239,7 +243,6 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 				}
 				leaveAppModel.setDelegatedEmps(delegatedEmps);
 			}
-			
 			
 			int result = leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps(), locale);
 				if (result == 0)

@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
+import om.edu.squ.squportal.portlet.leaveapp.bo.CheckLeaveResearch;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
@@ -198,6 +199,21 @@ public interface LeaveDbDao
 	 */
 	public AllowEleaveRequestProc	getAllowEleaveRequest(LeaveRequest leaveRequest, Locale locale) 
 	throws ParseException;
+	
+	/**
+	 * 
+	 * method name  : getCheckLeaveResearch
+	 * @param empNumber
+	 * @param researchId
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : CheckLeaveResearch
+	 * 
+	 * purpose		: Check leave for sabbatical research
+	 *
+	 * Date    		:	Mar 19, 2013 11:49:56 AM
+	 */
+	public CheckLeaveResearch getCheckLeaveResearch(String empNumber, String researchId, Locale locale);
 	
 	/**
 	 * 

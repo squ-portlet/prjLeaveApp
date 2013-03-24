@@ -48,6 +48,7 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
 import om.edu.squ.squportal.portlet.leaveapp.bo.CheckLeaveDelegation;
+import om.edu.squ.squportal.portlet.leaveapp.bo.CheckLeaveResearch;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Designation;
@@ -380,10 +381,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				namedParameters.put("paramLocale", locale.getLanguage());
 				namedParameters.put("paramBranchCode", branchCode);
 				namedParameters.put("paramLevel", String.valueOf(i));
-				
-				logger.info("SQL_EMP_BRANCH_SHORT : "+Constants.SQL_EMP_BRANCH_SHORT);
-				logger.info("namedParameters : "+namedParameters);
-				
+
 				try
 				{
 					lstEmployees	=	this.namedParameterJdbcTemplate.query(Constants.SQL_EMP_BRANCH_SHORT, namedParameters, mapper);
@@ -423,9 +421,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					namedParameters.put("paramDept", deptCode);
 					namedParameters.put("paramEmpNumber", empNumber);
 					namedParameters.put("paramLevel", String.valueOf(i));
-					
-					logger.info("SQL_EMP_BRANCH_DEPT_SHORT : "+Constants.SQL_EMP_BRANCH_DEPT_SHORT);
-					logger.info("namedParameters : "+namedParameters);
 					
 					lstEmployees	=	this.namedParameterJdbcTemplate.query(Constants.SQL_EMP_BRANCH_DEPT_SHORT, namedParameters, mapper);
 					lstDeptEmployees.addAll(lstEmployees);
@@ -568,8 +563,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	public synchronized AllowEleaveRequestProc	getAllowEleaveRequest(LeaveRequest leaveRequest, Locale locale) 
 																				throws ParseException
 	{
-		this.simpleJdbcCall				=	new SimpleJdbcCall(this.jdbcTemplate);
-		
+		this.simpleJdbcCall						=	new SimpleJdbcCall(this.jdbcTemplate);
+		CheckLeaveResearch	leaveResearch		=	null;
 		LeaveType	leaveType	=	new LeaveType();
 		Map			resultProc		=	null;	
 		
@@ -608,40 +603,135 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					paramIn.put(Constants.CONST_PROC_COL_IN_P_LEAVE_START, startDate);
 					paramIn.put(Constants.CONST_PROC_COL_IN_P_LEAVE_END, endDate);
 					paramIn.put(Constants.CONST_PROC_COL_IN_P_LEAVE_REQ_NO, leaveRequest.getRequestNo());
-					paramIn.put(Constants.CONST_PROC_COL_IN_P_SUGGESTED_APP_EMP_CODE, leaveRequest.getSuggestedHod());
+					paramIn.put(Constants.CONST_PROC_COL_IN_P_SUGGESTED_APP_EMP_CODE, leaveRequest.getEmployee().getMyHodId());
 
-		resultProc			=	simpleJdbcCall.execute(paramIn);
 		AllowEleaveRequestProc	requestProc		=	new AllowEleaveRequestProc();
-		if(
-				((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN))
-					.equalsIgnoreCase(Constants.CONST_YES_CAPITAL)
-		  )
-		{
-			requestProc.setAcceptLeave(true);
-		}
-		else
-		{
-			requestProc.setAcceptLeave(false);
-		}
-
-		requestProc.setLeaveCode((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_LEAVE_CODE));
-		if(locale.getLanguage().equals(Constants.CONST_LANG_DEFAULT_EN))
-		{
-			requestProc.setLeaveMessage((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_MSG_ENGLISH));
-		}
-		else
-		{
-			requestProc.setLeaveMessage((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_MSG_ARABIC));
-		}
-		requestProc.setCheckedAprroverEmpCode((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_CHECKED_APP_EMP_CODE));
-
-		logger.info("APPROVER ID : "+requestProc.getCheckedAprroverEmpCode());
 		
-		resultProc	=	null;
+		if(null != leaveRequest.getResearchId() && ! leaveRequest.getResearchId().trim().equals(""))
+		{
+			try
+			{
+				leaveResearch	=	 getCheckLeaveResearch(leaveRequest.getEmployee().getEmpNumber(), leaveRequest.getResearchId(),locale);
+			}
+			catch(Exception ex)
+			{
+				logger.error("error to validate researchid for employee : "+leaveRequest.getEmployee().getEmpNumber() +" for research id : "+leaveRequest.getResearchId());
+			}
+			
+		}
+		if((null != leaveResearch))
+		{
+			if(! leaveResearch.isAccept())
+			{
+				requestProc.setAcceptLeave(leaveResearch.isAccept());
+				requestProc.setLeaveMessage(leaveResearch.getMessage());
+			}
+			
+		}
+
+		
+		if(((leaveResearch ==null) && (null == leaveRequest.getResearchId() || leaveRequest.getResearchId().trim().equals(""))) ||
+				((leaveResearch !=null )&& (leaveResearch.isAccept())))
+		{
+		
+			resultProc			=	simpleJdbcCall.execute(paramIn);
+			
+			if(
+					((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN))
+						.equalsIgnoreCase(Constants.CONST_YES_CAPITAL)
+			  )
+			{
+				requestProc.setAcceptLeave(true);
+			}
+			else
+			{
+				requestProc.setAcceptLeave(false);
+			}
+	
+			requestProc.setLeaveCode((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_LEAVE_CODE));
+			if(locale.getLanguage().equals(Constants.CONST_LANG_DEFAULT_EN))
+			{
+				requestProc.setLeaveMessage((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_MSG_ENGLISH));
+			}
+			else
+			{
+				requestProc.setLeaveMessage((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_MSG_ARABIC));
+			}
+			requestProc.setCheckedAprroverEmpCode((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_CHECKED_APP_EMP_CODE));
+			
+			resultProc	=	null;
+		}
 		
 		return requestProc;
 	}
 
+	
+	/**
+	 * 
+	 * method name  : getCheckLeaveResearch
+	 * @param empNumber
+	 * @param researchId
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : CheckLeaveResearch
+	 * 
+	 * purpose		: Check leave for sabbatical research
+	 *
+	 * Date    		:	Mar 19, 2013 11:49:56 AM
+	 */
+	@Transactional("trLeaveReq")
+	public CheckLeaveResearch getCheckLeaveResearch(String empNumber, String researchId, Locale locale)
+	{
+		this.simpleJdbcCall				=	new SimpleJdbcCall(this.jdbcTemplate);
+		Map			resultProc			=	null;
+		simpleJdbcCall.withProcedureName(Constants.CONST_PROC_CHECK_ELEAVE_RESEARCH);
+		simpleJdbcCall.withoutProcedureColumnMetaDataAccess();
+		simpleJdbcCall.useInParameterNames(
+				Constants.CONST_PROC_COL_IN_P_RESEARCH_CODE,
+				Constants.CONST_PROC_COL_IN_P_LEAVE_EMP_CODE_RESEARCH
+				);
+		simpleJdbcCall.declareParameters(
+				new SqlParameter(Constants.CONST_PROC_COL_IN_P_RESEARCH_CODE, Types.VARCHAR),
+				new SqlParameter(Constants.CONST_PROC_COL_IN_P_LEAVE_EMP_CODE_RESEARCH, Types.VARCHAR),
+				new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN, Types.VARCHAR),
+				new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_ACCEPT_YN_RESEARCH, Types.VARCHAR),
+				new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_MSG_ENG_RESEARCH, Types.VARCHAR),
+				new SqlOutParameter(Constants.CONST_PROC_COL_OUT_P_MSG_ARB_RESEARCH, Types.VARCHAR)
+			);
+		
+		Map<String,Object> 	paramIn				=	new HashMap<String, Object>();
+		paramIn.put(Constants.CONST_PROC_COL_IN_P_RESEARCH_CODE, researchId);
+		paramIn.put(Constants.CONST_PROC_COL_IN_P_LEAVE_EMP_CODE_RESEARCH, empNumber);
+
+							resultProc			=	simpleJdbcCall.execute(paramIn);
+		CheckLeaveResearch	leaveResearch		=	new CheckLeaveResearch();
+		leaveResearch.setResearchId(researchId);
+		leaveResearch.setEmpCode(empNumber);
+		if(
+				((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_ACCEPT_YN_RESEARCH))
+					.equalsIgnoreCase(Constants.CONST_YES_CAPITAL)
+		  )
+		{
+			leaveResearch.setAccept(true);
+		}
+		else
+		{
+			leaveResearch.setAccept(false);
+		}
+		if(locale.getLanguage().equals(Constants.CONST_LANG_DEFAULT_EN))
+		{
+			leaveResearch.setMessage((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_MSG_ENG_RESEARCH));
+		}
+		else
+		{
+			leaveResearch.setMessage((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_MSG_ARB_RESEARCH));
+		}
+		
+		return leaveResearch;
+	}
+	
+	
+	
 
 	/**
 	 * 
@@ -816,6 +906,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 		return checkLeaveDelegation;
 	}
+
+	
 	
 	
 	/**
@@ -1284,6 +1376,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 		List<LeaveRequest>	leaveRequests	=	this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_LEAVE_REQUEST, namedParameters, mapper);
 		
+				
 		return leaveRequests;
 	}
 	

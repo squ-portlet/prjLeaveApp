@@ -180,7 +180,6 @@
 			var mydata = [
 						<c:forEach items="${leaveRequests}" var="req" varStatus="cnt">
 							{
-								
 								<portlet:renderURL var="varLeaveApprove">
 									<portlet:param name="action" value="leaveApprove"/>
 									<portlet:param name="reqNo" >
@@ -200,9 +199,7 @@
 								</portlet:actionURL>
 								
 								<c:choose>
-									<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
-													((req.employee.hierarchyCode >empHierarchyAddl) &&
-														(req.employee.senior && (req.employee.empNumber != empNumber)))}">
+									<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
 										reqNo:'<a href="${varLeaveApprove}"><font color="red"><c:out value="${req.requestNo}"/></font></a>',
 									</c:when>
 									<c:otherwise>
@@ -215,9 +212,7 @@
 							 type:'<c:out value="${req.leaveType.typeDesc}"/>',
 							 status:'<c:out value="${req.leaveStatus}"/>',
 								<c:choose>
-								<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
-												((req.employee.hierarchyCode >empHierarchyAddl) &&
-													(req.employee.senior && (req.employee.empNumber != empNumber)))}">
+								<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
 									employee:'<c:out value="${req.employee.empName}"/> &nbsp; (<c:out value="${req.employee.empNumber}"/>)',
 								</c:when>
 								<c:otherwise>
@@ -230,9 +225,7 @@
 								<portlet:param name="reqNo" value="${req.requestNo}"/>
 							</portlet:renderURL>
 							<c:choose>
-								<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
-													((req.employee.hierarchyCode >empHierarchyAddl) &&
-													(req.employee.senior && (req.employee.empNumber != empNumber)))}">
+								<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
 									<c:choose>
 										<c:when test="${(req.status.statusCode == leaveStatusApproved || 
 												         req.status.statusCode == leaveStatusRejected) ||
@@ -276,9 +269,7 @@
 							</c:choose>
 							
 							<c:choose>
-							<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
-											((req.employee.hierarchyCode >empHierarchyAddl) &&
-												(req.employee.senior && (req.employee.empNumber != empNumber)))}">
+							<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
 							isApprover:'y'
 							</c:when>
 							<c:otherwise>

@@ -166,6 +166,7 @@ public interface Constants
 	
 	
 	/***********STORED PROCEDURE**************************/
+	/**************************************STORED PROCEDURE - Check leave request**************************/
 	public static final	String	CONST_PROC_ALLOW_eLEAVE_REQUEST				=			"allow_eleave_request";
 	public static final	String	CONST_PROC_COL_IN_P_EMP_CODE				=			"P_EMP_CODE";
 	public static final	String	CONST_PROC_COL_IN_P_LEAVE_FLAG				=			"P_LEAVE_FLAG";
@@ -194,6 +195,14 @@ public interface Constants
 	public static final	String	CONST_PROC_COL_OUT_P_ACCEPT_DLG_YN			=			"P_ACCEPT_DLG_YN";
 	public static final	String	CONST_PROC_COL_OUT_P_MSG_ENG				=			"P_MSG_ENG";
 	public static final	String	CONST_PROC_COL_OUT_P_MSG_ARB				=			"P_MSG_ARB";
+	
+	/**************************************STORED PROCEDURE - Check e-leave research**************************/
+	public static final	String	CONST_PROC_CHECK_ELEAVE_RESEARCH			=			"check_eleave_Research";
+	public static final	String	CONST_PROC_COL_IN_P_RESEARCH_CODE			=			"P_RESEARCH_CODE";
+	public static final	String	CONST_PROC_COL_IN_P_LEAVE_EMP_CODE_RESEARCH	=			"P_LEAVE_EMP_CODE";
+	public static final	String	CONST_PROC_COL_OUT_P_ACCEPT_YN_RESEARCH		=			"P_ACCEPT_YN";
+	public static final	String	CONST_PROC_COL_OUT_P_MSG_ENG_RESEARCH		=			"P_MSG_ENG";
+	public static final	String	CONST_PROC_COL_OUT_P_MSG_ARB_RESEARCH		=			"P_MSG_ARB";
 	
 	
 	/******************************************************/
@@ -505,17 +514,10 @@ public interface Constants
 									                                        "      'en',initCap(EMP.VHM_EMP_NAME),						" +
 									                                        "      'ar',EMP.VHM_EMP_NAME_ARABIC) AS EMP_NAME,			" +
 																			"	LVREQ.VHM_HIERARCHY_CODE AS EMP_HIERARCHY_CODE,			" +
-																			"   DECODE( 												" +
-																			"       NVL(												" +
-																			"          (SELECT DISTINCT DELG.VHM_DELEGATED_STATUS		" +	
-																			"             FROM 											" +
-																			"             VHM_EMP_LEAVE_REQUEST LVREQ2,					" +
-																			"             VHM_EMP_LEAVE_REQ_DELEGATION DELG				" +
-																			"             WHERE  LVREQ2.VHM_LEAVE_REQ_NO = DELG.VHM_LEAVE_REQ_NO (+)  	" + 
-																			"            AND LVREQ2.VHM_LEAVE_REQ_NO =LVREQ.VHM_LEAVE_REQ_NO),'N'		" +
-																			"       ),													" +			
-																			"       'N','employee','senior'								" +			
-																			"	) AS DELEGATE_STATUS,HIR.VHM_LEVEL AS EMP_LEVEL,		" +
+										                                    "   DECODE													" +
+										                                    "    (														" +
+										                                    "      APP.VHM_APP_EMP_CODE, :paramEmpNumber, 'senior','employee' " +
+																			"	 ) AS DELEGATE_STATUS,HIR.VHM_LEVEL AS EMP_LEVEL,		" +
 																			" 	APP.VHM_APP_EMP_CODE AS EMP_APP_CODE,					" +
 																			"	(														" +
 																			"		SELECT DECODE('en',									" +

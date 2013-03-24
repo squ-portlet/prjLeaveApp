@@ -536,8 +536,28 @@ $(function() {
 		http://designwithpc.com/Plugins/ddSlick
 	*/
 	$(function() {
-		 $("#leaveTypeFlag").ddslick();
+		 $("#leaveTypeFlag").ddslick({
+				 onSelected: function (data) {
+	                    displaySelectedData(data);
+				 }
+		 });
+		 
 		});	
+		
+    function displaySelectedData(ddData) {
+        if (ddData.selectedData) {
+         	if(ddData.selectedData.value == 'B')
+        		{
+        			$("#divResearchId").show();
+        		}
+        	else
+        		{
+        			$("#divResearchId").hide();
+        		}
+        }
+        console.log(ddData);
+    }
+		
 </script>
 
 </head>
@@ -599,12 +619,17 @@ $(function() {
 					</span>
 				</th>
 				<td style="vertical-align: top;">
-					<form:select path="leaveTypeFlag" cssClass="leaveOptions">
+					<form:select path="leaveTypeFlag" cssClass="leaveOptions" >
 						<form:option value="">Select</form:option>
 						<form:options items="${leaveTypeFlag}" itemLabel="typeDesc" itemValue="typeNo"/>
 					</form:select>
 					<br>
 					<form:errors path="leaveTypeFlag" cssClass="error" />
+					
+					<div id="divResearchId" style="display: none;">
+						<spring:message code="prop.leave.app.apply.form.leave.sabbatical.research.id"/> <form:input path="researchId"/>
+					</div>
+					
 				</td>
 				<td>&nbsp;</td>
 				<th class="PortletHeaderColor">
