@@ -569,7 +569,7 @@ public interface Constants
 																			"				)											" +
 																			"		)													" +
 																			"	AND LVREQ.VHM_STATUS_CODE != " + CONST_LEAVE_STATUS_CANCEL	  +
-																			"	ORDER BY LVREQ.VHM_LEAVE_REQ_NO	DESC					";
+																			"	ORDER BY DELEGATE_STATUS, LVREQ.VHM_LEAVE_REQ_NO	DESC					";
 
 	
 	public static final String	SQL_VIEW_DEPT_HEAD_ID			=			"   SELECT VHM_EMP_CODE AS EMP_CODE,						" +

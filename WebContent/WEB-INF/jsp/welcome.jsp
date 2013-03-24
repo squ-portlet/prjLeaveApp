@@ -587,8 +587,7 @@
 				</portlet:actionURL>
 		
 				<c:choose> 
-					<c:when test='${(req.employee.hierarchyCode > empHierarchy) || 
-												(req.employee.senior && (req.employee.empNumber != empNumber))}'>
+					<c:when test='${(req.employee.senior && (req.employee.empNumber != empNumber))}'>
 					<c:set value="yellow" var="colYell"/>
 					<c:set value="${cnt+1}" var="cnt"/>
 					</c:when>
@@ -601,9 +600,7 @@
 				<tr bgcolor="${colYell}">
 					<td>
 						<c:choose>
-							<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
-											((req.employee.hierarchyCode >empHierarchyAddl) &&
-												(req.employee.senior && (req.employee.empNumber != empNumber)))}">
+							<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
 								<a href="${varLeaveApprove}"><c:out value="${req.requestNo}"/></a>
 							</c:when>
 							<c:otherwise>
@@ -638,9 +635,7 @@
 							<portlet:param name="reqNo" value="${req.requestNo}"/>
 						</portlet:renderURL>
 						<c:choose>
-							<c:when test="${(req.employee.hierarchyCode > empHierarchy) || 
-							((req.employee.hierarchyCode >empHierarchyAddl) &&
-								(req.employee.senior && (req.employee.empNumber != empNumber)))}">
+							<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
 								<c:choose>
 										<c:when test="${(req.status.statusCode == leaveStatusApproved) || 
 												         (req.status.statusCode == leaveStatusRejected) ||
