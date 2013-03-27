@@ -31,10 +31,6 @@ package om.edu.squ.squportal.portlet.leaveapp.controller;
 
 
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
@@ -55,7 +51,6 @@ import om.edu.squ.squportal.portlet.leaveapp.dao.service.LeaveAppServiceDao;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
-import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailService;
 import om.edu.squ.squportal.portlet.leaveapp.validator.LeaveAppValidator;
 import om.edu.squ.squportal.portlet.leaveapp.validator.LeaveAppValidatorApprove;
 
@@ -112,7 +107,6 @@ public class LeaveAppControllerMain
 				locale
 			  );
 		
-		
 		if(null != session.getAttribute("employee"))
 		{
 			session.removeAttribute("employee");
@@ -129,11 +123,11 @@ public class LeaveAppControllerMain
 		model.addAttribute("furtherClarification", Constants.CONST_LEAVE_STATUS_FURTHER_CLARIFICATION);
 		model.addAttribute("leaveStatusApproved", Constants.CONST_LEAVE_STATUS_APPROVED);
 		model.addAttribute("leaveStatusRejected", Constants.CONST_LEAVE_STATUS_REJECTED);
-		
+				
 		model.addAttribute("leaveActionApprove", Constants.CONST_LEAVE_ACTION_APPROVE);
 		model.addAttribute("leaveActionReturn", Constants.CONST_LEAVE_ACTION_RETURN);
 		model.addAttribute("leaveActionReject", Constants.CONST_LEAVE_ACTION_REJECT);
-
+		
 		return Constants.PAGE_WELCOME;
 	}
 	
@@ -155,13 +149,14 @@ public class LeaveAppControllerMain
 	@RequestMapping(params="action=leaveView")
 	private String leaveApplicationView
 		(
-			@RequestParam("reqNo") String requestNo, 
+			@RequestParam("reqNo") String requestNo,
+			@RequestParam("appEmpNo") String appEmpNo,
 			PortletRequest request, 
 			Model model,
 			Locale locale
 		)
 	{
-		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(requestNo, locale);
+		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(appEmpNo, requestNo, locale);
 		if(!model.containsAttribute("leaveAppModel"))
 		{
 			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
@@ -336,7 +331,7 @@ public class LeaveAppControllerMain
 	@RequestMapping(params="action=leaveApprove")
 	private String leaveApplicationApprove
 		(
-			@RequestParam("reqNo") String requestNo, 
+			@RequestParam("reqNo") String requestNo,
 			PortletRequest request, 
 			Model model,
 			Locale locale
@@ -371,7 +366,9 @@ public class LeaveAppControllerMain
 			Locale locale
 		)
 	{
-		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(requestNo, locale);
+		PortletSession			session					=	request.getPortletSession();
+		Employee				employee				=	(Employee)session.getAttribute("employee");	
+		LeaveRequest			leaveRequest	=	leaveAppServiceDao.getLeaveRequest(employee.getEmpNumber(), requestNo, locale);
 		if(!model.containsAttribute("leaveAppModel"))
 		{
 			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
@@ -583,7 +580,7 @@ public class LeaveAppControllerMain
 	{
 		PortletSession	session	=	request.getPortletSession();
 		Employee	employee	=	(Employee)session.getAttribute("employee");	
-		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(requestNo, locale);
+		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(null, requestNo, locale);
 		
 		if(!model.containsAttribute("leaveAppModel"))
 		{
@@ -594,6 +591,7 @@ public class LeaveAppControllerMain
 			leaveAppModel.setPositionAdditional(employee.getDesignationAddlCode());
 			LeaveType		leaveTypeFlag	=	leaveRequest.getLeaveTypeFlag();
 			leaveAppModel.setLeaveTypeFlag(leaveTypeFlag.getTypeNo());
+			leaveAppModel.setResearchId(leaveRequest.getResearchId());
 			leaveAppModel.setLeaveStartDate(leaveRequest.getLeaveStartDate());
 			leaveAppModel.setLeaveEndDate(leaveRequest.getLeaveEndDate());
 			leaveAppModel.setHod(leaveRequest.getSuggestedHod());

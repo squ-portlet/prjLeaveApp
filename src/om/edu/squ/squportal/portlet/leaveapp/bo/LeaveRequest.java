@@ -58,6 +58,8 @@ public class LeaveRequest implements Serializable
 	private	String			suggestedHod;
 	private	String			approverId;
 	private	String			researchId;
+	private	boolean			sabbaticalLowerApproverAction;
+	private	int				approverSequenceNo;
 	/**
 	 * Getter Method	: getRequestNo
 	 * @return the requestNo
@@ -419,14 +421,46 @@ public class LeaveRequest implements Serializable
 		this.researchId = researchId;
 	}
 	/**
-	 * Getter Method	: getSerialversionuid
-	 * @return the serialversionuid
+	 * Getter Method	: isSabbaticalLowerApproverAction
+	 * @return the sabbaticalLowerApproverAction
 	 * 
-	 * Date				: Mar 19, 2013
+	 * Date				: Mar 26, 2013
 	 */
-	public static long getSerialversionuid()
+	public boolean isSabbaticalLowerApproverAction()
 	{
-		return serialVersionUID;
+		return this.sabbaticalLowerApproverAction;
+	}
+	/**
+	 * Setter method : setSabbaticalLowerApproverAction
+	 * @param sabbaticalLowerApproverAction the sabbaticalLowerApproverAction to set
+	 * 
+	 * Date          : Mar 26, 2013 12:45:47 PM
+	 */
+	public void setSabbaticalLowerApproverAction(
+			boolean sabbaticalLowerApproverAction)
+	{
+		this.sabbaticalLowerApproverAction = sabbaticalLowerApproverAction;
+	}
+	
+	/**
+	 * Getter Method	: getApproverSequenceNo
+	 * @return the approverSequenceNo
+	 * 
+	 * Date				: Mar 27, 2013
+	 */
+	public int getApproverSequenceNo()
+	{
+		return this.approverSequenceNo;
+	}
+	/**
+	 * Setter method : setApproverSequenceNo
+	 * @param approverSequenceNo the approverSequenceNo to set
+	 * 
+	 * Date          : Mar 27, 2013 10:37:15 AM
+	 */
+	public void setApproverSequenceNo(int approverSequenceNo)
+	{
+		this.approverSequenceNo = approverSequenceNo;
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -469,7 +503,9 @@ public class LeaveRequest implements Serializable
 				+ (this.approverId != null ? "approverId=" + this.approverId
 						+ ", " : "")
 				+ (this.researchId != null ? "researchId=" + this.researchId
-						: "") + "]";
+						+ ", " : "") + "sabbaticalLowerApproverAction="
+				+ this.sabbaticalLowerApproverAction + ", approverSequenceNo="
+				+ this.approverSequenceNo + "]";
 	}
 	
 	

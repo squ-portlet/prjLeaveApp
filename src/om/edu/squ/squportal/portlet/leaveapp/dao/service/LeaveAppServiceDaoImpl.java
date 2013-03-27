@@ -30,8 +30,10 @@
 package om.edu.squ.squportal.portlet.leaveapp.dao.service;
 
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
@@ -44,6 +46,7 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Sabbatical;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
 import om.edu.squ.squportal.portlet.leaveapp.dao.db.LeaveDbDao;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
@@ -297,6 +300,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	/**
 	 * 
 	 * method name  : getLeaveRequest
+	 * @param empNumber
 	 * @param reqNo
 	 * @param locale
 	 * @return
@@ -307,9 +311,9 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 *
 	 * Date    		:	Sep 18, 2012 2:29:13 PM
 	 */
-	public synchronized LeaveRequest	getLeaveRequest(String reqNo, Locale locale)
+	public synchronized LeaveRequest	getLeaveRequest(String empNumber, String reqNo, Locale locale)
 	{
-		LeaveRequest	leaveRequest	=	leaveDbDao.getLeaveRequest(reqNo, locale);
+		LeaveRequest	leaveRequest	=	leaveDbDao.getLeaveRequest(empNumber, reqNo, locale);
 		Employee		empLeaveReq		=	leaveRequest.getEmployee();
 		Employee		employee		=	leaveDbDao.getEmployee(empLeaveReq.getEmpNumber(), locale);
 					
@@ -359,6 +363,32 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	public List<LeaveApprove>	getLeaveApproveHistory(String requestNo, Locale locale)
 	{
 		return leaveDbDao.getLeaveApproveHistory(requestNo, locale);
+	}
+	
+	/**
+	 * 
+	 * method name  : getSabbatical
+	 * @param empNumber
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Sabbatical>
+	 * 
+	 * purpose		: Get limited list of subbatical objects (sequence number just below) 
+	 *
+	 * Date    		:	Mar 25, 2013 2:01:51 PM
+	 */
+	public	Map<String,Sabbatical>	getSabbatical(String empNumber)
+	{
+		Map<String,Sabbatical> 	mapSabbaticals	=	new HashMap<String, Sabbatical>();
+		List<Sabbatical>		lstSabbaticals	=	leaveDbDao.getSabbatical(empNumber);
+		
+		
+		
+		for(Sabbatical sabbatical : lstSabbaticals )
+		{
+			mapSabbaticals.put(sabbatical.getRequestNo(), sabbatical);
+		}
+		return mapSabbaticals;
 	}
 	
 	/**
@@ -570,11 +600,11 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		String 			message			=	null;
 		LeaveRequest	leaveRequest	=	null;
 		LeaveApprove	leaveApprove	=	null;
-		int result = leaveDbDao.cancelLeaveRequest(requestNo);
+		int result = leaveDbDao.cancelLeaveRequest(null, requestNo);
 		if(result != 0)
 		{
 						message			=	UtilProperty.getMessage("prop.leave.app.cancel.request.success", new String []{requestNo}, locale);
-						leaveRequest 	= leaveDbDao.getLeaveRequest(requestNo, locale);
+						leaveRequest 	= leaveDbDao.getLeaveRequest(null, requestNo, locale);
 						leaveApprove	=	leaveDbDao.getLeaveApproveHistory(requestNo, locale).get(0);
 			/* Sending email */
 			EmailLeave	emailLeave		=	new EmailCancel(leaveRequest, leaveApprove, emailService,locale);
@@ -606,7 +636,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	{
 		boolean			result			=	false;
 		EmailLeave		emailLeave		=	null;		
-		LeaveRequest	leaveRequest	=	getLeaveRequest(requestNo, locale);
+		LeaveRequest	leaveRequest	=	getLeaveRequest(null, requestNo, locale);
 		LeaveApprove	leaveApprove	=	getLeaveApproveHistory(requestNo, locale).get(0);
 		
 		if(ApproverAction.equals(Constants.CONST_LEAVE_ACTION_APPROVE))

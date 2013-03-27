@@ -47,6 +47,7 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.HoD;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Sabbatical;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
 
 /**
@@ -278,6 +279,7 @@ public interface LeaveDbDao
 	/**
 	 * 
 	 * method name  : getLeaveRequest
+	 * @param empNumber TODO
 	 * @param reqNo
 	 * @param locale
 	 * @return
@@ -288,7 +290,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Sep 18, 2012 2:15:21 PM
 	 */
-	public LeaveRequest	getLeaveRequest(String reqNo, Locale locale);
+	public LeaveRequest	getLeaveRequest(String empNumber, String reqNo, Locale locale);
 
 	/**
 	 * 
@@ -319,6 +321,20 @@ public interface LeaveDbDao
 	 * Date    		:	Jan 13, 2013 12:53:38 PM
 	 */
 	public List<LeaveApprove>	getLeaveApproveHistory(String requestNo, Locale locale);
+	
+	/**
+	 * 
+	 * method name  : getSabaSabbatical
+	 * @param empNumber
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Sabbatical>
+	 * 
+	 * purpose		: Get limited list of subbatical objects (sequence number just below)  
+	 *
+	 * Date    		:	Mar 25, 2013 2:01:51 PM
+	 */
+	public	List<Sabbatical>	getSabbatical(String empNumber);
 	
 	/**
 	 * 
@@ -408,6 +424,7 @@ public interface LeaveDbDao
 	/**
 	 * 
 	 * method name  : cancelLeaveRequest
+	 * @param empNumber TODO
 	 * @param requestNo
 	 * @return
 	 * LeaveDbDaoImpl
@@ -417,7 +434,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Feb 3, 2013 1:54:23 PM
 	 */
-	public int cancelLeaveRequest(String requestNo);
+	public int cancelLeaveRequest(String empNumber, String requestNo);
 	
 	/**
 	 * 

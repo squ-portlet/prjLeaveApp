@@ -199,7 +199,7 @@
 								</portlet:actionURL>
 								
 								<c:choose>
-									<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
+									<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber) && (req.sabbaticalLowerApproverAction && ! ((req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected))))}">
 										reqNo:'<a href="${varLeaveApprove}"><font color="red"><c:out value="${req.requestNo}"/></font></a>',
 									</c:when>
 									<c:otherwise>
@@ -223,6 +223,7 @@
 							<portlet:renderURL var="varLeaveView">
 								<portlet:param name="action" value="leaveView"/>
 								<portlet:param name="reqNo" value="${req.requestNo}"/>
+								<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
 							</portlet:renderURL>
 							<c:choose>
 								<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
@@ -230,6 +231,9 @@
 										<c:when test="${(req.status.statusCode == leaveStatusApproved || 
 												         req.status.statusCode == leaveStatusRejected) ||
 												         (req.status.statusCode == furtherClarification)}">
+											actions: '<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>',
+										</c:when>
+										<c:when test="${!(req.sabbaticalLowerApproverAction)}">
 											actions: '<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>',
 										</c:when>
 										<c:otherwise>
@@ -263,9 +267,12 @@
 								<c:when test="${(req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected)}">
 									actions:'<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>',
 								</c:when>
+								<c:when test="${(req.approverSequenceNo != 1)}">
+									actions: '<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>',
+								</c:when>
 								<c:otherwise>
 									actions:'<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" index="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>',
-									</c:otherwise>
+								</c:otherwise>
 							</c:choose>
 							
 							<c:choose>

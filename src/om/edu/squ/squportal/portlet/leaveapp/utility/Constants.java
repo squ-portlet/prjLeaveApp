@@ -89,15 +89,20 @@ public interface Constants
 	public static final	String	CONST_LEAVE_TYPE				=			"LEAVE_TYPE";
 	public static final	String	CONST_LEAVE_DESC				=			"LEAVE_DESC";
 	public static final	String	CONST_LEAVE_TYPE_FLAG			=			"LEAVE_TYPE_FLAG";
+	public static final	String	CONST_LEAVE_RESEARCH_ID			=			"LEAVE_RESEARCH_ID";
 	public static final	String	CONST_LEAVE_REQ_REMARK			=			"LEAVE_REQ_REMARK";
 	public static final	String	CONST_ACTION_CODE				=			"ACTION_CODE";
 	public static final	String	CONST_ACTION_DESC				=			"ACTION_DESC";
 	public static final	String	CONST_ACTION_DATE				=			"ACTION_DATE";
 	public static final	String	CONST_APPROVER_REMARK			=			"APPROVER_REMARK";
+	public static final	String	CONST_APPROVER_SEQUENCE_NO		=			"APPROVER_SEQUENCE_NO";
+	public static final	String	CONST_APPROVER_NEXT_SEQUENCE_NO	=			"APPROVER_NEXT_SEQUENCE_NO";
+	public static final	String	CONST_APPROVER_BEFORE_ACTION	=			"SAB_ACTION_LOWER";
 	public static final	String	CONST_DELEGATE_START_DATE		=			"DELEGATE_START_DATE";
 	public static final	String	CONST_DELEGATE_END_DATE			=			"DELEGATE_END_DATE";
 	public static final	String	CONST_DELEGATE_STATUS			=			"DELEGATE_STATUS";
 	public static final	String	CONST_SUGGESTED_APPROVER_CODE	=			"SUGGESTED_APPROVER_CODE";
+	
 	
 
 	
@@ -502,13 +507,43 @@ public interface Constants
 																			"		'en',LVTYPE.VHM_LEAVE_TYPE_DESC,					" +
 																			"		'ar',LVTYPE.VHM_LEAVE_TYPE_DESC_ARABIC				" +
 																			"	) AS LEAVE_DESC,										" +
-																			" LVREQ.VHM_STATUS_CODE AS LEAVE_STATUS_CODE,				" +
-																			" DECODE													" +
-																			"	(														" +
-																			"		:paramLocale,										" +
-																			"		'en',LVSTATUS.VHM_STATUS_DESC,						" +
-																			"		'ar',LVSTATUS.VHM_STATUS_DESC_ARABIC				" +
-																			"		) AS LEAVE_STATUS,									" +
+																			" DECODE																" +
+										                                    "   (																	" +
+										                                    "      APP.VHM_ACTION_CODE, 											" +
+										                                    "      NULL, 															" +
+										                                    "      (																" +
+										                                    "       SELECT VHM_STATUS_CODE											" +
+										                                    "       FROM															" +
+										                                    "          VHM_WORKFLOW_STATUS 											" +
+										                                    "      WHERE															" +
+										                                    "          VHM_STATUS_CODE= '0000000001'								" +
+										                                    "      ),																" +
+										                                    "      LVREQ.VHM_STATUS_CODE											" +	
+										                                    "  ) AS LEAVE_STATUS_CODE,												" +
+																			"	DECODE																" +
+																			"		(																" +
+																			"			APP.VHM_ACTION_CODE, 										" +
+																			"			NULL,														" +
+										                                    "  				(														" +
+										                                    "   				 SELECT												" +
+										                                    "      						DECODE 										" +
+										                                    "									(									" +
+										                                    "		 								'en', 							" +
+										                                    "										'en',VHM_STATUS_DESC, 			" +
+										                                    "										'ar',VHM_STATUS_DESC_ARABIC 	" +
+										                                    "									) 									" +
+										                                    "    				FROM												" +
+										                                    "      				VHM_WORKFLOW_STATUS 								" +	
+										                                    "    				WHERE												" +
+										                                    "      				VHM_STATUS_CODE= '0000000001'						" +
+										                                    "  				)														" +
+										                                    "  		,DECODE 														" +
+										                                    "				(														" +
+										                                    "				 'en', 													" +
+										                                    "				 'en',LVSTATUS.VHM_STATUS_DESC, 						" +
+										                                    "				 'ar',LVSTATUS.VHM_STATUS_DESC_ARABIC 					" +
+										                                    "				) 														" +
+										                                    "		 ) AS LEAVE_STATUS,												" +
 																			"   LVREQ.VHM_EMP_CODE AS EMP_CODE,							" +
 																			"	LVREQ.VHM_EMP_INTERNET_USR_ID AS EMP_INTERNET_ID,		" +
 																			" DECODE('en',												" +
@@ -527,7 +562,19 @@ public interface Constants
 										                                    "    	FROM VHM_EMPLOYEE  EMPAPP							" +
 										                                    "    	WHERE 												" +
 										                                    "	EMPAPP.VHM_EMP_CODE=APP.VHM_APP_EMP_CODE				" +
-										                                    "	) AS EMP_APP_NAME										" +
+										                                    "	) AS EMP_APP_NAME,										" +
+										                                    "	APP.VHM_APP_SEQ_NO AS APPROVER_SEQUENCE_NO,				" +
+										                                    "   NVL (													" +
+										                                    "     (														" +
+										                                    "            SELECT  DECODE (								" + 
+										                                    "                        NVL(APP2.VHM_ACTION_CODE ,'N'),	" +
+										                                    "                        'N','N',							" +
+										                                    "                        '0000000001','Y','N')				" +
+										                                    "            FROM  VHM_EMP_LEAVE_REQUEST_APPROVAL APP2		" +
+										                                    "            WHERE APP2.VHM_LEAVE_REQ_NO = APP.VHM_LEAVE_REQ_NO	" +
+										                                    "            AND APP2.VHM_APP_SEQ_NO = (APP.VHM_APP_SEQ_NO - 1)	" +
+										                                    "			 AND APP2.VHM_ACTION_CODE is null					" +
+										                                    "      ),'Y') AS SAB_ACTION_LOWER      						" +	
 																			" FROM 														" +
 																			"		VHM_EMP_LEAVE_REQUEST LVREQ,						" +
 																			"		VHM_LEAVE_TYPE_FLAG LVTYPE,							" +
@@ -569,8 +616,23 @@ public interface Constants
 																			"				)											" +
 																			"		)													" +
 																			"	AND LVREQ.VHM_STATUS_CODE != " + CONST_LEAVE_STATUS_CANCEL	  +
-																			"	ORDER BY DELEGATE_STATUS, LVREQ.VHM_LEAVE_REQ_NO	DESC					";
+																			"	ORDER BY DELEGATE_STATUS, LVREQ.VHM_LEAVE_REQ_NO	DESC, APP.VHM_APP_SEQ_NO ";
 
+	public static final String	SQL_VIEW_SABBATICAL_LIMITED		=			"	SELECT APP.VHM_LEAVE_REQ_NO	AS	LEAVE_REQUEST_NO,				" +
+																			"	       APP.VHM_ACTION_CODE AS ACTION_CODE,						" +
+																			"	       MAX(APP.VHM_APP_SEQ_NO) AS APPROVER_NEXT_SEQUENCE_NO		" +
+																			"	FROM VHM_EMP_LEAVE_REQUEST_APPROVAL APP ,						" +
+																			"	         (														" +
+																			"	            SELECT REQ.VHM_LEAVE_REQ_NO , APP.VHM_APP_SEQ_NO	" +
+																			"	            FROM VHM_EMP_LEAVE_REQUEST_APPROVAL APP,			" +
+																			"	                 VHM_EMP_LEAVE_REQUEST REQ						" +
+																			"	            WHERE APP.VHM_LEAVE_REQ_NO = REQ.VHM_LEAVE_REQ_NO	" +
+																			"				AND  REQ.BDGID_BUDG_ID IS NOT NULL					" +
+																			"	             AND  APP.VHM_APP_EMP_CODE = :paramEmpNumber		" +
+																			"	          ) TEMP												" +
+																			"	WHERE APP.VHM_LEAVE_REQ_NO = TEMP.VHM_LEAVE_REQ_NO				" + 
+																			"	AND APP.VHM_APP_SEQ_NO < TEMP.VHM_APP_SEQ_NO					" +
+																			"   GROUP BY APP.VHM_LEAVE_REQ_NO,APP.VHM_ACTION_CODE				" ;
 	
 	public static final String	SQL_VIEW_DEPT_HEAD_ID			=			"   SELECT VHM_EMP_CODE AS EMP_CODE,						" +
 																			"  	DECODE(:paramLocale,									" +
@@ -678,6 +740,7 @@ public interface Constants
 																			"	   'en',INITCAP(LVTYPE.VHM_LEAVE_TYPE_DESC),			" +
 																			"	   'ar',LVTYPE.VHM_LEAVE_TYPE_DESC_ARABIC				" +
 																			"	   ) AS LEAVE_DESC,										" +
+																			"	LVREQ.BDGID_BUDG_ID AS LEAVE_RESEARCH_ID,				" +
 																			"	LVREQ.VHM_LEAVE_REQUEST_REMARKS AS LEAVE_REQ_REMARK,	" +
 																			"	LVREQ.VHM_EMP_CODE AS EMP_CODE,							" +
 																			"  DECODE(:paramLocale,                          			" +		
@@ -735,10 +798,97 @@ public interface Constants
 																			"							SELECT MAX(VHM_APP_RECEIVED_DATE) " +	
 																			"							FROM VHM_EMP_LEAVE_REQUEST_APPROVAL " +
 																			"							WHERE VHM_LEAVE_REQ_NO = :paramReqNo " +
-																			"										)					" +
+																																						"										)					" +
 																			"	ORDER BY LEAVE_REQ_DATE DESC							" +
 																			") WHERE ROWNUM <=1											";
 
+	public static final String	SQL_VIEW_LEAVE_REQUEST_SPECIFIC_EMPLOYEE =	" SELECT * FROM (											" +
+																			" 	SELECT 													" +
+																			"	LVREQ.VHM_LEAVE_REQ_NO AS LEAVE_REQUEST_NO,				" +
+																			"	TO_CHAR(LVREQ.VHM_LEAVE_REQ_DATE,'DD/MM/YYYY') 			" +
+																			"									AS LEAVE_REQ_DATE,		" +
+																			"	LVREQ.VHM_STATUS_CODE AS LEAVE_STATUS_CODE,				" +
+																			"	DECODE													" +
+																			"	  (:paramLocale,										" +
+																			"	      'en',InitCap(LVSTAT.VHM_STATUS_DESC),				" +
+																			"	      'ar',LVSTAT.VHM_STATUS_DESC_ARABIC				" +
+																			"	  ) AS LEAVE_STATUS,									" +
+																			"	TO_CHAR(LVREQ.VHM_LEAVE_START_DATE,'DD/MM/YYYY') 		" +
+																			"									AS LEAVE_START_DATE,	" +
+																			"	TO_CHAR(LVREQ.VHM_LEAVE_END_DATE,'DD/MM/YYYY') 			" +
+																			"									AS LEAVE_END_DATE,		" +
+																			"	LVREQ.VHM_LEAVE_TYPE_FLAG AS LEAVE_TYPE_FLAG,			" +
+																			" 	LVREQ.VHM_LEAVE_TYPE AS LEAVE_TYPE,						" +
+																			"	DECODE													" +
+																			"	  (:paramLocale,										" +
+																			"	   'en',INITCAP(LVTYPE.VHM_LEAVE_TYPE_DESC),			" +
+																			"	   'ar',LVTYPE.VHM_LEAVE_TYPE_DESC_ARABIC				" +
+																			"	   ) AS LEAVE_DESC,										" +
+																			"	LVREQ.BDGID_BUDG_ID AS LEAVE_RESEARCH_ID,				" +
+																			"	LVREQ.VHM_LEAVE_REQUEST_REMARKS AS LEAVE_REQ_REMARK,	" +
+																			"	LVREQ.VHM_EMP_CODE AS EMP_CODE,							" +
+																			"  DECODE(:paramLocale,                          			" +		
+																			"            'en',initCap(EMP.VHM_EMP_NAME),   				" +       	
+																			"			 'ar',EMP.VHM_EMP_NAME_ARABIC) AS EMP_NAME,		" +
+																			"	initCap(EMP.VHM_EMP_NAME) AS EMP_NAME_EN,				" +
+																			" 	EMP.VHM_EMP_NAME_ARABIC AS EMP_NAME_AR,					" +
+																			"	EMP.VHM_EMP_SQU_EMAIL AS EMP_MAIL_ID,					" +
+																			"  SUBSTR(													" +
+																			"			EMP.VHM_EMP_SQU_EMAIL,1,						" +
+																			"			INSTRB(EMP.VHM_EMP_SQU_EMAIL, '@', 1, 1)-1		" +
+																			"		  ) AS EMP_INTERNET_ID,								" +
+																			"	LVREQ.VHM_ADMIN_HOLDING_YN AS EMP_ADMIN,				" +
+																			"	LVREQ.VHM_DEPT_CODE AS EMP_DEPARTMENT_CODE,				" +
+																			"	DECODE 													" +
+																			"	  (:paramLocale,										" +
+																			"	   'en',INITCAP(DEPT.VHM_DEPT_NAME),					" +
+																			"	   'ar',DEPT.VHM_DEPT_NAME_ARA							" +
+																			"	  ) AS EMP_DEPARTMENT,									" +
+																			"	LVREQ.VHM_POSITION_CODE AS EMP_ADDITIONAL_POSITION_CODE, " +
+																			"	DECODE													" +
+																			"	  (:paramLocale,										" +
+																			"	   'en',INITCAP(DESIG.VHM_DESG_DESC),					" +
+																			"	   'ar',DESIG.VHM_DESG_DESC_ARABIC) 					" +
+																			"							AS EMP_ADDITIONAL_POSITION_DESC," +
+																			"	LVAPRV.VHM_ACTION_CODE AS ACTION_CODE,					" +
+																			"	LVAPRV.VHM_APP_REMARKS AS APPROVER_REMARK,				" +
+																			"	LVREQ.VHM_SUGGESTED_APP_EMP_CODE 						" +
+																			"						AS SUGGESTED_APPROVER_CODE,			" +
+																			"   EMP.VHM_EMP_BRAN_CODE AS EMP_APP_BRANCH_CODE,			" +
+																			"	EMP.VHM_EMP_DEPT_CODE AS EMP_APP_DEPARTMENT_CODE,       " +
+																			"	EMP.VHM_EMP_SECTION_CODE AS EMP_APP_SECTION_CODE,		" +
+																			"	LVAPRV.VHM_APP_EMP_CODE AS EMP_APP_CODE					" +
+																			"	FROM													" + 
+																			"	  VHM_EMP_LEAVE_REQUEST LVREQ,							" +
+																			"	  VHM_WORKFLOW_STATUS LVSTAT,							" +
+																			"	  VHM_LEAVE_TYPE_FLAG LVTYPE,							" +
+																			"	  VHM_DEPARTMENT DEPT,									" +
+																			"	  VHM_DESIGNATION DESIG,								" +
+																			"	  VHM_EMP_LEAVE_REQUEST_APPROVAL LVAPRV,				" +
+																			"	  VHM_EMPLOYEE EMP										" +
+																			"	WHERE 													" +
+																			"	  LVREQ.VHM_LEAVE_REQ_NO = :paramReqNo					" +
+																		//	"	  AND EMP.VHM_EMP_CODE = 								" +
+																		//	"						LVREQ.VHM_SUGGESTED_APP_EMP_CODE	" +
+																			"	  AND EMP.VHM_EMP_CODE          = LVREQ.VHM_EMP_CODE	" +
+																			"	  AND LVREQ.VHM_STATUS_CODE								" +
+																			"						=LVSTAT.VHM_STATUS_CODE				" +
+																			"	  AND LVREQ.VHM_LEAVE_TYPE_FLAG = LVTYPE.VHM_LEAVE_TYPE_FLAG " +
+																			"	  AND LVREQ.VHM_DEPT_CODE = DEPT.VHM_DEPT_CODE			" +
+																			"	  AND LVREQ.VHM_POSITION_CODE = DESIG.VHM_DESG_CODE (+)	" +
+																			"	  AND LVREQ.VHM_LEAVE_REQ_NO  =	LVAPRV.VHM_LEAVE_REQ_NO (+)" +
+																			"	  AND LVAPRV.VHM_APP_EMP_CODE = :paramEmpNumber	  		  " +
+																			"     AND LVAPRV.VHM_APP_RECEIVED_DATE = 					" +
+																			"							(					  			" +
+																			"							SELECT MAX(VHM_APP_RECEIVED_DATE) " +	
+																			"							FROM VHM_EMP_LEAVE_REQUEST_APPROVAL " +
+																			"							WHERE VHM_LEAVE_REQ_NO = :paramReqNo " +
+																			"							AND VHM_APP_EMP_CODE = :paramEmpNumber	 " +
+																			"										)					" +
+																			"	ORDER BY LEAVE_REQ_DATE DESC							" +
+																			") WHERE ROWNUM <=1											";
+	
+	
 	public static final String SQL_LEAVE_STATUS_HISTORY			=			"	SELECT SLOG.VHM_STATUS_CODE AS LEAVE_STATUS_CODE,		" +
 																			" 		DECODE(												" +
 																			"  		:paramLocale,										" +
@@ -789,7 +939,7 @@ public interface Constants
 																			" VHM_LEAVE_END_DATE, 										  " +
 																			" VHM_BRANCH_CODE,VHM_DEPT_CODE, VHM_SECTION_CODE,			  " +
 																			" VHM_GRADE_CODE, VHM_DESG_CODE,VHM_EMP_JOB_TYPE,			  " +
-																			" VHM_LEAVE_TYPE, VHM_ADMIN_HOLDING_YN,	  " +
+																			" VHM_LEAVE_TYPE, BDGID_BUDG_ID,  	VHM_ADMIN_HOLDING_YN,	  " +
 																			" VHM_POSITION_CODE,VHM_HIERARCHY_CODE,VHM_LEAVE_REQUEST_ACTIVE," +
 																			" VHM_LEAVE_REQUEST_REMARKS,VHM_LEAVE_REQUEST_CRE_USR_INIT,VHM_LEAVE_REQUEST_CRE_DATE," +
 																			" VHM_LEAVE_TYPE_FLAG,VHM_SUGGESTED_APP_EMP_CODE				" +
@@ -801,7 +951,7 @@ public interface Constants
 																			" TO_DATE(:paramEndDate,'dd/MM/yyyy'),												" +
 																			" :paramBranchCode,:paramDepartmentCode,:paramSectionCode,		" +
 																			" :paramGradeCode,:paramDesignationCode,:paramJobTypeCode,		" +
-																			" :paramLeaveType,:paramIsAdmin,								" +
+																			" :paramLeaveType,:paramResearchId,:paramIsAdmin,				" +
 																			" :paramPositionCode,:paramHierarchyCode,:paramIsReqActive,		" +
 																			" :paramReqRemarks,:paramReqUserInit,SYSDATE,					" +
 																			" :paramLeaveTypeFlag,:paramHodId								" +

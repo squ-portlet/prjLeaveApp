@@ -32,6 +32,7 @@ package om.edu.squ.squportal.portlet.leaveapp.dao.service;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
@@ -44,6 +45,7 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveApprove;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveRequest;
 import om.edu.squ.squportal.portlet.leaveapp.bo.LeaveType;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Sabbatical;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 
@@ -184,6 +186,7 @@ public interface LeaveAppServiceDao
 	/**
 	 * 
 	 * method name  : getLeaveRequest
+	 * @param empNumber 
 	 * @param reqNo
 	 * @param locale
 	 * @return
@@ -194,7 +197,7 @@ public interface LeaveAppServiceDao
 	 *
 	 * Date    		:	Sep 18, 2012 2:31:17 PM
 	 */
-	public LeaveRequest	getLeaveRequest(String reqNo, Locale locale);
+	public LeaveRequest	getLeaveRequest(String empNumber, String reqNo, Locale locale);
 	
 	/**
 	 * 
@@ -225,6 +228,20 @@ public interface LeaveAppServiceDao
 	 * Date    		:	Jan 13, 2013 1:01:30 PM
 	 */
 	public List<LeaveApprove>	getLeaveApproveHistory(String requestNo, Locale locale);
+	
+	/**
+	 * 
+	 * method name  : getSabaSabbatical
+	 * @param empNumber
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : Map<String,Sabbatical>
+	 * 
+	 * purpose		: Get limited list of subbatical objects (sequence number just below) 
+	 *
+	 * Date    		:	Mar 25, 2013 2:01:51 PM
+	 */
+	public	Map<String, Sabbatical>	getSabbatical(String empNumber);
 	
 	/**
 	 * 
