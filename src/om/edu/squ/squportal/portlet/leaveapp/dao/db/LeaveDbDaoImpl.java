@@ -315,7 +315,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		Map<String,String> namedParameters = new HashMap<String,String>();
 		namedParameters.put("paramLocale", locale.getLanguage());
 		namedParameters.put("paramEmpNumber", empNumber);
-		
+
 		return this.namedParameterJdbcTemplate.queryForObject(Constants.SQL_EMPLOYEE, namedParameters, mapper);
 		
 	}

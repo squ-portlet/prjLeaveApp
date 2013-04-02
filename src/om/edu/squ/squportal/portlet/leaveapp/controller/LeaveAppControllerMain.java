@@ -112,7 +112,6 @@ public class LeaveAppControllerMain
 			session.removeAttribute("employee");
 		}
 		session.setAttribute("employee", employee);
-		
 		List<LeaveRequest>	leaveRequests	=	leaveAppServiceDao.getLeaveRequests(employee,locale);
 		model.addAttribute("leaveRequests", leaveRequests);
 		model.addAttribute("empHierarchy", employee.getHierarchyCode());

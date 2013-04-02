@@ -189,8 +189,9 @@ $(function(){
 		minDate: -<c:out value="${daysAllowed}"/>,
 		firstDay:6,
 		onClose: function( selectedDate ) {
+			var	endDt	=	$( ".calendarEnd" ).datepicker( "getDate" );
 			resDtIssueOK = diffLeaveDate();	
-			if(resDtIssueOK)
+			if(null == endDt || resDtIssueOK)
 					{
 						$( ".calendarEnd" ).datepicker( "option", "minDate", selectedDate ); 
 						$( ".calendarDelgStart" ).datepicker( "option", "minDate", selectedDate );
@@ -212,8 +213,9 @@ $(function(){
 		minDate: -<c:out value="${daysAllowed}"/>,
 		firstDay:6,
 	    onClose: function( selectedDate ) {
+	    	var startDt	=	$( ".calendarStart" ).datepicker( "getDate" );
 	    	resDtIssueOK = diffLeaveDate();
-	    	if(resDtIssueOK)
+	    	if(null == startDt || resDtIssueOK)
 			{
 		    	$( ".calendarStart" ).datepicker( "option", "maxDate", selectedDate );  
 	    		$( ".calendarDelgEnd" ).datepicker( "option", "maxDate", selectedDate );
