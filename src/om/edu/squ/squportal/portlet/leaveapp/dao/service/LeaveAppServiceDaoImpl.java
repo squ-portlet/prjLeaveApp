@@ -222,7 +222,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		leaveRequest.setLeaveRequestRemarks(leaveAppModel.getLeaveRemarks());
 		leaveRequest.setLeaveStatus(Constants.CONST_LEAVE_STATUS_WAITING_APPV);
 		leaveRequest.setResearchId(leaveAppModel.getResearchId());
-
+		
 			allowEleaveRequestProc	=	leaveDbDao.getAllowEleaveRequest(leaveRequest, locale);
 		
 		if(allowEleaveRequestProc.isAcceptLeave())
@@ -246,7 +246,10 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 				}
 				leaveAppModel.setDelegatedEmps(delegatedEmps);
 			}
-			
+			if ((null != leaveAppModel.getApproverEmpNumber()) || (! leaveAppModel.getApproverEmpNumber().trim().equals("")))
+			{
+				leaveRequest.setApproverId(leaveAppModel.getApproverEmpNumber());
+			}
 			int result = leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps(), locale);
 				if (result == 0)
 				{
@@ -508,7 +511,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		/*Sending e-mail*/
 		if(result != 0)
 		{
-			sendApproveEmail(leaveAppModel.getRequestNo(), leaveAppModel.getApproverAction(), locale);
+			sendApproveEmail(employee.getEmpNumber(),leaveAppModel.getRequestNo(), leaveAppModel.getApproverAction(), locale);
 		}
 		return result;
 	}
@@ -548,7 +551,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		/*Sending e-mail*/
 		if(result != 0)
 		{
-			sendApproveEmail(requestNo, actionNo, locale);
+			sendApproveEmail(employee.getEmpNumber(),requestNo, actionNo, locale);
 		}
 		return result;
 	}
@@ -595,16 +598,16 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 *
 	 * Date    		:	Feb 3, 2013 1:54:23 PM
 	 */
-	public String cancelLeaveRequest(String requestNo, Locale locale)
+	public String cancelLeaveRequest(String approverEmpNumber, String requestNo, Locale locale)
 	{
 		String 			message			=	null;
 		LeaveRequest	leaveRequest	=	null;
 		LeaveApprove	leaveApprove	=	null;
-		int result = leaveDbDao.cancelLeaveRequest(null, requestNo);
+		int result = leaveDbDao.cancelLeaveRequest(approverEmpNumber, requestNo);
 		if(result != 0)
 		{
 						message			=	UtilProperty.getMessage("prop.leave.app.cancel.request.success", new String []{requestNo}, locale);
-						leaveRequest 	= leaveDbDao.getLeaveRequest(null, requestNo, locale);
+						leaveRequest 	= leaveDbDao.getLeaveRequest(approverEmpNumber, requestNo, locale);
 						leaveApprove	=	leaveDbDao.getLeaveApproveHistory(requestNo, locale).get(0);
 			/* Sending email */
 			EmailLeave	emailLeave		=	new EmailCancel(leaveRequest, leaveApprove, emailService,locale);
@@ -624,6 +627,10 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	/**
 	 * 
 	 * method name  : sendApproveEmail
+	 * @param appEmpNumber
+	 * @param requestNo
+	 * @param ApproverAction
+	 * @param locale
 	 * @return
 	 * LeaveAppServiceDaoImpl
 	 * return type  : boolean
@@ -632,11 +639,11 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 *
 	 * Date    		:	Feb 19, 2013 12:19:24 PM
 	 */
-	private boolean sendApproveEmail(String requestNo, String ApproverAction, Locale locale)
+	private boolean sendApproveEmail(String appEmpNumber,String requestNo, String ApproverAction, Locale locale)
 	{
 		boolean			result			=	false;
 		EmailLeave		emailLeave		=	null;		
-		LeaveRequest	leaveRequest	=	getLeaveRequest(null, requestNo, locale);
+		LeaveRequest	leaveRequest	=	getLeaveRequest(appEmpNumber, requestNo, locale);
 		LeaveApprove	leaveApprove	=	getLeaveApproveHistory(requestNo, locale).get(0);
 		
 		if(ApproverAction.equals(Constants.CONST_LEAVE_ACTION_APPROVE))

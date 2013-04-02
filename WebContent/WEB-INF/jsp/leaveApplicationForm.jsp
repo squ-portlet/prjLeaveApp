@@ -587,6 +587,7 @@ $(function() {
 <div id="dialogDate" class="dialogApproveClass" title='<spring:message code="error.prop.leave.app.warning.dialogue.title"/>' style="display:none;"></div>
 
 <form:form modelAttribute="leaveAppModel"  action="${submitRequest}" method="post" htmlEscape="false" >
+<form:hidden path="approverEmpNumber" />
 <h2><font color="red"><form:errors path="*" /></font></h2>
 	<fieldset>
 		<legend>

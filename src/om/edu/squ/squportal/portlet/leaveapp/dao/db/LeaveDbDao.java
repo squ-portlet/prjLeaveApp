@@ -279,7 +279,7 @@ public interface LeaveDbDao
 	/**
 	 * 
 	 * method name  : getLeaveRequest
-	 * @param empNumber TODO
+	 * @param approverEmpNumber TODO
 	 * @param reqNo
 	 * @param locale
 	 * @return
@@ -290,7 +290,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Sep 18, 2012 2:15:21 PM
 	 */
-	public LeaveRequest	getLeaveRequest(String empNumber, String reqNo, Locale locale);
+	public LeaveRequest	getLeaveRequest(String approverEmpNumber, String reqNo, Locale locale);
 
 	/**
 	 * 
@@ -424,7 +424,7 @@ public interface LeaveDbDao
 	/**
 	 * 
 	 * method name  : cancelLeaveRequest
-	 * @param empNumber TODO
+	 * @param approverEmpNumber TODO
 	 * @param requestNo
 	 * @return
 	 * LeaveDbDaoImpl
@@ -434,7 +434,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Feb 3, 2013 1:54:23 PM
 	 */
-	public int cancelLeaveRequest(String empNumber, String requestNo);
+	public int cancelLeaveRequest(String approverEmpNumber, String requestNo);
 	
 	/**
 	 * 

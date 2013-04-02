@@ -368,7 +368,7 @@ public class LeaveAppControllerMain
 	{
 		PortletSession			session					=	request.getPortletSession();
 		Employee				employee				=	(Employee)session.getAttribute("employee");	
-		LeaveRequest			leaveRequest	=	leaveAppServiceDao.getLeaveRequest(employee.getEmpNumber(), requestNo, locale);
+		LeaveRequest			leaveRequest	=	leaveAppServiceDao.getLeaveRequest(String.format("%07d", Integer.valueOf(employee.getEmpNumber())), requestNo, locale);
 		if(!model.containsAttribute("leaveAppModel"))
 		{
 			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
@@ -471,13 +471,14 @@ public class LeaveAppControllerMain
 	private void leaveApplicationCancel
 	(
 			@RequestParam("reqNum") String requestNo,
+			@RequestParam("appEmpNo") String appEmpNo,
 			ActionRequest request,
 			ActionResponse response, PortletRequest req, 
 			@ModelAttribute("leaveAppModel") LeaveAppModel leaveAppModel,
 			BindingResult result,Locale locale,Model model		
 	)
 	{
-		String message	=	leaveAppServiceDao.cancelLeaveRequest(requestNo, locale);
+		String message	=	leaveAppServiceDao.cancelLeaveRequest(appEmpNo, requestNo, locale);
 		response.setRenderParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, message);
 		response.setRenderParameter("action", "backToMain");
 	}
@@ -574,13 +575,14 @@ public class LeaveAppControllerMain
 	 */
 	@RequestMapping(params="action=updateLeaveApply")
 	private	String updateLeaveApply(
-									@RequestParam("reqNum") String requestNo, 
+									@RequestParam("reqNum") String requestNo,
+									@RequestParam("appEmpNo") String appEmpNo, 
 									PortletRequest request, Model model,Locale locale
 									)
 	{
 		PortletSession	session	=	request.getPortletSession();
 		Employee	employee	=	(Employee)session.getAttribute("employee");	
-		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(null, requestNo, locale);
+		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(appEmpNo, requestNo, locale);
 		
 		if(!model.containsAttribute("leaveAppModel"))
 		{
@@ -597,6 +599,7 @@ public class LeaveAppControllerMain
 			leaveAppModel.setHod(leaveRequest.getSuggestedHod());
 			leaveAppModel.setLeaveRemarks(leaveRequest.getLeaveRequestRemarks());
 			leaveAppModel.setOpMode(Constants.CONST_MODEL_MODE_UPDATE);
+			leaveAppModel.setApproverEmpNumber(appEmpNo);
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
 		model.addAttribute("empNumber", String.format("%07d", Integer.valueOf(employee.getEmpNumber())));
@@ -613,6 +616,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("opMode", Constants.CONST_MODEL_MODE_UPDATE);
 		model.addAttribute("mgrName", leaveAppServiceDao.getManager(employee.getEmpNumber(), locale).getEmpName());
 		model.addAttribute("approver", leaveRequest.getApprove());
+		model.addAttribute("appEmpNo", appEmpNo);
 		model.addAttribute("reqNum", requestNo);
 		model.addAttribute("leaveTypeNo", leaveRequest.getLeaveType().getTypeNo());
 		model.addAttribute("daysAllowed", Constants.CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE);

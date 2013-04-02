@@ -80,6 +80,19 @@ public class LeaveStatus implements Serializable
 	{
 		this.statusDesc = statusDesc;
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		return "LeaveStatus ["
+				+ (this.statusCode != null ? "statusCode=" + this.statusCode
+						+ ", " : "")
+				+ (this.statusDesc != null ? "statusDesc=" + this.statusDesc
+						: "") + "]";
+	}
+	
 	
 	
 }

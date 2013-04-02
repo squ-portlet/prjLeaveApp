@@ -66,6 +66,7 @@ public class LeaveAppModel implements Serializable
 	private	String			approverAction;										//	Action for approve, reject, return
 	private	String			approverRemark;
 	private	String			opMode;												//  mode for update/insert etc.
+	private	String			approverEmpNumber;
 	
 	/**
 	 * Getter Method	: getRequestNo
@@ -550,6 +551,26 @@ public class LeaveAppModel implements Serializable
 	{
 		this.opMode = opMode;
 	}
+	/**
+	 * Getter Method	: getApproverEmpNumber
+	 * @return the approverEmpNumber
+	 * 
+	 * Date				: Mar 30, 2013
+	 */
+	public String getApproverEmpNumber()
+	{
+		return this.approverEmpNumber;
+	}
+	/**
+	 * Setter method : setApproverEmpNumber
+	 * @param approverEmpNumber the approverEmpNumber to set
+	 * 
+	 * Date          : Mar 30, 2013 10:41:49 AM
+	 */
+	public void setApproverEmpNumber(String approverEmpNumber)
+	{
+		this.approverEmpNumber = approverEmpNumber;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -599,7 +620,9 @@ public class LeaveAppModel implements Serializable
 						+ this.approverAction + ", " : "")
 				+ (this.approverRemark != null ? "approverRemark="
 						+ this.approverRemark + ", " : "")
-				+ (this.opMode != null ? "opMode=" + this.opMode : "") + "]";
+				+ (this.opMode != null ? "opMode=" + this.opMode + ", " : "")
+				+ (this.approverEmpNumber != null ? "approverEmpNumber="
+						+ this.approverEmpNumber : "") + "]";
 	}
 	
 	

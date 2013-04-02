@@ -507,43 +507,25 @@ public interface Constants
 																			"		'en',LVTYPE.VHM_LEAVE_TYPE_DESC,					" +
 																			"		'ar',LVTYPE.VHM_LEAVE_TYPE_DESC_ARABIC				" +
 																			"	) AS LEAVE_DESC,										" +
-																			" DECODE																" +
-										                                    "   (																	" +
-										                                    "      APP.VHM_ACTION_CODE, 											" +
-										                                    "      NULL, 															" +
-										                                    "      (																" +
-										                                    "       SELECT VHM_STATUS_CODE											" +
-										                                    "       FROM															" +
-										                                    "          VHM_WORKFLOW_STATUS 											" +
-										                                    "      WHERE															" +
-										                                    "          VHM_STATUS_CODE= '0000000001'								" +
-										                                    "      ),																" +
-										                                    "      LVREQ.VHM_STATUS_CODE											" +	
-										                                    "  ) AS LEAVE_STATUS_CODE,												" +
-																			"	DECODE																" +
-																			"		(																" +
-																			"			APP.VHM_ACTION_CODE, 										" +
-																			"			NULL,														" +
-										                                    "  				(														" +
-										                                    "   				 SELECT												" +
-										                                    "      						DECODE 										" +
-										                                    "									(									" +
-										                                    "		 								'en', 							" +
-										                                    "										'en',VHM_STATUS_DESC, 			" +
-										                                    "										'ar',VHM_STATUS_DESC_ARABIC 	" +
-										                                    "									) 									" +
-										                                    "    				FROM												" +
-										                                    "      				VHM_WORKFLOW_STATUS 								" +	
-										                                    "    				WHERE												" +
-										                                    "      				VHM_STATUS_CODE= '0000000001'						" +
-										                                    "  				)														" +
-										                                    "  		,DECODE 														" +
-										                                    "				(														" +
-										                                    "				 'en', 													" +
-										                                    "				 'en',LVSTATUS.VHM_STATUS_DESC, 						" +
-										                                    "				 'ar',LVSTATUS.VHM_STATUS_DESC_ARABIC 					" +
-										                                    "				) 														" +
-										                                    "		 ) AS LEAVE_STATUS,												" +
+																			" NVL(														" +
+									                                        "  (														" +
+									                                        "     SELECT LSA.LSA_STATUS_CODE							" +
+									                                        "     FROM LEAVE_STATUS_ACTION LSA							" +
+									                                        "     WHERE LSA.LSA_ACTION_CODE =							" +  
+									                                        "      get_last_approval_action								" +
+									                                        "		(													" +
+									                                        "			APP.VHM_APP_EMP_CODE    ,LVREQ.VHM_LEAVE_REQ_NO" +
+									                                        "		)													" +
+									                                        "	) 														" + 
+									                                        " ,'0000000001') AS LEAVE_STATUS_CODE, 						" +
+									                                        "  get_leave_status_by_action								" +
+									                                        "			(												" +
+									                                        "				get_last_approval_action(					" +
+									                                        "							APP.VHM_APP_EMP_CODE,			" +
+									                                        "							LVREQ.VHM_LEAVE_REQ_NO			" +
+									                                        "							),:paramLocale					" +
+									                                        "			)												" +
+									                                        "							AS LEAVE_STATUS, 				" +	
 																			"   LVREQ.VHM_EMP_CODE AS EMP_CODE,							" +
 																			"	LVREQ.VHM_EMP_INTERNET_USR_ID AS EMP_INTERNET_ID,		" +
 																			" DECODE('en',												" +
@@ -564,17 +546,11 @@ public interface Constants
 										                                    "	EMPAPP.VHM_EMP_CODE=APP.VHM_APP_EMP_CODE				" +
 										                                    "	) AS EMP_APP_NAME,										" +
 										                                    "	APP.VHM_APP_SEQ_NO AS APPROVER_SEQUENCE_NO,				" +
-										                                    "   NVL (													" +
-										                                    "     (														" +
-										                                    "            SELECT  DECODE (								" + 
-										                                    "                        NVL(APP2.VHM_ACTION_CODE ,'N'),	" +
-										                                    "                        'N','N',							" +
-										                                    "                        '0000000001','Y','N')				" +
-										                                    "            FROM  VHM_EMP_LEAVE_REQUEST_APPROVAL APP2		" +
-										                                    "            WHERE APP2.VHM_LEAVE_REQ_NO = APP.VHM_LEAVE_REQ_NO	" +
-										                                    "            AND APP2.VHM_APP_SEQ_NO = (APP.VHM_APP_SEQ_NO - 1)	" +
-										                                    "			 AND APP2.VHM_ACTION_CODE is null					" +
-										                                    "      ),'Y') AS SAB_ACTION_LOWER      						" +	
+										                                    "   IS_VALID_LEAVE_APP_APPROVER								" +
+										                                    "				(											" +
+										                                    "					APP.VHM_APP_SEQ_NO,						" +
+										                                    "					LVREQ.VHM_LEAVE_REQ_NO					" +
+										                                    "				) AS SAB_ACTION_LOWER						" +
 																			" FROM 														" +
 																			"		VHM_EMP_LEAVE_REQUEST LVREQ,						" +
 																			"		VHM_LEAVE_TYPE_FLAG LVTYPE,							" +
@@ -807,7 +783,12 @@ public interface Constants
 																			"	LVREQ.VHM_LEAVE_REQ_NO AS LEAVE_REQUEST_NO,				" +
 																			"	TO_CHAR(LVREQ.VHM_LEAVE_REQ_DATE,'DD/MM/YYYY') 			" +
 																			"									AS LEAVE_REQ_DATE,		" +
-																			"	LVREQ.VHM_STATUS_CODE AS LEAVE_STATUS_CODE,				" +
+																		    "  DECODE													" +
+																		    "    (														" + 
+																		    "      LVAPRV.VHM_ACTION_CODE,								" +
+																		    "      NULL, '" + CONST_LEAVE_STATUS_WAITING_APPV + "',		" +
+																		    "      LVREQ.VHM_STATUS_CODE								" +
+																		    "    )AS LEAVE_STATUS_CODE,									" +
 																			"	DECODE													" +
 																			"	  (:paramLocale,										" +
 																			"	      'en',InitCap(LVSTAT.VHM_STATUS_DESC),				" +

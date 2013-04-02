@@ -353,6 +353,7 @@ public interface LeaveAppServiceDao
 	/**
 	 * 
 	 * method name  : cancelLeaveRequest
+	 * @param approverEmpNumber TODO
 	 * @param requestNo
 	 * @return
 	 * LeaveDbDaoImpl
@@ -362,7 +363,7 @@ public interface LeaveAppServiceDao
 	 *
 	 * Date    		:	Feb 3, 2013 1:54:23 PM
 	 */
-	public String cancelLeaveRequest(String requestNo, Locale locale);
+	public String cancelLeaveRequest(String approverEmpNumber, String requestNo, Locale locale);
 	
 	/**
 	 * 

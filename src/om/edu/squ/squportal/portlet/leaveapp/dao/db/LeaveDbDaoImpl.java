@@ -315,7 +315,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		Map<String,String> namedParameters = new HashMap<String,String>();
 		namedParameters.put("paramLocale", locale.getLanguage());
 		namedParameters.put("paramEmpNumber", empNumber);
-
+		
 		return this.namedParameterJdbcTemplate.queryForObject(Constants.SQL_EMPLOYEE, namedParameters, mapper);
 		
 	}
@@ -1155,9 +1155,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		}
 		else
 		{
-			LeaveRequest	leaveRequestCompare	=	getLeaveRequest(leaveRequest.getEmployee().getEmpNumber(),leaveRequestNo);
+			LeaveRequest	leaveRequestCompare	=	getLeaveRequest(leaveRequest.getApproverId(),leaveRequestNo);
 			namedParameters.put("paramCompLeaveStatus",leaveRequestCompare.getStatus().getStatusCode());
-			
+
 			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_REQUEST, namedParameters);
 			
 			if(result == 0)
@@ -1372,7 +1372,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveApprove.setEmployee(employeeApp);
 				leaveRequest.setApprove(leaveApprove);
 				leaveRequest.setApproverSequenceNo(rs.getInt(Constants.CONST_APPROVER_SEQUENCE_NO));
-				if(rs.getString(Constants.CONST_APPROVER_BEFORE_ACTION).equalsIgnoreCase(Constants.CONST_YES_CAPITAL))
+				if((null != rs.getString(Constants.CONST_APPROVER_BEFORE_ACTION)) && rs.getString(Constants.CONST_APPROVER_BEFORE_ACTION).equalsIgnoreCase(Constants.CONST_YES_CAPITAL))
 				{
 					leaveRequest.setSabbaticalLowerApproverAction(true);
 				}
@@ -1401,7 +1401,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 * method name  : getLeaveRequest
 	 * @param reqNo
 	 * @param locale
-	 * @param empNumber
+	 * @param approverEmpNumber
 	 * @return
 	 * LeaveDbDaoImpl
 	 * return type  : LeaveRequest
@@ -1410,7 +1410,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Sep 18, 2012 2:14:04 PM
 	 */
-	public LeaveRequest	getLeaveRequest(String empNumber, String reqNo, Locale locale)
+	public LeaveRequest	getLeaveRequest(String approverEmpNumber, String reqNo, Locale locale)
 	{
 		LeaveRequest	leaveRequestResult	=	null;
 		Employee		empApprover			=	null;
@@ -1426,6 +1426,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				LeaveType		leaveType		=	new LeaveType();
 				LeaveType		leaveTypeFlag	=	new LeaveType();
 				Employee		employee		=	new	Employee();
+				
 				
 				LeaveApprove	approve			=	new LeaveApprove();
 					leaveRequest.setRequestNo(rs.getString(Constants.CONST_LEAVE_REQUEST_NO));
@@ -1479,10 +1480,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		}
 	};
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
-		namedParameters.put("paramEmpNumber", empNumber);
+		namedParameters.put("paramEmpNumber", approverEmpNumber);
 		namedParameters.put("paramReqNo", reqNo);
 		namedParameters.put("paramLocale", locale.getLanguage());
-		
 		leaveRequestResult	=	this.namedParameterJdbcTemplate.queryForObject(Constants.SQL_VIEW_LEAVE_REQUEST_SPECIFIC_EMPLOYEE, namedParameters, mapper);
 			empApprover			=	getEmployee(leaveRequestResult.getApproverId(), locale);	
 				leaveApprove		=	leaveRequestResult.getApprove();
@@ -1497,6 +1497,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	/**
 	 * 
 	 * method name  : getLeaveRequest
+	 * @param approverEmpNumber
 	 * @param reqNo
 	 * @return
 	 * LeaveDbDaoImpl
@@ -1506,9 +1507,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Jan 30, 2013 12:03:42 PM
 	 */
-	private	LeaveRequest	getLeaveRequest(String empNumber,String reqNo)
+	private	LeaveRequest	getLeaveRequest(String approverEmpNumber,String reqNo)
 	{
-		return getLeaveRequest(empNumber, reqNo, new Locale(Constants.CONST_LANG_DEFAULT_EN));
+		return getLeaveRequest(approverEmpNumber, reqNo, new Locale(Constants.CONST_LANG_DEFAULT_EN));
 	}
 	
 	/**
@@ -1791,7 +1792,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		LeaveRequest	leaveRequest	=	getLeaveRequest(employee.getEmpNumber(),approve.getRequestNo());
 		String			leaveStatusCode	=	leaveRequest.getStatus().getStatusCode();
 		
-		
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 			namedParameters.put("paramReqNo", approve.getRequestNo());
 			namedParameters.put("paramEmpNo", employee.getEmpNumber());
@@ -1950,7 +1950,6 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramCompStartDate",leaveRequest.getLeaveStartDate());
 		namedParameters.put("paramCompEndDate",leaveRequest.getLeaveEndDate());
 		namedParameters.put("paramCompSuggestedHod",leaveRequest.getSuggestedHod());
-		
 		return namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_REQ_STATUS, namedParameters);
 	}
 	
@@ -1978,7 +1977,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	/**
 	 * 
 	 * method name  : cancelLeaveRequest
-	 * @param empNumber
+	 * @param approverEmpNumber
 	 * @param requestNo
 	 * @return
 	 * LeaveDbDaoImpl
@@ -1988,9 +1987,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Feb 3, 2013 1:54:23 PM
 	 */
-	public int cancelLeaveRequest(String empNumber, String requestNo)
+	public int cancelLeaveRequest(String approverEmpNumber, String requestNo)
 	{
-		LeaveRequest	leaveRequestCompare	=	getLeaveRequest(empNumber,requestNo);
+		LeaveRequest	leaveRequestCompare	=	getLeaveRequest(approverEmpNumber,requestNo);
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 		namedParameters.put("paramReqNo",requestNo);
 		namedParameters.put("paramCompLeaveStatus",leaveRequestCompare.getStatus().getStatusCode());

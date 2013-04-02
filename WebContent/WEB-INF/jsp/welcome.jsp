@@ -192,10 +192,12 @@
 								<portlet:renderURL var="varLeaveClarification">
 									<portlet:param name="action" value="updateLeaveApply"/>
 									<portlet:param name="reqNum" value="${req.requestNo}"/>
+									<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
 								</portlet:renderURL>
 								<portlet:actionURL var="varLeaveCancel">
 		  							<portlet:param name="action" value="leaveCancel"/>
 		  							<portlet:param name="reqNum" value="${req.requestNo}"/>
+		  							<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
 								</portlet:actionURL>
 								
 								<c:choose>
@@ -587,10 +589,12 @@
 				<portlet:renderURL var="varLeaveClarification">
 					<portlet:param name="action" value="updateLeaveApply"/>
 					<portlet:param name="reqNum" value="${req.requestNo}"/>
+					<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
 				</portlet:renderURL>
 				<portlet:actionURL var="varLeaveCancel">
 							<portlet:param name="action" value="leaveCancel"/>
 							<portlet:param name="reqNum" value="${req.requestNo}"/>
+							<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
 				</portlet:actionURL>
 		
 				<c:choose> 
@@ -671,6 +675,7 @@
 								<portlet:renderURL var="varLeaveClarification">
 									<portlet:param name="action" value="updateLeaveApply"/>
 									<portlet:param name="reqNum" value="${req.requestNo}"/>
+									<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
 								</portlet:renderURL>
 									<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | 
 									<a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a> 
