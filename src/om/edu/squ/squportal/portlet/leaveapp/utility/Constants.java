@@ -911,7 +911,7 @@ public interface Constants
 																			"	WHERE APP.VHM_APP_EMP_CODE = EMP.VHM_EMP_CODE			" +
 																			"	AND APP.VHM_ACTION_CODE=WFACTION.VHM_ACTION_CODE(+)		" +
 																			"	AND APP.VHM_LEAVE_REQ_NO = :paramReqNo					" +
-																			"	ORDER BY VHM_APP_RECEIVED_DATE DESC 					";
+																			"	ORDER BY VHM_APP_ACTION_DATE DESC 						";
 	
 	public static final String	SQL_INSERT_LEAVE_REQUEST		=			" INSERT INTO VHM_EMP_LEAVE_REQUEST 						  " +
 																			" (															  " +
