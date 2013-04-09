@@ -149,19 +149,21 @@
 
 </style>
 
-
-
 <c:if test="${rc.locale.language=='ar'}">
-<style>
-	img.imgBck {
-        -moz-transform: scaleX(-1);
-        -o-transform: scaleX(-1);
-        -webkit-transform: scaleX(-1);
-        transform: scaleX(-1);
-        filter: FlipH;
-        -ms-filter: "FlipH";
-	}
-</style>
+	<style>
+		img.imgBck {
+	        -moz-transform: scaleX(-1);
+	        -o-transform: scaleX(-1);
+	        -webkit-transform: scaleX(-1);
+	        transform: scaleX(-1);
+	        filter: FlipH;
+	        -ms-filter: "FlipH";
+		}
+	</style>
+	<c:set var="direction" value="right"/>
+</c:if>
+<c:if test="${rc.locale.language=='en'}">
+	<c:set var="direction" value="left"/>
 </c:if>
 
 <script>
@@ -280,7 +282,11 @@ $(function() {
         var branchCode=$(this).val();
         var empNumber = "${empNumber}";
         $('txtEmpNum').val='';
-        currentDropdown.closest('tr').find("select.selEmpNum").empty().append('<option value=""><spring:message code="prop.leave.app.dropdown.text"/></option>');
+       
+		var varEmpId=currentDropdown.closest('tr').find("input.tEmpId");
+		//alert("EmpId : " +  varEmpId.val());
+        
+        currentDropdown.closest('tr').find("select.selEmpNum").empty().append('<option value=""><spring:message code="prop.leave.app.dropdown.employee.text"/></option>');
         $.ajax({
             type: "GET",
             //contentType: "application/json; charset=utf-8",
@@ -289,8 +295,9 @@ $(function() {
             data: 'branchCode='+branchCode+'&empNumber='+empNumber,
             dataType: "json",
             success: function(data) {
-
-            	currentDropdown.closest('tr').find("select.selEmpNum").empty().append('<option value=""><spring:message code="prop.leave.app.dropdown.text"/></option>');
+				//tEmpId
+				var selct = '';
+            	currentDropdown.closest('tr').find("select.selEmpNum").empty().append('<option value=""><spring:message code="prop.leave.app.dropdown.employee.text"/></option>');
             	
             	if(data.length==1)
             	{
@@ -305,6 +312,8 @@ $(function() {
             			currentDropdown.closest('tr').find("select.selEmpNum").append(opt);
             		});
             		
+            		//currentDropdown.closest('tr').find("select.selEmpNum").selectmenu('refresh');
+            		currentDropdown.closest('tr').find("select.selEmpNum").val(varEmpId.val());
             	}
             	else if(data.length>1) 
             	{
@@ -363,7 +372,7 @@ $(function() {
         	var deptCode = "${approver.departmentCode}";
         </c:if>
         
-        $('#selSectionCode2').empty().append("<option value=''><spring:message code="prop.leave.app.dropdown.text"/></option>");
+        $('#selSectionCode2').empty().append("<option value=''><spring:message code="prop.leave.app.dropdown.department.text"/></option>");
         $(".divHod").html("HOD : ");
         $.ajax({
             type: "GET",
@@ -373,7 +382,7 @@ $(function() {
             dataType: "json",
             async:false,
             success: function(data) {
-                var options = "<option value=' '><spring:message code="prop.leave.app.dropdown.text"/></option>"; 
+                var options = "<option value=' '><spring:message code="prop.leave.app.dropdown.department.text"/></option>"; 
                 for (index in data) {
                 	var dept = data[index];
                 	var selct = '';
@@ -404,15 +413,25 @@ $(function() {
             dataType: "json",
             async:false,
             success: function(data) {
-                var options = "<option value=''><spring:message code="prop.leave.app.dropdown.text"/></option>"; 
+                var options = "<option value=''><spring:message code="prop.leave.app.dropdown.section.text"/></option>"; 
                 for (index in data) {
                 	var section = data[index];
                 	var selct = '';
                 	//if (deptCode==dept.deptCode) selct=' selected';
                 	options += "<option value='" + section.sectionCode +"'" + selct + ">" + section.sectionDesc + "</option>";
                 }
-
-                currentDropdown.closest('tr').find("select.selSectionCode2").html(options);
+                
+				currentDropdown.closest('tr').find("select.selSectionCode2").html(options);
+				
+				if($('#selSectionCode2').find('option').length <= 1)
+					{
+						$('#sectionDiv').hide();
+					}
+				else
+					{
+					$('#sectionDiv').show();
+					}
+				
             }
         }
         );
@@ -446,7 +465,18 @@ $(function() {
 		    	 if (hod.hodId==hodId) selct=' checked ';
 			    	 dataHtml += "<input type='radio' name='hod'  value='"+hod.hodId+"'"+ selct + "/> " +hod.hodName+ "<br>"; 
 		    }
-		    $(".divHod").html(dataHtml);
+		    
+		    if(data != null || data != '')
+		    	{
+		    		$(".divHod").html(dataHtml);
+		    		$("#approverDiv").show();
+		    		
+		    	}
+		    else
+		    	{
+		    		$("#approverDiv").hide();
+		    	}
+		    //$(".divHod").html(dataHtml);
             }
         }
         );
@@ -621,9 +651,9 @@ $(function() {
 						<spring:message code="prop.leave.app.apply.form.leave.type"/>:
 					</span>
 				</th>
-				<td style="vertical-align: top;">
+				<td style="vertical-align: middle;">
 					<form:select path="leaveTypeFlag" cssClass="leaveOptions" >
-						<form:option value="">Select</form:option>
+						<form:option value=""><spring:message code="prop.leave.app.dropdown.leave.type.text"/></form:option>
 						<form:options items="${leaveTypeFlag}" itemLabel="typeDesc" itemValue="typeNo"/>
 					</form:select>
 					<br>
@@ -671,44 +701,61 @@ $(function() {
 					<div>
 						<fieldset>
 						<legend><spring:message code="prop.leave.app.apply.form.leave.manager.select"/> </legend>
-							
+							     
 								<div style="float: none;">
-									<form:select path="branch2"  cssClass="selBranchCode leaveOptions" id="selBranchCode" >
-										<option><spring:message code="prop.leave.app.dropdown.text"/></option>
-										<c:forEach items="${branches}" var="branch">
-											<c:set value="" var="selct"/>
-											<c:choose>
-												<c:when test='${opMode=="u"}'>
-												<c:if test="${approver.branchCode==branch.branchCode}">
-				<%-- 									<c:if test="${employee.branchCode==branch.branchCode}"> --%>
-													<c:set value="selected" var="selct"/> 
-												</c:if>
-												</c:when>
-												<c:otherwise>
-													<c:if test="${employee.branchCode==branch.branchCode}">
-														<c:set value="selected" var="selct"/> 
-													</c:if>
-												</c:otherwise>
-											</c:choose>
-											<option value="${branch.branchCode}" ${selct}>
-												<c:out value="${branch.branchDesc}"/>
-											</option>
-										</c:forEach>
-									</form:select>
+									<div style="width: 20%; float: ${direction}">
+										<spring:message code="prop.leave.app.apply.form.requester.branch"/>
 									</div>
-								<br>
-								<div style="float: none;">
-									<form:select path="department2" cssClass="selDeptCode2 leaveOptions" id="selDeptCode2">
-										<option><spring:message code="prop.leave.app.dropdown.text"/></option>
-									</form:select>
+									<div>
+											<form:select path="branch2"  cssClass="selBranchCode leaveOptions" id="selBranchCode" >
+												<option><spring:message code="prop.leave.app.dropdown.branch.text"/></option>
+												<c:forEach items="${branches}" var="branch">
+													<c:set value="" var="selct"/>
+													<c:choose>
+														<c:when test='${opMode=="u"}'>
+														<c:if test="${approver.branchCode==branch.branchCode}">
+						<%-- 									<c:if test="${employee.branchCode==branch.branchCode}"> --%>
+															<c:set value="selected" var="selct"/> 
+														</c:if>
+														</c:when>
+														<c:otherwise>
+															<c:if test="${employee.branchCode==branch.branchCode}">
+																<c:set value="selected" var="selct"/> 
+															</c:if>
+														</c:otherwise>
+													</c:choose>
+													<option value="${branch.branchCode}" ${selct}>
+														<c:out value="${branch.branchDesc}"/>
+													</option>
+												</c:forEach>
+											</form:select>
+									 </div>
 								</div>
 								<br>
 								<div style="float: none;">
-									<form:select path="section2" cssClass="selSectionCode2 leaveOptions" id="selSectionCode2">
-										<option><spring:message code="prop.leave.app.dropdown.text"/></option>
-									</form:select>
+									<div style="width: 20%; float:${direction}">
+										<spring:message code="prop.leave.app.apply.form.requester.department"/>
+									</div>
+									<div>
+										<form:select path="department2" cssClass="selDeptCode2 leaveOptions" id="selDeptCode2">
+											<option><spring:message code="prop.leave.app.dropdown.department.text"/></option>
+										</form:select>
+									</div>
 								</div>
-									<div id="divHod" class="divHod" ></div><form:errors path="hod"  cssClass="error"/>
+								<br>
+								<div id="sectionDiv" style="float: none;">
+									<div style="width: 20%; float: ${direction}"><spring:message code="prop.leave.app.apply.form.requester.section"/></div>
+									<div>
+										<form:select path="section2" cssClass="selSectionCode2 leaveOptions" id="selSectionCode2">
+											<option><spring:message code="prop.leave.app.dropdown.section.text"/></option>
+										</form:select>
+									</div>
+									<br>
+								</div>
+								<div id="approverDiv" style="float:none;">
+									<div style="width : 20%; float: ${direction}"> <spring:message code="prop.leave.app.apply.form.approvar.name"/> </div> 
+									<div id="divHod" class="divHod" style="margin-${direction}:20% "></div><form:errors path="hod"  cssClass="error"/>
+								</div>
 							
 					</fieldset>
 				</div>
@@ -816,48 +863,63 @@ $(function() {
 							<spring:message code="prop.leave.app.apply.form.delegated.date.to"/>
 						</span>
 					</th>
+					<th>
+					<span class="PortletHeaderText">
+						<spring:message code="prop.leave.app.apply.form.delegated.branch"/>
+					</span>
+					</th>
 					<th class="PortletHeaderColor">
 						<span class="PortletHeaderText">
-							<spring:message code="prop.leave.app.apply.form.delegated.emp.code"/>
+							<spring:message code="prop.leave.app.apply.form.delegated.emp.name"/>
 						</span>
 					</th>
-					<th colspan="2"><i><spring:message code="prop.leave.app.apply.form.delegated.msg"/></i></th>
-					
-					
 				</tr>
 				<c:forEach var="i" begin="0" end="2" step="1">
 					<tr>
-						<td><form:input path="delegatedEmps[${i}].fromDate" cssClass="calendarDelgStart" />
+						<td>
+							<center>
+							<form:input path="delegatedEmps[${i}].fromDate" cssClass="calendarDelgStart" />
+							</center>
 							<br><form:errors path="delegatedEmps[${i}].fromDate" cssClass="error"/>
 						</td>
-						<td><form:input path="delegatedEmps[${i}].toDate" cssClass="calendarDelgEnd"/>
+						<td>
+						<center>
+							<form:input path="delegatedEmps[${i}].toDate" cssClass="calendarDelgEnd"/>
+						</center>
 							<br><form:errors path="delegatedEmps[${i}].toDate" cssClass="error"/>
 						</td>
-						<td><form:input path="delegatedEmps[${i}].empNumber" cssClass="txtEmpNum" id="delegatedEmps[${i}].empNumber"/>
-							<br><form:errors path="delegatedEmps[${i}].empNumber" cssClass="error"/>
+						<td>
+							<center>
+								<form:select path="delegatedEmps[${i}].branchCode" cssClass="selBranchCode" id="selBranchCode">
+									<option><spring:message code="prop.leave.app.dropdown.branch.text"/></option>
+									<c:forEach items="${branchesEmpno}" var="brn">
+										<c:set value="" var="selct"/>
+										<c:if test="${employee.branchCode==brn.branchCode}">
+											<c:set value="selected" var="selct"/> 
+										</c:if>
+										<option value="${brn.branchCode}" ${selct}>
+											<c:out value="${brn.branchDesc}"/>
+										</option>
+									</c:forEach>
+								</form:select>
+							</center>
 						</td>
 						<td>
-							<form:select path="delegatedEmps[${i}].empName" cssClass="selEmpNum" id="selEmpNum" onchange="getEmpId(this,${i});">
-								<option><spring:message code="prop.leave.app.dropdown.text"/></option>
-							</form:select>
+							<center>
+								<form:hidden path="delegatedEmps[${i}].empNumber" cssClass="tEmpId" id="tEmpId" />
+								<form:select path="delegatedEmps[${i}].empName" cssClass="selEmpNum" id="selEmpNum" onchange="getEmpId(this,${i});">
+									<option><spring:message code="prop.leave.app.dropdown.employee.text"/></option>
+								</form:select>
+							</center>
 						</td>
-						<td>
-							<form:select path="delegatedEmps[${i}].branchCode" cssClass="selBranchCode" id="selBranchCode">
-								<option><spring:message code="prop.leave.app.dropdown.text"/></option>
-								<c:forEach items="${branchesEmpno}" var="brn">
-									<c:set value="" var="selct"/>
-									<c:if test="${employee.branchCode==brn.branchCode}">
-										<c:set value="selected" var="selct"/> 
-									</c:if>
-									<option value="${brn.branchCode}" ${selct}>
-										<c:out value="${brn.branchDesc}"/>
-									</option>
-								</c:forEach>
-	
-							</form:select>
-						</td>
+
 					</tr>
 				</c:forEach>
+				<tr>
+					<td colspan="4">
+						<i><font color="red"><spring:message code="prop.leave.app.apply.form.delegated.note"/></font></i>
+					</td>
+				</tr>
 			</table>
 		</c:if>
 		
@@ -952,8 +1014,10 @@ $(function() {
 <script type="text/javascript">
 	function getEmpId(obj,i)
 	{
-		document.getElementById('delegatedEmps['+i+'].empNumber').value=obj.value;
-		//document.getElementById(obj2).value=obj.value;
+		var currentDropdown = $(obj);
+		var varEmpId=currentDropdown.closest('tr').find("input.tEmpId");
+		varEmpId.val(obj.value);
+
 	}
 	
 </script>

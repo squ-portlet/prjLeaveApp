@@ -528,7 +528,7 @@ public interface Constants
 									                                        "							AS LEAVE_STATUS, 				" +	
 																			"   LVREQ.VHM_EMP_CODE AS EMP_CODE,							" +
 																			"	LVREQ.VHM_EMP_INTERNET_USR_ID AS EMP_INTERNET_ID,		" +
-																			" DECODE('en',												" +
+																			" DECODE(:paramLocale,										" +
 									                                        "      'en',initCap(EMP.VHM_EMP_NAME),						" +
 									                                        "      'ar',EMP.VHM_EMP_NAME_ARABIC) AS EMP_NAME,			" +
 																			"	LVREQ.VHM_HIERARCHY_CODE AS EMP_HIERARCHY_CODE,			" +
@@ -538,7 +538,7 @@ public interface Constants
 																			"	 ) AS DELEGATE_STATUS,HIR.VHM_LEVEL AS EMP_LEVEL,		" +
 																			" 	APP.VHM_APP_EMP_CODE AS EMP_APP_CODE,					" +
 																			"	(														" +
-																			"		SELECT DECODE('en',									" +
+																			"		SELECT DECODE(:paramLocale,							" +
 										                                    "          'en',initCap(EMPAPP.VHM_EMP_NAME),				" +
 										                                    "          'ar',EMPAPP.VHM_EMP_NAME_ARABIC) 				" +
 										                                    "    	FROM VHM_EMPLOYEE  EMPAPP							" +

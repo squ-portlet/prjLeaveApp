@@ -115,7 +115,7 @@
 	.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; background: #333333 url("${urlImgBgFlat}") 50% 50% repeat-x; opacity: .10;filter:Alpha(Opacity=10); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }
 	
 	.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #eeeeee; background: #ffffff url("${urlImgBgFlat65}") 50% 50% repeat-x; font-weight: bold; color: #cc0000; }
-	.ui-widget-content { border: 1px solid #eeeeee; background: #ffffff url("${urlImgBgFlat75}") 50% 50% repeat-x; color: #333333; }
+	.ui-widget-content { border: 1px solid rgb(236, 193, 193); background: #ffffff url("${urlImgBgFlat75}") 50% 50% repeat-x; color: #333333; }
 	.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {border: 1px solid #fcd3a1; background: #fbf8ee url("${urlImgBgGlass55}") 50% 50% repeat-x; color: #444444; }
 	.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #d8dcdf; background: #eeeeee url("${urlImgBgHighLightHard1}") 50% 50% repeat-x; font-weight: bold; color: #004276; }
 	.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #cdd5da; background: #f6f6f6 url("${urlImgBgHighLightHard2}") 50% 50% repeat-x; font-weight: bold; color: #111111; }
@@ -156,7 +156,13 @@
 		}
 
 </style>
-
+	<div id="browserCompAdv" style="display:none;">
+		<center>
+			<p>
+				<font color="#D8D8D8"><h3><spring:message code="prop.leave.app.title.browser.compatibility.text"/></h3></font>
+			</p>
+		</center>
+	</div>
 <c:catch var="e">
 
 
@@ -296,7 +302,7 @@
 					/*Dialog for IE Quirk mode*/
 					$(function() { 
 						
-
+									$("#browserCompAdv").show();
 									$("#dialogQuirk").html('<spring:message code="error.prop.leave.app.quirk.mode.text"/>'); 
    	 								$("#dialogQuirk").dialog(
                                        {
@@ -356,24 +362,28 @@
 								   	          '<spring:message code="prop.leave.app.title.request.leave.start.date"/>',
 								   	          '<spring:message code="prop.leave.app.title.request.leave.end.date"/>',
 								   	          '<spring:message code="prop.leave.app.title.request.leave.type"/>',
-								   	          '<spring:message code="prop.leave.app.title.request.date"/>',
+								   	          //'<spring:message code="prop.leave.app.title.request.date"/>',
 								   	          '<spring:message code="prop.leave.app.title.request.status"/>',
 								   	       '<spring:message code="prop.leave.app.title.request.requester"/>',
 								   	          '<spring:message code="prop.leave.app.title.request.action"/>'
 								   	       	  //'approver'
 								   	          ],
 								   	colModel:[
-								   		{name:'reqNo',width:90,index:'endDate'},
-								   		{name:'startDate',index:'startDate',  align:"right"},
-								   		{name:'endDate',index:'endDate', align:"right"},
-								   		{name:'type'},		
-								   		{name:'reqDate',index:'reqDate', align:"right"},
-								   		{name:'status'},
+								   		{name:'reqNo',index:'reqNo',align:"right",width:'70%'},
+								   		{name:'startDate',index:'startDate',  align:"center",width:'60%'},
+								   		{name:'endDate',index:'endDate', align:"center",width:'60%'},
+								   		{name:'type',width:'80%'},		
+								   		//{name:'reqDate',index:'reqDate', align:"center",width:'60%'},
+								   		{name:'status',width:'80%'},
 								   		{name:'employee'},
-								   		{name:'actions',width:200}
+								   		{name:'actions',width:'80%'}
 								   		//{name:'approver',width:200}
 								   	],
 								   	rowNum:10,
+								   	autowidth: true,
+								   	shrinkToFit :true,
+								    forcefit: true,
+								   	rownumbers: true,
 								   	rowList:[10,20,30],
 								   	pager: '#pager2',
 								   	sortname: 'reqNo',
@@ -401,24 +411,28 @@
 								   	          '<spring:message code="prop.leave.app.title.request.leave.start.date"/>',
 								   	          '<spring:message code="prop.leave.app.title.request.leave.end.date"/>',
 								   	          '<spring:message code="prop.leave.app.title.request.leave.type"/>',
-								   	          '<spring:message code="prop.leave.app.title.request.date"/>',
+								   	          //'<spring:message code="prop.leave.app.title.request.date"/>',
 								   	          '<spring:message code="prop.leave.app.title.request.status"/>',
 									   	       '<spring:message code="prop.leave.app.title.request.approver"/>',
 								   	          '<spring:message code="prop.leave.app.title.request.action"/>'
 								   	       	  //'approver'
 								   	          ],
 								   	colModel:[
-								   		{name:'reqNo',width:90,index:'endDate'},
-								   		{name:'startDate',index:'startDate',  align:"right"},
-								   		{name:'endDate',index:'endDate', align:"right"},
-								   		{name:'type'},		
-								   		{name:'reqDate',index:'reqDate', align:"right"},
-								   		{name:'status'},
+								   		{name:'reqNo',index:'reqNo',align:"right",width:'70%'},
+								   		{name:'startDate',index:'startDate',  align:"center", width:'60%'},
+								   		{name:'endDate',index:'endDate', align:"center",width:'60%'},
+								   		{name:'type',width:'80%'},		
+								   		//{name:'reqDate',index:'reqDate', align:"center",width:'60%'},
+								   		{name:'status',width:'80%'},
 								   		{name:'employee'},
-								   		{name:'actions',width:200}
+								   		{name:'actions',width:'80%'}
 								   		//{name:'approver',width:200}
 								   	],
 								   	rowNum:10,
+								   	autowidth: true,
+								   	shrinkToFit :true,
+								    forcefit: true,
+								   	rownumbers: true,
 								   	rowList:[10,20,30],
 								   	pager: '#pager3',
 								   	sortname: 'reqNo',
@@ -644,6 +658,7 @@
 						<portlet:renderURL var="varLeaveView">
 							<portlet:param name="action" value="leaveView"/>
 							<portlet:param name="reqNo" value="${req.requestNo}"/>
+							<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
 						</portlet:renderURL>
 						<c:choose>
 							<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
