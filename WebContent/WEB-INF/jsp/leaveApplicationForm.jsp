@@ -229,22 +229,6 @@ $(function(){
 
 });
 
-// $(function(){
-
-// 	$('#leaveStartDate').keydown(
-// 				function(e){ 
-// 					resDtIssueOK = diffLeaveDate();
-// 					 return resDtIssueOK;
-// 				});
-			
-// 	$('#leaveEndDate').keydown(
-// 			function(e){ 
-// 				resDtIssueOK = diffLeaveDate();
-// 				 return resDtIssueOK;
-// 			});
-	
-	
-// });
 
 
 $(function(){
@@ -301,18 +285,15 @@ $(function() {
             	
             	if(data.length==1)
             	{
-            		//$('#selEmpNum').empty();
             		var empData=data[0];
             		
             		$(empData).each(function(i,item){
             			var opt=$('<option></option>');
             			$(opt).val(item.empNumber);
             			$(opt).html(item.empName);
-            			//$('#selEmpNum').append(opt);
             			currentDropdown.closest('tr').find("select.selEmpNum").append(opt);
             		});
             		
-            		//currentDropdown.closest('tr').find("select.selEmpNum").selectmenu('refresh');
             		currentDropdown.closest('tr').find("select.selEmpNum").val(varEmpId.val());
             	}
             	else if(data.length>1) 
@@ -330,12 +311,10 @@ $(function() {
             			$(optGroup).append(opt);
             		});            		
             		currentDropdown.closest('tr').find("select.selEmpNum").append(optGroup);
-            		//$('#selEmpNum').append(optGroup);
-            		
+           		
             		
             		
             		var optGroup=$('<optgroup></optgroup>');
-            		//$(opt).html(<spring:message code="prop.leave.app.dropdown.text"/>);
         			$(optGroup).attr('label','<spring:message code="prop.leave.app.dropdown.delg.emp.group2"/>');
         			
             		$(otherDept).each(function(i,item){          			
@@ -476,24 +455,16 @@ $(function() {
 		    	{
 		    		$("#approverDiv").hide();
 		    	}
-		    //$(".divHod").html(dataHtml);
             }
         }
         );
     };
-//     alert ("section code : "+$('select.selSectionCode2').val());
-// 	if($('select.selSectionCode2').val()  != '')
-// 		{
-// 			alert ("section code2 : "+$('select.selSectionCode2').val());
+
 		    $('select.selSectionCode2').each(populateDropDowns);
 		    $('select.selSectionCode2').change(populateDropDowns);
-// 		}
-// 	else
-// 		{
-// 		alert ("dept code : "+$('select.selSectionCode2').val());
+
 		    $('select.selDeptCode2').each(populateDropDowns);
 		    $('select.selDeptCode2').change(populateDropDowns);
-// 		}
 
 		    $('select.selBranchCode').each(populateDropDowns);
 		    $('select.selBranchCode').change(populateDropDowns);
@@ -627,226 +598,161 @@ $(function() {
 				<spring:message code="prop.leave.app.apply.form.legend.title"/>
 			</h3>
 		</legend>
-		
-		<table cellspacing="0" cellpadding="0" border="1" width="100%">
-			<caption><spring:message code="prop.leave.app.apply.form.required.details"/></caption>
-<!-- 			<tr> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.request.no"/>: --%>
-<!-- 					</span> -->
-<!-- 				</th>  -->
-<%-- 				<td><form:input path="requestNo"/></td> --%>
-<!-- 				<td>&nbsp;</td> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.request.date"/>: --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<%-- 				<td><form:input path="requestDate" id="requestDate" cssClass="calendar"/></td> --%>
-<!-- 			</tr> -->
-			<tr>
-				<th class="PortletHeaderColor">
-					<span class="PortletHeaderText">
-						<spring:message code="prop.leave.app.apply.form.leave.type"/>:
-					</span>
-				</th>
-				<td style="vertical-align: middle;">
-					<form:select path="leaveTypeFlag" cssClass="leaveOptions" >
-						<form:option value=""><spring:message code="prop.leave.app.dropdown.leave.type.text"/></form:option>
-						<form:options items="${leaveTypeFlag}" itemLabel="typeDesc" itemValue="typeNo"/>
-					</form:select>
-					<br>
-					<form:errors path="leaveTypeFlag" cssClass="error" />
-					
-					<div id="divResearchId" style="display: none;">
-						<spring:message code="prop.leave.app.apply.form.leave.sabbatical.research.id"/> <form:input path="researchId"/>
-					</div>
-					
-				</td>
-				<td>&nbsp;</td>
-				<th class="PortletHeaderColor">
-					<span class="PortletHeaderText">
-						<spring:message code="prop.leave.app.apply.form.requester.approver.selection"/>
-					</span>
-				</th>
-				
-				<td >
-				
-<div id="accordion" class="ui-accordion ui-widget ui-helper-reset">
-				<c:choose>
-					<c:when test='${opMode=="u"}'>
-						<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
-							<a href="#">
-								<spring:message code="prop.leave.app.apply.form.leave.manager"/>
-								<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i></font>
-							</a>
-						</h3>
-					</c:when>
-					<c:otherwise>
-						<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons">
-							<a href="#">
-								<spring:message code="prop.leave.app.apply.form.leave.manager.default"/>
-								<font color="red" size="small"><i><c:out value="${mgrName}"/></i></font>
-							</a>
-						</h3>
-						<div>
-							<br>
-							<center><spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/></center>
-						</div>
+			<table>
+				<tr>
+					<th class="PortletHeaderColor">
+						<span class="PortletHeaderText">
+							<spring:message code="prop.leave.app.apply.form.leave.type"/>:
+						</span>
+					</th>
+					<td >
+						<form:select path="leaveTypeFlag" cssClass="leaveOptions" >
+							<form:option value=""><spring:message code="prop.leave.app.dropdown.leave.type.text"/></form:option>
+							<form:options items="${leaveTypeFlag}" itemLabel="typeDesc" itemValue="typeNo"/>
+						</form:select>
+						<br>
+						<form:errors path="leaveTypeFlag" cssClass="error" />
 						
-					<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
-						<a href="#"><spring:message code="prop.leave.app.apply.form.leave.manager.custom"/></a>
-					</h3>				
-					<div>
-						<fieldset>
-						<legend><spring:message code="prop.leave.app.apply.form.leave.manager.select"/> </legend>
-							     
-								<div style="float: none;">
-									<div style="width: 20%; float: ${direction}">
-										<spring:message code="prop.leave.app.apply.form.requester.branch"/>
-									</div>
-									<div>
-											<form:select path="branch2"  cssClass="selBranchCode leaveOptions" id="selBranchCode" >
-												<option><spring:message code="prop.leave.app.dropdown.branch.text"/></option>
-												<c:forEach items="${branches}" var="branch">
-													<c:set value="" var="selct"/>
-													<c:choose>
-														<c:when test='${opMode=="u"}'>
-														<c:if test="${approver.branchCode==branch.branchCode}">
-						<%-- 									<c:if test="${employee.branchCode==branch.branchCode}"> --%>
-															<c:set value="selected" var="selct"/> 
-														</c:if>
-														</c:when>
-														<c:otherwise>
-															<c:if test="${employee.branchCode==branch.branchCode}">
-																<c:set value="selected" var="selct"/> 
-															</c:if>
-														</c:otherwise>
-													</c:choose>
-													<option value="${branch.branchCode}" ${selct}>
-														<c:out value="${branch.branchDesc}"/>
-													</option>
-												</c:forEach>
-											</form:select>
-									 </div>
-								</div>
-								<br>
-								<div style="float: none;">
-									<div style="width: 20%; float:${direction}">
-										<spring:message code="prop.leave.app.apply.form.requester.department"/>
-									</div>
-									<div>
-										<form:select path="department2" cssClass="selDeptCode2 leaveOptions" id="selDeptCode2">
-											<option><spring:message code="prop.leave.app.dropdown.department.text"/></option>
-										</form:select>
-									</div>
-								</div>
-								<br>
-								<div id="sectionDiv" style="float: none;">
-									<div style="width: 20%; float: ${direction}"><spring:message code="prop.leave.app.apply.form.requester.section"/></div>
-									<div>
-										<form:select path="section2" cssClass="selSectionCode2 leaveOptions" id="selSectionCode2">
-											<option><spring:message code="prop.leave.app.dropdown.section.text"/></option>
-										</form:select>
-									</div>
-									<br>
-								</div>
-								<div id="approverDiv" style="float:none;">
-									<div style="width : 20%; float: ${direction}"> <spring:message code="prop.leave.app.apply.form.approvar.name"/> </div> 
-									<div id="divHod" class="divHod" style="margin-${direction}:20% "></div><form:errors path="hod"  cssClass="error"/>
-								</div>
-							
-					</fieldset>
-				</div>
-
-					</c:otherwise>
-				</c:choose>
-				
-
-</div>				
-				</td>
-			</tr>
-			<tr>
-				<th class="PortletHeaderColor">
-					<span class="PortletHeaderText">
-						<spring:message code="prop.leave.app.apply.form.leave.start.date"/>:
-					</span>
-				</th>
-				<td><form:input path="leaveStartDate" id="leaveStartDate" cssClass="calendarStart" />
-					<br><form:errors path="leaveStartDate" cssClass="error" />
-				</td>
-				<td>&nbsp;</td>
-				<th class="PortletHeaderColor">
-					<span class="PortletHeaderText">
-						<spring:message code="prop.leave.app.apply.form.leave.end.date"/>:
-					</span>
-				</th>
-				<td><form:input path="leaveEndDate" id="leaveEndDate" cssClass="calendarEnd" />
-					<br><form:errors path="leaveEndDate" cssClass="error"/>
-				</td>
-			</tr>
-			<tr>
-				<th class="PortletHeaderColor">
+						<div id="divResearchId" style="display: none;">
+							<spring:message code="prop.leave.app.apply.form.leave.sabbatical.research.id"/> <form:input path="researchId"/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th class="PortletHeaderColor">
+						<span class="PortletHeaderText">
+							<spring:message code="prop.leave.app.apply.form.leave.start.date"/>:
+						</span>
+					</th>
+					<td><form:input path="leaveStartDate" id="leaveStartDate" cssClass="calendarStart" />
+						<br><form:errors path="leaveStartDate" cssClass="error" />
+					</td>
+				</tr>
+				<tr>
+					<th class="PortletHeaderColor">
+						<span class="PortletHeaderText">
+							<spring:message code="prop.leave.app.apply.form.leave.end.date"/>:
+						</span>
+					</th>
+					<td><form:input path="leaveEndDate" id="leaveEndDate" cssClass="calendarEnd" />
+						<br><form:errors path="leaveEndDate" cssClass="error"/>
+					</td>
+				</tr>
+				<tr>
+					<th class="PortletHeaderColor">
 					<span class="PortletHeaderText">
 						<spring:message code="prop.leave.app.apply.form.leave.remarks"/>:
 					</span>
-				</th>
-				<td colspan="4"><form:textarea cssStyle="width:100%" path="leaveRemarks"/></td>
-			</tr>
-		</table>
-		<p/>
+					</th>
+					<td colspan="4"><form:textarea cssStyle="width:100%" path="leaveRemarks"/></td>
+				</tr>
+			</table>
+
+			<table>
+					<tr>
+						<th class="PortletHeaderColor">
+							<span class="PortletHeaderText">
+								<spring:message code="prop.leave.app.apply.form.requester.approver.selection"/>
+							</span>
+						</th>
+						<td>
+								<div id="accordion" class="ui-accordion ui-widget ui-helper-reset">
+									<c:choose>
+										<c:when test='${opMode=="u"}'>
+											<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
+												<a href="#">
+													<spring:message code="prop.leave.app.apply.form.leave.manager"/>
+													<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i></font>
+												</a>
+											</h3>
+										</c:when>
+										<c:otherwise>
+											<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons">
+												<a href="#">
+													<spring:message code="prop.leave.app.apply.form.leave.manager.default"/>
+													<font color="red" size="small"><i><c:out value="${mgrName}"/></i></font>
+												</a>
+											</h3>
+											<div>
+												<br>
+												<center><spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/></center>
+											</div>
+											
+										<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
+											<a href="#"><spring:message code="prop.leave.app.apply.form.leave.manager.custom"/></a>
+										</h3>				
+										<div>
+											<fieldset>
+											<legend><spring:message code="prop.leave.app.apply.form.leave.manager.select"/> </legend>
+												     
+													<div style="float: none;">
+														<div style="width: 20%; float: ${direction}">
+															<spring:message code="prop.leave.app.apply.form.requester.branch"/>
+														</div>
+														<div>
+																<form:select path="branch2"  cssClass="selBranchCode leaveOptions" id="selBranchCode" >
+																	<option><spring:message code="prop.leave.app.dropdown.branch.text"/></option>
+																	<c:forEach items="${branches}" var="branch">
+																		<c:set value="" var="selct"/>
+																		<c:choose>
+																			<c:when test='${opMode=="u"}'>
+																			<c:if test="${approver.branchCode==branch.branchCode}">
+											<%-- 									<c:if test="${employee.branchCode==branch.branchCode}"> --%>
+																				<c:set value="selected" var="selct"/> 
+																			</c:if>
+																			</c:when>
+																			<c:otherwise>
+																				<c:if test="${employee.branchCode==branch.branchCode}">
+																					<c:set value="selected" var="selct"/> 
+																				</c:if>
+																			</c:otherwise>
+																		</c:choose>
+																		<option value="${branch.branchCode}" ${selct}>
+																			<c:out value="${branch.branchDesc}"/>
+																		</option>
+																	</c:forEach>
+																</form:select>
+														 </div>
+													</div>
+													<br>
+													<div style="float: none;">
+														<div style="width: 20%; float:${direction}">
+															<spring:message code="prop.leave.app.apply.form.requester.department"/>
+														</div>
+														<div>
+															<form:select path="department2" cssClass="selDeptCode2 leaveOptions" id="selDeptCode2">
+																<option><spring:message code="prop.leave.app.dropdown.department.text"/></option>
+															</form:select>
+														</div>
+													</div>
+													<br>
+													<div id="sectionDiv" style="float: none;">
+														<div style="width: 20%; float: ${direction}"><spring:message code="prop.leave.app.apply.form.requester.section"/></div>
+														<div>
+															<form:select path="section2" cssClass="selSectionCode2 leaveOptions" id="selSectionCode2">
+																<option><spring:message code="prop.leave.app.dropdown.section.text"/></option>
+															</form:select>
+														</div>
+														<br>
+													</div>
+													<div id="approverDiv" style="float:none;">
+														<div style="width : 20%; float: ${direction}"> <spring:message code="prop.leave.app.apply.form.approvar.name"/> </div> 
+														<div id="divHod" class="divHod" style="margin-${direction}:20% "></div><form:errors path="hod"  cssClass="error"/>
+													</div>
+										</fieldset>
+									</div>
+										</c:otherwise>
+									</c:choose>
+							</div>	
+						
+						
+						</td>
+				</tr>
+
+			</table>
+
+
 		<c:if test="${(employee.hierarchyLevelCode != baseLevelEmp) || (not empty (employee.hierarchyAddlLevelCode) != baseLevelEmp)}" >		
-<!-- 		<table cellspacing="0" cellpadding="0" border="1" width="100%"> -->
-<%-- 			<caption><spring:message code="prop.leave.app.apply.form.required.details.other"/></caption> --%>
-<!-- 			<tr> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.purpose"/>: --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<%-- 				<td colspan="4"><form:textarea path="leavePurpose" cssStyle="width:100%" /></td> --%>
-<!-- 			</tr> -->
-<!-- 			<tr> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.last.leave.return.date"/>: --%>
-<!-- 					</span>		 -->
-<!-- 				</th> -->
-<%-- 				<td colspan="4"><form:input path="leaveLastReturnDate" cssClass="calendar"/></td> --%>
-<!-- 			</tr> -->
-<!-- 			<tr> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.research.id"/>: --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<%-- 				<td colspan="4"><form:input path="researchId"/></td> --%>
-<!-- 			</tr> -->
-<!-- 			<tr> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.administrative"/>: --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<!-- 				<td> -->
-<%-- 					<form:checkbox path="adminSqu" /> --%>
-<!-- 				</td> -->
-<!-- 				<td></td> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.position"/> --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<!-- 				<td> -->
-<%-- 					<form:select path="positionAdditional"> --%>
-<%-- 						<form:option value="NA"><spring:message code="prop.leave.app.dropdown.text"/></form:option> --%>
-<%-- 						<form:options items="${addlPosition}" itemLabel="desigDescription" itemValue="desigCode"/> --%>
-					
-<%-- 					</form:select> --%>
-<!-- 				</td>			 -->
-<!-- 			</tr> -->
-<!-- 		</table> -->
 		
 			<table cellspacing="0" cellpadding="0" border="1" width="100%">
 				<caption>
