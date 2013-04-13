@@ -542,8 +542,7 @@ $(function() {
 	 				}
 	 				
 	 		});
-
-		
+	});	
 </script>
 
 </head>
