@@ -74,10 +74,6 @@
 <c:url value="/js/jquery.ui.position.js" var="urlJsJqueryPosition"/>
 <c:url value="/js/jquery.ui.dialog.js" var="urlJsJqueryDialog"/>
 
-<%-- <c:url value="/js/jquery.dropkick-1.0.0.js" var="urlJsDropKick"/> --%>
-<c:url value="/js/jquery.ddslick.js" var="urlJsJqueryDdslick"/>
-
-
 <link type="text/css" href="${urlJQueryCSS}" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="${urlCssSquPortletStyle}" />
 <link type="text/css" href="${urlJsJqueryAccordion}" rel="stylesheet" />
@@ -96,9 +92,6 @@
 <script type="text/javascript" src="${urlJsJqueryDraggable}"></script>
 <script type="text/javascript" src="${urlJsJqueryPosition}"></script>
 <script type="text/javascript" src="${urlJsJqueryDialog}"></script>
-
-<%-- <script type="text/javascript" src="${urlJsDropKick}"></script> --%>
-<script type="text/javascript" src="${urlJsJqueryDdslick}"></script>
 
 <c:url value="/LeaveAppEmpServlet" var="servletLeave"/>
 <c:url value="/LeaveAppBranchServlet" var="servletLeaveBranch"/>
@@ -532,34 +525,24 @@ $(function() {
 			return result;
 			
 		}
-
 	/**
-		dropdown combobox
-		This code taken from 
-		http://designwithpc.com/Plugins/ddSlick
+	* Leave type changes to sabbatical shows researchId
 	*/
 	$(function() {
-		 $("#leaveTypeFlag").ddslick({
-				 onSelected: function (data) {
-	                    displaySelectedData(data);
-				 }
-		 });
-		 
-		});	
-		
-    function displaySelectedData(ddData) {
-        if (ddData.selectedData) {
-         	if(ddData.selectedData.value == 'B')
-        		{
-        			$("#divResearchId").show();
-        		}
-        	else
-        		{
-        			$("#divResearchId").hide();
-        		}
-        }
-        console.log(ddData);
-    }
+
+	 		$("#leaveTypeFlag").on("change", function (){
+	 			
+	 			if(this.value == 'B')
+	 				{
+	 					$("#divResearchId").show();
+	 				}
+	 			else
+	 				{
+	 					$("#divResearchId").hide();
+	 				}
+	 				
+	 		});
+
 		
 </script>
 
@@ -605,17 +588,23 @@ $(function() {
 							<spring:message code="prop.leave.app.apply.form.leave.type"/>:
 						</span>
 					</th>
-					<td >
+					<td>
 						<form:select path="leaveTypeFlag" cssClass="leaveOptions" >
 							<form:option value=""><spring:message code="prop.leave.app.dropdown.leave.type.text"/></form:option>
 							<form:options items="${leaveTypeFlag}" itemLabel="typeDesc" itemValue="typeNo"/>
 						</form:select>
 						<br>
 						<form:errors path="leaveTypeFlag" cssClass="error" />
-						
-						<div id="divResearchId" style="display: none;">
-							<spring:message code="prop.leave.app.apply.form.leave.sabbatical.research.id"/> <form:input path="researchId"/>
-						</div>
+					</td>
+				</tr>
+				<tr id="divResearchId" style="display: none;">
+					<th class="PortletHeaderColor">
+						<span class="PortletHeaderText">
+							<spring:message code="prop.leave.app.apply.form.leave.sabbatical.research.id"/>:
+						</span>						
+					</th>
+					<td>
+						<form:input path="researchId"/>
 					</td>
 				</tr>
 				<tr>
@@ -753,8 +742,8 @@ $(function() {
 
 
 		<c:if test="${(employee.hierarchyLevelCode != baseLevelEmp) || (not empty (employee.hierarchyAddlLevelCode) != baseLevelEmp)}" >		
-		
-			<table cellspacing="0" cellpadding="0" border="1" width="100%">
+		<br>
+			<table cellspacing="0" cellpadding="0" border="1" width="100%" style="margin: 1em;">
 				<caption>
 					<spring:message code="prop.leave.app.apply.form.delegated.employees"/>
 				</caption>
@@ -769,7 +758,7 @@ $(function() {
 							<spring:message code="prop.leave.app.apply.form.delegated.date.to"/>
 						</span>
 					</th>
-					<th>
+					<th class="PortletHeaderColor">
 					<span class="PortletHeaderText">
 						<spring:message code="prop.leave.app.apply.form.delegated.branch"/>
 					</span>
@@ -786,13 +775,13 @@ $(function() {
 							<center>
 							<form:input path="delegatedEmps[${i}].fromDate" cssClass="calendarDelgStart" />
 							</center>
-							<br><form:errors path="delegatedEmps[${i}].fromDate" cssClass="error"/>
+							<form:errors path="delegatedEmps[${i}].fromDate" cssClass="error"/>
 						</td>
 						<td>
 						<center>
 							<form:input path="delegatedEmps[${i}].toDate" cssClass="calendarDelgEnd"/>
 						</center>
-							<br><form:errors path="delegatedEmps[${i}].toDate" cssClass="error"/>
+							<form:errors path="delegatedEmps[${i}].toDate" cssClass="error"/>
 						</td>
 						<td>
 							<center>
@@ -837,82 +826,11 @@ $(function() {
 			</tr>
 		</table>
 		
-<!-- 		<table cellspacing="0" cellpadding="0" border="1" width="100%"> -->
-<%-- 			<caption> --%>
-<%-- 				<spring:message code="prop.leave.app.apply.form.approvar.history.details"/> --%>
-<%-- 			</caption> --%>
-			
-<!-- 			<tr> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.approvar.name"/> --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.approvar.date"/> --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.approvar.action"/> --%>
-<!-- 					</span> -->
-<!-- 				</th> -->
-<!-- 				<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.approvar.approver"/> --%>
-<!-- 					</span> -->
-<!-- 				</th>	 -->
-<!-- 			</tr> -->
-<!-- 			<tr> -->
-<!-- 				<td></td> -->
-<!-- 				<td></td> -->
-<!-- 				<td></td> -->
-<!-- 				<td></td>	 -->
-<!-- 			</tr>			 -->
-<!-- 		</table> -->
+
 		<center>
 			<input type="submit" value='<spring:message code="prop.leave.app.apply.form.requester.submit"/>' style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
 		</center>
-<!-- 		<fieldset> -->
-<!-- 			<legend> -->
-<%-- 				<spring:message code="prop.leave.app.apply.form.approvar.action.administrative"/> --%>
-<!-- 			</legend> -->
-<!-- 			<table cellspacing="0" cellpadding="0" border="1" width="100%"> -->
-<!-- 				<tr> -->
-<!-- 					<th class="PortletHeaderColor"> -->
-<!-- 					<span class="PortletHeaderText"> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.approvar.action"/> --%>
-<!-- 					</span> -->
-<!-- 					</th> -->
-						
-<!-- 					<td> -->
-<%-- 						<spring:message code="prop.leave.app.apply.form.approvar.actions" var="appActions"/> --%>
-						
-<%-- 						<form:select path="approverAction"> --%>
-<%-- 							<form:option value="0">Select</form:option> --%>
-<%-- 							<form:options items="${adminActions}" itemLabel="actionDesc" itemValue="actionCode"/> --%>
-							
-<%-- 						</form:select> --%>
-					
-<!-- 					</td> -->
-<!-- 					<td>&nbsp;</td> -->
-<!-- 					<th class="PortletHeaderColor"> -->
-<!-- 						<span class="PortletHeaderText"> -->
-<%-- 							<spring:message code="prop.leave.app.apply.form.approvar.remarks"/> --%>
-<!-- 						</span> -->
-<!-- 					</th> -->
-<!-- 					<td> -->
-<%-- 						<form:textarea path="approverRemark" cssStyle="width:100%"/> --%>
-<!-- 					</td> -->
-<!-- 				</tr> -->
-<!-- 			</table> -->
-<%-- 			<center> --%>
-<%-- 				<input type="submit" value='<spring:message code="prop.leave.app.apply.form.approver.submit"/>' style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/> --%>
-<%-- 			</center> --%>
-			
-			
-<!-- 		</fieldset> -->
+
 		
 	</fieldset>
 </form:form>
