@@ -52,15 +52,11 @@
 
 
 <c:url value="/css/jquery-ui-1.8.18.custom.css" var="urlJQueryCSS"/>
-<c:url value="/css/ui.jqgrid.css" var="urlJqGridCSS"/>
-
-
+<c:url value="/css/squPortletStyles.css" var="urlSQUStyle"/>
 
 <c:url value="/js/jquery-1.7.2.min.js" var="urlJsJqueryMin"/>
 <c:url value="/js/jquery-ui-1.8.18.custom.min.js" var="urlJsJqueryCustom"/>
 <c:url value="/js/jquery.layout.js" var="urlJsJqueryLayout"/>
-<c:url value="/js/grid.locale-en.js"  var="urlJsJqueryGridLocaleEN"/>
-<c:url value="/js/grid.locale-ar.js" var="urlJsJqueryGridLocaleAR"/>
 <c:url value="/js/jquery.jqGrid.min.js"  var="urlJsJqueryGridMin"/>
 <c:url value="/js/jquery.tablednd.js"  var="urlJsJqueryTableDND"/>
 <c:url value="/js/jquery.contextmenu.js"  var="urlJsJqueryContextMenu"/>
@@ -76,17 +72,19 @@
 
 <link type="text/css" href="${urlJQueryCSS}" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="${urlJqGridCSS}" />
-
+<link rel="stylesheet" type="text/css" href="${urlSQUStyle}" />
 
 <script type="text/javascript" src="${urlJsJqueryMin}"></script>
 <script type="text/javascript" src="${urlJsJqueryCustom}"></script>
 <script type="text/javascript" src="${urlJsJqueryLayout}"></script>
+
 <c:if test="${rc.locale.language=='en'}">
 	<script type="text/javascript" src="${urlJsJqueryGridLocaleEN}"></script>
 </c:if>
 <c:if test="${rc.locale.language=='ar'}">
 	<script type="text/javascript" src="${urlJsJqueryGridLocaleAR}"></script>
 </c:if>
+
 <script type="text/javascript" src="${urlJsJqueryGridMin}"></script>
 <script type="text/javascript" src="${urlJsJqueryTableDND}"></script>
 <script type="text/javascript" src="${urlJsJqueryContextMenu}"></script>
@@ -154,14 +152,6 @@
 		background-color: #ffe7cf;
 		color:#f48000;
 		}
-/*For Jq-grid word/text wrapping */
-/* .ui-jqgrid tr.jqgrow td { */
-/*     white-space: normal; */
-/*     height:auto; */
-/*     vertical-align:text-top; */
-/*     padding-top:2px; */
-/* } */
-
 
 </style>
 
@@ -196,313 +186,6 @@
 		
 		<c:if test="${not empty leaveRequests}">
 			<script type="text/javascript">
-			//contribution :  http://trirand.com/blog/jqgrid/jqgrid.html
-			var countRequester = 0;
-			var countApprover = 0;
-			var mydata = [
-						<c:forEach items="${leaveRequests}" var="req" varStatus="cnt">
-							{
-								<portlet:renderURL var="varLeaveApprove">
-									<portlet:param name="action" value="leaveApprove"/>
-									<portlet:param name="reqNo" >
-									<jsp:attribute name="value">
-										<c:out value="${req.requestNo}"/>
-									</jsp:attribute>
-									</portlet:param>
-								</portlet:renderURL>
-		
-								<portlet:renderURL var="varLeaveClarification">
-									<portlet:param name="action" value="updateLeaveApply"/>
-									<portlet:param name="reqNum" value="${req.requestNo}"/>
-									<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
-								</portlet:renderURL>
-								<portlet:actionURL var="varLeaveCancel">
-		  							<portlet:param name="action" value="leaveCancel"/>
-		  							<portlet:param name="reqNum" value="${req.requestNo}"/>
-		  							<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
-								</portlet:actionURL>
-								
-								<c:choose>
-									<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber) && (req.sabbaticalLowerApproverAction && ! ((req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected))))}">
-										reqNo:'<a href="${varLeaveApprove}"><font color="red"><c:out value="${req.requestNo}"/></font></a> &nbsp;',
-									</c:when>
-									<c:otherwise>
-										reqNo:'<c:out value="${req.requestNo}"/> &nbsp;',
-									</c:otherwise>
-								</c:choose>
-							 reqDate:'<c:out value="${req.requestDate}"/>',
-							 startDate:'<c:out value="${req.leaveStartDate}"/>',
-							 endDate:'<c:out value="${req.leaveEndDate}"/>',
-							 type:'<c:out value="${req.leaveType.typeDesc}"/>',
-							 status:'<c:out value="${req.leaveStatus}"/>',
-								<c:choose>
-								<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
-									employee:'<c:out value="${req.employee.empName}"/> ',
-								</c:when>
-								<c:otherwise>
-									employee:'<c:out value="${req.approve.employee.empName}"/>',
-								</c:otherwise>
-							</c:choose>
-							 
-							<portlet:renderURL var="varLeaveView">
-								<portlet:param name="action" value="leaveView"/>
-								<portlet:param name="reqNo" value="${req.requestNo}"/>
-								<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
-							</portlet:renderURL>
-							<c:choose>
-								<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
-									<c:choose>
-										<c:when test="${(req.status.statusCode == leaveStatusApproved || 
-												         req.status.statusCode == leaveStatusRejected) ||
-												         (req.status.statusCode == furtherClarification)}">
-											actions: '<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>',
-										</c:when>
-										<c:when test="${!(req.sabbaticalLowerApproverAction)}">
-											actions: '<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>',
-										</c:when>
-										<c:otherwise>
-											 actions: 
-												 '<c:forEach items="${adminActions}" var="admActions">'+
-													'<portlet:actionURL var="varLeaveAdminAction">'+
-													'<portlet:param name="action" value="leaveAutoAdminAction"/>'+
-													'<portlet:param name="reqNum" value="${req.requestNo}"/>'+
-													'<portlet:param name="appActionNum" value="${admActions.actionCode}"/>'+
-													'</portlet:actionURL>'+
-
-													'<portlet:renderURL var="varLeaveApprove2">'+
-													'<portlet:param name="action" value="leaveApprove2"/>'+
-													'<portlet:param name="reqNo" value="${req.requestNo}"/>'+
-													'<portlet:param name="_approverAction" value="${admActions.actionCode}"/>'+
-													'</portlet:renderURL>'+
-
-													'<c:if test="${(admActions.actionCode == leaveActionApprove)}">'+
-															'|&nbsp;&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|'+		
-														'</c:if>'+
-														'<c:if test="${(admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">'+
-															'&nbsp;&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|'+		
-														'</c:if>'+
-													'</c:forEach>',
-										</c:otherwise>
-									</c:choose>
-								</c:when>
-								<c:when test="${(req.status.statusCode == furtherClarification)}">
-									actions:'<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a>',
-								</c:when>
-								<c:when test="${(req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected)}">
-									actions:'<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>',
-								</c:when>
-								<c:when test="${(req.approverSequenceNo != 1)}">
-									actions: '<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>',
-								</c:when>
-								<c:otherwise>
-									actions:'<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" index="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>',
-								</c:otherwise>
-							</c:choose>
-							
-							<c:choose>
-							<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
-							isApprover:'y'
-							</c:when>
-							<c:otherwise>
-							isApprover:'n'
-							</c:otherwise>
-						</c:choose>
-							
-							},
-						</c:forEach>
-		
-			      		];
-	$(function() {
-			if((navigator.userAgent.toLowerCase().indexOf("msie") > -1)&& jQuery.support.boxModel == false)
-				{
-					/*Dialog for IE Quirk mode*/
-					$(function() { 
-						
-									$("#browserCompAdv").show();
-									$("#dialogQuirk").html('<spring:message code="error.prop.leave.app.quirk.mode.text"/>'); 
-   	 								$("#dialogQuirk").dialog(
-                                       {
-                                       	resizable: false,
-                                       	width:400,
-                                       	height:200,
-                                       	modal: true,
-                           				close: function(event, ui) {
-                           					$("#dialogQuirk").hide();
-                           					return false;
-                           					},
-                         					buttons:
-                         						{
-                         						"<spring:message code='prop.leave.app.title.request.button.exit'/>": function() {
-                         						$( this ).dialog( "close" );
-                         						}
-                         						}
-                                       }		
-                                       ); 
-   	 							return false;                         
-					});
-					
-				}
-			else
-			{
-					$(function(){
-						for(var i=0;i<mydata.length;i++)
-							{
-							if (typeof mydata[i] !== 'undefined' && mydata[i] !== null)
-								{
-									if(mydata[i].isApprover=="y")
-										{
-											countApprover	=	countApprover + 1;
-										}
-									if(mydata[i].isApprover=="n")
-										{
-											countRequester	=	countRequester + 1;
-										}
-								}
-							
-							}
-						
-					});
-					
-					
-					$(function(){
-						
-						
-							if(countApprover != 0)
-									{
-								$('#list2').jqGrid({
-								   	//url:'server.php?q=2',
-									//datatype: "json",
-									datatype: "local",
-								   	colNames:[
-								   	          '<spring:message code="prop.leave.app.title.request.no"/>',
-								   	          '<spring:message code="prop.leave.app.title.request.leave.start.date"/>',
-								   	          '<spring:message code="prop.leave.app.title.request.leave.end.date"/>',
-								   	          '<spring:message code="prop.leave.app.title.request.leave.type"/>',
-								   	          //'<spring:message code="prop.leave.app.title.request.date"/>',
-								   	          '<spring:message code="prop.leave.app.title.request.status"/>',
-								   	       '<spring:message code="prop.leave.app.title.request.requester"/>',
-								   	          '<spring:message code="prop.leave.app.title.request.action"/>'
-								   	       	  //'approver'
-								   	          ],
-								   	colModel:[
-								   		{name:'reqNo',index:'reqNo',align:"right",width:'70%'},
-								   		{name:'startDate',index:'startDate',  align:"center",width:'60%'},
-								   		{name:'endDate',index:'endDate', align:"center",width:'60%'},
-								   		{name:'type',width:'90%',align:"${direction}"},		
-								   		//{name:'reqDate',index:'reqDate', align:"center",width:'60%'},
-								   		{name:'status',width:'80%',align:"${direction}"},
-								   		{name:'employee',align:"${direction}"},
-								   		{name:'actions',align:"${direction}"}
-								   		//{name:'approver',width:200}
-								   	],
-								   	rowNum:10,
-								   	autowidth: true,
-								   	shrinkToFit :true,
-								    forcefit: true,
-								   	rownumbers: true,
-								   	rowList:[10,20,30],
-								   	pager: '#pager2',
-								   	sortname: 'reqNo',
-								    viewrecords: true,
-								    sortorder: "desc",
-								    caption:'<spring:message code="prop.leave.app.title.request.approver.header"/> (<c:out value="${empName}"/>)'
-								});
-							
-								}
-						
-						
-					});
-				
-					$(function(){
-						
-						
-								if(countRequester != 0)
-									{
-								$('#list3').jqGrid({
-								   	//url:'server.php?q=2',
-									//datatype: "json",
-									datatype: "local",
-								   	colNames:[
-								   	          '<spring:message code="prop.leave.app.title.request.no"/>',
-								   	          '<spring:message code="prop.leave.app.title.request.leave.start.date"/>',
-								   	          '<spring:message code="prop.leave.app.title.request.leave.end.date"/>',
-								   	          '<spring:message code="prop.leave.app.title.request.leave.type"/>',
-								   	          //'<spring:message code="prop.leave.app.title.request.date"/>',
-								   	          '<spring:message code="prop.leave.app.title.request.status"/>',
-									   	       '<spring:message code="prop.leave.app.title.request.approver"/>',
-								   	          '<spring:message code="prop.leave.app.title.request.action"/>'
-								   	       	  //'approver'
-								   	          ],
-								   	colModel:[
-								   		{name:'reqNo',index:'reqNo',align:"right",width:'70%'},
-								   		{name:'startDate',index:'startDate',  align:"center", width:'60%'},
-								   		{name:'endDate',index:'endDate', align:"center",width:'60%'},
-								   		{name:'type',width:'90%',align:"${direction}"},		
-								   		//{name:'reqDate',index:'reqDate', align:"center",width:'60%'},
-								   		{name:'status',width:'80%',align:"${direction}"},
-								   		{name:'employee',align:"${direction}"},
-								   		{name:'actions',align:"${direction}"}
-								   		//{name:'approver',width:200}
-								   	],
-								   	rowNum:10,
-								   	autowidth: true,
-								   	shrinkToFit :true,
-								    forcefit: true,
-								   	rownumbers: true,
-								   	rowList:[10,20,30],
-								   	pager: '#pager3',
-								   	sortname: 'reqNo',
-								    viewrecords: true,
-								    sortorder: "desc",
-								    caption:'<spring:message code="prop.leave.app.title.request.requester.header"/> (<c:out value="${empName}"/>)' 
-								});
-								
-								}
-						
-					});
-				
-					
-					$(function(){
-						
-						
-							if(countApprover != 0)
-								{
-									for(var i=0;i<mydata.length;i++)
-									{
-									if (typeof mydata[i] !== 'undefined' && mydata[i] !== null)
-									{
-										if(mydata[i].isApprover=="y")
-											{
-											$('#list2').jqGrid('addRowData',i+1,mydata[i]);	
-											}
-										}
-									}
-								}
-							$('#backupDiv').remove();
-						
-					});
-				
-				
-					$(function(){  
-						
-						
-							if(countRequester != 0)
-								{
-									for(var i=0;i<mydata.length;i++)
-									{
-									if (typeof mydata[i] !== 'undefined' && mydata[i] !== null)
-									{
-										if(mydata[i].isApprover=="n")
-											{
-											$('#list3').jqGrid('addRowData',i+1,mydata[i]);	
-											}
-										}
-									}
-								}
-						
-						});
-					
-			}
 			
 			/*Dialog for approve request*/
 			$(function() { 
@@ -580,10 +263,6 @@
 			                                        });
 			    
 			}); 
-	return false;	
-	
-	});			
-			
 			
 			</script>
 		
@@ -592,87 +271,109 @@
 			<div id="dialogApprove" class="dialogApproveClass" title='<spring:message code="prop.leave.app.title.request.dialog.approve"/>' style="display:none;"></div>	
 			<div id="dialogQuirk" class="dialogApproveClass" title='<spring:message code="error.prop.leave.app.quirk.mode.title"/>' style="display:none;"></div>
 
-		<div id="backupDiv">
-				<c:set value="0" var="cnt"/>
-				<fieldset > 
-						<legend><spring:message code="javax.portlet.title"/></legend>
-						
-				 <table border="1" style="border:1px solid; margin: 1em; border-collapse: collapse;">
-				 	<tr>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.no"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.start.date"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.date"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.status"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.requester"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.approver"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.action"/></th>
-				 	</tr>
-				 	<c:forEach items="${leaveRequests}" var="req" >
-						<portlet:renderURL var="varLeaveApprove">
-							<portlet:param name="action" value="leaveApprove"/>
-							<portlet:param name="reqNo" >
-							<jsp:attribute name="value">
-								<c:out value="${req.requestNo}"/>
-							</jsp:attribute>
-							</portlet:param>
-						</portlet:renderURL>
-						<portlet:renderURL var="varLeaveClarification">
-							<portlet:param name="action" value="updateLeaveApply"/>
-							<portlet:param name="reqNum" value="${req.requestNo}"/>
-							<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
-						</portlet:renderURL>
-						<portlet:actionURL var="varLeaveCancel">
-									<portlet:param name="action" value="leaveCancel"/>
-									<portlet:param name="reqNum" value="${req.requestNo}"/>
-									<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
-						</portlet:actionURL>
+			<c:set var="appCount" value="0"/>
+			<c:set var="reqCount" value="0"/>
+			<c:forEach items="${leaveRequests}" var="req" >
+				<c:choose>
+					<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
+						<c:set var="isApprover" value="y"/>
+						<c:set var="appCount" value="${(appCount) + 1}"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="isApprover" value="n"/>
+						<c:set var="reqCount" value="${reqCount+1}"/>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+
+<!-- 
+		Requester table
+ -->
+	<c:if test="${reqCount != 0}">
+		<fieldset >
+			<legend><spring:message code="prop.leave.app.title.request.requester.header"/> (<c:out value="${empName}"/>)</legend>
+			<center>
+			<table border="1" style="border:1px solid;  border-collapse: collapse; " width="100%">
+				<tr>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.no"/></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.start.date"/></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.date"/></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.status"/></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.approver"/></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.action"/></th>
+				</tr>
+				<c:forEach items="${leaveRequests}" var="req" >
 				
-						<c:choose> 
-							<c:when test='${(req.employee.senior && (req.employee.empNumber != empNumber))}'>
-							<c:set value="yellow" var="colYell"/>
-							<c:set value="${cnt+1}" var="cnt"/>
-							</c:when>
-							<c:otherwise>
-							<c:set value="white" var="colYell"/>
-							</c:otherwise>
-														
-						</c:choose>
+					<c:choose>
+						<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
+							<c:set var="isApprover" value="y"/>
+						</c:when>
+						<c:otherwise>
+							<c:set var="isApprover" value="n"/>
+						</c:otherwise>
+					</c:choose>
+				
+					<c:if test='${isApprover == "n"}'>
+					<portlet:renderURL var="varLeaveApprove">
+						<portlet:param name="action" value="leaveApprove"/>
+						<portlet:param name="reqNo" >
+						<jsp:attribute name="value">
+							<c:out value="${req.requestNo}"/>
+						</jsp:attribute>
+						</portlet:param>
+					</portlet:renderURL>
+	
+					<portlet:renderURL var="varLeaveClarification">
+						<portlet:param name="action" value="updateLeaveApply"/>
+						<portlet:param name="reqNum" value="${req.requestNo}"/>
+						<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
+					</portlet:renderURL>
+					<portlet:actionURL var="varLeaveCancel">
+						<portlet:param name="action" value="leaveCancel"/>
+						<portlet:param name="reqNum" value="${req.requestNo}"/>
+						<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
+					</portlet:actionURL>
+				<tr>
+						<td class="clsNum">
+							<c:choose>
+								<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber) && (req.sabbaticalLowerApproverAction && ! ((req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected))))}">
+									<a href="${varLeaveApprove}"><font color="red"><c:out value="${req.requestNo}"/></font></a>
+								</c:when>
+								<c:otherwise>
+									<c:out value="${req.requestNo}"/>
+								</c:otherwise>
+							</c:choose>
+						</td>
+						<td class="clsDate">
+							<c:out value="${req.leaveStartDate}"/>
+						</td>
+						<td class="clsDate">
+							<c:out value="${req.leaveEndDate}"/>
+						</td>
+						<td>
+							<c:out value="${req.leaveType.typeDesc}"/>
+						</td>
+						<td class="clsDate">
+							<c:out value="${req.requestDate}"/>
+						</td>
+						<td>
+							<c:out value="${req.leaveStatus}"/>
+						</td>
+						<td>
+							<c:choose>
+								<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
+									<c:out value="${req.employee.empName}"/>
+								</c:when>
+								<c:otherwise>
+									<c:out value="${req.approve.employee.empName}"/>
+								</c:otherwise>
+							</c:choose>
+						</td>
+						<td>
 						
-						<tr bgcolor="${colYell}">
-							<td>
-								<c:choose>
-									<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
-										<a href="${varLeaveApprove}"><c:out value="${req.requestNo}"/></a>
-									</c:when>
-									<c:otherwise>
-										<c:out value="${req.requestNo}"/>
-									</c:otherwise>
-								</c:choose>
-							</td>
-							<td>
-								<c:out value="${req.leaveStartDate}"/>
-							</td>
-							<td>
-								<c:out value="${req.leaveEndDate}"/>
-							</td>
-							<td>
-								<c:out value="${req.leaveType.typeDesc}"/>
-							</td>
-							<td>
-								<c:out value="${req.requestDate}"/>
-							</td>
-							<td>
-								<c:out value="${req.leaveStatus}"/>
-							</td>
-							<td>
-								<c:out value="${req.employee.empName}"/> 
-							</td>
-							<td>
-								<c:out value="${req.approve.employee.empName}"/> 
-							</td>
-							<td>
+						
 								<portlet:renderURL var="varLeaveView">
 									<portlet:param name="action" value="leaveView"/>
 									<portlet:param name="reqNo" value="${req.requestNo}"/>
@@ -681,68 +382,210 @@
 								<c:choose>
 									<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
 										<c:choose>
-												<c:when test="${(req.status.statusCode == leaveStatusApproved) || 
-														         (req.status.statusCode == leaveStatusRejected) ||
-														         (req.status.statusCode == furtherClarification )}">
-													<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
-												</c:when>
+											<c:when test="${(req.status.statusCode == leaveStatusApproved || 
+													         req.status.statusCode == leaveStatusRejected) ||
+													         (req.status.statusCode == furtherClarification)}">
+												<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
+											</c:when>
+											<c:when test="${!(req.sabbaticalLowerApproverAction)}">
+												<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
+											</c:when>
 											<c:otherwise>
-												<c:forEach items="${adminActions}" var="admActions">
-													<portlet:actionURL var="varLeaveAdminAction">
-													   <portlet:param name="action" value="leaveAutoAdminAction"/>
-													   <portlet:param name="reqNum" value="${req.requestNo}"/>
-													   <portlet:param name="appActionNum" value="${admActions.actionCode}"/>
-													</portlet:actionURL>
-													<c:if test="${(admActions.actionCode == leaveActionApprove)}">
-														 <a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a> &nbsp; 
-													</c:if>
-													<c:if test="${(admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">
-														<a href="${varLeaveApprove}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;
-													</c:if>
-													
-												</c:forEach>
+													 	<c:forEach items="${adminActions}" var="admActions">
+														<portlet:actionURL var="varLeaveAdminAction">
+														<portlet:param name="action" value="leaveAutoAdminAction"/>
+														<portlet:param name="reqNum" value="${req.requestNo}"/>
+														<portlet:param name="appActionNum" value="${admActions.actionCode}"/>
+														</portlet:actionURL>
+	
+														<portlet:renderURL var="varLeaveApprove2">
+														<portlet:param name="action" value="leaveApprove2"/>
+														<portlet:param name="reqNo" value="${req.requestNo}"/>
+														<portlet:param name="_approverAction" value="${admActions.actionCode}"/>
+														</portlet:renderURL>
+	
+														<c:if test="${(admActions.actionCode == leaveActionApprove)}">
+																|&nbsp;&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		
+															</c:if>
+															<c:if test="${(admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">
+																&nbsp;&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		
+															</c:if>
+														</c:forEach>
 											</c:otherwise>
-										</c:choose>		
+										</c:choose>
 									</c:when>
 									<c:when test="${(req.status.statusCode == furtherClarification)}">
-										<portlet:renderURL var="varLeaveClarification">
-											<portlet:param name="action" value="updateLeaveApply"/>
-											<portlet:param name="reqNum" value="${req.requestNo}"/>
-											<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
-										</portlet:renderURL>
-											<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | 
-											<a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a> 
+										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a>
 									</c:when>
 									<c:when test="${(req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected)}">
-											<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
+										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
+									</c:when>
+									<c:when test="${(req.approverSequenceNo != 1)}">
+										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
 									</c:when>
 									<c:otherwise>
-										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> 
-										<a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a>
-										<a href="" class="mydialogCls" reqNo="${req.requestNo}" index="${varLeaveCancel}"  ><spring:message code="prop.leave.app.title.request.cancel" /></a>
+										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" index="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
 									</c:otherwise>
 								</c:choose>
-							</td>
-						</tr>
-				 	</c:forEach>
-				 </table>
-				 </fieldset>
-					<c:if test="${cnt!=0}">
-						 <spring:message code="prop.leave.app.title.request.note"/>
-				 	</c:if>
-				 <table>
-				 	<tr>
-				 		<td></td><td></td>
-				 	</tr>
-				 </table>
-<!-- -------------------TODO Changes--------------------------- -->
+						</td>
+				</tr>
+				</c:if>
+				</c:forEach>
+				
+			</table>
+		</center>
+		</fieldset>
+	</c:if>
 
-			</div>
-		</c:if>
-		
+<!-- 
+		Approver table
+ -->	
+<c:if test="${appCount != 0}">
+	<fieldset >
+		<legend><spring:message code="prop.leave.app.title.request.approver.header"/> (<c:out value="${empName}"/>)</legend>
+		<table border="1" style="border:1px solid;  border-collapse: collapse;" width="100%">
+			<tr>
+					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.no"/></th>
+					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.start.date"/></th>
+					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
+					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
+					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.date"/></th>
+					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.status"/></th>
+					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.requester"/></th>
+					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.action"/></th>
+			</tr>
+			<c:forEach items="${leaveRequests}" var="req" >
+			
+				<c:choose>
+					<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
+						<c:set var="isApprover" value="y"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="isApprover" value="n"/>
+					</c:otherwise>
+				</c:choose>
+			
+				<c:if test='${isApprover == "y"}'>
+				<portlet:renderURL var="varLeaveApprove">
+					<portlet:param name="action" value="leaveApprove"/>
+					<portlet:param name="reqNo" >
+					<jsp:attribute name="value">
+						<c:out value="${req.requestNo}"/>
+					</jsp:attribute>
+					</portlet:param>
+				</portlet:renderURL>
 
+				<portlet:renderURL var="varLeaveClarification">
+					<portlet:param name="action" value="updateLeaveApply"/>
+					<portlet:param name="reqNum" value="${req.requestNo}"/>
+					<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
+				</portlet:renderURL>
+				<portlet:actionURL var="varLeaveCancel">
+					<portlet:param name="action" value="leaveCancel"/>
+					<portlet:param name="reqNum" value="${req.requestNo}"/>
+					<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
+				</portlet:actionURL>
+			<tr>
+					<td class="clsNum">
+						<c:choose>
+							<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber) && (req.sabbaticalLowerApproverAction && ! ((req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected))))}">
+								<a href="${varLeaveApprove}"><font color="red"><c:out value="${req.requestNo}"/></font></a>
+							</c:when>
+							<c:otherwise>
+								<c:out value="${req.requestNo}"/>
+							</c:otherwise>
+						</c:choose>
+					</td>
+					<td class="clsDate">
+						<c:out value="${req.leaveStartDate}"/>
+					</td>
+					<td class="clsDate">
+						<c:out value="${req.leaveEndDate}"/>
+					</td>
+					<td>
+						<c:out value="${req.leaveType.typeDesc}"/>
+					</td>
+					<td class="clsDate">
+						<c:out value="${req.requestDate}"/>
+					</td>
+					<td>
+						<c:out value="${req.leaveStatus}"/>
+					</td>
+					<td>
+						<c:choose>
+							<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
+								<c:out value="${req.employee.empName}"/>
+							</c:when>
+							<c:otherwise>
+								<c:out value="${req.approve.employee.empName}"/>
+							</c:otherwise>
+						</c:choose>
+					</td>
+					<td>
+					
+					
+							<portlet:renderURL var="varLeaveView">
+								<portlet:param name="action" value="leaveView"/>
+								<portlet:param name="reqNo" value="${req.requestNo}"/>
+								<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
+							</portlet:renderURL>
+							<c:choose>
+								<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
+									<c:choose>
+										<c:when test="${(req.status.statusCode == leaveStatusApproved || 
+												         req.status.statusCode == leaveStatusRejected) ||
+												         (req.status.statusCode == furtherClarification)}">
+											<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
+										</c:when>
+										<c:when test="${!(req.sabbaticalLowerApproverAction)}">
+											<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
+										</c:when>
+										<c:otherwise>
+												 	<c:forEach items="${adminActions}" var="admActions">
+													<portlet:actionURL var="varLeaveAdminAction">
+													<portlet:param name="action" value="leaveAutoAdminAction"/>
+													<portlet:param name="reqNum" value="${req.requestNo}"/>
+													<portlet:param name="appActionNum" value="${admActions.actionCode}"/>
+													</portlet:actionURL>
 
-		
+													<portlet:renderURL var="varLeaveApprove2">
+													<portlet:param name="action" value="leaveApprove2"/>
+													<portlet:param name="reqNo" value="${req.requestNo}"/>
+													<portlet:param name="_approverAction" value="${admActions.actionCode}"/>
+													</portlet:renderURL>
+
+													<c:if test="${(admActions.actionCode == leaveActionApprove)}">
+															|&nbsp;&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		
+														</c:if>
+														<c:if test="${(admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">
+															&nbsp;&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		
+														</c:if>
+													</c:forEach>
+										</c:otherwise>
+									</c:choose>
+								</c:when>
+								<c:when test="${(req.status.statusCode == furtherClarification)}">
+									<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a>
+								</c:when>
+								<c:when test="${(req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected)}">
+									<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
+								</c:when>
+								<c:when test="${(req.approverSequenceNo != 1)}">
+									<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
+								</c:when>
+								<c:otherwise>
+									<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" index="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
+								</c:otherwise>
+							</c:choose>					
+					</td>
+			</tr>
+			</c:if>
+			</c:forEach>
+		</table>
+	</fieldset>
+</c:if>
+
+	</c:if>		
 		<portlet:renderURL var="newApply">
 			<portlet:param name="action" value="newApply"/>
 		</portlet:renderURL>

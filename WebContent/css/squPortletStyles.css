@@ -226,3 +226,19 @@ a.down-big {
     font-size: 16px;
     padding: 10px 15px;
 }
+th
+{
+	padding: 5px;
+}
+td
+{
+	padding: 5px;
+}
+td.clsDate
+{
+	text-align: center;
+}
+td.clsNum
+{
+	text-align: right;
+}
