@@ -55,6 +55,7 @@ import om.edu.squ.squportal.portlet.leaveapp.utility.UtilFile;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailApprove;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailCancel;
+import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailGeneral;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailLeave;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailReject;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailReturn;
@@ -367,6 +368,25 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	{
 		return leaveDbDao.getLeaveApproveHistory(requestNo, locale);
 	}
+
+	/**
+	 * 
+	 * method name  : getLeaveApproveHistory
+	 * @param requestNo
+	 * @param appEmpNumber
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<LeaveApprove>
+	 * 
+	 * purpose		: Get Approver History of a particular approver for particular request number
+	 *
+	 * Date    		:	Apr 14, 2013 1:04:50 PM
+	 */
+	public List<LeaveApprove>	getLeaveApproveHistory(String requestNo, String appEmpNumber, Locale locale)
+	{
+		return leaveDbDao.getLeaveApproveHistory(requestNo, appEmpNumber, locale);
+	}
 	
 	/**
 	 * 
@@ -644,12 +664,28 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		boolean			result			=	false;
 		EmailLeave		emailLeave		=	null;		
 		LeaveRequest	leaveRequest	=	getLeaveRequest(appEmpNumber, requestNo, locale);
-		LeaveApprove	leaveApprove	=	getLeaveApproveHistory(requestNo, locale).get(0);
+		LeaveApprove	leaveApprove	=	getLeaveApproveHistory(requestNo,appEmpNumber, locale).get(0);
+		LeaveType		leaveTypeFlag	=	leaveRequest.getLeaveTypeFlag();
 		
 		if(ApproverAction.equals(Constants.CONST_LEAVE_ACTION_APPROVE))
 		{
 			emailLeave	=	new EmailApprove(leaveRequest, leaveApprove, null, emailService,locale);
 			result		=	emailLeave.sendEmail(true, true);
+			/**
+			 * For Sabbatical leave
+			 * send mail to next higher approver on successful leave approved by immediate approver
+			 * 
+			 */
+			if(leaveTypeFlag.getTypeNo().equals(Constants.CONST_LEAVE_TYPE_FLAG_SABBATICAL))
+			{
+				int sequenceNo	=	leaveRequest.getApproverSequenceNo();
+				if  (sequenceNo < leaveDbDao.getMaxLeaveApproverSequence(requestNo))
+				{
+					LeaveApprove	leaveApproveSeq	=	leaveDbDao.getLeaveApproveHistorySequence(requestNo, String.valueOf(sequenceNo+1), locale).get(0);
+					emailLeave	=	new EmailGeneral(true, leaveRequest, leaveApproveSeq, null, emailService, locale);
+					result		=	emailLeave.sendEmail(true, true);
+				}
+			}
 			
 		}else
 			if(ApproverAction.equals(Constants.CONST_LEAVE_ACTION_RETURN))

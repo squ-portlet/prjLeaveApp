@@ -96,6 +96,7 @@ public interface Constants
 	public static final	String	CONST_ACTION_DATE				=			"ACTION_DATE";
 	public static final	String	CONST_APPROVER_REMARK			=			"APPROVER_REMARK";
 	public static final	String	CONST_APPROVER_SEQUENCE_NO		=			"APPROVER_SEQUENCE_NO";
+	public static final	String	CONST_APPROVER_MAX_SEQUENCE_NO	=			"APPROVER_MAX_SEQUENCE_NO";
 	public static final	String	CONST_APPROVER_NEXT_SEQUENCE_NO	=			"APPROVER_NEXT_SEQUENCE_NO";
 	public static final	String	CONST_APPROVER_BEFORE_ACTION	=			"SAB_ACTION_LOWER";
 	public static final	String	CONST_DELEGATE_START_DATE		=			"DELEGATE_START_DATE";
@@ -119,6 +120,8 @@ public interface Constants
 	public static final	String	CONST_LEAVE_ACTION_APPROVE		=			"0000000001";
 	public static final	String	CONST_LEAVE_ACTION_RETURN		=			"0000000002";
 	public static final	String	CONST_LEAVE_ACTION_REJECT		=			"0000000003";
+	
+	public static final String	CONST_LEAVE_TYPE_FLAG_SABBATICAL =			"B";
 	
 	public static final	String	CONST_LEAVE_ACTION_APPROVE_DESC	=			"APPROVE";
 	public static final	String	CONST_LEAVE_ACTION_RETURN_DESC	=			"RETURN";
@@ -833,6 +836,7 @@ public interface Constants
 																			"							AS EMP_ADDITIONAL_POSITION_DESC," +
 																			"	LVAPRV.VHM_ACTION_CODE AS ACTION_CODE,					" +
 																			"	LVAPRV.VHM_APP_REMARKS AS APPROVER_REMARK,				" +
+																			"	LVAPRV.VHM_APP_SEQ_NO AS APPROVER_SEQUENCE_NO,			" +
 																			"	LVREQ.VHM_SUGGESTED_APP_EMP_CODE 						" +
 																			"						AS SUGGESTED_APPROVER_CODE,			" +
 																			"   EMP.VHM_EMP_BRAN_CODE AS EMP_APP_BRANCH_CODE,			" +
@@ -912,10 +916,74 @@ public interface Constants
 																			"	AND APP.VHM_ACTION_CODE=WFACTION.VHM_ACTION_CODE(+)		" +
 																			"	AND APP.VHM_LEAVE_REQ_NO = :paramReqNo					" +
 																			"	ORDER BY VHM_APP_ACTION_DATE DESC 						";
+
+	public static final String	SQL_LEAVE_APPROVE_HISTORY_EMPLOYEE_NUM	=	" SELECT													" +
+																			"	VHM_APP_EMP_CODE AS EMP_CODE,							" +
+																			"	DECODE(													" +
+																			"	      :paramLocale,												" +
+																			"	      'en',initcap(EMP.VHM_EMP_NAME),					" +
+																			"	      'ar',EMP.VHM_EMP_NAME_ARABIC						" +
+																			"	      ) AS EMP_NAME,									" +
+																			"	initcap(EMP.VHM_EMP_NAME) AS EMP_NAME_EN,				" +
+																			"	EMP.VHM_EMP_NAME_ARABIC AS EMP_NAME_AR,					" + 
+																			"  SUBSTR(													" +
+																			"			EMP.VHM_EMP_SQU_EMAIL,1,						" +
+																			"			INSTRB(EMP.VHM_EMP_SQU_EMAIL, '@', 1, 1)-1		" +
+																			"		  ) AS EMP_INTERNET_ID,								" +
+																			"	TO_CHAR(VHM_APP_ACTION_DATE,'dd-mm-yyyy hh:mi AM') AS ACTION_DATE, " +
+																			"	APP.VHM_ACTION_CODE AS ACTION_CODE,						" +
+																			"	DECODE( 												" +
+																			"	  :paramLocale,											" +
+																			"	  'en',initCap(VHM_ACTION_DESC),						" +
+																			"	  'ar',VHM_ACTION_DESC_ARABIC							" +
+																			"	) AS ACTION_DESC,										" +
+																			"	VHM_APP_REMARKS AS APPROVER_REMARK						" +
+																			"	FROM VHM_EMP_LEAVE_REQUEST_APPROVAL APP,				" +
+																			"	VHM_WORKFLOW_ACTIONS WFACTION,							" +
+																			"	VHM_EMPLOYEE EMP										" +
+																			"	WHERE APP.VHM_APP_EMP_CODE = EMP.VHM_EMP_CODE			" +
+																			"	AND APP.VHM_ACTION_CODE=WFACTION.VHM_ACTION_CODE(+)		" +
+																			"	AND APP.VHM_LEAVE_REQ_NO = :paramReqNo					" +
+																			"	AND APP.VHM_APP_EMP_CODE = :paramEmpCode				" +
+																			"	ORDER BY VHM_APP_ACTION_DATE DESC 						";
+
+	public static final String	SQL_LEAVE_APPROVE_HISTORY_APP_SEQUENCE_NUM	=	" SELECT													" +
+																			"	VHM_APP_EMP_CODE AS EMP_CODE,							" +
+																			"	DECODE(													" +
+																			"	      :paramLocale,												" +
+																			"	      'en',initcap(EMP.VHM_EMP_NAME),					" +
+																			"	      'ar',EMP.VHM_EMP_NAME_ARABIC						" +
+																			"	      ) AS EMP_NAME,									" +
+																			"	initcap(EMP.VHM_EMP_NAME) AS EMP_NAME_EN,				" +
+																			"	EMP.VHM_EMP_NAME_ARABIC AS EMP_NAME_AR,					" + 
+																			"  SUBSTR(													" +
+																			"			EMP.VHM_EMP_SQU_EMAIL,1,						" +
+																			"			INSTRB(EMP.VHM_EMP_SQU_EMAIL, '@', 1, 1)-1		" +
+																			"		  ) AS EMP_INTERNET_ID,								" +
+																			"	TO_CHAR(VHM_APP_ACTION_DATE,'dd-mm-yyyy hh:mi AM') AS ACTION_DATE, " +
+																			"	APP.VHM_ACTION_CODE AS ACTION_CODE,						" +
+																			"	DECODE( 												" +
+																			"	  :paramLocale,											" +
+																			"	  'en',initCap(VHM_ACTION_DESC),						" +
+																			"	  'ar',VHM_ACTION_DESC_ARABIC							" +
+																			"	) AS ACTION_DESC,										" +
+																			"	VHM_APP_REMARKS AS APPROVER_REMARK						" +
+																			"	FROM VHM_EMP_LEAVE_REQUEST_APPROVAL APP,				" +
+																			"	VHM_WORKFLOW_ACTIONS WFACTION,							" +
+																			"	VHM_EMPLOYEE EMP										" +
+																			"	WHERE APP.VHM_APP_EMP_CODE = EMP.VHM_EMP_CODE			" +
+																			"	AND APP.VHM_ACTION_CODE=WFACTION.VHM_ACTION_CODE(+)		" +
+																			"	AND APP.VHM_LEAVE_REQ_NO = :paramReqNo					" +
+																			"	AND APP.VHM_APP_SEQ_NO = :paramAppSeqNo					" +
+																			"	ORDER BY VHM_APP_ACTION_DATE DESC 						";
+
+	public static final String	SQL_LEAVE_APPROVE_MAX_SEQUENCE_NUM	=		"	SELECT MAX(VHM_APP_SEQ_NO) AS APPROVER_MAX_SEQUENCE_NO	" +
+																			"	FROM VHM_EMP_LEAVE_REQUEST_APPROVAL APP					" +
+																			"	WHERE APP.VHM_LEAVE_REQ_NO = :paramReqNo				"; 
 	
-	public static final String	SQL_INSERT_LEAVE_REQUEST		=			" INSERT INTO VHM_EMP_LEAVE_REQUEST 						  " +
+	public static final String	SQL_INSERT_LEAVE_REQUEST			=		" INSERT INTO VHM_EMP_LEAVE_REQUEST 						  " +
 																			" (															  " +
-																			" VHM_LEAVE_REQ_NO, VHM_LEAVE_REQ_DATE,VHM_STATUS_CODE, " +
+																			" VHM_LEAVE_REQ_NO, VHM_LEAVE_REQ_DATE,VHM_STATUS_CODE, 	  " +
 																			" VHM_EMP_CODE, VHM_EMP_INTERNET_USR_ID,VHM_LEAVE_START_DATE, " +
 																			" VHM_LEAVE_END_DATE, 										  " +
 																			" VHM_BRANCH_CODE,VHM_DEPT_CODE, VHM_SECTION_CODE,			  " +

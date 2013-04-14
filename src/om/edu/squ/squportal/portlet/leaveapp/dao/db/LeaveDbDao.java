@@ -324,6 +324,53 @@ public interface LeaveDbDao
 	
 	/**
 	 * 
+	 * method name  : getLeaveApproveHistory
+	 * @param requestNo
+	 * @param appEmpNumber
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<LeaveApprove>
+	 * 
+	 * purpose		: Get Approver History of a particular approver for particular request number
+	 *
+	 * Date    		:	Apr 14, 2013 1:04:50 PM
+	 */
+	public List<LeaveApprove>	getLeaveApproveHistory(String requestNo, String appEmpNumber, Locale locale);
+	
+	/**
+	 * 
+	 * method name  : getLeaveApproveHistorySequence
+	 * @param requestNo
+	 * @param sequenceNo
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<LeaveApprove>
+	 * 
+	 * purpose		:	 Get Approver History of a particular sequence number for particular request number
+	 *
+	 * Date    		:	Apr 14, 2013 3:05:42 PM
+	 */
+	public List<LeaveApprove>	getLeaveApproveHistorySequence(String requestNo, String sequenceNo, Locale locale);
+	
+	/**
+	 * 
+	 * method name  : getMaxLeaveApproverSequence
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: Maximum sequence number of leave approver of a particular leave request
+	 *
+	 * Date    		:	Apr 14, 2013 3:32:56 PM
+	 */
+	public int getMaxLeaveApproverSequence(String requestNo);
+	
+	
+	/**
+	 * 
 	 * method name  : getSabaSabbatical
 	 * @param empNumber
 	 * @return

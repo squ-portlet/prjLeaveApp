@@ -51,6 +51,7 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 	private	EmailData		emailData			= 	null;
 	private	Locale 			locale				=	null;
 	private	boolean			isNewEmail			=	false;
+	private	boolean			isSabbatical		=	false;
 	
 
 	/**
@@ -104,6 +105,31 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 		
 	}
 	
+	/**
+	 * 
+	 * Constructor
+	 * @param SabbaticalRequired
+	 * @param leaveRequestNo
+	 * @param leaveRequest
+	 * @param leaveApprove
+	 * @param delegatedEmps
+	 * @param emailService
+	 * @param locale
+	 *
+	 */
+	public EmailGeneral
+	(
+			boolean SabbaticalRequired, LeaveRequest leaveRequest, 
+			LeaveApprove leaveApprove,DelegatedEmp[] delegatedEmps, 
+			EmailService emailService,Locale locale
+	)
+	{
+		this.emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps,emailService,locale);
+		this.isNewEmail	=	false;
+		isSabbatical	=	SabbaticalRequired;
+		this.locale		=	locale;
+	}
+	
 	
 	/**
 	 * 
@@ -135,10 +161,18 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 		}
 		else
 		{
-			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null));
-			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null, ARABIC));
+			if(isSabbatical)
+			{
+				this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester.sabbatical",null));
+				this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester.sabbatical",null, ARABIC));
+			}
+				
+			else
+			{
+				this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null));
+				this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null, ARABIC));
+			}
 		}
-		
 		return sendLeaveEmail();
 	}
 	
@@ -170,12 +204,19 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver",null));
 			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver",null, ARABIC));
 		}
-		else
+		else 
 		{
-			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null));
-			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null, ARABIC));
+			if(isSabbatical)
+			{
+				this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver.sabbatical",null));
+				this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver.sabbatical",null, ARABIC));
+			}
+			else
+			{
+				this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null));
+				this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null, ARABIC));
+			}
 		}
-		
 		return sendLeaveEmail();
 	}
 

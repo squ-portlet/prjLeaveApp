@@ -1474,7 +1474,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveRequest.setSuggestedHod(rs.getString(Constants.CONST_SUGGESTED_APPROVER_CODE));
 					leaveRequest.setApprove(approve);
 					leaveRequest.setApproverId(rs.getString(Constants.CONST_EMP_APP_CODE));
-					
+					leaveRequest.setApproverSequenceNo(rs.getInt(Constants.CONST_APPROVER_SEQUENCE_NO));
 				return leaveRequest;
 			
 		}
@@ -1601,7 +1601,127 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 
 		return this.namedParameterJdbcTemplate.query(Constants.SQL_LEAVE_APPROVE_HISTORY, namedParameters, mapper);
 	}
+	
+	/**
+	 * 
+	 * method name  : getLeaveApproveHistory
+	 * @param requestNo
+	 * @param appEmpNumber
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<LeaveApprove>
+	 * 
+	 * purpose		: Get Approver History of a particular approver for particular request number
+	 *
+	 * Date    		:	Apr 14, 2013 1:04:50 PM
+	 */
+	public List<LeaveApprove>	getLeaveApproveHistory(String requestNo, String appEmpNumber, Locale locale)
+	{
+		RowMapper<LeaveApprove> mapper	=	new RowMapper<LeaveApprove>()
+		{
+			
+			public LeaveApprove mapRow(ResultSet rs, int rowNum) throws SQLException
+			{
+				LeaveApprove	approve		=	new LeaveApprove();
+				AdminAction		action		=	new AdminAction();
+				Employee		employee	=	new Employee();
+				
+				action.setActionCode(rs.getString(Constants.CONST_ACTION_CODE));
+				action.setActionDesc(rs.getString(Constants.CONST_ACTION_DESC));
+				action.setActionDate(rs.getString(Constants.CONST_ACTION_DATE));
+				action.setAdminActionRemark(rs.getString(Constants.CONST_APPROVER_REMARK));
+				
+				employee.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
+				employee.setEmpName(rs.getString(Constants.CONST_EMP_NAME));
+				employee.setEmpNameEn(rs.getString(Constants.CONST_EMP_NAME_EN));
+				employee.setEmpNameAr(rs.getString(Constants.CONST_EMP_NAME_AR));
+				employee.setEmpInternetId(rs.getString(Constants.CONST_EMP_INTERNET_ID));
+				
+				approve.setAction(action);
+				approve.setEmployee(employee);
+				
+				return approve;
+			}
+		};
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramLocale", locale.getLanguage());
+		namedParameters.put("paramReqNo", requestNo);
+		namedParameters.put("paramEmpCode", appEmpNumber);
 
+		return this.namedParameterJdbcTemplate.query(Constants.SQL_LEAVE_APPROVE_HISTORY_EMPLOYEE_NUM, namedParameters, mapper);
+	}
+	
+	/**
+	 * 
+	 * method name  : getLeaveApproveHistorySequence
+	 * @param requestNo
+	 * @param sequenceNo
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<LeaveApprove>
+	 * 
+	 * purpose		:	 Get Approver History of a particular sequence number for particular request number
+	 *
+	 * Date    		:	Apr 14, 2013 3:05:42 PM
+	 */
+	public List<LeaveApprove>	getLeaveApproveHistorySequence(String requestNo, String sequenceNo, Locale locale)
+	{
+		RowMapper<LeaveApprove> mapper	=	new RowMapper<LeaveApprove>()
+		{
+			
+			public LeaveApprove mapRow(ResultSet rs, int rowNum) throws SQLException
+			{
+				LeaveApprove	approve		=	new LeaveApprove();
+				AdminAction		action		=	new AdminAction();
+				Employee		employee	=	new Employee();
+				
+				action.setActionCode(rs.getString(Constants.CONST_ACTION_CODE));
+				action.setActionDesc(rs.getString(Constants.CONST_ACTION_DESC));
+				action.setActionDate(rs.getString(Constants.CONST_ACTION_DATE));
+				action.setAdminActionRemark(rs.getString(Constants.CONST_APPROVER_REMARK));
+				
+				employee.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
+				employee.setEmpName(rs.getString(Constants.CONST_EMP_NAME));
+				employee.setEmpNameEn(rs.getString(Constants.CONST_EMP_NAME_EN));
+				employee.setEmpNameAr(rs.getString(Constants.CONST_EMP_NAME_AR));
+				employee.setEmpInternetId(rs.getString(Constants.CONST_EMP_INTERNET_ID));
+				
+				approve.setAction(action);
+				approve.setEmployee(employee);
+				
+				return approve;
+			}
+		};
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramLocale", locale.getLanguage());
+		namedParameters.put("paramReqNo", requestNo);
+		namedParameters.put("paramAppSeqNo", sequenceNo);
+
+		return this.namedParameterJdbcTemplate.query(Constants.SQL_LEAVE_APPROVE_HISTORY_APP_SEQUENCE_NUM, namedParameters, mapper);
+	}
+
+	/**
+	 * 
+	 * method name  : getMaxLeaveApproverSequence
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: Maximum sequence number of leave approver of a particular leave request
+	 *
+	 * Date    		:	Apr 14, 2013 3:32:56 PM
+	 */
+	public int getMaxLeaveApproverSequence(String requestNo)
+	{
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramReqNo", requestNo);
+		
+		return this.namedParameterJdbcTemplate.queryForInt(Constants.SQL_LEAVE_APPROVE_MAX_SEQUENCE_NUM, namedParameters);
+	}
+	
 	/**
 	 * 
 	 * method name  : getSabaSabbatical
