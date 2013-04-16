@@ -104,8 +104,11 @@ public interface Constants
 	public static final	String	CONST_DELEGATE_STATUS			=			"DELEGATE_STATUS";
 	public static final	String	CONST_SUGGESTED_APPROVER_CODE	=			"SUGGESTED_APPROVER_CODE";
 	
-	
-
+	public static final	String	CONST_BUDGET_YEAR_FROM			=			"BUDGET_YEAR_FROM";
+	public static final	String	CONST_BUDGET_YEAR_TO			=			"BUDGET_YEAR_TO";
+	public static final	String	CONST_BUDGET_DESCRIPTION		=			"BUDGET_DESCRIPTION";
+	public static final	String	CONST_BUDGET_DESCRIPTION_SHORT	=			"BUDGET_DESCRIPTION_SHORT";
+	public static final	String	CONST_BUDGET_REMARKS			=			"BUDGET_REMARKS";
 	
 	public static final	String	CONST_COUNTER					=			"COUNTER";
 	
@@ -659,7 +662,7 @@ public interface Constants
 																			"		)													" +
 																			" UNION														" +
 																			"	SELECT DISTINCT	VHM_EMP_CODE AS EMP_CODE,				" +						
-																		  	"	DECODE('en',											" +
+																		  	"	DECODE(:paramLocale,									" +
 																		  	"			'en',initCap(VHM_EMP_NAME) , 					" +
 																		  	"			'ar',VHM_EMP_NAME_ARABIC 						" +
 																		  	"		)	AS EMP_NAME , HIR.VHM_LEVEL AS EMP_LEVEL		" +	
@@ -1083,7 +1086,19 @@ public interface Constants
 																			" WHERE															" +
 																			"    REQ_DELG.VHM_DELEGATED_EMP_CODE = EMP.VHM_EMP_CODE			" +
 																			"    AND REQ_DELG.VHM_LEAVE_REQ_NO = :paramLeaveReqNo			";
-																			
+
+	public static final String	SQL_VIEW_BUDGET					=			" SELECT 	BDGID_BUDG_ID    AS LEAVE_RESEARCH_ID,				" +
+																			" 			BDGID_FR_YR_ID   AS BUDGET_YEAR_FROM,				" + 
+																			"    		BDGID_TO_YR_ID   AS BUDGET_YEAR_TO,					" +
+																			"			BDGID_DESC	     AS BUDGET_DESCRIPTION , 			" +
+																			"    		BDGID_SHORT_DESC AS BUDGET_DESCRIPTION_SHORT,		" +
+																			" 			BDGID_REMARKS	 AS BUDGET_REMARKS 					" +
+																			" FROM GLM_BUDG_ID_VIEW											" +
+																			" WHERE 														" +
+																			" UPPER(BDGID_BUDG_ID) LIKE UPPER(:paramResearchId)				" +
+																			" AND BDGID_ACTIVE_YN = 'Y'										" +
+																			" AND ROWNUM <= 10												";
+	
 
 	public static final String	SQL_INSERT_LEAVE_REQ_DELEGATION	=			" INSERT INTO VHM_EMP_LEAVE_REQ_DELEGATION 						" +
 																			" (  															" +

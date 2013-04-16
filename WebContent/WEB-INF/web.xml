@@ -73,4 +73,14 @@
     <servlet-name>LeaveAppHodServlet</servlet-name>
     <url-pattern>/LeaveAppHodServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description>Leave Application Research - (Budget)</description>
+    <display-name>LeaveAppResearch</display-name>
+    <servlet-name>LeaveAppResearch</servlet-name>
+    <servlet-class>om.edu.squ.squportal.portlet.leaveapp.servlet.LeaveAppResearchServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LeaveAppResearch</servlet-name>
+    <url-pattern>/LeaveAppResearch</url-pattern>
+  </servlet-mapping>
 </web-app>

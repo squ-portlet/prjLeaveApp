@@ -53,18 +53,22 @@
 <c:url value="/css/images/ui-bg_glass_75_e6e6e6_1x400.png" var="urlImgBgFlat75e6"/>
 <c:url value="/css/images/ui-bg_glass_75_dadada_1x400.png" var="urlImgBgFlat75d1"/>
 
+<c:url value="/css/images/ui-anim_basic_16x16.gif" var="urlImgAnimAuto"/>
 <%-- <spring:url value="/css/images/dk_arrows.png" var="urlImgDkArrow"/> --%>
 
 <c:url value="/css/squPortletStyles.css" var="urlCssSquPortletStyle"/>
 <c:url value="/css/jquery-ui-1.8.18.custom.css" var="urlJQueryCSS"/>
 <c:url value="/css/jquery.ui.accordion.css" var="urlJQueryAccordionCSS"/>
 <c:url value="/css/jquery.ui.theme.css" var="urlJQueryThemeCSS"/>
+<c:url value="/css/jquery.ui.autocomplete.css" var="urlJQueryAutoCompCSS"/>
 
 <%-- <c:url value="/css/dropkick.css" var="urlDropkickCSS"/> --%>
 
-<c:url value="/js/jquery-1.7.1.min.js" var="urlJsJqueryMin"/>
+<%-- <c:url value="/js/jquery-1.7.1.min.js" var="urlJsJqueryMin"/> --%>
+<c:url value="/js/jquery-1.7.1.js" var="urlJsJqueryMin"/>
 <c:url value="/js/jquery-ui-1.8.18.custom.min.js" var="urlJsJqueryCustom"/>
 <c:url value="/js/jquery.ui.accordion.js" var="urlJsJqueryAccordion"/>
+<c:url value="/js/jquery-ui-i18n.js" var="urlJsJqueryLocaleI18n"/>
 
 <c:url value="/js/jquery.ui.core.js" var="urlJsJqueryCore"/>
 <c:url value="/js/jquery.ui.widget.js" var="urlJsJqueryWidget"/>
@@ -73,17 +77,20 @@
 <c:url value="/js/jquery.ui.draggable.js" var="urlJsJqueryDraggable"/>
 <c:url value="/js/jquery.ui.position.js" var="urlJsJqueryPosition"/>
 <c:url value="/js/jquery.ui.dialog.js" var="urlJsJqueryDialog"/>
+<c:url value="/js/jquery.ui.autocomplete.js" var="urlJsJqueryAutocomplete"/>
 
 <link type="text/css" href="${urlJQueryCSS}" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="${urlCssSquPortletStyle}" />
 <link type="text/css" href="${urlJsJqueryAccordion}" rel="stylesheet" />
 <link type="text/css" href="${urlJQueryThemeCSS}" rel="stylesheet" />
+<link type="text/css" href="${urlJQueryAutoCompCSS}" rel="stylesheet" />
 
 <%-- <link type="text/css" href="${urlDropkickCSS}" rel="stylesheet" /> --%>
 
-<script type="text/javascript" src="${urlJsJqueryMin}"></script>
+<script type="text/javascript" src="${urlJsJqueryMin}" charset="utf-8"></script>
 <script type="text/javascript" src="${urlJsJqueryCustom}"></script>
 <script type="text/javascript" src="${urlJsJqueryAccordion}"></script>
+<%-- <script type="text/javascript" src="${urlJsJqueryLocaleI18n}"></script> --%>
 
 <script type="text/javascript" src="${urlJsJqueryCore}"></script>
 <script type="text/javascript" src="${urlJsJqueryWidget}"></script>
@@ -93,12 +100,33 @@
 <script type="text/javascript" src="${urlJsJqueryPosition}"></script>
 <script type="text/javascript" src="${urlJsJqueryDialog}"></script>
 
+<script type="text/javascript" src="${urlJsJqueryAutocomplete}"></script>
+
+
+
 <c:url value="/LeaveAppEmpServlet" var="servletLeave"/>
 <c:url value="/LeaveAppBranchServlet" var="servletLeaveBranch"/>
 <c:url value="/LeaveAppHodServlet" var="servletLeaveHOD"/>
+<c:url value="/LeaveAppResearch" var="servletResearch" />
 
-
-
+<c:if test="${rc.locale.language=='ar'}">
+	<style>
+		img.imgBck {
+	        -moz-transform: scaleX(-1);
+	        -o-transform: scaleX(-1);
+	        -webkit-transform: scaleX(-1);
+	        transform: scaleX(-1);
+	        filter: FlipH;
+	        -ms-filter: "FlipH";
+		}
+	</style>
+	<c:set var="direction" value="right"/>
+	<c:set var="directionOpp" value="left"/>
+</c:if>
+<c:if test="${rc.locale.language=='en'}">
+	<c:set var="direction" value="left"/>
+	<c:set var="directionOpp" value="right"/>
+</c:if>
 
 <style>
 .error
@@ -115,7 +143,9 @@
 	.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; background: #333333 url("${urlImgBgFlat}") 50% 50% repeat-x; opacity: .10;filter:Alpha(Opacity=10); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }
 	
 	.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #eeeeee; background: #ffffff url("${urlImgBgFlat65}") 50% 50% repeat-x; font-weight: bold; color: #cc0000; }
+/*
 	.ui-widget-content { border: 1px solid #eeeeee; background: #ffffff url("${urlImgBgFlat75}") 50% 50% repeat-x; color: #333333; }
+*/
 	.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {border: 1px solid #fcd3a1; background: #fbf8ee url("${urlImgBgGlass55}") 50% 50% repeat-x; color: #444444; }
 	.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #d8dcdf; background: #eeeeee url("${urlImgBgHighLightHard1}") 50% 50% repeat-x; font-weight: bold; color: #004276; }
 	.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #cdd5da; background: #f6f6f6 url("${urlImgBgHighLightHard2}") 50% 50% repeat-x; font-weight: bold; color: #111111; }
@@ -128,7 +158,9 @@
 	
 	
 	.ui-icon { width: 16px; height: 16px; background-image: url("${urlImgIcons2}"); }
+	/*
 	.ui-widget-content .ui-icon {background-image: url("${urlImgIcons2}"); }
+	*/
 	
 	.ui-widget-header .ui-icon {background-image: url("${urlImgIcons3}"); }
 	
@@ -136,28 +168,20 @@
 	.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url("${urlImgIcons2}"); }
 	.ui-state-active .ui-icon {background-image: url("${urlImgIcons2}"); }
 	.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url("${urlImgIcons2}"); }
+	/*
 	.ui-widget-content { border: 1px solid #aaaaaa/*{borderColorContent}*/; background: #ffffff/*{bgColorContent}*/ url("${urlImgBgFlat75}")/*{bgImgUrlContent}*/ 50%/*{bgContentXPos}*/ 50%/*{bgContentYPos}*/ repeat-x/*{bgContentRepeat}*/; color: #222222/*{fcContent}*/; }
-
+	*/
 	/*.dk_toggle {background-image: url("${urlImgDkArrow}");}*/
+	/*Ajax autocomplete list*/
+	.ui-menu-item {font-size: small;}
+	.ui-menu .ui-menu-item {font-size: small;}
+	.ui-autocomplete-loading { background: white url("${urlImgAnimAuto}") ${directionOpp} center no-repeat; }
 
+	/*autocomplete alternet color*/
+	.ui-menu-item-alternate { background: rgb(231, 217, 217); }
 </style>
 
-<c:if test="${rc.locale.language=='ar'}">
-	<style>
-		img.imgBck {
-	        -moz-transform: scaleX(-1);
-	        -o-transform: scaleX(-1);
-	        -webkit-transform: scaleX(-1);
-	        transform: scaleX(-1);
-	        filter: FlipH;
-	        -ms-filter: "FlipH";
-		}
-	</style>
-	<c:set var="direction" value="right"/>
-</c:if>
-<c:if test="${rc.locale.language=='en'}">
-	<c:set var="direction" value="left"/>
-</c:if>
+
 
 <script>
 var resDtIssueOK	=	true;
@@ -543,6 +567,51 @@ $(function() {
 	 				
 	 		});
 	});	
+	
+	/*AutoComplete feature at researchId for sabbatical leave*/
+	$(function() {
+		$( "#researchId" ).autocomplete({
+			source: function( request, response ) {
+				var researchId = $("#researchId").val();
+				$.ajax({
+					contentType: "application/json; charset=utf-8",
+					url: "${servletResearch}",
+					dataType: "json",
+					data: 'researchId='+researchId,
+					success: function( data ) {
+						response( $.map( data, function( item ) {
+							return {
+								label: item.budgetId +  ", " + item.budgetYearFrom + " - " + item.budgetYearTo + ", " + item.budgetDescription + ", " + item.budgetDescriptionShort +", " +item.budgetRemarks,
+								value: item.budgetId
+							}
+
+						}));
+
+					}
+
+				});
+			},
+		minLength: 2,
+		
+			open: function( event, ui ) {
+						 $( this ).autocomplete( "widget" )
+							 .find( "ui-menu-item-alternate" )
+								 .removeClass( "ui-menu-item-alternate" )
+							 .end()
+							 .find( "li.ui-menu-item:odd a" )
+								 .addClass( "ui-menu-item-alternate" );
+					 
+
+			
+			$( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+		},
+		close: function() {
+			$( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+		}
+		});
+		
+	});
+	
 </script>
 
 </head>
@@ -603,7 +672,9 @@ $(function() {
 						</span>						
 					</th>
 					<td>
-						<form:input path="researchId"/>
+						<div class="ui-widget">
+							<form:input path="researchId"/>
+						</div>
 					</td>
 				</tr>
 				<tr>
@@ -672,61 +743,66 @@ $(function() {
 										<div>
 											<fieldset>
 											<legend><spring:message code="prop.leave.app.apply.form.leave.manager.select"/> </legend>
-												     
-													<div style="float: none;">
-														<div style="width: 20%; float: ${direction}">
-															<spring:message code="prop.leave.app.apply.form.requester.branch"/>
-														</div>
-														<div>
-																<form:select path="branch2"  cssClass="selBranchCode leaveOptions" id="selBranchCode" >
-																	<option><spring:message code="prop.leave.app.dropdown.branch.text"/></option>
-																	<c:forEach items="${branches}" var="branch">
-																		<c:set value="" var="selct"/>
-																		<c:choose>
-																			<c:when test='${opMode=="u"}'>
-																			<c:if test="${approver.branchCode==branch.branchCode}">
-											<%-- 									<c:if test="${employee.branchCode==branch.branchCode}"> --%>
-																				<c:set value="selected" var="selct"/> 
-																			</c:if>
-																			</c:when>
-																			<c:otherwise>
-																				<c:if test="${employee.branchCode==branch.branchCode}">
-																					<c:set value="selected" var="selct"/> 
-																				</c:if>
-																			</c:otherwise>
-																		</c:choose>
-																		<option value="${branch.branchCode}" ${selct}>
-																			<c:out value="${branch.branchDesc}"/>
-																		</option>
-																	</c:forEach>
-																</form:select>
-														 </div>
-													</div>
-													<br>
-													<div style="float: none;">
-														<div style="width: 20%; float:${direction}">
-															<spring:message code="prop.leave.app.apply.form.requester.department"/>
-														</div>
-														<div>
-															<form:select path="department2" cssClass="selDeptCode2 leaveOptions" id="selDeptCode2">
-																<option><spring:message code="prop.leave.app.dropdown.department.text"/></option>
-															</form:select>
-														</div>
-													</div>
-													<br>
-													<div id="sectionDiv" style="float: none;">
-														<div style="width: 20%; float: ${direction}"><spring:message code="prop.leave.app.apply.form.requester.section"/></div>
-														<div>
-															<form:select path="section2" cssClass="selSectionCode2 leaveOptions" id="selSectionCode2">
-																<option><spring:message code="prop.leave.app.dropdown.section.text"/></option>
-															</form:select>
-														</div>
-														<br>
-													</div>
-													<div id="approverDiv" style="float:none;">
-														<div style="width : 20%; float: ${direction}"> <spring:message code="prop.leave.app.apply.form.approvar.name"/> </div> 
-														<div id="divHod" class="divHod" style="margin-${direction}:20% "></div><form:errors path="hod"  cssClass="error"/>
-													</div>
+												<table>     
+													<tr>
+														<td>
+															<div style="float: none;">
+																<div style="width: 20%; float: ${direction}">
+																	<spring:message code="prop.leave.app.apply.form.requester.branch"/>
+																</div>
+																<div>
+																		<form:select path="branch2"  cssClass="selBranchCode leaveOptions" id="selBranchCode" >
+																			<option><spring:message code="prop.leave.app.dropdown.branch.text"/></option>
+																			<c:forEach items="${branches}" var="branch">
+																				<c:set value="" var="selct"/>
+																				<c:choose>
+																					<c:when test='${opMode=="u"}'>
+																					<c:if test="${approver.branchCode==branch.branchCode}">
+													<%-- 									<c:if test="${employee.branchCode==branch.branchCode}"> --%>
+																						<c:set value="selected" var="selct"/> 
+																					</c:if>
+																					</c:when>
+																					<c:otherwise>
+																						<c:if test="${employee.branchCode==branch.branchCode}">
+																							<c:set value="selected" var="selct"/> 
+																						</c:if>
+																					</c:otherwise>
+																				</c:choose>
+																				<option value="${branch.branchCode}" ${selct}>
+																					<c:out value="${branch.branchDesc}"/>
+																				</option>
+																			</c:forEach>
+																		</form:select>
+																 </div>
+															</div>
+															<br>
+															<div style="float: none;">
+																<div style="width: 20%; float:${direction}">
+																	<spring:message code="prop.leave.app.apply.form.requester.department"/>
+																</div>
+																<div>
+																	<form:select path="department2" cssClass="selDeptCode2 leaveOptions" id="selDeptCode2">
+																		<option><spring:message code="prop.leave.app.dropdown.department.text"/></option>
+																	</form:select>
+																</div>
+															</div>
+															<br>
+															<div id="sectionDiv" style="float: none;">
+																<div style="width: 20%; float: ${direction}"><spring:message code="prop.leave.app.apply.form.requester.section"/></div>
+																<div>
+																	<form:select path="section2" cssClass="selSectionCode2 leaveOptions" id="selSectionCode2">
+																		<option><spring:message code="prop.leave.app.dropdown.section.text"/></option>
+																	</form:select>
+																</div>
+																<br>
+															</div>
+															<div id="approverDiv" style="float:none;">
+																<div style="width : 20%; float: ${direction}"> <spring:message code="prop.leave.app.apply.form.approvar.name"/> </div> 
+																<div id="divHod" class="divHod" style="margin-${direction}:20% "></div><form:errors path="hod"  cssClass="error"/>
+															</div>
+												</td>
+											</tr>
+										</table>
 										</fieldset>
 									</div>
 										</c:otherwise>

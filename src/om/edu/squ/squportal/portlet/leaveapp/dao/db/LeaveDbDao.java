@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Budget;
 import om.edu.squ.squportal.portlet.leaveapp.bo.CheckLeaveResearch;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Department;
@@ -440,6 +441,25 @@ public interface LeaveDbDao
 	 * Date    		:	Nov 26, 2012 12:40:40 PM
 	 */
 	public List<Section> getSections(String departmentCode, Locale locale);
+
+	/**
+	 * 
+	 * method name  : getBudget
+	 * @param budgetId
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Budget>
+	 * 
+	 * purpose		: Get list of budget object. 
+	 *
+	 * (Note : the locale as parameter has kept only for future compatibility. 
+	 *         at present all the columns in GLM_BUDG_ID_VIEW are in english 
+	 *         even though they made for arabic) 
+	 *
+	 * Date    		:	Apr 15, 2013 10:32:19 AM
+	 */
+	public List<Budget> getBudget(String budgetId, Locale locale);
 	
 	/**
 	 * 

@@ -48,6 +48,7 @@ import javax.sql.DataSource;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AdminAction;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Branch;
+import om.edu.squ.squportal.portlet.leaveapp.bo.Budget;
 import om.edu.squ.squportal.portlet.leaveapp.bo.CheckLeaveDelegation;
 import om.edu.squ.squportal.portlet.leaveapp.bo.CheckLeaveResearch;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
@@ -1887,6 +1888,47 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramLocale", locale.getLanguage());
 		namedParameters.put("paramDept", departmentCode);
 		return this.namedParameterJdbcTemplate.query(Constants.SQL_SECTION, namedParameters, mapper);
+	}
+	
+	/**
+	 * 
+	 * method name  : getBudget
+	 * @param budgetId
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<Budget>
+	 * 
+	 * purpose		: Get list of budget object. 
+	 *
+	 * (Note : the locale as parameter has kept only for future compatibility. 
+	 *         at present all the columns in GLM_BUDG_ID_VIEW are in english 
+	 *         even though they made for arabic) 
+	 *
+	 * Date    		:	Apr 15, 2013 10:32:19 AM
+	 */
+	public List<Budget> getBudget(String budgetId, Locale locale)
+	{
+		RowMapper<Budget> mapper = new RowMapper<Budget>()
+		{
+			
+			public Budget mapRow(ResultSet rs, int rowNum) throws SQLException
+			{
+				Budget	budget		=	new Budget();
+				budget.setBudgetId(rs.getString(Constants.CONST_LEAVE_RESEARCH_ID));
+				budget.setBudgetYearFrom(rs.getString(Constants.CONST_BUDGET_YEAR_FROM));
+				budget.setBudgetYearTo(rs.getString(Constants.CONST_BUDGET_YEAR_TO));
+				budget.setBudgetDescription(rs.getString(Constants.CONST_BUDGET_DESCRIPTION));
+				budget.setBudgetDescriptionShort(rs.getString(Constants.CONST_BUDGET_DESCRIPTION_SHORT));
+				budget.setBudgetRemarks(rs.getString(Constants.CONST_BUDGET_REMARKS));
+				return budget;
+			}
+		};
+		
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramResearchId", budgetId+"%");
+		return this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_BUDGET, namedParameters, mapper);
+		
 	}
 	
 	
