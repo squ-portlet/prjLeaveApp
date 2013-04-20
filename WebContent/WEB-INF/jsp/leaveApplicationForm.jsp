@@ -1,4 +1,5 @@
-<!--  * Project 				:	prjLeaveApp
+<!--  
+ * Project 				:	prjLeaveApp
  * Organisation 		:	Sultan Qaboos University
  * Center				:	Center for Information System
  * Department 			:	Planning & Development
@@ -176,9 +177,10 @@
 	.ui-menu-item {font-size: small;}
 	.ui-menu .ui-menu-item {font-size: small;}
 	.ui-autocomplete-loading { background: white url("${urlImgAnimAuto}") ${directionOpp} center no-repeat; }
-
+	//.ui-autocomplete {width: 70%; font-size: small;}
 	/*autocomplete alternet color*/
 	.ui-menu-item-alternate { background: rgb(231, 217, 217); }
+	.ui-corner-all {font-size: small;}
 </style>
 
 
@@ -600,8 +602,9 @@ $(function() {
 							 .end()
 							 .find( "li.ui-menu-item:odd a" )
 								 .addClass( "ui-menu-item-alternate" );
-					 
-
+						 
+						 $('.ui-autocomplete').css('width', '75%');
+						 $('.ui-autocomplete').css('font-size', 'smaller');
 			
 			$( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
 		},
@@ -672,7 +675,7 @@ $(function() {
 						</span>						
 					</th>
 					<td>
-						<div class="ui-widget">
+						<div class="ui-widget" style="font-size: small;">
 							<form:input path="researchId"/>
 						</div>
 					</td>
