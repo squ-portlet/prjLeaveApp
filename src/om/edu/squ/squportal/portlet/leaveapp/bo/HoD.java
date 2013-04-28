@@ -13,7 +13,7 @@
  * Date of creation		:	Dec 2, 2012  8:59:19 AM
  * Date of modification :	
  * 
- * Summary				:	Head of the departments
+ * Summary				:	Head of the department object
  *
  *
  * Copyright 2012 the original author or authors and Organization.

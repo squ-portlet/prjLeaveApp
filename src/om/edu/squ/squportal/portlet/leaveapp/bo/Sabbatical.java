@@ -29,11 +29,13 @@
  */
 package om.edu.squ.squportal.portlet.leaveapp.bo;
 
+import java.io.Serializable;
+
 /**
  * @author Bhabesh
  *
  */
-public class Sabbatical
+public class Sabbatical implements Serializable
 {
 	private	String	requestNo;
 	private	String	approverAction;

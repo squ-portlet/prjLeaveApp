@@ -29,11 +29,13 @@
  */
 package om.edu.squ.squportal.portlet.leaveapp.bo;
 
+import java.io.Serializable;
+
 /**
  * @author Bhabesh
  *
  */
-public class Section
+public class Section implements Serializable
 {
 	private	String	sectionCode;
 	private	String	sectionDesc;

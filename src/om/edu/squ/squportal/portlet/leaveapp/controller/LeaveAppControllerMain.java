@@ -568,7 +568,7 @@ public class LeaveAppControllerMain
 	 * LeaveAppControllerMain
 	 * return type  : String
 	 * 
-	 * purpose		: 
+	 * purpose		: Update form of the leave application
 	 *
 	 * Date    		:	Dec 15, 2012 8:56:59 AM
 	 */

@@ -13,7 +13,7 @@
  * Date of creation		:	Mar 19, 2013  11:43:09 AM
  * Date of modification :	
  * 
- * Summary				:	
+ * Summary				:	business object for stored procedure check_eleave_Research
  *
  *
  * Copyright 2013 the original author or authors and Organization.
