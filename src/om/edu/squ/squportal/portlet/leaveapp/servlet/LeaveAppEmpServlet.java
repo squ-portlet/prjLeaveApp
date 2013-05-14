@@ -73,6 +73,7 @@ public class LeaveAppEmpServlet extends HttpServlet {
 		String			branchCode	=	request.getParameter("branchCode");
 		
 		//String			deptCode	=	request.getParameter("deptCode");
+		response.setContentType("text/html; charset=utf-8");
 		
 		Locale			locale		=	request.getLocale();			
 		

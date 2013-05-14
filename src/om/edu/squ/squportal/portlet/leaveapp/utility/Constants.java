@@ -85,6 +85,7 @@ public interface Constants
 	public static final	String	CONST_LEAVE_STATUS_CODE			=			"LEAVE_STATUS_CODE";
 	public static final	String	CONST_LEAVE_STATUS_DATE			=			"LEAVE_STATUS_DATE";
 	public static final	String	CONST_LEAVE_REQUEST_REMARKS		=			"LEAVE_REQUEST_REMARKS";
+	public static final	String	CONST_LEAVE_REQUEST_PROCESS_SALARY	=		"LEAVE_PROCESS_SALARY";
 	
 	public static final	String	CONST_LEAVE_TYPE				=			"LEAVE_TYPE";
 	public static final	String	CONST_LEAVE_DESC				=			"LEAVE_DESC";
@@ -247,7 +248,7 @@ public interface Constants
 	public	static	String	MAIL_SUBJECT						=			"Leave application.";
 	public	static	String	MAIL_REQUEST_NO						=			" Request No: ";
 	public	static	boolean	IS_MAIL_SEND_ON						=			true;
-	public	static	String	CONST_TEMP_EMAIL_TO					=			"bhabesh.m@gmail.com";
+	public	static	String	CONST_TEMP_EMAIL_TO					=			"bhabesh@squ.edu.com";
 	/******************************************************/
 
 	/************* EMAIL TEMPLATE***************************/
@@ -845,7 +846,8 @@ public interface Constants
 																			"   EMP.VHM_EMP_BRAN_CODE AS EMP_APP_BRANCH_CODE,			" +
 																			"	EMP.VHM_EMP_DEPT_CODE AS EMP_APP_DEPARTMENT_CODE,       " +
 																			"	EMP.VHM_EMP_SECTION_CODE AS EMP_APP_SECTION_CODE,		" +
-																			"	LVAPRV.VHM_APP_EMP_CODE AS EMP_APP_CODE					" +
+																			"	LVAPRV.VHM_APP_EMP_CODE AS EMP_APP_CODE,				" +
+																			"	LVREQ.VHM_PROCESS_SAL_YN AS LEAVE_PROCESS_SALARY		" +
 																			"	FROM													" + 
 																			"	  VHM_EMP_LEAVE_REQUEST LVREQ,							" +
 																			"	  VHM_WORKFLOW_STATUS LVSTAT,							" +
@@ -994,7 +996,7 @@ public interface Constants
 																			" VHM_LEAVE_TYPE, BDGID_BUDG_ID,  	VHM_ADMIN_HOLDING_YN,	  " +
 																			" VHM_POSITION_CODE,VHM_HIERARCHY_CODE,VHM_LEAVE_REQUEST_ACTIVE," +
 																			" VHM_LEAVE_REQUEST_REMARKS,VHM_LEAVE_REQUEST_CRE_USR_INIT,VHM_LEAVE_REQUEST_CRE_DATE," +
-																			" VHM_LEAVE_TYPE_FLAG,VHM_SUGGESTED_APP_EMP_CODE				" +
+																			" VHM_LEAVE_TYPE_FLAG,VHM_SUGGESTED_APP_EMP_CODE,VHM_PROCESS_SAL_YN 	" +
 																			" ) 															" +
 																			" VALUES 														" +
 																			"(																" +
@@ -1006,7 +1008,7 @@ public interface Constants
 																			" :paramLeaveType,:paramResearchId,:paramIsAdmin,				" +
 																			" :paramPositionCode,:paramHierarchyCode,:paramIsReqActive,		" +
 																			" :paramReqRemarks,:paramReqUserInit,SYSDATE,					" +
-																			" :paramLeaveTypeFlag,:paramHodId								" +
+																			" :paramLeaveTypeFlag,:paramHodId,UPPER(:paramProcessSalaray)	" +
 																			" )																";
 	public static final String	SQL_VIEW_ONLY_LEAVE_REQUEST_SPECIFIC	=	" SELECT 														" +
 																			" TO_CHAR(LVREQ.VHM_LEAVE_START_DATE,'DD/MM/YYYY') AS LEAVE_START_DATE,	" +
@@ -1043,7 +1045,8 @@ public interface Constants
 																			"		VHM_LEAVE_REQUEST_UPD_DATE=SYSDATE,						" +
 																			"		VHM_LEAVE_TYPE_FLAG = :paramLeaveTypeFlag,				" +
 																			"		VHM_SUGGESTED_APP_EMP_CODE= :paramHodId,				" +
-																			"		VHM_STATUS_CODE  	= :paramLeaveStatus					" +
+																			"		VHM_STATUS_CODE  	= :paramLeaveStatus,				" +
+																			"		VHM_PROCESS_SAL_YN	= :paramProcessSalaray				" +
 																			"	WHERE VHM_LEAVE_REQ_NO 	= :paramReqNo						" +
 																			"	  AND VHM_STATUS_CODE  	= :paramCompLeaveStatus				" +
 																			"	AND (														" +

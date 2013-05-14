@@ -60,6 +60,8 @@ public class LeaveRequest implements Serializable
 	private	String			researchId;
 	private	boolean			sabbaticalLowerApproverAction;
 	private	int				approverSequenceNo;
+	private	String			processSalaray;
+	
 	/**
 	 * Getter Method	: getRequestNo
 	 * @return the requestNo
@@ -462,6 +464,26 @@ public class LeaveRequest implements Serializable
 	{
 		this.approverSequenceNo = approverSequenceNo;
 	}
+	/**
+	 * Getter Method	: getProcessSalaray
+	 * @return the processSalaray
+	 * 
+	 * Date				: May 13, 2013
+	 */
+	public String getProcessSalaray()
+	{
+		return this.processSalaray;
+	}
+	/**
+	 * Setter method : setProcessSalaray
+	 * @param processSalaray the processSalaray to set
+	 * 
+	 * Date          : May 13, 2013 11:04:09 AM
+	 */
+	public void setProcessSalaray(String processSalaray)
+	{
+		this.processSalaray = processSalaray;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -503,9 +525,14 @@ public class LeaveRequest implements Serializable
 				+ (this.approverId != null ? "approverId=" + this.approverId
 						+ ", " : "")
 				+ (this.researchId != null ? "researchId=" + this.researchId
-						+ ", " : "") + "sabbaticalLowerApproverAction="
-				+ this.sabbaticalLowerApproverAction + ", approverSequenceNo="
-				+ this.approverSequenceNo + "]";
+						+ ", " : "")
+				+ "sabbaticalLowerApproverAction="
+				+ this.sabbaticalLowerApproverAction
+				+ ", approverSequenceNo="
+				+ this.approverSequenceNo
+				+ ", "
+				+ (this.processSalaray != null ? "processSalaray="
+						+ this.processSalaray : "") + "]";
 	}
 	
 	

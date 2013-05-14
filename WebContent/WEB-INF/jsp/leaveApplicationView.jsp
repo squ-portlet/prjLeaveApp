@@ -175,8 +175,20 @@ $(function() {
 								<spring:message code="prop.leave.app.apply.form.leave.type"/>:
 							</span>
 						</th>
-						<td colspan="4">
+						<td >
 							<c:out value="${leaveRequest.leaveType.typeDesc}"/>
+							<c:if test="${leaveRequest.leaveTypeFlag.typeNo == 'B'}">
+								<br>(<spring:message code="prop.leave.app.apply.form.leave.sabbatical.research.id"/> : <c:out value="${leaveRequest.researchId}"/>)
+							</c:if>
+						</td>
+						<td>&nbsp;</td>
+						<th class="PortletHeaderColor">
+							<span class="PortletHeaderText">
+								<spring:message code="prop.leave.app.apply.form.salary.advance"/>:
+							</span>
+						</th>
+						<td>
+							<c:out value="${leaveRequest.processSalaray}"/>
 						</td>
 					</tr>
 					<tr>

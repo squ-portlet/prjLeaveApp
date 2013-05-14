@@ -1123,9 +1123,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramReqRemarks",leaveRequest.getLeaveRequestRemarks());
 		namedParameters.put("paramReqUserInit",Constants.USER_WEB);
 		namedParameters.put("paramLeaveTypeFlag",leaveRequest.getLeaveTypeFlag().getTypeNo());
-
-		
 		namedParameters.put("paramHodId", emp.getMyHodId());
+		
+		namedParameters.put("paramProcessSalaray",leaveRequest.getProcessSalaray());
 		if(
 			null == leaveRequest.getRequestNo() || 
 		   leaveRequest.getRequestNo().trim().equals("") || 
@@ -1476,6 +1476,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveRequest.setApprove(approve);
 					leaveRequest.setApproverId(rs.getString(Constants.CONST_EMP_APP_CODE));
 					leaveRequest.setApproverSequenceNo(rs.getInt(Constants.CONST_APPROVER_SEQUENCE_NO));
+					leaveRequest.setProcessSalaray(rs.getString(Constants.CONST_LEAVE_REQUEST_PROCESS_SALARY));
 				return leaveRequest;
 			
 		}

@@ -252,6 +252,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 			{
 				leaveRequest.setApproverId(leaveAppModel.getApproverEmpNumber());
 			}
+			leaveRequest.setProcessSalaray(leaveAppModel.getProcessSalaray());
 			int result = leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps(), locale);
 				if (result == 0)
 				{

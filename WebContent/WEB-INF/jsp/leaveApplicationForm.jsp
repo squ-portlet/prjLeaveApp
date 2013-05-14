@@ -218,6 +218,8 @@ $(function(){
 						$( ".calendarDelgStart" ).datepicker( "option", "minDate", selectedDate );
 						$( ".calendarDelgEnd" ).datepicker( "option", "minDate", selectedDate );
 					}
+			showHideProcessSalaray();
+			
 				}
 		//inline: true
 	});
@@ -241,8 +243,9 @@ $(function(){
 		    	$( ".calendarStart" ).datepicker( "option", "maxDate", selectedDate );  
 	    		$( ".calendarDelgEnd" ).datepicker( "option", "maxDate", selectedDate );
 	    		$( ".calendarDelgStart" ).datepicker( "option", "maxDate", selectedDate );
-			}    		
-	    		
+			}
+	    	
+	    	showHideProcessSalaray();
 	    }
 	});
 
@@ -551,6 +554,35 @@ $(function() {
 			return result;
 			
 		}
+
+	/**
+	* 
+	*/
+	function showHideProcessSalaray()
+	{
+			if($("#leaveTypeFlag").val() == 'A')
+				{
+				var start = $( ".calendarStart" ).datepicker( "getDate" );
+				var end = $( ".calendarEnd" ).datepicker( "getDate" );
+				var diff = new Date(end - start);
+
+				// get days
+				var days = diff/1000/60/60/24;
+				if (days >= 14)
+ 				{
+ 					$("#divProcessSal").show();
+ 				}
+				else
+ 				{
+ 					$("#divProcessSal").hide();
+ 				}
+				}
+			else
+ 				{
+ 					$("#divProcessSal").hide();
+ 				}
+	}
+	
 	/**
 	* Leave type changes to sabbatical shows researchId
 	*/
@@ -569,6 +601,18 @@ $(function() {
 	 				
 	 		});
 	});	
+
+	/**
+	* Leave type changes to annual shows advance salary options
+	*/
+	$(function() {
+
+	 		$("#leaveTypeFlag").on("change", function (){
+	 			
+	 			showHideProcessSalaray();
+	 				
+	 		});
+	});		
 	
 	/*AutoComplete feature at researchId for sabbatical leave*/
 	$(function() {
@@ -698,6 +742,19 @@ $(function() {
 					</th>
 					<td><form:input path="leaveEndDate" id="leaveEndDate" cssClass="calendarEnd" />
 						<br><form:errors path="leaveEndDate" cssClass="error"/>
+					</td>
+				</tr>
+				<tr id="divProcessSal" style="display:none;">
+					<th class="PortletHeaderColor">
+						<span class="PortletHeaderText">
+							<spring:message code="prop.leave.app.apply.form.salary.advance"/>
+						</span>
+					</th>
+					<td>
+						<form:radiobutton path="processSalaray" value="Y"/> <spring:message code="prop.leave.app.apply.form.salary.radio.bttn.yes"/>
+						<c:if test="${employee.omani}">
+						<br><form:radiobutton path="processSalaray" value="N"/> <spring:message code="prop.leave.app.apply.form.salary.radio.bttn.no"/>
+						</c:if>
 					</td>
 				</tr>
 				<tr>

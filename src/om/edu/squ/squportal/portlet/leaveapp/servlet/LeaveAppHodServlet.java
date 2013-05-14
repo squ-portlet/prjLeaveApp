@@ -75,7 +75,9 @@ public class LeaveAppHodServlet extends HttpServlet {
 		HoD				hoD					=	new HoD("na","na");
 		List<HoD>		hoDList				=	null;
 		String			strJson				=	null;
-				
+		
+		response.setContentType("text/html; charset=utf-8");
+		
 		LeaveDbDao		leaveDbDao	=	new LeaveDbDaoImpl(datasource);
 
 		if(null != request.getParameter("sectionCode") && ! request.getParameter("sectionCode").trim().equals("") )

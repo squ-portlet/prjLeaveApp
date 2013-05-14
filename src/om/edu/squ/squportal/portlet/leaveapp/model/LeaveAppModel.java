@@ -67,6 +67,7 @@ public class LeaveAppModel implements Serializable
 	private	String			approverRemark;
 	private	String			opMode;												//  mode for update/insert etc.
 	private	String			approverEmpNumber;
+	private	String			processSalaray;
 	
 	/**
 	 * Getter Method	: getRequestNo
@@ -571,6 +572,26 @@ public class LeaveAppModel implements Serializable
 	{
 		this.approverEmpNumber = approverEmpNumber;
 	}
+	/**
+	 * Getter Method	: getProcessSalaray
+	 * @return the processSalaray
+	 * 
+	 * Date				: May 13, 2013
+	 */
+	public String getProcessSalaray()
+	{
+		return this.processSalaray;
+	}
+	/**
+	 * Setter method : setProcessSalaray
+	 * @param processSalaray the processSalaray to set
+	 * 
+	 * Date          : May 13, 2013 11:12:41 AM
+	 */
+	public void setProcessSalaray(String processSalaray)
+	{
+		this.processSalaray = processSalaray;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -622,7 +643,9 @@ public class LeaveAppModel implements Serializable
 						+ this.approverRemark + ", " : "")
 				+ (this.opMode != null ? "opMode=" + this.opMode + ", " : "")
 				+ (this.approverEmpNumber != null ? "approverEmpNumber="
-						+ this.approverEmpNumber : "") + "]";
+						+ this.approverEmpNumber + ", " : "")
+				+ (this.processSalaray != null ? "processSalaray="
+						+ this.processSalaray : "") + "]";
 	}
 	
 	

@@ -204,6 +204,7 @@ public class LeaveAppControllerMain
 			leaveAppModel.setAdminSqu(employee.isAdmin());
 			leaveAppModel.setPositionAdditional(employee.getDesignationAddlCode());
 			leaveAppModel.setOpMode(Constants.CONST_MODEL_MODE_INSERT);
+			leaveAppModel.setProcessSalaray(Constants.CONST_YES_CAPITAL);
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
 		model.addAttribute("empNumber", empNumber);
@@ -599,6 +600,7 @@ public class LeaveAppControllerMain
 			leaveAppModel.setLeaveRemarks(leaveRequest.getLeaveRequestRemarks());
 			leaveAppModel.setOpMode(Constants.CONST_MODEL_MODE_UPDATE);
 			leaveAppModel.setApproverEmpNumber(appEmpNo);
+			leaveAppModel.setProcessSalaray(leaveRequest.getProcessSalaray());
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
 		model.addAttribute("empNumber", String.format("%07d", Integer.valueOf(employee.getEmpNumber())));

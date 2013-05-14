@@ -72,6 +72,8 @@ public class LeaveAppBranchServlet extends HttpServlet {
 		String				branchCode	=	request.getParameter("branchCode");
 		Gson 				gson 		= 	new Gson();
 		
+		response.setContentType("text/html; charset=utf-8");
+		
 		LeaveDbDao			leaveDbDao	=	new LeaveDbDaoImpl(datasource);
 		
 		if(null == request.getParameter("deptCode"))
