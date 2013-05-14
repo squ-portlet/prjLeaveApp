@@ -183,9 +183,12 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			if(null == employee.getReligionCode())
 			{
 				logger.warn(" Warning : Religion is null ");
+				namedParameters.put("paramMuslim", Constants.CONST_MUSLIM);
 			}
-			
-			namedParameters.put("paramMuslim", Constants.CONST_NON_MUSLIM);
+			//TODO as per bug id : 1268 null value at employee religion code is considered as MUSLIM
+			// this will be changed as soon as correct data enterted at VHM_EMPLOYEE at EMP_RELIGION_CODE
+			// and below code will be uncommented and within the if statement above the code will be removed / commented
+			//namedParameters.put("paramMuslim", Constants.CONST_NON_MUSLIM);
 		}
 		if(null != employee.getGender() && employee.getGender().equals(Constants.CONST_GENDER_FEMALE_NUM))
 		{
