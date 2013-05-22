@@ -229,7 +229,7 @@
 			$(function() { 
 			    $(".mydialogCls").click(function(event) {
 		    	
-			    	 								var i     = this.getAttribute("index");
+			    	 								var i     = this.getAttribute("indexRef");
 			    	 								var varReqNo = this.getAttribute("reqNo");
 			    	 								var msg	     = '<spring:message code="prop.leave.app.title.request.cancel.msg" arguments="varReqNo"/>';
 			    	 								var msgReplace	=	msg.replace("varReqNo",varReqNo);
@@ -424,7 +424,7 @@
 										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
 									</c:when>
 									<c:otherwise>
-										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" index="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
+										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" indexRef="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
 									</c:otherwise>
 								</c:choose>
 						</td>
@@ -574,7 +574,7 @@
 									<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
 								</c:when>
 								<c:otherwise>
-									<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" index="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
+									<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" indexRef="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
 								</c:otherwise>
 							</c:choose>					
 					</td>

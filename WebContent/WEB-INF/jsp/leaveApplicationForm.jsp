@@ -195,7 +195,7 @@ $(function(){
 		buttonImage: "${urlImgCalendar}",
 		buttonImageOnly: true,
 		minDate: -30,
-		firstDay:6
+		firstDay:7
 		//inline: true
 	});
 });
@@ -208,7 +208,7 @@ $(function(){
 		buttonImage: "${urlImgCalendar}",
 		buttonImageOnly: true,
 		minDate: -<c:out value="${daysAllowed}"/>,
-		firstDay:6,
+		firstDay:7,
 		onClose: function( selectedDate ) {
 			var	endDt	=	$( ".calendarEnd" ).datepicker( "getDate" );
 			resDtIssueOK = diffLeaveDate();	
@@ -234,7 +234,7 @@ $(function(){
 		buttonImage: "${urlImgCalendar}",
 		buttonImageOnly: true,
 		minDate: -<c:out value="${daysAllowed}"/>,
-		firstDay:6,
+		firstDay:7,
 	    onClose: function( selectedDate ) {
 	    	var startDt	=	$( ".calendarStart" ).datepicker( "getDate" );
 	    	resDtIssueOK = diffLeaveDate();
@@ -290,7 +290,6 @@ $(function() {
         $('txtEmpNum').val='';
        
 		var varEmpId=currentDropdown.closest('tr').find("input.tEmpId");
-		//alert("EmpId : " +  varEmpId.val());
         
         currentDropdown.closest('tr').find("select.selEmpNum").empty().append('<option value=""><spring:message code="prop.leave.app.dropdown.employee.text"/></option>');
         $.ajax({
@@ -464,7 +463,7 @@ $(function() {
 		    	 var selct = '';
 		    	 
 		    	 if (hod.hodId==hodId) selct=' checked ';
-			    	 dataHtml += "<input type='radio' name='hod'  value='"+hod.hodId+"'"+ selct + "/> " +hod.hodName+ "<br>"; 
+			    	 dataHtml += "<tr><td><input type='radio' name='hod'  value='"+hod.hodId+"'"+ selct + "/> " +hod.hodName+ "</td></tr>"; 
 		    }
 		    
 		    if(data != null || data != '')
@@ -696,7 +695,7 @@ $(function() {
 				<spring:message code="prop.leave.app.apply.form.legend.title"/>
 			</h3>
 		</legend>
-			<table>
+			<table width=100%>
 				<tr>
 					<th class="PortletHeaderColor">
 						<span class="PortletHeaderText">
@@ -708,8 +707,7 @@ $(function() {
 							<form:option value=""><spring:message code="prop.leave.app.dropdown.leave.type.text"/></form:option>
 							<form:options items="${leaveTypeFlag}" itemLabel="typeDesc" itemValue="typeNo"/>
 						</form:select>
-						<br>
-						<form:errors path="leaveTypeFlag" cssClass="error" />
+						<div><form:errors path="leaveTypeFlag" cssClass="error" /></div>
 					</td>
 				</tr>
 				<tr id="divResearchId" style="display: none;">
@@ -765,112 +763,109 @@ $(function() {
 					</th>
 					<td colspan="4"><form:textarea cssStyle="width:100%" path="leaveRemarks"/></td>
 				</tr>
-			</table>
-
-			<table>
-					<tr>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.requester.approver.selection"/>
-							</span>
-						</th>
-						<td>
-								<div id="accordion" class="ui-accordion ui-widget ui-helper-reset">
-									<c:choose>
-										<c:when test='${opMode=="u"}'>
-											<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
-												<a href="#">
-													<spring:message code="prop.leave.app.apply.form.leave.manager"/>
-													<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i></font>
-												</a>
-											</h3>
-										</c:when>
-										<c:otherwise>
-											<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons">
-												<a href="#">
-													<spring:message code="prop.leave.app.apply.form.leave.manager.default"/>
-													<font color="red" size="small"><i><c:out value="${mgrName}"/></i></font>
-												</a>
-											</h3>
-											<div>
-												<br>
-												<center><spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/></center>
-											</div>
-											
+				<tr>
+					<th class="PortletHeaderColor">
+						<span class="PortletHeaderText">
+							<spring:message code="prop.leave.app.apply.form.requester.approver.selection"/>
+						</span>
+					</th>
+					<td>
+<!-- Accordion Start -->					
+							<div id="accordion" class="ui-accordion ui-widget ui-helper-reset">
+								<c:choose>
+									<c:when test='${opMode=="u"}'>
 										<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
-											<a href="#"><spring:message code="prop.leave.app.apply.form.leave.manager.custom"/></a>
-										</h3>				
+												<a href="#">
+														<spring:message code="prop.leave.app.apply.form.leave.manager"/>
+														<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i></font>
+												</a>
+										</h3>
+									</c:when>
+									<c:otherwise>
+										<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons">
+												<a href="#">
+														<spring:message code="prop.leave.app.apply.form.leave.manager.default"/>
+														<font color="red" size="small"><i><c:out value="${mgrName}"/></i></font>
+												</a>
+										</h3>
 										<div>
-											<fieldset>
-											<legend><spring:message code="prop.leave.app.apply.form.leave.manager.select"/> </legend>
-												<table>     
-													<tr>
-														<td>
-															<div style="float: none;">
-																<div style="width: 20%; float: ${direction}">
-																	<spring:message code="prop.leave.app.apply.form.requester.branch"/>
-																</div>
-																<div>
-																		<form:select path="branch2"  cssClass="selBranchCode leaveOptions" id="selBranchCode" >
-																			<option><spring:message code="prop.leave.app.dropdown.branch.text"/></option>
-																			<c:forEach items="${branches}" var="branch">
-																				<c:set value="" var="selct"/>
-																				<c:choose>
-																					<c:when test='${opMode=="u"}'>
-																					<c:if test="${approver.branchCode==branch.branchCode}">
-													<%-- 									<c:if test="${employee.branchCode==branch.branchCode}"> --%>
+											<br>
+											<center><spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/></center>
+										</div>
+										
+									<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
+										<a href="#"><spring:message code="prop.leave.app.apply.form.leave.manager.custom"/></a>
+									</h3>				
+									<div>
+										<fieldset>
+										<legend><spring:message code="prop.leave.app.apply.form.leave.manager.select"/> </legend>
+											<table>     
+												<tr>
+													<td>
+														<div style="float: none;">
+															<div style="width: 20%; float: ${direction}">
+																<spring:message code="prop.leave.app.apply.form.requester.branch"/>
+															</div>
+															<div>
+																	<form:select path="branch2"  cssClass="selBranchCode leaveOptions" id="selBranchCode" >
+																		<option><spring:message code="prop.leave.app.dropdown.branch.text"/></option>
+																		<c:forEach items="${branches}" var="branch">
+																			<c:set value="" var="selct"/>
+																			<c:choose>
+																				<c:when test='${opMode=="u"}'>
+																				<c:if test="${approver.branchCode==branch.branchCode}">
+												<%-- 									<c:if test="${employee.branchCode==branch.branchCode}"> --%>
+																					<c:set value="selected" var="selct"/> 
+																				</c:if>
+																				</c:when>
+																				<c:otherwise>
+																					<c:if test="${employee.branchCode==branch.branchCode}">
 																						<c:set value="selected" var="selct"/> 
 																					</c:if>
-																					</c:when>
-																					<c:otherwise>
-																						<c:if test="${employee.branchCode==branch.branchCode}">
-																							<c:set value="selected" var="selct"/> 
-																						</c:if>
-																					</c:otherwise>
-																				</c:choose>
-																				<option value="${branch.branchCode}" ${selct}>
-																					<c:out value="${branch.branchDesc}"/>
-																				</option>
-																			</c:forEach>
-																		</form:select>
-																 </div>
+																				</c:otherwise>
+																			</c:choose>
+																			<option value="${branch.branchCode}" ${selct}>
+																				<c:out value="${branch.branchDesc}"/>
+																			</option>
+																		</c:forEach>
+																	</form:select>
+															 </div>
+														</div>
+														<br>
+														<div style="float: none;">
+															<div style="width: 20%; float:${direction}">
+																<spring:message code="prop.leave.app.apply.form.requester.department"/>
+															</div>
+															<div>
+																<form:select path="department2" cssClass="selDeptCode2 leaveOptions" id="selDeptCode2">
+																	<option><spring:message code="prop.leave.app.dropdown.department.text"/></option>
+																</form:select>
+															</div>
+														</div>
+														<br>
+														<div id="sectionDiv" style="float: none;">
+															<div style="width: 20%; float: ${direction}"><spring:message code="prop.leave.app.apply.form.requester.section"/></div>
+															<div>
+																<form:select path="section2" cssClass="selSectionCode2 leaveOptions" id="selSectionCode2">
+																	<option><spring:message code="prop.leave.app.dropdown.section.text"/></option>
+																</form:select>
 															</div>
 															<br>
-															<div style="float: none;">
-																<div style="width: 20%; float:${direction}">
-																	<spring:message code="prop.leave.app.apply.form.requester.department"/>
-																</div>
-																<div>
-																	<form:select path="department2" cssClass="selDeptCode2 leaveOptions" id="selDeptCode2">
-																		<option><spring:message code="prop.leave.app.dropdown.department.text"/></option>
-																	</form:select>
-																</div>
-															</div>
-															<br>
-															<div id="sectionDiv" style="float: none;">
-																<div style="width: 20%; float: ${direction}"><spring:message code="prop.leave.app.apply.form.requester.section"/></div>
-																<div>
-																	<form:select path="section2" cssClass="selSectionCode2 leaveOptions" id="selSectionCode2">
-																		<option><spring:message code="prop.leave.app.dropdown.section.text"/></option>
-																	</form:select>
-																</div>
-																<br>
-															</div>
-															<div id="approverDiv" style="float:none;">
-																<div style="width : 20%; float: ${direction}"> <spring:message code="prop.leave.app.apply.form.approvar.name"/> </div> 
-																<div id="divHod" class="divHod" style="margin-${direction}:20% "></div><form:errors path="hod"  cssClass="error"/>
-															</div>
-												</td>
-											</tr>
-										</table>
-										</fieldset>
-									</div>
-										</c:otherwise>
-									</c:choose>
-							</div>	
-						
-						
-						</td>
+														</div>
+														<div id="approverDiv" style="float:none;">
+															<div style="width : 20%; float: ${direction}"> <spring:message code="prop.leave.app.apply.form.approvar.name"/> </div> 
+															<table id="divHod" class="divHod" style="margin-${direction}:20% " width="100%"></table><form:errors path="hod"  cssClass="error"/>
+														</div>
+											</td>
+										</tr>
+									</table>
+									</fieldset>
+								</div>
+									</c:otherwise>
+								</c:choose>
+						</div>	
+<!-- Accordion end -->
+					</td>
 				</tr>
 
 			</table>

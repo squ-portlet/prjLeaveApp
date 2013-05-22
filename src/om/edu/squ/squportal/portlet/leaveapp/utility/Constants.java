@@ -248,7 +248,7 @@ public interface Constants
 	public	static	String	MAIL_SUBJECT						=			"Leave application.";
 	public	static	String	MAIL_REQUEST_NO						=			" Request No: ";
 	public	static	boolean	IS_MAIL_SEND_ON						=			true;
-	public	static	String	CONST_TEMP_EMAIL_TO					=			"bhabesh@squ.edu.om";
+	public	static	String	CONST_TEMP_EMAIL_TO					=			null;
 	/******************************************************/
 
 	/************* EMAIL TEMPLATE***************************/
@@ -492,7 +492,10 @@ public interface Constants
 																		    "	AND VHM_SHOW_LEAVE_PORTAL_YN = 'Y'						" +
 																		    "   AND DECODE(:paramMuslim,'N',VHM_SHOW_MUSLIM_YN) IS NULL	" +
 																		    "	AND DECODE(:paramFemale,'N',VHM_SHOW_FEMALE_YN) IS NULL	" +
-																		    "   AND DECODE(:paramOmani,'N',VHM_SHOW_LOCAL_YN) IS NULL   ";
+																		    "   AND DECODE(:paramOmani,'N',VHM_SHOW_LOCAL_YN) IS NULL   " +
+																		    "	ORDER BY DECODE(:paramLocale,							" +
+																		    "		'en',VHM_ENG_SEQ_ORDER,								" +
+																		    "		'ar', VHM_ARB_SEQ_ORDER)							";
 																		   
 	
 	public static final String	SQL_ADMIN_ACTION				=			" SELECT VHM_ACTION_CODE AS ACTION_CODE,					" +
