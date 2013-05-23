@@ -258,7 +258,7 @@ public interface Constants
 
 	/******************************************************/
 
-	public	static	String	LEAVE_URL							=			"https://portalnew.squ.edu.om/portal/page/portal/Portlets/wsrpLeaveApp179";
+	public	static	String	LEAVE_URL							=			"http://portalmid1.squ.edu.om/portal/page/portal/staff/leaveApplication";
 	public	static	String	CONST_DELEGATION_AVL				=			"This leave application has delegation";
 	public	static	String	CONST_DELEGATION_NAME				=			"Name : ";
 	public	static	String	CONST_DELEGATION_START_DATE			=			"Start : ";
@@ -499,11 +499,12 @@ public interface Constants
 																		   
 	
 	public static final String	SQL_ADMIN_ACTION				=			" SELECT VHM_ACTION_CODE AS ACTION_CODE,					" +
-																			" DECODE(:paramLocale, 												" +                          			
+																			" DECODE(:paramLocale, 										" +                          			
                               			                      				"	'en',initCap(VHM_ACTION_DESC),							" +          	
 																		    "	'ar',VHM_ACTION_DESC_ARABIC) AS ACTION_DESC				" +
 																		    " FROM VHM_WORKFLOW_ACTIONS    								" +
-																		    " WHERE VHM_SERVICE_TYPE = 'LEAVE'							";
+																		    " WHERE VHM_SERVICE_TYPE = 'LEAVE'							" +
+																		    " AND VHM_ACTION_ACTIVE = 'Y'								";
 	
 	public static final String	SQL_VIEW_LEAVE_REQUEST			=			" SELECT DISTINCT											" +
 																			" LVREQ.VHM_LEAVE_REQ_NO	AS LEAVE_REQUEST_NO,			" +

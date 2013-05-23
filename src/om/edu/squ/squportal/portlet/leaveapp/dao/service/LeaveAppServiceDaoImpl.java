@@ -653,11 +653,11 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 						message			=	UtilProperty.getMessage("prop.leave.app.cancel.request.success", new String []{requestNo}, locale);
 						leaveRequest 	= leaveDbDao.getLeaveRequest(approverEmpNumber, requestNo, locale);
 						leaveApprove	=	leaveDbDao.getLeaveApproveHistory(requestNo, locale).get(0);
+		
 			/* Sending email */
-			EmailLeave	emailLeave		=	new EmailCancel(leaveRequest, leaveApprove, emailService,locale);
+						EmailLeave	emailLeave		=	new EmailCancel(leaveRequest, leaveApprove, emailService,locale);
 						emailLeave.sendRequesterEmail();
 						emailLeave.sendApproverEmail();
-			
 		}
 		else
 		{
