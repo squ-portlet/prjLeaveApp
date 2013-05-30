@@ -132,9 +132,9 @@ dropdown combobox
 This code taken from 
 http://designwithpc.com/Plugins/ddSlick
 */
-$(function() {
- $("#approverAction").ddslick();
-});	
+// $(function() {
+//  $("#approverAction").ddslick();
+// });	
 </script>
 
 
@@ -170,6 +170,50 @@ $(function() {
 			<form:form modelAttribute="leaveAppModel" action="${leaveApprove}" method="post" htmlEscape="false" >	
 			<h2><form:errors path="*" cssClass="error" /></h2>
 			<form:hidden path="requestNo" />	
+						<fieldset>
+				<legend>
+					<spring:message code="prop.leave.app.apply.form.approvar.action.administrative"/>
+				</legend>
+				<table cellspacing="0" cellpadding="0" border="1" width="100%">
+					<tr>
+						<th class="PortletHeaderColor">
+						<span class="PortletHeaderText">
+							<spring:message code="prop.leave.app.apply.form.approvar.action"/>
+						</span>
+						</th>
+							
+						<td>
+							<spring:message code="prop.leave.app.apply.form.approvar.actions" var="appActions"/>
+							<form:errors path="approverAction" cssClass="error" />
+							<form:select path="approverAction" disabled="${varDisable}">
+								<c:if test="${empty leaveRequest.approve.approverAction}">
+									<form:option value=""><spring:message code="prop.leave.app.dropdown.text"/></form:option>
+								</c:if>
+								<form:options items="${adminActions}" itemLabel="actionDesc" itemValue="actionCode"/>
+							</form:select>
+							
+						</td>
+						<th class="PortletHeaderColor">
+							<span class="PortletHeaderText">
+								<spring:message code="prop.leave.app.apply.form.approvar.remarks"/>
+							</span>
+						</th>
+						<td>
+							<form:errors path="approverRemark" cssClass="error" />
+							<form:textarea path="approverRemark" cssStyle="width:100%" disabled="${varDisable}"/>
+							
+						</td>
+					</tr>
+				</table>
+				<center>
+				<c:if test="${!varDisable}">
+					<input type="submit" value='<spring:message code="prop.leave.app.apply.form.approver.submit"/>' 
+					style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px" 
+					/>
+				</c:if>
+				</center>
+			</fieldset>
+			
 			<fieldset>
 				<legend><spring:message code="prop.leave.app.apply.form.required.details"/></legend>
 				<table cellspacing="0" cellpadding="0" border="1" width="100%">
@@ -425,51 +469,5 @@ $(function() {
 				<c:set var="varDisable" value="true"/>
 				<c:set var="bttnDisable" value="disabled='disabled'"/>
 			</c:if>
-			<fieldset>
-				<legend>
-					<spring:message code="prop.leave.app.apply.form.approvar.action.administrative"/>
-				</legend>
-				<table cellspacing="0" cellpadding="0" border="1" width="100%">
-					<tr>
-						<th class="PortletHeaderColor">
-						<span class="PortletHeaderText">
-							<spring:message code="prop.leave.app.apply.form.approvar.action"/>
-						</span>
-						</th>
-							
-						<td>
-							<spring:message code="prop.leave.app.apply.form.approvar.actions" var="appActions"/>
-							<form:errors path="approverAction" cssClass="error" />
-							<form:select path="approverAction" disabled="${varDisable}">
-								<c:if test="${empty leaveRequest.approve.approverAction}">
-									<form:option value=""><spring:message code="prop.leave.app.dropdown.text"/></form:option>
-								</c:if>
-								<form:options items="${adminActions}" itemLabel="actionDesc" itemValue="actionCode"/>
-							</form:select>
-							
-						</td>
-						<td>&nbsp;</td>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.approvar.remarks"/>
-							</span>
-						</th>
-						<td>
-							<form:errors path="approverRemark" cssClass="error" />
-							<form:textarea path="approverRemark" cssStyle="width:100%" disabled="${varDisable}"/>
-							
-						</td>
-					</tr>
-				</table>
-				<center>
-				<c:if test="${!varDisable}">
-					<input type="submit" value='<spring:message code="prop.leave.app.apply.form.approver.submit"/>' 
-					style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px" 
-					/>
-				</c:if>
-				</center>
-				
-				
-			</fieldset>
 		</form:form>
 	</fieldset>

@@ -297,7 +297,7 @@ $(function() {
             //contentType: "application/json; charset=utf-8",
             //url:  '${servletLeave}&branchCode='+branchCode+'&deptCode='+deptCode,
             url:  "${servletLeave}",
-            data: 'branchCode='+branchCode+'&empNumber='+empNumber,
+            data: 'branchCode='+branchCode+'&empNumber='+empNumber+'&localeSrv='+"${rc.locale.language}",
             dataType: "json",
             success: function(data) {
 				//tEmpId
@@ -378,7 +378,7 @@ $(function() {
             type: "GET",
 //             contentType: "application/json; charset=utf-8",
             url:  "${servletLeaveBranch}",
-            data: 'branchCode='+branchCode,
+            data: 'branchCode='+branchCode+'&localeSrv='+"${rc.locale.language}",
             dataType: "json",
             async:false,
             success: function(data) {
@@ -409,7 +409,7 @@ $(function() {
             type: "GET",
 //             contentType: "application/json; charset=utf-8",
             url:  "${servletLeaveBranch}",
-            data: 'deptCode='+deptCode,
+            data: 'deptCode='+deptCode+'&localeSrv='+"${rc.locale.language}",
             dataType: "json",
             async:false,
             success: function(data) {
@@ -453,7 +453,7 @@ $(function() {
             type: "GET",
 //             contentType: "application/json; charset=utf-8", hierarchyLevelCode
             url:  "${servletLeaveHOD}",
-            data: 'branchCode='+branchCode+'&deptCode='+deptCode+'&sectionCode='+sectionCode+'&hierarchyLevelCode='+hierarchyLevelCode,
+            data: 'branchCode='+branchCode+'&deptCode='+deptCode+'&sectionCode='+sectionCode+'&hierarchyLevelCode='+hierarchyLevelCode+'&localeSrv='+"${rc.locale.language}",
             dataType: "json",
             success: function(data) {
 			var  dataHtml = '';
@@ -463,12 +463,13 @@ $(function() {
 		    	 var selct = '';
 		    	 
 		    	 if (hod.hodId==hodId) selct=' checked ';
-			    	 dataHtml += "<tr><td><input type='radio' name='hod'  value='"+hod.hodId+"'"+ selct + "/> " +hod.hodName+ "</td></tr>"; 
+			    	 dataHtml += "<tr><td><input type='radio' name='hod' id='radio"+hod.hodId+"' value='"+hod.hodId+"'"+ selct + "/> <a href='#' class='rdhlink' rdid='"+hod.hodId+"'>" +hod.hodName+ "</a></td></tr>"; 
 		    }
 		    
 		    if(data != null || data != '')
 		    	{
 		    		$(".divHod").html(dataHtml);
+		    		rdLink();
 		    		$("#approverDiv").show();
 		    		
 		    	}
@@ -491,6 +492,18 @@ $(function() {
 		    $('select.selBranchCode').change(populateDropDowns);
 
 });
+
+/**
+ * Make the HOD hyperlink clickable to select the radio button
+ */
+function rdLink(){
+    $(".rdhlink").click(function(event) {
+    				var rdId	=	this.getAttribute("rdid");
+    					$("#radio"+rdId).prop("checked", true)
+                         return false; 
+                         });
+	}
+
 
 /**
  * Accordion
@@ -661,7 +674,7 @@ $(function() {
 </script>
 
 </head>
-
+ 
 <portlet:actionURL var="submitRequest">
 	<portlet:param name="action" value="newApply"/>
 		<portlet:param name="operation">
@@ -775,19 +788,19 @@ $(function() {
 								<c:choose>
 									<c:when test='${opMode=="u"}'>
 										<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
-												<a href="#">
+<!-- 												<a href="#"> -->
 														<spring:message code="prop.leave.app.apply.form.leave.manager"/>
 														<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i></font>
-												</a>
+<!-- 												</a> -->
 										</h3>
 									</c:when>
 									<c:otherwise>
-										<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons">
-												<a href="#">
+										<div>
+<!-- 												<a href="#"> -->
 														<spring:message code="prop.leave.app.apply.form.leave.manager.default"/>
 														<font color="red" size="small"><i><c:out value="${mgrName}"/></i></font>
-												</a>
-										</h3>
+<!-- 												</a> -->
+										</div>
 										<div>
 											<br>
 											<center><spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/></center>
@@ -853,7 +866,7 @@ $(function() {
 															<br>
 														</div>
 														<div id="approverDiv" style="float:none;">
-															<div style="width : 20%; float: ${direction}"> <spring:message code="prop.leave.app.apply.form.approvar.name"/> </div> 
+															<div > <spring:message code="prop.leave.app.apply.form.approvar.name.list"/> </div> 
 															<table id="divHod" class="divHod" style="margin-${direction}:20% " width="100%"></table><form:errors path="hod"  cssClass="error"/>
 														</div>
 											</td>
@@ -958,7 +971,7 @@ $(function() {
 		
 
 		<center>
-			<input type="submit" value='<spring:message code="prop.leave.app.apply.form.requester.submit"/>' style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
+			<input type="submit" value='<spring:message code="prop.leave.app.apply.form.requester.submit"/>' style="border-style: solid; border-color: black; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
 		</center>
 
 		

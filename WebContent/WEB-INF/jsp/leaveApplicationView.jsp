@@ -142,16 +142,13 @@ $(function() {
 	<portlet:param name="action" value="leaveApprove"/>
 </portlet:actionURL>
 
-
-
-
 	<fieldset>
 		<legend>
 			<h3>
 				<spring:message code="prop.leave.app.apply.form.legend.title"/>
 			</h3>
 		</legend>
-			<fieldset>
+			<fieldset style="padding-top=0;margin-top=0;">
 				<legend><spring:message code="prop.leave.app.apply.form.required.details"/></legend>
 				<table cellspacing="0" cellpadding="0" border="1" width="100%">
 					<tr>
@@ -161,7 +158,7 @@ $(function() {
 							</span>
 						</th> 
 						<td><c:out value="${leaveRequest.requestNo}"/></td>
-						<td>&nbsp;</td>
+
 						<th class="PortletHeaderColor">
 							<span class="PortletHeaderText">
 								<spring:message code="prop.leave.app.apply.form.request.date"/>:
@@ -182,14 +179,21 @@ $(function() {
 							</c:if>
 						</td>
 					<c:if test="${leaveRequest.leaveTypeFlag.typeNo == 'A'}">
-						<td>&nbsp;</td>
 						<th class="PortletHeaderColor">
 							<span class="PortletHeaderText">
 								<spring:message code="prop.leave.app.apply.form.salary.advance"/>:
 							</span>
 						</th>
 						<td>
-							<c:out value="${leaveRequest.processSalaray}"/>
+							<c:choose>
+								<c:when test="${leaveRequest.processSalaray == 'Y'}">
+									<spring:message code="prop.leave.app.apply.form.salary.advance.yes"/>
+								</c:when>
+								<c:otherwise>
+									<spring:message code="prop.leave.app.apply.form.salary.advance.no"/>
+								</c:otherwise>
+							</c:choose>
+							
 						</td>
 					</c:if>
 					</tr>
@@ -200,7 +204,7 @@ $(function() {
 							</span>
 						</th>
 						<td><c:out value="${leaveRequest.leaveStartDate}"/></td>
-						<td>&nbsp;</td>
+
 						<th class="PortletHeaderColor">
 							<span class="PortletHeaderText">
 								<spring:message code="prop.leave.app.apply.form.leave.end.date"/>:
@@ -214,7 +218,16 @@ $(function() {
 								<spring:message code="prop.leave.app.apply.form.leave.remarks"/>:
 							</span>
 						</th>
-						<td colspan="4"><c:out value="${leaveRequest.leaveRequestRemarks}"/></td>
+						<td colspan="3">
+						<c:choose>
+							<c:when test="${not empty leaveRequest.leaveRequestRemarks}">
+								<c:out value="${leaveRequest.leaveRequestRemarks}"/>
+							</c:when>
+							<c:otherwise>
+								<spring:message code="prop.leave.app.apply.leave.remarks.not.available"/>
+							</c:otherwise>
+						</c:choose>
+						</td>
 					</tr>
 				</table>
 			</fieldset>
@@ -362,7 +375,16 @@ $(function() {
 						<tr>
 							<td>&nbsp; <c:out value="${lhis.requestDate}" /> </td>
 							<td>&nbsp; <c:out value="${lhis.status.statusDesc}" /> </td>
-							<td>&nbsp; <c:out value="${lhis.leaveRequestRemarks}" /> </td>
+							<td>&nbsp; 
+							<c:choose>
+								<c:when test="${not empty lhis.leaveRequestRemarks}">
+									<c:out value="${lhis.leaveRequestRemarks}" />
+								</c:when>
+								<c:otherwise>
+									<spring:message code="prop.leave.app.apply.leave.remarks.not.available"/>
+								</c:otherwise> 
+							</c:choose>
+							</td>
 						</tr>
 					</c:forEach>
 				</table>
@@ -404,7 +426,16 @@ $(function() {
 							<td>&nbsp;<c:out value="${appHis.employee.empName}" /></td>
 							<td>&nbsp;<c:out value="${appHis.action.actionDate}" /></td>
 							<td>&nbsp;<c:out value="${appHis.action.actionDesc}" /></td>
-							<td>&nbsp;<c:out value="${appHis.action.adminActionRemark}" /></td>	
+							<td>&nbsp;
+							<c:choose>
+								<c:when test="${not empty appHis.action.adminActionRemark}">
+									<c:out value="${appHis.action.adminActionRemark}" />
+								</c:when>
+								<c:otherwise>
+									<spring:message code="prop.leave.app.apply.leave.remarks.not.available"/>
+								</c:otherwise>
+							</c:choose>
+							</td>	
 						</tr>
 					</c:forEach>			
 				</table>

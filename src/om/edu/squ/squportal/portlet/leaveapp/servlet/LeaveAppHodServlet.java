@@ -65,16 +65,22 @@ public class LeaveAppHodServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Locale			locale				=	request.getLocale();	
 		String			branchCode			=	request.getParameter("branchCode");
 		String			deptCode			=	request.getParameter("deptCode");
 		String			hierarchyLevelCode	=	request.getParameter("hierarchyLevelCode");
+		String			localeSrv			=	request.getParameter("localeSrv");
 		String			sectCode			=	null;
 		HoD				deptHead			=	null;
 		List<HoD>		sectHead			=	null;
 		HoD				hoD					=	new HoD("na","na");
 		List<HoD>		hoDList				=	null;
 		String			strJson				=	null;
+		
+		if(null == request.getParameter("localeSrv"))
+		{
+			localeSrv	=	"en";
+		}
+		Locale				locale		=	new Locale(localeSrv);
 		
 		response.setContentType("text/html; charset=utf-8");
 		

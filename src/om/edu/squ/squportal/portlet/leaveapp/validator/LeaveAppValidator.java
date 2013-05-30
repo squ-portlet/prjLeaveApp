@@ -232,15 +232,15 @@ public class LeaveAppValidator implements Validator
 								
 								
 						}
-						else
-						{
-							if(((msDiffLvDate /(constTimeMilli)+1)) > Constants.CONST_DELEGATION_REQ_LEAVE_DAYS)								// delegation requirement
-									{																									// for more than 5 days
-									err.rejectValue("delegatedEmps["+i+"].fromDate", "error.prop.leave.app.delegate.limit.exceed.na", 
-													new Object[]{String.valueOf(Constants.CONST_DELEGATION_REQ_LEAVE_DAYS)}, "");	
-										break;
-									}
-						}
+//						else
+//						{
+//							if(((msDiffLvDate /(constTimeMilli)+1)) > Constants.CONST_DELEGATION_REQ_LEAVE_DAYS)								// delegation requirement
+//									{																									// for more than 5 days
+//									err.rejectValue("delegatedEmps["+i+"].fromDate", "error.prop.leave.app.delegate.limit.exceed.na", 
+//													new Object[]{String.valueOf(Constants.CONST_DELEGATION_REQ_LEAVE_DAYS)}, "");	
+//										break;
+//									}
+//						}
 						
 
 						

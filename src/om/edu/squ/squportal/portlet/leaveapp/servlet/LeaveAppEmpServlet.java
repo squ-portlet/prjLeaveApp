@@ -70,12 +70,16 @@ public class LeaveAppEmpServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String			empNumber		=	request.getParameter("empNumber");
-		String			branchCode	=	request.getParameter("branchCode");
-		
+		String			branchCode		=	request.getParameter("branchCode");
+		String			localeSrv		=	request.getParameter("localeSrv");
 		//String			deptCode	=	request.getParameter("deptCode");
 		response.setContentType("text/html; charset=utf-8");
 		
-		Locale			locale		=	request.getLocale();			
+		if(null == request.getParameter("localeSrv"))
+		{
+			localeSrv	=	"en";
+		}
+		Locale				locale		=	new Locale(localeSrv);
 		
 		LeaveDbDao		leaveDbDao	=	new LeaveDbDaoImpl(datasource);
 		List<Employee>	employees	=	leaveDbDao.getEmployee(empNumber,branchCode,locale);

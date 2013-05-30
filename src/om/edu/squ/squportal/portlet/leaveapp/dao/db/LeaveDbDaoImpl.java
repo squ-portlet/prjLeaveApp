@@ -1364,7 +1364,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				leaveRequest.setStatus(leaveStatus);
 					employeeReq.setEmpNumber(rs.getString(Constants.CONST_EMP_CODE));
 					employeeReq.setEmpInternetId(rs.getString(Constants.CONST_EMP_INTERNET_ID));
-					employeeReq.setEmpName(rs.getString(Constants.CONST_EMP_NAME));
+					employeeReq.setEmpName(rs.getString(Constants.CONST_EMP_FIRST_NAME) + " " +rs.getString(Constants.CONST_EMP_LAST_NAME ));
 					employeeReq.setHierarchyCode(rs.getString(Constants.CONST_EMP_HIERARCHY_CODE));
 					if(rs.getString(Constants.CONST_DELEGATE_STATUS).equals(Constants.CONST_EMP_SENIOR))
 					{
@@ -1376,7 +1376,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					}
 				leaveRequest.setEmployee(employeeReq);
 						employeeApp.setEmpNumber(rs.getString(Constants.CONST_EMP_APP_CODE));
-						employeeApp.setEmpName(rs.getString(Constants.CONST_EMP_APP_NAME));
+						employeeApp.setEmpName(rs.getString(Constants.CONST_EMP_APP_FIRST_NAME) + " " +rs.getString(Constants.CONST_EMP_APP_LAST_NAME) );
 					leaveApprove.setEmployee(employeeApp);
 				leaveRequest.setApprove(leaveApprove);
 				leaveRequest.setApproverSequenceNo(rs.getInt(Constants.CONST_APPROVER_SEQUENCE_NO));

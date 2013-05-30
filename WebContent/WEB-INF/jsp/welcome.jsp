@@ -299,7 +299,6 @@
 						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.start.date"/></th>
 						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
 						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
-						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.date"/></th>
 						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.status"/></th>
 						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.approver"/></th>
 						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.action"/></th>
@@ -354,9 +353,6 @@
 						</td>
 						<td>
 							<c:out value="${req.leaveType.typeDesc}"/>
-						</td>
-						<td class="clsDate">
-							<c:out value="${req.requestDate}"/>
 						</td>
 						<td>
 							<c:out value="${req.leaveStatus}"/>
@@ -442,14 +438,13 @@
  -->	
 <c:if test="${appCount != 0}">
 	<fieldset >
-		<legend><spring:message code="prop.leave.app.title.request.approver.header"/> (<c:out value="${empName}"/>)</legend>
+		<legend><spring:message code="prop.leave.app.title.request.approver.header"/></legend>
 		<table border="1" style="border:1px solid;  border-collapse: collapse;" width="100%">
 			<tr>
 					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.no"/></th>
 					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.start.date"/></th>
 					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
 					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.date"/></th>
 					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.status"/></th>
 					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.requester"/></th>
 					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.action"/></th>
@@ -505,9 +500,6 @@
 					<td>
 						<c:out value="${req.leaveType.typeDesc}"/>
 					</td>
-					<td class="clsDate">
-						<c:out value="${req.requestDate}"/>
-					</td>
 					<td>
 						<c:out value="${req.leaveStatus}"/>
 					</td>
@@ -522,8 +514,6 @@
 						</c:choose>
 					</td>
 					<td>
-					
-					
 							<portlet:renderURL var="varLeaveView">
 								<portlet:param name="action" value="leaveView"/>
 								<portlet:param name="reqNo" value="${req.requestNo}"/>

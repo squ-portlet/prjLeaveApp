@@ -66,12 +66,19 @@ public class LeaveAppBranchServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Locale				locale		=	request.getLocale();			
+		//Locale				locale		=	request.getLocale();	
+		
 		String				strJson		=	null;
 		String				deptCode	=	null;
 		String				branchCode	=	request.getParameter("branchCode");
+		String				localeSrv	=	request.getParameter("localeSrv");				
 		Gson 				gson 		= 	new Gson();
-		
+		if(null == request.getParameter("localeSrv"))
+		{
+			localeSrv	=	"en";
+		}
+
+		Locale				locale		=	new Locale(localeSrv);
 		response.setContentType("text/html; charset=utf-8");
 		
 		LeaveDbDao			leaveDbDao	=	new LeaveDbDaoImpl(datasource);
