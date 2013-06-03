@@ -477,14 +477,14 @@ public class LeaveAppControllerMain
 	@RequestMapping(params="action=leaveCancel")
 	private void leaveApplicationCancel
 	(
-			@RequestParam("reqNum") String requestNo,
-			@RequestParam("appEmpNo") String appEmpNo,
 			ActionRequest request,
 			ActionResponse response, PortletRequest req, 
 			@ModelAttribute("leaveAppModel") LeaveAppModel leaveAppModel,
 			BindingResult result,Locale locale,Model model		
 	)
 	{
+		String	appEmpNo	=	leaveAppModel.getApproverEmpNumber();
+		String	requestNo	=	leaveAppModel.getRequestNo();
 		String message	=	leaveAppServiceDao.cancelLeaveRequest(appEmpNo, requestNo, locale);
 		response.setRenderParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, message);
 		response.setRenderParameter("action", "backToMain");
@@ -513,8 +513,6 @@ public class LeaveAppControllerMain
 	@RequestMapping(params="action=leaveAutoAdminAction")
 	private void leaveAppAutoAdminAction 
 		(
-				@RequestParam("reqNum") String requestNo,
-				@RequestParam("appActionNum") String actionNo,
 				ActionRequest request,
 				ActionResponse response, PortletRequest req, 
 				@ModelAttribute("leaveAppModel") LeaveAppModel leaveAppModel,
@@ -522,6 +520,8 @@ public class LeaveAppControllerMain
 
 		)
 	{
+		String 	requestNo		=	leaveAppModel.getRequestNo();
+		String	actionNo		=	leaveAppModel.getApproverAction();
 		Employee	employee	=	(Employee)request.getPortletSession().getAttribute("employee");
 		int resultApprove = leaveAppServiceDao.setLeaveApprove(requestNo, actionNo, locale, employee);
 		if(resultApprove == 0)

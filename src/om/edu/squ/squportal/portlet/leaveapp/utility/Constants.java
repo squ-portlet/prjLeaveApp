@@ -234,39 +234,39 @@ public interface Constants
 	/******************************************************/
 	
 	/**********LDAP***************************************/
-	public	static	String	LDAP_COMMON_NAME					=			"cn";
-	public	static	String	LDAP_EMPLOYEE_NUMBER				=			"employeenumber"; 
-	public	static	String	LDAP_EMPLOYEE_NUMBER2				=			"description"; 
+	public	static	String	LDAP_COMMON_NAME								=			"cn";
+	public	static	String	LDAP_EMPLOYEE_NUMBER							=			"employeenumber"; 
+	public	static	String	LDAP_EMPLOYEE_NUMBER2							=			"description"; 
 	/******************************************************/
 	
 	/************* PROPERTY FILE ******************************/
-	public	static	String	RESOURCE_PROPERTY_FILE_NAME			=			"messages";
+	public	static	String	RESOURCE_PROPERTY_FILE_NAME						=			"messages";
 	/******************************************************/
 
 	
 	/************* EMAIL *********************************/
-	//public	static	String	RESOURCE_PROPERTY_FILE_NAME		=			"mailProp";
-	public	static	String	MAIL_SMTP_HOST						=			"smtpHost";
-	public	static	String	MAIL_SMTP_PORT						=			"smtpPort";
-	public	static	String	MAIL_FROM							=			"portal_feedback@squ.edu.om";
-	public	static	String	MAIL_SUBJECT						=			"Leave application.";
-	public	static	String	MAIL_REQUEST_NO						=			" Request No: ";
-	public	static	boolean	IS_MAIL_SEND_ON						=			true;
-	public	static	String	CONST_TEMP_EMAIL_TO					=			null;
+	//public	static	String	RESOURCE_PROPERTY_FILE_NAME					=			"mailProp";
+	public	static	String	MAIL_SMTP_HOST									=			"smtpHost";
+	public	static	String	MAIL_SMTP_PORT									=			"smtpPort";
+	public	static	String	MAIL_FROM										=			"portal_feedback@squ.edu.om";
+	public	static	String	MAIL_SUBJECT									=			"Leave application.";
+	public	static	String	MAIL_REQUEST_NO									=			" Request No: ";
+	public	static	boolean	IS_MAIL_SEND_ON									=			true;
+	public	static	String	CONST_TEMP_EMAIL_TO								=			null;
 	/******************************************************/
 
 	/************* EMAIL TEMPLATE***************************/
-	public	static	String	TEMPL_LEAVE_APP						=			"TEMPLATE_EMAIL_OTHER";  
-	public	static	String	TEMPL_LEAVE_APP_REQUESTER			=			"TEMPLATE_EMAIL_REQUESTER";	
-	public	static	String	TEMPL_LEAVE_APP_APPROVER			=			"TEMPLATE_EMAIL_APPROVER"; 
+	public	static	String	TEMPL_LEAVE_APP									=			"TEMPLATE_EMAIL_OTHER";  
+	public	static	String	TEMPL_LEAVE_APP_REQUESTER						=			"TEMPLATE_EMAIL_REQUESTER";	
+	public	static	String	TEMPL_LEAVE_APP_APPROVER						=			"TEMPLATE_EMAIL_APPROVER"; 
 
 	/******************************************************/
 
-	public	static	String	LEAVE_URL							=			"http://portalmid1.squ.edu.om/portal/page/portal/staff/leaveApplication";
-	public	static	String	CONST_DELEGATION_AVL				=			"This leave application has delegation";
-	public	static	String	CONST_DELEGATION_NAME				=			"Name : ";
-	public	static	String	CONST_DELEGATION_START_DATE			=			"Start : ";
-	public	static	String	CONST_DELEGATION_END_DATE			=			"End : ";
+	public	static	String	LEAVE_URL										=			"http://portalmid1.squ.edu.om/portal/page/portal/staff/leaveApplication";
+	public	static	String	CONST_DELEGATION_AVL							=			"This leave application has delegation";
+	public	static	String	CONST_DELEGATION_NAME							=			"Name : ";
+	public	static	String	CONST_DELEGATION_START_DATE						=			"Start : ";
+	public	static	String	CONST_DELEGATION_END_DATE						=			"End : ";
 
 	
 	/**********SQL**********************************/

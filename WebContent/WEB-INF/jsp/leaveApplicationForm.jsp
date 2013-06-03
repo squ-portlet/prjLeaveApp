@@ -812,7 +812,7 @@ $(function() {
 									<div>
 										<fieldset>
 										<legend><spring:message code="prop.leave.app.apply.form.leave.manager.select"/> </legend>
-											<table>     
+											<table width="100%">     
 												<tr>
 													<td>
 														<div style="float: none;">

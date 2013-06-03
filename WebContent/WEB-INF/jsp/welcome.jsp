@@ -190,10 +190,11 @@
 			/*Dialog for approve request*/
 			$(function() { 
 			    $(".refApproveClass").click(function(event) {
-			    	 								var linkRef     = this.getAttribute("linkRef");
-			    	 								var varReqNo = this.getAttribute("reqNo");
-			    	 								var msg	     = '<spring:message code="prop.leave.app.title.request.dialog.approve.msg" arguments="varReqNo"/>';
-			    	 								var msgReplace	=	msg.replace("varReqNo",varReqNo);
+			    	 								var linkRef     	= this.getAttribute("linkRef");
+			    	 								var varReqNo 		= this.getAttribute("reqNo");
+			    	 								var	varAppActionNum = this.getAttribute("appActionNum");
+			    	 								var msg	     		= '<spring:message code="prop.leave.app.title.request.dialog.approve.msg" arguments="varReqNo"/>';
+			    	 								var msgReplace		=	msg.replace("varReqNo",varReqNo);
 			    	 								$("#dialogApprove").html(msgReplace);
 			    	 								event.preventDefault();
 			    	 								 $("#dialogApprove").closest('.ui-dialog').children('.ui-dialog-titlebar').addClass("dialog-title");
@@ -209,11 +210,17 @@
 			                            					},
 			                          					buttons: {
 			                          						"<spring:message code='prop.leave.app.title.request.dialog.approve.button.yes'/>": function() {
-															window.location=linkRef;
+			                          							$("#requestNo").val(varReqNo);
+			                          							$("#approverAction").val(varAppActionNum);
+							    	 							$("#leaveAppModel").attr("action", linkRef);
+							    	 							$("#leaveAppModel").submit();
 			                          						$( this ).dialog( "close" );
 			                          						},
 			                          						"<spring:message code='prop.leave.app.title.request.dialog.approve.button.exit'/>": function() {
-			                          						$( this ).dialog( "close" );
+			                          							$("#requestNo").val("");
+			                          							$("#approverAction").val("");
+			                          							$("#leaveAppModel").attr("action", "");
+			                          							$( this ).dialog( "close" );
 			                          						}
 			                          						}
 			                                        }		
@@ -229,8 +236,9 @@
 			$(function() { 
 			    $(".mydialogCls").click(function(event) {
 		    	
-			    	 								var i     = this.getAttribute("indexRef");
-			    	 								var varReqNo = this.getAttribute("reqNo");
+			    	 								var i     		= this.getAttribute("indexRef");
+			    	 								var varReqNo 	= this.getAttribute("reqNo");
+			    	 								var	varAppEmpNo = this.getAttribute("appEmpNo");
 			    	 								var msg	     = '<spring:message code="prop.leave.app.title.request.cancel.msg" arguments="varReqNo"/>';
 			    	 								var msgReplace	=	msg.replace("varReqNo",varReqNo);
 			    	 								$("#myDialog").html(msgReplace);
@@ -248,11 +256,17 @@
 			                            					},
 			                          					buttons: {
 			                          						"<spring:message code='prop.leave.app.title.request.cancel.button.remove'/>": function() {
-															window.location=i;
+			                          						$("#requestNo").val(varReqNo);
+			                          						$("#approverEmpNumber").val(varAppEmpNo);
+						    	 							$("#leaveAppModel").attr("action", i);
+						    	 							$("#leaveAppModel").submit();
 			                          						$( this ).dialog( "close" );
 			                          						},
 			                          						"<spring:message code='prop.leave.app.title.request.cancel.button.exit'/>": function() {
-			                          						$( this ).dialog( "close" );
+			                          							$("#requestNo").val("");
+			                          							$("#approverEmpNumber").val("");
+			                          							$("#leaveAppModel").attr("action", "");
+			                          							$( this ).dialog( "close" );
 			                          						}
 			                          						}
 			                                        }		
@@ -285,6 +299,12 @@
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
+
+			<form:form modelAttribute="leaveAppModel" method="post" htmlEscape="false">
+				<form:hidden 	path="requestNo" />
+				<form:hidden	path="approverEmpNumber"/>
+				<form:hidden	path="approverAction"/>
+			</form:form>
 
 <!-- 
 		Requester table
@@ -331,8 +351,6 @@
 					</portlet:renderURL>
 					<portlet:actionURL var="varLeaveCancel">
 						<portlet:param name="action" value="leaveCancel"/>
-						<portlet:param name="reqNum" value="${req.requestNo}"/>
-						<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
 					</portlet:actionURL>
 				<tr>
 						<td class="clsNum">
@@ -389,9 +407,7 @@
 											<c:otherwise>
 													 	<c:forEach items="${adminActions}" var="admActions">
 														<portlet:actionURL var="varLeaveAdminAction">
-														<portlet:param name="action" value="leaveAutoAdminAction"/>
-														<portlet:param name="reqNum" value="${req.requestNo}"/>
-														<portlet:param name="appActionNum" value="${admActions.actionCode}"/>
+															<portlet:param name="action" value="leaveAutoAdminAction"/>
 														</portlet:actionURL>
 	
 														<portlet:renderURL var="varLeaveApprove2">
@@ -401,12 +417,13 @@
 														</portlet:renderURL>
 	
 														<c:if test="${(admActions.actionCode == leaveActionApprove)}">
-																|&nbsp;&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		
+																|&nbsp;&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" appActionNum="${admActions.actionCode}" linkRef="${varLeaveAdminAction}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		
 															</c:if>
 															<c:if test="${(admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">
 																&nbsp;&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		
 															</c:if>
 														</c:forEach>
+														&nbsp;&nbsp;<a href="${varLeaveApprove}"><font color="red"><spring:message code="prop.leave.app.title.request.actions" /></font></a>&nbsp;&nbsp;|
 											</c:otherwise>
 										</c:choose>
 									</c:when>
@@ -420,7 +437,7 @@
 										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
 									</c:when>
 									<c:otherwise>
-										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" indexRef="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
+										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" appEmpNo="${req.approve.employee.empNumber}" indexRef="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
 									</c:otherwise>
 								</c:choose>
 						</td>
@@ -477,8 +494,6 @@
 				</portlet:renderURL>
 				<portlet:actionURL var="varLeaveCancel">
 					<portlet:param name="action" value="leaveCancel"/>
-					<portlet:param name="reqNum" value="${req.requestNo}"/>
-					<portlet:param name="appEmpNo" value="${req.approve.employee.empNumber}"/>
 				</portlet:actionURL>
 			<tr>
 					<td class="clsNum">
@@ -534,8 +549,8 @@
 												 	<c:forEach items="${adminActions}" var="admActions">
 													<portlet:actionURL var="varLeaveAdminAction">
 													<portlet:param name="action" value="leaveAutoAdminAction"/>
-													<portlet:param name="reqNum" value="${req.requestNo}"/>
-													<portlet:param name="appActionNum" value="${admActions.actionCode}"/>
+<%-- 													<portlet:param name="reqNum" value="${req.requestNo}"/> --%>
+<%-- 													<portlet:param name="appActionNum" value="${admActions.actionCode}"/> --%>
 													</portlet:actionURL>
 
 													<portlet:renderURL var="varLeaveApprove2">
@@ -545,12 +560,13 @@
 													</portlet:renderURL>
 
 													<c:if test="${(admActions.actionCode == leaveActionApprove)}">
-															|&nbsp;&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		
+															|&nbsp;&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}" appActionNum="${admActions.actionCode}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		
 														</c:if>
 														<c:if test="${(admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">
-															&nbsp;&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		
+															&nbsp;&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|
 														</c:if>
 													</c:forEach>
+													&nbsp;&nbsp;<a href="${varLeaveApprove}"><font color="red"><spring:message code="prop.leave.app.title.request.actions" /></font></a>&nbsp;&nbsp;|
 										</c:otherwise>
 									</c:choose>
 								</c:when>
@@ -564,7 +580,7 @@
 									<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
 								</c:when>
 								<c:otherwise>
-									<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" indexRef="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
+									<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" appEmpNo="${req.approve.employee.empNumber}" indexRef="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
 								</c:otherwise>
 							</c:choose>					
 					</td>
