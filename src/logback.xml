@@ -29,7 +29,7 @@
  
   </appender>
  
-     <logger name="om.edu.squ.squportal.portlet.personalinfo">  
+     <logger name="om.edu.squ.squportal.portlet.leaveapp">  
          <level value="INFO" />  
      </logger> 
  

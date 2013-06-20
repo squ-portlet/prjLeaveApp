@@ -199,6 +199,7 @@ http://designwithpc.com/Plugins/ddSlick
 							</span>
 						</th>
 						<td>
+							<spring:message code="prop.leave.app.apply.form.approvar.action.remarks"/>
 							<form:errors path="approverRemark" cssClass="error" />
 							<form:textarea path="approverRemark" cssStyle="width:100%" disabled="${varDisable}"/>
 							
@@ -207,6 +208,7 @@ http://designwithpc.com/Plugins/ddSlick
 				</table>
 				<center>
 				<c:if test="${!varDisable}">
+					<br>
 					<input type="submit" value='<spring:message code="prop.leave.app.apply.form.approver.submit"/>' 
 					style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px" 
 					/>
