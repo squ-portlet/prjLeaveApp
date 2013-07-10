@@ -109,6 +109,7 @@
 <c:url value="/LeaveAppBranchServlet" var="servletLeaveBranch"/>
 <c:url value="/LeaveAppHodServlet" var="servletLeaveHOD"/>
 <c:url value="/LeaveAppResearch" var="servletResearch" />
+<c:url value="/LeaveAppBalanceLeave" var="servletLeaveBal" />
 
 <c:if test="${rc.locale.language=='ar'}">
 	<style>
@@ -219,6 +220,29 @@ $(function(){
 						$( ".calendarDelgEnd" ).datepicker( "option", "minDate", selectedDate );
 					}
 			showHideProcessSalaray();
+
+			var startLeaveDt=$(this).val();
+			var empNumber = "${empNumber}";
+		       $.ajax({
+		            type: "GET",
+//		             contentType: "application/json; charset=utf-8", hierarchyLevelCode
+		            url:  "${servletLeaveBal}",
+		            data: 'startLeaveDt='+startLeaveDt+"&empNumber="+empNumber,
+		            dataType: "json",
+		            success: function(resp) {
+		            			if(null != resp && resp.length > 0 && $("#leaveTypeFlag option:selected").val() == 'A')
+		            			{
+									$("#divLeaveBal").html('<font color="red">'+resp+'</font>' + '&nbsp; <spring:message code="prop.leave.app.apply.form.leave.balance.days"/>');
+									$("#divLeaveBalTxt").html('&nbsp;&nbsp; <spring:message code="prop.leave.app.apply.form.leave.balance"/> &nbsp; : &nbsp;&nbsp;');
+		            			}
+		            			else
+		            				{
+		            				$("#divLeaveBal").html("");
+		            				$("#divLeaveBalTxt").html("");
+		            				}
+		            }
+		        }
+		        );
 			
 				}
 		//inline: true
@@ -277,6 +301,23 @@ $(function(){
 	});
 });
 
+/**
+ * If not Annual leave then leave balance data will  
+ */
+$(function() {
+	var varLeaveTypeF = function() {
+		if ($("#leaveTypeFlag option:selected").val() != 'A')
+	{
+		$("#divLeaveBal").html("");
+		$("#divLeaveBalTxt").html("");
+	}
+	};
+    $('#leaveTypeFlag').each(varLeaveTypeF);
+    $('#leaveTypeFlag').change(varLeaveTypeF);
+});
+
+
+
 
 
 //reference of the code from url mentioned below :
@@ -332,8 +373,6 @@ $(function() {
             			$(optGroup).append(opt);
             		});            		
             		currentDropdown.closest('tr').find("select.selEmpNum").append(optGroup);
-           		
-            		
             		
             		var optGroup=$('<optgroup></optgroup>');
         			$(optGroup).attr('label','<spring:message code="prop.leave.app.dropdown.delg.emp.group2"/>');
@@ -493,6 +532,8 @@ $(function() {
 
 });
 
+
+
 /**
  * Make the HOD hyperlink clickable to select the radio button
  */
@@ -518,6 +559,9 @@ $(function() {
 		);
 	});
 
+/**
+ * Dialogue for differ leave date 
+ */
 	function diffLeaveDate()
 		{
 			
@@ -741,9 +785,12 @@ $(function() {
 							<spring:message code="prop.leave.app.apply.form.leave.start.date"/>:
 						</span>
 					</th>
-					<td><form:input path="leaveStartDate" id="leaveStartDate" cssClass="calendarStart" />
+					<td><div style="float: ${direction};"><form:input path="leaveStartDate" id="leaveStartDate" cssClass="calendarStart" /></div><div id="divLeaveBalTxt" style="float: ${direction};"></div><div id="divLeaveBal"></div> 
 						<br><form:errors path="leaveStartDate" cssClass="error" />
 					</td>
+	
+						
+	
 				</tr>
 				<tr>
 					<th class="PortletHeaderColor">

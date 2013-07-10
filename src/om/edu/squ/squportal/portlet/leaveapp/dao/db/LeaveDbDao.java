@@ -517,5 +517,19 @@ public interface LeaveDbDao
 	 */
 	public int removeLeaveRequest(String requestNo);
 	
-	
+
+	/**
+	 * 
+	 * method name  : getLeaveBalance
+	 * @param empNumber
+	 * @param strStartDate
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : String
+	 * 
+	 * purpose		: Get Leave balance
+	 *
+	 * Date    		:	Jul 8, 2013 1:21:42 PM
+	 */
+	public String	getLeaveBalance(String empNumber, String strStartDate);
 }

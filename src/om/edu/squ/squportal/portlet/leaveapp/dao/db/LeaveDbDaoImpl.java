@@ -64,6 +64,7 @@ import om.edu.squ.squportal.portlet.leaveapp.bo.Sabbatical;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Section;
 import om.edu.squ.squportal.portlet.leaveapp.exception.DbNotAvailableException;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
+import om.edu.squ.squportal.portlet.leaveapp.utility.DateChange;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailGeneral;
 import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailLeave;
@@ -75,7 +76,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -107,6 +110,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	public LeaveDbDaoImpl(DataSource dataSource)
 	{
 		this.namedParameterJdbcTemplate	=	new NamedParameterJdbcTemplate(dataSource);
+		this.jdbcTemplate				=	new JdbcTemplate(dataSource);
 	}
 	
 	/**
@@ -2251,6 +2255,57 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	private int removeLeaveReqHistory(String requestNo)
 	{
 		return jdbcTemplate.update(Constants.SQL_DELETE_LEAVE_WORKFLOW_LOG_SPECIFIC, requestNo);
+	}
+	
+	/**
+	 * 
+	 * method name  : getLeaveBalance
+	 * @param empNumber
+	 * @param strStartDate
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : String
+	 * 
+	 * purpose		: Get Leave balance
+	 *
+	 * Date    		:	Jul 8, 2013 1:21:42 PM
+	 * @throws ParseException 
+	 */
+	public String	getLeaveBalance(String empNumber, String strStartDate)
+	{
+		this.simpleJdbcCall				=	new SimpleJdbcCall(this.jdbcTemplate);
+		
+		java.sql.Date	dateSQL			=	null;
+		try
+		{
+			dateSQL	=	new DateChange(strStartDate).getStringToSqlDate();
+		}
+		catch(ParseException pex)
+		{
+			logger.error("Parse exception in date : "+pex);
+		}
+		
+		
+		simpleJdbcCall.withFunctionName(Constants.CONST_FUNC_CHECK_LEAVE_BALANCE);
+		simpleJdbcCall.withoutProcedureColumnMetaDataAccess();
+		simpleJdbcCall.useInParameterNames(
+				Constants.CONST_FUNC_COL_IN_E_CODE,
+				Constants.CONST_FUNC_COL_IN_SDATE
+				);
+		simpleJdbcCall.declareParameters(
+				new SqlOutParameter(Constants.CONST_FUNC_COL_OUT_LEAVE_BAL, Types.NUMERIC),
+				new SqlParameter(Constants.CONST_FUNC_COL_IN_E_CODE, Types.VARCHAR),
+				new SqlParameter(Constants.CONST_FUNC_COL_IN_SDATE, Types.DATE)
+				
+				);
+
+		Map<String,Object> 	paramIn				=	new HashMap<String, Object>();
+		paramIn.put(Constants.CONST_FUNC_COL_IN_E_CODE, empNumber);
+		paramIn.put(Constants.CONST_FUNC_COL_IN_SDATE, dateSQL);
+		
+		
+		
+		return String.valueOf(simpleJdbcCall.executeFunction(Object.class, paramIn));
 	}
 	
 }

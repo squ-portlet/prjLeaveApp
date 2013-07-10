@@ -221,6 +221,11 @@ public interface Constants
 	public static final	String	CONST_PROC_COL_OUT_P_MSG_ENG_RESEARCH		=			"P_MSG_ENG";
 	public static final	String	CONST_PROC_COL_OUT_P_MSG_ARB_RESEARCH		=			"P_MSG_ARB";
 	
+	/************************************** FUNCTION - Check leave balance **************************/
+	public static final	String	CONST_FUNC_CHECK_LEAVE_BALANCE				=			"LEAVE_AVAIL";
+	public static final	String	CONST_FUNC_COL_IN_E_CODE					=			"E_CODE";
+	public static final	String	CONST_FUNC_COL_IN_SDATE						=			"SDATE";
+	public static final	String	CONST_FUNC_COL_OUT_LEAVE_BAL				=			"v_return";
 	
 	/******************************************************/
 	

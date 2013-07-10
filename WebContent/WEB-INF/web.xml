@@ -83,4 +83,14 @@
     <servlet-name>LeaveAppResearch</servlet-name>
     <url-pattern>/LeaveAppResearch</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>LeaveAppBalanceLeave</display-name>
+    <servlet-name>LeaveAppBalanceLeave</servlet-name>
+    <servlet-class>om.edu.squ.squportal.portlet.leaveapp.servlet.LeaveAppBalanceLeave</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LeaveAppBalanceLeave</servlet-name>
+    <url-pattern>/LeaveAppBalanceLeave</url-pattern>
+  </servlet-mapping>
 </web-app>
