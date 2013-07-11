@@ -269,6 +269,22 @@ $(function(){
 	    		$( ".calendarDelgStart" ).datepicker( "option", "maxDate", selectedDate );
 			}
 	    	
+	    	var durationDay	=	(($( ".calendarEnd" ).datepicker( "getDate" ) -  $( ".calendarStart" ).datepicker( "getDate" ))/(1000*60*60*24))+1;
+	    	if(null != $( ".calendarStart" ).datepicker( "getDate" ) && $( ".calendarStart" ).datepicker( "getDate" ) != "")
+	    		{
+	    			$("#divLeaveDurTxt").html('&nbsp;&nbsp <spring:message code="prop.leave.app.apply.form.leave.duration"/>&nbsp; : &nbsp;&nbsp;');
+	    			$("#divLeaveDur").html('<font color="red">'+durationDay+'</font> &nbsp;<spring:message code="prop.leave.app.apply.form.leave.balance.days"/>');
+	    		}
+	    	else
+	    		{
+	    			$("#divLeaveDurTxt").html("");
+	    			$("#divLeaveDur").html("");
+	    		}
+	    	if(null == $( ".calendarEnd" ).datepicker( "getDate" ) || $( ".calendarEnd" ).datepicker( "getDate" ) == "")
+	    		{
+	    			$("#divLeaveDurTxt").html("");
+    				$("#divLeaveDur").html("");
+	    		}
 	    	showHideProcessSalaray();
 	    }
 	});
@@ -789,8 +805,6 @@ $(function() {
 						<br><form:errors path="leaveStartDate" cssClass="error" />
 					</td>
 	
-						
-	
 				</tr>
 				<tr>
 					<th class="PortletHeaderColor">
@@ -798,7 +812,8 @@ $(function() {
 							<spring:message code="prop.leave.app.apply.form.leave.end.date"/>:
 						</span>
 					</th>
-					<td><form:input path="leaveEndDate" id="leaveEndDate" cssClass="calendarEnd" />
+					<td>
+						<div style="float: ${direction};"><form:input path="leaveEndDate" id="leaveEndDate" cssClass="calendarEnd" /></div><div id="divLeaveDurTxt" style="float: ${direction};"></div><div id="divLeaveDur"></div>
 						<br><form:errors path="leaveEndDate" cssClass="error"/>
 					</td>
 				</tr>
