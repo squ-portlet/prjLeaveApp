@@ -52,6 +52,7 @@ public class LeaveAppModel implements Serializable
 	private	String			leaveRemarks;
 	private	String			leavePurpose;
 	private	String			leaveLastReturnDate;
+	private	long			leaveBalance;
 	private	String			employeeNumber;
 	private	String			empLevel;
 	private	String			researchId;
@@ -248,6 +249,27 @@ public class LeaveAppModel implements Serializable
 	public void setLeaveLastReturnDate(String leaveLastReturnDate)
 	{
 		this.leaveLastReturnDate = leaveLastReturnDate;
+	}
+	
+	/**
+	 * Getter Method	: getLeaveBalance
+	 * @return the leaveBalance
+	 * 
+	 * Date				: Jul 14, 2013
+	 */
+	public long getLeaveBalance()
+	{
+		return this.leaveBalance;
+	}
+	/**
+	 * Setter method : setLeaveBalance
+	 * @param leaveBalance the leaveBalance to set
+	 * 
+	 * Date          : Jul 14, 2013 11:41:00 AM
+	 */
+	public void setLeaveBalance(long leaveBalance)
+	{
+		this.leaveBalance = leaveBalance;
 	}
 	/**
 	 * Getter Method	: getEmployeeNumber
@@ -617,6 +639,9 @@ public class LeaveAppModel implements Serializable
 						+ this.leavePurpose + ", " : "")
 				+ (this.leaveLastReturnDate != null ? "leaveLastReturnDate="
 						+ this.leaveLastReturnDate + ", " : "")
+				+ "leaveBalance="
+				+ this.leaveBalance
+				+ ", "
 				+ (this.employeeNumber != null ? "employeeNumber="
 						+ this.employeeNumber + ", " : "")
 				+ (this.empLevel != null ? "empLevel=" + this.empLevel + ", "

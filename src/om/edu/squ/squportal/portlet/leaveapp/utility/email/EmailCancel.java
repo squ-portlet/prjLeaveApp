@@ -110,7 +110,6 @@ public class EmailCancel extends EmailDataAbstract implements EmailLeave
 		{
 			this.emailData.setMailTo(getEmpApprover().getEmpInternetId()+"@squ.edu.om");
 		}
-		this.emailData.setMailTo("bhabesh@squ.edu.om");	
 		this.emailData.setEmailReceiverNameEn(getEmpApprover().getEmpNameEn());
 		this.emailData.setEmailReceiverNameAr(getEmpApprover().getEmpNameAr());
 		this.emailData.setEmailTemplateName(emailTemplateApproverPath);	

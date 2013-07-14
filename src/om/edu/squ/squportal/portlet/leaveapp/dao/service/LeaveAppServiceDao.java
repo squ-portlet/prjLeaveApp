@@ -400,4 +400,20 @@ public interface LeaveAppServiceDao
 	 */
 	public String removeLeaveRequest(String requestNo,Locale locale);
 	
+	/**
+	 * 
+	 * method name  : getLeaveBalance
+	 * @param empNumber
+	 * @param strStartDate
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : String
+	 * 
+	 * purpose		: Get Leave balance
+	 *
+	 * Date    		:	Jul 8, 2013 1:21:42 PM
+	 * @throws ParseException 
+	 */
+	public String	getLeaveBalance(String empNumber, String strStartDate);
+	
 }

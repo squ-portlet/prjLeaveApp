@@ -100,6 +100,12 @@ public class LeaveAppValidator implements Validator
 				long	constTimeMilli	=	1000*60*60*24;	
 				long	lvDateNos		=	(msDiffLvDate/constTimeMilli)+1;						// total number of leaves
 				long	delgDateNos		=	0;														// total number of delegation dates 
+				long	empLeaveBal		=	leaveAppModel.getLeaveBalance();						// employee leave balance
+				
+				if(leaveAppModel.getLeaveTypeFlag().equals("A") && lvDateNos>empLeaveBal)
+				{
+					err.rejectValue("leaveEndDate", "error.prop.leave.app.annual.leave.exceed");
+				}
 				
 				if(msDiffLvDate <0)
 				{

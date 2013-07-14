@@ -188,6 +188,7 @@
 
 <script>
 var resDtIssueOK	=	true;
+var varLeaveBal		=	null;
 $(function(){
 	// Datepicker
 	$('.calendar').datepicker({
@@ -232,6 +233,7 @@ $(function(){
 		            success: function(resp) {
 		            			if(null != resp && resp.length > 0 && $("#leaveTypeFlag option:selected").val() == 'A')
 		            			{
+		            				varLeaveBal	= resp;
 									$("#divLeaveBal").html('<font color="red">'+resp+'</font>' + '&nbsp; <spring:message code="prop.leave.app.apply.form.leave.balance.days"/>');
 									$("#divLeaveBalTxt").html('&nbsp;&nbsp; <spring:message code="prop.leave.app.apply.form.leave.balance"/> &nbsp; : &nbsp;&nbsp;');
 		            			}
@@ -274,16 +276,29 @@ $(function(){
 	    		{
 	    			$("#divLeaveDurTxt").html('&nbsp;&nbsp <spring:message code="prop.leave.app.apply.form.leave.duration"/>&nbsp; : &nbsp;&nbsp;');
 	    			$("#divLeaveDur").html('<font color="red">'+durationDay+'</font> &nbsp;<spring:message code="prop.leave.app.apply.form.leave.balance.days"/>');
+	    			if(parseInt(durationDay)>parseInt(varLeaveBal))
+	    				{
+	    					$("#divErrLeaveDuration").html('<br><font color="red"><spring:message code="error.prop.leave.app.annual.leave.exceed"/></font>');
+	    					$("#bttnSubmit").hide();
+	    				}
+	    			else
+	    				{
+	    					$("#divErrLeaveDuration").html("");
+	    					$("#bttnSubmit").show();
+	    				}
+	    			
 	    		}
 	    	else
 	    		{
 	    			$("#divLeaveDurTxt").html("");
 	    			$("#divLeaveDur").html("");
+	    			$("#divErrLeaveDuration").html("");
 	    		}
 	    	if(null == $( ".calendarEnd" ).datepicker( "getDate" ) || $( ".calendarEnd" ).datepicker( "getDate" ) == "")
 	    		{
 	    			$("#divLeaveDurTxt").html("");
     				$("#divLeaveDur").html("");
+    				$("#divErrLeaveDuration").html("");
 	    		}
 	    	showHideProcessSalaray();
 	    }
@@ -814,6 +829,7 @@ $(function() {
 					</th>
 					<td>
 						<div style="float: ${direction};"><form:input path="leaveEndDate" id="leaveEndDate" cssClass="calendarEnd" /></div><div id="divLeaveDurTxt" style="float: ${direction};"></div><div id="divLeaveDur"></div>
+						<div id="divErrLeaveDuration"></div>
 						<br><form:errors path="leaveEndDate" cssClass="error"/>
 					</td>
 				</tr>
@@ -1033,7 +1049,7 @@ $(function() {
 		
 
 		<center>
-			<input type="submit" value='<spring:message code="prop.leave.app.apply.form.requester.submit"/>' style="border-style: solid; border-color: black; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
+			<input id="bttnSubmit" type="submit" value='<spring:message code="prop.leave.app.apply.form.requester.submit"/>' style="border-style: solid; border-color: black; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
 		</center>
 
 		

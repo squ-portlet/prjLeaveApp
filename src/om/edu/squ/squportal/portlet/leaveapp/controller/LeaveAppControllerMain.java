@@ -265,7 +265,9 @@ public class LeaveAppControllerMain
 		PortletSession			session					=	request.getPortletSession();
 		Employee				employee				=	(Employee)session.getAttribute("employee");	
 		AllowEleaveRequestProc	allowEleaveRequestProc	=	null;
-
+		String					empNumber				=	String.format("%07d", Integer.valueOf(employee.getEmpNumber()));
+		long					empLeaveBal				=	Long.parseLong(leaveAppServiceDao.getLeaveBalance(empNumber, leaveAppModel.getLeaveStartDate()));
+		leaveAppModel.setLeaveBalance(empLeaveBal);
 		new LeaveAppValidator().validate(leaveAppModel, result);
 		
 		if(result.hasErrors())
