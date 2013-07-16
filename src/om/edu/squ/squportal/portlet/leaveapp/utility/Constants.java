@@ -267,7 +267,7 @@ public interface Constants
 
 	/******************************************************/
 
-	public	static	String	LEAVE_URL										=			"http://portalmid1.squ.edu.om/portal/page/portal/staff/leaveApplication";
+	public	static	String	LEAVE_URL										=			"https://portalnew.squ.edu.om/portal/page/portal/home";
 	public	static	String	CONST_DELEGATION_AVL							=			"This leave application has delegation";
 	public	static	String	CONST_DELEGATION_NAME							=			"Name : ";
 	public	static	String	CONST_DELEGATION_START_DATE						=			"Start : ";

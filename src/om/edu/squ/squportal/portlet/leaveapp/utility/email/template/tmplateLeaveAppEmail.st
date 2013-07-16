@@ -14,7 +14,7 @@
 			Leave Start Date : $emailData.requestStartDate$ <br>
 			Leave End Date : $emailData.requestEndDate$  <br><br>
 			
-			requester : $emailData.requesterName$ <br>
+			Requester : $emailData.requesterName$ <br>
 			Requester Email: $emailData.requesterEmail$ <br><br>
 			
 			approver : $emailData.approverName$ <br>
