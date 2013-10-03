@@ -44,6 +44,7 @@ public class LeaveRequest implements Serializable
 	private	String			requestDate;
 	private	String			leaveStartDate;
 	private	String			leaveEndDate;
+	private	long			leaveDateDuration;
 	private	String			leaveReturnDate;
 	private	String			leaveLastReturnDate;
 	private	String			leaveStatus;
@@ -141,6 +142,27 @@ public class LeaveRequest implements Serializable
 	public void setLeaveEndDate(String leaveEndDate)
 	{
 		this.leaveEndDate = leaveEndDate;
+	}
+	
+	/**
+	 * Getter Method	: getLeaveDateDuration
+	 * @return the leaveDateDuration
+	 * 
+	 * Date				: Jul 18, 2013
+	 */
+	public long getLeaveDateDuration()
+	{
+		return this.leaveDateDuration;
+	}
+	/**
+	 * Setter method : setLeaveDateDuration
+	 * @param leaveDateDuration the leaveDateDuration to set
+	 * 
+	 * Date          : Jul 18, 2013 1:48:41 PM
+	 */
+	public void setLeaveDateDuration(long leaveDateDuration)
+	{
+		this.leaveDateDuration = leaveDateDuration;
 	}
 	/**
 	 * Getter Method	: getLeaveReturnDate
@@ -499,6 +521,9 @@ public class LeaveRequest implements Serializable
 						+ this.leaveStartDate + ", " : "")
 				+ (this.leaveEndDate != null ? "leaveEndDate="
 						+ this.leaveEndDate + ", " : "")
+				+ "leaveDateDuration="
+				+ this.leaveDateDuration
+				+ ", "
 				+ (this.leaveReturnDate != null ? "leaveReturnDate="
 						+ this.leaveReturnDate + ", " : "")
 				+ (this.leaveLastReturnDate != null ? "leaveLastReturnDate="

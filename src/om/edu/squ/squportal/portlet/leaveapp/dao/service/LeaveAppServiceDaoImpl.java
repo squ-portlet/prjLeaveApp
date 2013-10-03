@@ -30,6 +30,8 @@
 package om.edu.squ.squportal.portlet.leaveapp.dao.service;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -319,10 +321,28 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 */
 	public synchronized LeaveRequest	getLeaveRequest(String empNumber, String reqNo, Locale locale)
 	{
+	    SimpleDateFormat sdfDate 		= 	new SimpleDateFormat("dd/MM/yyyy");
+		Date			dtLvStartDate	=	null;										//	Leave start date
+		Date			dtLvEndDate		=	null;	
 		LeaveRequest	leaveRequest	=	leaveDbDao.getLeaveRequest(empNumber, reqNo, locale);
 		Employee		empLeaveReq		=	leaveRequest.getEmployee();
 		Employee		employee		=	leaveDbDao.getEmployee(empLeaveReq.getEmpNumber(), locale);
-					
+		sdfDate.setLenient(false); 
+		
+		try
+		{
+			dtLvStartDate			=	sdfDate.parse(leaveRequest.getLeaveStartDate());
+			dtLvEndDate				=	sdfDate.parse(leaveRequest.getLeaveEndDate());
+			long	msDiffLvTime 	=	dtLvEndDate.getTime() - dtLvStartDate.getTime();
+			long	constTimeMilli	=	1000*60*60*24;	
+			long	lvDateNos		=	(msDiffLvTime/constTimeMilli)+1;
+			leaveRequest.setLeaveDateDuration(lvDateNos);
+		}
+		catch (ParseException ex)
+		{
+			logger.error("Date parsing error. Details : "+ex.getMessage());
+		}
+		
 		employee.setAdmin2(empLeaveReq.isAdmin2());
 		employee.setDepartment2code(empLeaveReq.getDepartment2code());
 		employee.setDepartment2(empLeaveReq.getDepartment2());

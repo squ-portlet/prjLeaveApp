@@ -178,23 +178,24 @@ $(function() {
 								<br>(<spring:message code="prop.leave.app.apply.form.leave.sabbatical.research.id"/> : <c:out value="${leaveRequest.researchId}"/>)
 							</c:if>
 						</td>
-					<c:if test="${leaveRequest.leaveTypeFlag.typeNo == 'A'}">
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.salary.advance"/>:
-							</span>
-						</th>
-						<td>
-							<c:choose>
-								<c:when test="${leaveRequest.processSalaray == 'Y'}">
-									<spring:message code="prop.leave.app.apply.form.salary.advance.yes"/>
-								</c:when>
-								<c:otherwise>
-									<spring:message code="prop.leave.app.apply.form.salary.advance.no"/>
-								</c:otherwise>
-							</c:choose>
-							
-						</td>
+					<c:if test="${leaveRequest.leaveTypeFlag.typeNo == 'A' && not empty leaveRequest.leaveDateDuration}">
+						<c:if test="${leaveRequest.leaveDateDuration > 14}">
+							<th class="PortletHeaderColor">
+								<span class="PortletHeaderText">
+									<spring:message code="prop.leave.app.apply.form.salary.advance"/>:
+								</span>
+							</th>
+							<td>
+								<c:choose>
+									<c:when test="${leaveRequest.processSalaray == 'Y'}">
+										<spring:message code="prop.leave.app.apply.form.salary.advance.yes"/>
+									</c:when>
+									<c:otherwise>
+										<spring:message code="prop.leave.app.apply.form.salary.advance.no"/>
+									</c:otherwise>
+								</c:choose>
+							</td>
+						</c:if>
 					</c:if>
 					</tr>
 					<tr>
