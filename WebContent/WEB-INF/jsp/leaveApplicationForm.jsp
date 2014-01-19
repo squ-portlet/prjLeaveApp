@@ -182,6 +182,7 @@
 	/*autocomplete alternet color*/
 	.ui-menu-item-alternate { background: rgb(231, 217, 217); }
 	.ui-corner-all {font-size: small;}
+	.ui-datepicker { width: 16em; padding: .2em .2em 0; display: none; }
 </style>
 
 

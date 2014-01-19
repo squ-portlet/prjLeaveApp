@@ -7,11 +7,11 @@
  * 
  * FrameWork			:	Spring 3.1.0 (Annotation) Portlet
  * 
- * File Name			:	leaveApplicationForm.jsp
+ * File Name			:	leaveApplicationView.jsp
  * 
  * Date of Creation		:	07-August-2012
  *  
- * Summary				:	Leave Application Form
+ * Summary				:	Leave Application View
  *
  * Copyright 2012 the original author or authors.
  *
@@ -261,14 +261,20 @@ $(function() {
 						</th>
 						<td><c:out value="${leaveRequest.employee.designation}"/></td>
 						<td></td>
+
+<!-- Temporary blocking display of Grade  --  Code Start -->						
+
 						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.requester.grade"/>:
-							</span>
+<!-- 							<span class="PortletHeaderText"> -->
+<%-- 								<spring:message code="prop.leave.app.apply.form.requester.grade"/>: --%>
+<!-- 							</span> -->
 						</th>
 						<td>
-							<c:out value="${leaveRequest.employee.grade}"/> (<c:out value="${leaveRequest.employee.gradeShort}"/>)
+<%-- 							<c:out value="${leaveRequest.employee.grade}"/> (<c:out value="${leaveRequest.employee.gradeShort}"/>) --%>
 						</td>
+
+<!-- Temporary blocking display of Grade  --  Code End -->
+						
 					</tr>
 					<tr>
 						<th class="PortletHeaderColor">

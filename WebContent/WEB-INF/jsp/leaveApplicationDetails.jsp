@@ -7,11 +7,11 @@
  * 
  * FrameWork			:	Spring 3.1.0 (Annotation) Portlet
  * 
- * File Name			:	leaveApplicationForm.jsp
+ * File Name			:	leaveApplicationDetails.jsp
  * 
  * Date of Creation		:	07-August-2012
  *  
- * Summary				:	Leave Application Form
+ * Summary				:	Leave Application Details
  *
  * Copyright 2012 the original author or authors.
  *
