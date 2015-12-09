@@ -595,10 +595,12 @@
 		<portlet:renderURL var="newApply">
 			<portlet:param name="action" value="newApply"/>
 		</portlet:renderURL>
-		
-		<a href="${newApply}">
+<p>
+		<br></br>		
+		<a class='btn btn-primary' href="${newApply}">
 			<spring:message code="prop.leave.app.apply.new"/>
 		</a>
+</p>
 
 </c:catch>
  <c:if test="${e != null}">The caught exception is:

@@ -8,8 +8,8 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="con" path="com.sun.portlet.plugin.library.portlet20"/>
 	<classpathentry kind="lib" path="build/portlet-container.jar"/>
 	<classpathentry kind="lib" path="C:/openPortletTomcat-6/lib/servlet-api.jar"/>
+	<classpathentry kind="con" path="net.sf.eclipse.portlet.core.ClasspathContainer/V2_0"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

@@ -101,7 +101,7 @@ $(function(){
 
 
 <div >
-	<a class="button" style="width: 100 px; " href="${backToMain}">
+	<a class="button btn btn-primary" style="width: 100 px; " href="${backToMain}">
 		<img class="imgBck"  src="${urlImgBack}" style="border-style: none; position: relative; top: 3px;"/>&nbsp;
 		<fmt:message key="prop.leave.app.url.back"/>
 	</a>
@@ -353,7 +353,7 @@ $(function(){
 			</tr>			
 		</table>
 		<center>
-			<input type="submit" value='<spring:message code="prop.leave.app.apply.form.requester.submit"/>' style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
+			<input type="submit" class='btn btn-primary' value='<spring:message code="prop.leave.app.apply.form.requester.submit"/>' style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
 		</center>
 		<fieldset>
 			<legend>
@@ -390,7 +390,7 @@ $(function(){
 				</tr>
 			</table>
 			<center>
-				<input type="submit" value='<spring:message code="prop.leave.app.apply.form.approver.submit"/>' style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
+				<input type="submit" class='btn btn-primary' value='<spring:message code="prop.leave.app.apply.form.approver.submit"/>' style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
 			</center>
 			
 			

@@ -767,7 +767,7 @@ $(function() {
 </portlet:renderURL>
 
 <div >
-	<a class="button" style="width: 100 px; " href="${backToMain}">
+	<a class="button btn btn-primary" style="width: 100 px; " href="${backToMain}">
 		<img class="imgBck"  src="${urlImgBack}" style="border-style: none; position: relative; top: 3px;"/>&nbsp;
 		<fmt:message key="prop.leave.app.url.back"/>
 	</a>
@@ -1050,7 +1050,7 @@ $(function() {
 		
 
 		<center>
-			<input id="bttnSubmit" type="submit" value='<spring:message code="prop.leave.app.apply.form.requester.submit"/>' style="border-style: solid; border-color: black; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
+			<input id="bttnSubmit" class='btn btn-primary' type="submit" value='<spring:message code="prop.leave.app.apply.form.requester.submit"/>' style="border-style: solid; border-color: black; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
 		</center>
 
 		

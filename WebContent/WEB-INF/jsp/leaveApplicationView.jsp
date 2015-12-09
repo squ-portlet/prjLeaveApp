@@ -132,7 +132,7 @@ $(function() {
 
 
 <div >
-	<a class="button" style="width: 100 px; " href="${backToMain}">
+	<a class="button btn btn-primary" style="width: 100 px; " href="${backToMain}">
 		<img class="imgBck"  src="${urlImgBack}" style="border-style: none; position: relative; top: 3px;"/>&nbsp;
 		<fmt:message key="prop.leave.app.url.back"/>
 	</a>
