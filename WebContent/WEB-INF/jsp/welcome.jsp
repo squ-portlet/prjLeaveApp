@@ -155,6 +155,10 @@
 
 </style>
 
+<portlet:renderURL var="newApply">
+	<portlet:param name="action" value="newApply"/>
+</portlet:renderURL>
+
 <c:if test="${rc.locale.language=='en'}">
 	<c:set var="direction" value="left"/>
 </c:if>
@@ -299,6 +303,14 @@
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
+
+<p>
+		<br></br>		
+		<a class='btn btn-primary' href="${newApply}">
+			<spring:message code="prop.leave.app.apply.new"/>
+		</a>
+</p>
+
 
 			<form:form modelAttribute="leaveAppModel" method="post" htmlEscape="false">
 				<form:hidden 	path="requestNo" />
@@ -592,9 +604,7 @@
 </c:if>
 
 	</c:if>		
-		<portlet:renderURL var="newApply">
-			<portlet:param name="action" value="newApply"/>
-		</portlet:renderURL>
+
 <p>
 		<br></br>		
 		<a class='btn btn-primary' href="${newApply}">
