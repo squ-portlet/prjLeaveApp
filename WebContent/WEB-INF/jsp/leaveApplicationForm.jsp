@@ -794,7 +794,8 @@ $(function() {
 					<td>
 						<form:select path="leaveTypeFlag" cssClass="leaveOptions" >
 							<form:option value=""><spring:message code="prop.leave.app.dropdown.leave.type.text"/></form:option>
-							<form:options items="${leaveTypeFlag}" itemLabel="typeDesc" itemValue="typeNo"/>
+<%-- 							<form:options items="${leaveTypeFlag}" itemLabel="typeDesc" itemValue="typeNo"/> 								--%> <!--  Only Annual leave this time -- 12-April-2016 -- (Bhabesh) -->
+								<form:option value="A"><spring:message code="prop.leave.app.dropdown.leave.annual.text"/></form:option>
 						</form:select>
 						<div><form:errors path="leaveTypeFlag" cssClass="error" /></div>
 					</td>
