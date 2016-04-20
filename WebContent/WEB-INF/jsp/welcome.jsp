@@ -34,6 +34,7 @@
 <%@ taglib prefix="form"    uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<%@include file="ui/cssWelcome.jsp" %>
 
 <spring:url value="/css/images/backIcon.png" var="urlImgBack"/>
 <c:url value="/css/images/calendar.gif" var="urlImgCalendar"/>
@@ -51,51 +52,7 @@
 <c:url value="/css/images/ui-icons_ffffff_256x240.png" var="urlImgIcons3"/>
 
 
-<c:url value="/css/jquery-ui-1.8.18.custom.css" var="urlJQueryCSS"/>
-<c:url value="/css/squPortletStyles.css" var="urlSQUStyle"/>
 
-<c:url value="/js/jquery-1.7.2.min.js" var="urlJsJqueryMin"/>
-<c:url value="/js/jquery-ui-1.8.18.custom.min.js" var="urlJsJqueryCustom"/>
-<c:url value="/js/jquery.layout.js" var="urlJsJqueryLayout"/>
-<c:url value="/js/jquery.jqGrid.min.js"  var="urlJsJqueryGridMin"/>
-<c:url value="/js/jquery.tablednd.js"  var="urlJsJqueryTableDND"/>
-<c:url value="/js/jquery.contextmenu.js"  var="urlJsJqueryContextMenu"/>
-
-<c:url value="/js/jquery.ui.core.js" var="urlJsJqueryCore"/>
-<c:url value="/js/jquery.ui.widget.js" var="urlJsJqueryWidget"/>
-<c:url value="/js/jquery.ui.mouse.js" var="urlJsJqueryMouse"/>
-<c:url value="/js/jquery.ui.button.js" var="urlJsJqueryButton"/>
-<c:url value="/js/jquery.ui.draggable.js" var="urlJsJqueryDraggable"/>
-<c:url value="/js/jquery.ui.position.js" var="urlJsJqueryPosition"/>
-<c:url value="/js/jquery.ui.dialog.js" var="urlJsJqueryDialog"/>
-
-
-<link type="text/css" href="${urlJQueryCSS}" rel="stylesheet" />
-<link rel="stylesheet" type="text/css" href="${urlJqGridCSS}" />
-<link rel="stylesheet" type="text/css" href="${urlSQUStyle}" />
-
-<script type="text/javascript" src="${urlJsJqueryMin}"></script>
-<script type="text/javascript" src="${urlJsJqueryCustom}"></script>
-<script type="text/javascript" src="${urlJsJqueryLayout}"></script>
-
-<c:if test="${rc.locale.language=='en'}">
-	<script type="text/javascript" src="${urlJsJqueryGridLocaleEN}"></script>
-</c:if>
-<c:if test="${rc.locale.language=='ar'}">
-	<script type="text/javascript" src="${urlJsJqueryGridLocaleAR}"></script>
-</c:if>
-
-<script type="text/javascript" src="${urlJsJqueryGridMin}"></script>
-<script type="text/javascript" src="${urlJsJqueryTableDND}"></script>
-<script type="text/javascript" src="${urlJsJqueryContextMenu}"></script>
-
-<script type="text/javascript" src="${urlJsJqueryCore}"></script>
-<script type="text/javascript" src="${urlJsJqueryWidget}"></script>
-<script type="text/javascript" src="${urlJsJqueryMouse}"></script>
-<script type="text/javascript" src="${urlJsJqueryButton}"></script>
-<script type="text/javascript" src="${urlJsJqueryDraggable}"></script>
-<script type="text/javascript" src="${urlJsJqueryPosition}"></script>
-<script type="text/javascript" src="${urlJsJqueryDialog}"></script>
 
 
 <style>
@@ -168,16 +125,19 @@
 
 	<div id="browserCompAdv" style="display:none;">
 		<center>
-			<p>
-				<font color="#D8D8D8"><h3><spring:message code="prop.leave.app.title.browser.compatibility.text"/></h3></font>
-			</p>
+				<div class="alert alert-warning" role="alert">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<spring:message code="prop.leave.app.title.browser.compatibility.text"/>
+				</div>
 		</center>
 	</div>
 <c:catch var="e">
 
 
 		<c:if test="${not empty allowELeaveRequestMsg}">
-			<h2><font color="red"><c:out value="${allowELeaveRequestMsg}"/></font></h2>
+		<div class="alert alert-warning" role="alert">
+			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			<c:out value="${allowELeaveRequestMsg}"/></div>
 		</c:if>
 		
 		<table id="list3" class="listT"></table>
@@ -310,8 +270,6 @@
 			<spring:message code="prop.leave.app.apply.new"/>
 		</a>
 </p>
-
-
 			<form:form modelAttribute="leaveAppModel" method="post" htmlEscape="false">
 				<form:hidden 	path="requestNo" />
 				<form:hidden	path="approverEmpNumber"/>

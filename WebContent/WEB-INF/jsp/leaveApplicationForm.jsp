@@ -31,6 +31,8 @@
 <%@ taglib prefix="form"    uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<%@include file="ui/cssWelcome.jsp" %>
+
 <head>
 
 <spring:url value="/css/images/backIcon.png" var="urlImgBack"/>
@@ -62,46 +64,6 @@
 <c:url value="/css/jquery.ui.accordion.css" var="urlJQueryAccordionCSS"/>
 <c:url value="/css/jquery.ui.theme.css" var="urlJQueryThemeCSS"/>
 <c:url value="/css/jquery.ui.autocomplete.css" var="urlJQueryAutoCompCSS"/>
-
-<%-- <c:url value="/css/dropkick.css" var="urlDropkickCSS"/> --%>
-
-<%-- <c:url value="/js/jquery-1.7.1.min.js" var="urlJsJqueryMin"/> --%>
-<c:url value="/js/jquery-1.7.1.js" var="urlJsJqueryMin"/>
-<c:url value="/js/jquery-ui-1.8.18.custom.min.js" var="urlJsJqueryCustom"/>
-<c:url value="/js/jquery.ui.accordion.js" var="urlJsJqueryAccordion"/>
-<c:url value="/js/jquery-ui-i18n.js" var="urlJsJqueryLocaleI18n"/>
-
-<c:url value="/js/jquery.ui.core.js" var="urlJsJqueryCore"/>
-<c:url value="/js/jquery.ui.widget.js" var="urlJsJqueryWidget"/>
-<c:url value="/js/jquery.ui.mouse.js" var="urlJsJqueryMouse"/>
-<c:url value="/js/jquery.ui.button.js" var="urlJsJqueryButton"/>
-<c:url value="/js/jquery.ui.draggable.js" var="urlJsJqueryDraggable"/>
-<c:url value="/js/jquery.ui.position.js" var="urlJsJqueryPosition"/>
-<c:url value="/js/jquery.ui.dialog.js" var="urlJsJqueryDialog"/>
-<c:url value="/js/jquery.ui.autocomplete.js" var="urlJsJqueryAutocomplete"/>
-
-<link type="text/css" href="${urlJQueryCSS}" rel="stylesheet" />
-<link rel="stylesheet" type="text/css" href="${urlCssSquPortletStyle}" />
-<link type="text/css" href="${urlJsJqueryAccordion}" rel="stylesheet" />
-<link type="text/css" href="${urlJQueryThemeCSS}" rel="stylesheet" />
-<link type="text/css" href="${urlJQueryAutoCompCSS}" rel="stylesheet" />
-
-<%-- <link type="text/css" href="${urlDropkickCSS}" rel="stylesheet" /> --%>
-
-<script type="text/javascript" src="${urlJsJqueryMin}" charset="utf-8"></script>
-<script type="text/javascript" src="${urlJsJqueryCustom}"></script>
-<script type="text/javascript" src="${urlJsJqueryAccordion}"></script>
-<%-- <script type="text/javascript" src="${urlJsJqueryLocaleI18n}"></script> --%>
-
-<script type="text/javascript" src="${urlJsJqueryCore}"></script>
-<script type="text/javascript" src="${urlJsJqueryWidget}"></script>
-<script type="text/javascript" src="${urlJsJqueryMouse}"></script>
-<script type="text/javascript" src="${urlJsJqueryButton}"></script>
-<script type="text/javascript" src="${urlJsJqueryDraggable}"></script>
-<script type="text/javascript" src="${urlJsJqueryPosition}"></script>
-<script type="text/javascript" src="${urlJsJqueryDialog}"></script>
-
-<script type="text/javascript" src="${urlJsJqueryAutocomplete}"></script>
 
 
 
@@ -212,6 +174,10 @@ $(function(){
 		buttonImageOnly: true,
 		minDate: -<c:out value="${daysAllowed}"/>,
 		firstDay:7,
+		beforeShowDay: function(date){
+			var day = date.getDay();
+			return [(day != 5 && day != 6)];
+	    },
 		onClose: function( selectedDate ) {
 			var	endDt	=	$( ".calendarEnd" ).datepicker( "getDate" );
 			resDtIssueOK = diffLeaveDate();	
@@ -262,6 +228,10 @@ $(function(){
 		buttonImageOnly: true,
 		minDate: -<c:out value="${daysAllowed}"/>,
 		firstDay:7,
+		beforeShowDay: function(date){
+			var day = date.getDay();
+			return [(day != 5 && day != 6)];
+	    },
 	    onClose: function( selectedDate ) {
 	    	var startDt	=	$( ".calendarStart" ).datepicker( "getDate" );
 	    	resDtIssueOK = diffLeaveDate();
@@ -584,8 +554,9 @@ function rdLink(){
 $(function() {
 	$( "#accordion" ).accordion(
 			{
-			autoHeight: false
-
+			//autoHeight: false,
+			collapsible: true, 
+			active: false
 			}
 			
 		);
@@ -746,6 +717,46 @@ $(function() {
 		});
 		
 	});
+
+	
+	/*Jquery Validation*/
+	$.validator.addMethod(
+   		 "omaniDate",
+		    function(value, element) {
+		        return value.match(/^\d\d?\/\d\d?\/\d\d\d\d$/);
+		    }
+	);
+	
+	$(function() {
+		$( "#leaveAppModel" ).validate({
+		 	rules: {
+		 		"leaveTypeFlag":{
+		 			required: true
+		 		},
+				 "leaveStartDate": {
+				      required: true,
+				      omaniDate: true
+				    },
+			    "leaveEndDate": {
+				      required: true,
+				      omaniDate: true
+				    }
+			 },
+			errorPlacement: function(error, element) {
+				  error.insertAfter(element);
+		  	},
+		  	 messages: {
+		  		leaveTypeFlag : '<spring:message code="error.prop.leave.app.leaveType.na"/>',
+		  		leaveStartDate : '<spring:message code="error.prop.leave.app.leaveStartDate.na"/>',
+		  		leaveEndDate : '<spring:message code="error.prop.leave.app.leaveEndDate.na"/>'
+		  	 }
+
+		});
+		
+	});
+	
+	
+	
 	
 </script>
 
@@ -777,7 +788,7 @@ $(function() {
 
 <form:form modelAttribute="leaveAppModel"  action="${submitRequest}" method="post" htmlEscape="false" >
 <form:hidden path="approverEmpNumber" />
-<h2><font color="red"><form:errors path="*" /></font></h2>
+	<center><form:errors path="*"  cssClass="alert alert-danger" role="alert"/></center>
 	<fieldset>
 		<legend>
 			<h3>
@@ -786,11 +797,11 @@ $(function() {
 		</legend>
 			<table width=100%>
 				<tr>
-					<th class="PortletHeaderColor">
+					<td>
 						<span class="PortletHeaderText">
 							<spring:message code="prop.leave.app.apply.form.leave.type"/>:
 						</span>
-					</th>
+					</td>
 					<td>
 						<form:select path="leaveTypeFlag" cssClass="leaveOptions" >
 							<form:option value=""><spring:message code="prop.leave.app.dropdown.leave.type.text"/></form:option>
@@ -801,11 +812,11 @@ $(function() {
 					</td>
 				</tr>
 				<tr id="divResearchId" style="display: none;">
-					<th class="PortletHeaderColor">
+					<td>
 						<span class="PortletHeaderText">
 							<spring:message code="prop.leave.app.apply.form.leave.sabbatical.research.id"/>:
 						</span>						
-					</th>
+					</td>
 					<td>
 						<div class="ui-widget" style="font-size: small;">
 							<form:input path="researchId"/>
@@ -813,22 +824,22 @@ $(function() {
 					</td>
 				</tr>
 				<tr>
-					<th class="PortletHeaderColor">
+					<td>
 						<span class="PortletHeaderText">
 							<spring:message code="prop.leave.app.apply.form.leave.start.date"/>:
 						</span>
-					</th>
+					</td>
 					<td><div style="float: ${direction};"><form:input path="leaveStartDate" id="leaveStartDate" cssClass="calendarStart" /></div><div id="divLeaveBalTxt" style="float: ${direction};"></div><div id="divLeaveBal"></div> 
 						<br><form:errors path="leaveStartDate" cssClass="error" />
 					</td>
 	
 				</tr>
 				<tr>
-					<th class="PortletHeaderColor">
+					<td>
 						<span class="PortletHeaderText">
 							<spring:message code="prop.leave.app.apply.form.leave.end.date"/>:
 						</span>
-					</th>
+					</td>
 					<td>
 						<div style="float: ${direction};"><form:input path="leaveEndDate" id="leaveEndDate" cssClass="calendarEnd" /></div><div id="divLeaveDurTxt" style="float: ${direction};"></div><div id="divLeaveDur"></div>
 						<div id="divErrLeaveDuration"></div>
@@ -836,11 +847,11 @@ $(function() {
 					</td>
 				</tr>
 				<tr id="divProcessSal" style="display:none;">
-					<th class="PortletHeaderColor">
+					<td>
 						<span class="PortletHeaderText">
 							<spring:message code="prop.leave.app.apply.form.salary.advance"/>
 						</span>
-					</th>
+					</td>
 					<td>
 						<form:radiobutton path="processSalaray" value="Y"/> <spring:message code="prop.leave.app.apply.form.salary.radio.bttn.yes"/>
 						<c:if test="${employee.omani}">
@@ -849,24 +860,24 @@ $(function() {
 					</td>
 				</tr>
 				<tr>
-					<th class="PortletHeaderColor">
+					<td>
 					<span class="PortletHeaderText">
 						<spring:message code="prop.leave.app.apply.form.leave.remarks"/>:
 					</span>
-					</th>
+					</td>
 					<td colspan="4"><form:textarea cssStyle="width:100%" path="leaveRemarks"/></td>
 				</tr>
 				<tr>
-					<th class="PortletHeaderColor">
+					<td>
 						<span class="PortletHeaderText">
 							<spring:message code="prop.leave.app.apply.form.requester.approver.selection"/>
 						</span>
-					</th>
+					</td>
 					<td>
 <!-- Accordion Start -->					
 							<div id="accordion" class="ui-accordion ui-widget ui-helper-reset">
 								<c:choose>
-									<c:when test='${opMode=="u"}'>
+									<c:when test='${opMode=="a"}'> <!-- Earlier opMode=="u" -->
 										<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
 <!-- 												<a href="#"> -->
 														<spring:message code="prop.leave.app.apply.form.leave.manager"/>
@@ -971,26 +982,26 @@ $(function() {
 					<spring:message code="prop.leave.app.apply.form.delegated.employees"/>
 				</caption>
 				<tr>
-					<th class="PortletHeaderColor">
+					<td class="PortletHeaderColor">
 						<span class="PortletHeaderText">
 							<spring:message code="prop.leave.app.apply.form.delegated.date.from"/>
 						</span>
-					</th>
-					<th class="PortletHeaderColor">
+					</td>
+					<td class="PortletHeaderColor">
 						<span class="PortletHeaderText">
 							<spring:message code="prop.leave.app.apply.form.delegated.date.to"/>
 						</span>
-					</th>
-					<th class="PortletHeaderColor">
+					</td>
+					<td class="PortletHeaderColor">
 					<span class="PortletHeaderText">
 						<spring:message code="prop.leave.app.apply.form.delegated.branch"/>
 					</span>
-					</th>
-					<th class="PortletHeaderColor">
+					</td>
+					<td class="PortletHeaderColor">
 						<span class="PortletHeaderText">
 							<spring:message code="prop.leave.app.apply.form.delegated.emp.name"/>
 						</span>
-					</th>
+					</td>
 				</tr>
 				<c:forEach var="i" begin="0" end="2" step="1">
 					<tr>
