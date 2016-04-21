@@ -555,7 +555,7 @@ $(function() {
 	$( "#accordion" ).accordion(
 			{
 			//autoHeight: false,
-			collapsible: true, 
+			collapsible: false, 
 			active: false
 			}
 			
@@ -877,29 +877,31 @@ $(function() {
 <!-- Accordion Start -->					
 							<div id="accordion" class="ui-accordion ui-widget ui-helper-reset">
 								<c:choose>
-									<c:when test='${opMode=="a"}'> <!-- Earlier opMode=="u" -->
+									<c:when test='${opMode!="u"}'> <!-- Earlier opMode=="u" -->
 										<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
-<!-- 												<a href="#"> -->
-														<spring:message code="prop.leave.app.apply.form.leave.manager"/>
-														<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i></font>
-<!-- 												</a> -->
-										</h3>
-									</c:when>
-									<c:otherwise>
-										<div>
 <!-- 												<a href="#"> -->
 														<spring:message code="prop.leave.app.apply.form.leave.manager.default"/>
 														<font color="red" size="small"><i><c:out value="${mgrName}"/></i></font>
 <!-- 												</a> -->
-										</div>
+										</h3>
+										
+							<%--
 										<div>
 											<br>
 											<center><spring:message code="prop.leave.app.apply.form.leave.manager.change.text"/></center>
-										</div>
+										</div> 
+								--%>
 										
-									<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
-										<a href="#"><spring:message code="prop.leave.app.apply.form.leave.manager.custom"/></a>
-									</h3>				
+									</c:when>
+									<c:otherwise>
+										<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
+<!-- 												<a href="#"> -->
+														<spring:message code="prop.leave.app.apply.form.leave.manager.custom"/>
+														<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i></font>
+<!-- 												</a> -->
+										</h3>
+									</c:otherwise>
+								</c:choose>	
 									<div>
 										<fieldset>
 										<legend><spring:message code="prop.leave.app.apply.form.leave.manager.select"/> </legend>
@@ -965,8 +967,7 @@ $(function() {
 									</table>
 									</fieldset>
 								</div>
-									</c:otherwise>
-								</c:choose>
+	
 						</div>	
 <!-- Accordion end -->
 					</td>
