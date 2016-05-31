@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
@@ -93,6 +94,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	private	NamedParameterJdbcTemplate 		namedParameterJdbcTemplate;
 	private SimpleJdbcCall 					simpleJdbcCall;
 	private	EmailService					emailService;
+	private	Properties						queryPropsReturn;
 	
 	/**
 	 * 
@@ -145,6 +147,19 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	public void setEmailService(EmailService emailService)
 	{
 		this.emailService	=	emailService;
+	}
+
+	
+	
+	/**
+	 * Setter method : setQueryPropsReturn
+	 * @param queryPropsReturn the queryPropsReturn to set
+	 * 
+	 * Date          : May 31, 2016 1:30:55 PM
+	 */
+	public void setQueryPropsReturn(Properties queryPropsReturn)
+	{
+		this.queryPropsReturn = queryPropsReturn;
 	}
 
 	/**
@@ -2307,5 +2322,12 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 		return String.valueOf(simpleJdbcCall.executeFunction(Object.class, paramIn));
 	}
+	
+	
+	/***********************************************************************************
+	 *             LEAVE RETURN
+	 ***********************************************************************************/
+	
+	
 	
 }

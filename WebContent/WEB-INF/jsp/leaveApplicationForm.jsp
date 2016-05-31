@@ -140,11 +140,15 @@
 	.ui-menu-item {font-size: small;}
 	.ui-menu .ui-menu-item {font-size: small;}
 	.ui-autocomplete-loading { background: white url("${urlImgAnimAuto}") ${directionOpp} center no-repeat; }
-	//.ui-autocomplete {width: 70%; font-size: small;}
+	/*.ui-autocomplete {width: 70%; font-size: small;}*/
 	/*autocomplete alternet color*/
 	.ui-menu-item-alternate { background: rgb(231, 217, 217); }
 	.ui-corner-all {font-size: small;}
 	.ui-datepicker { width: 16em; padding: .2em .2em 0; display: none; }
+	
+	/*Accordion content */
+	.ui-accordion-content .ui-helper-reset .ui-widget-content .ui-corner-bottom .ui-accordion-content-active{height: inherit; overflow-x: hidden;}
+	
 </style>
 
 
@@ -875,10 +879,10 @@ $(function() {
 					</td>
 					<td>
 <!-- Accordion Start -->					
-							<div id="accordion" class="ui-accordion ui-widget ui-helper-reset">
+							<div  >
 								<c:choose>
 									<c:when test='${opMode!="u"}'> <!-- Earlier opMode=="u" -->
-										<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
+										<h3 >
 <!-- 												<a href="#"> -->
 														<spring:message code="prop.leave.app.apply.form.leave.manager.default"/>
 														<font color="red" size="small"><i><c:out value="${mgrName}"/></i></font>
@@ -894,7 +898,7 @@ $(function() {
 										
 									</c:when>
 									<c:otherwise>
-										<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top">
+										<h3 >
 <!-- 												<a href="#"> -->
 														<spring:message code="prop.leave.app.apply.form.leave.manager.custom"/>
 														<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i></font>
@@ -903,7 +907,7 @@ $(function() {
 									</c:otherwise>
 								</c:choose>	
 									<div>
-										<fieldset>
+										<fieldset style="padding: 5; border: 1;">
 										<legend><spring:message code="prop.leave.app.apply.form.leave.manager.select"/> </legend>
 											<table width="100%">     
 												<tr>

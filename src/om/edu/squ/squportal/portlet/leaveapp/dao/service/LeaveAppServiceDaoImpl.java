@@ -65,6 +65,8 @@ import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+
 /**
  * @author Bhabesh
  *
@@ -301,6 +303,9 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		
 		return leaveDbDao.getLeaveRequests(employee, locale);
 	}
+	
+
+	
 	
 	/**
 	 * 

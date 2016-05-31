@@ -184,6 +184,9 @@ public interface LeaveAppServiceDao
 	 */
 	public List<LeaveRequest>	getLeaveRequests(Employee employee, Locale locale);
 	
+
+
+	
 	/**
 	 * 
 	 * method name  : getLeaveRequest
