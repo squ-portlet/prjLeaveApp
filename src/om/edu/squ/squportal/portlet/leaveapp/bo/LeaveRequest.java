@@ -62,6 +62,8 @@ public class LeaveRequest implements Serializable
 	private	boolean			sabbaticalLowerApproverAction;
 	private	int				approverSequenceNo;
 	private	String			processSalaray;
+	private	boolean			leaveReturn;
+	
 	
 	/**
 	 * Getter Method	: getRequestNo
@@ -506,58 +508,53 @@ public class LeaveRequest implements Serializable
 	{
 		this.processSalaray = processSalaray;
 	}
+	
+	/**
+	 * Getter Method	: isLeaveReturn
+	 * @return the leaveReturn
+	 * 
+	 * Date				: Jun 2, 2016
+	 */
+	public boolean isLeaveReturn()
+	{
+		return this.leaveReturn;
+	}
+	/**
+	 * Setter method : setLeaveReturn
+	 * @param leaveReturn the leaveReturn to set
+	 * 
+	 * Date          : Jun 2, 2016 10:59:51 AM
+	 */
+	public void setLeaveReturn(boolean leaveReturn)
+	{
+		this.leaveReturn = leaveReturn;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString()
 	{
-		return "LeaveRequest ["
-				+ (this.requestNo != null ? "requestNo=" + this.requestNo
-						+ ", " : "")
-				+ (this.requestDate != null ? "requestDate=" + this.requestDate
-						+ ", " : "")
-				+ (this.leaveStartDate != null ? "leaveStartDate="
-						+ this.leaveStartDate + ", " : "")
-				+ (this.leaveEndDate != null ? "leaveEndDate="
-						+ this.leaveEndDate + ", " : "")
-				+ "leaveDateDuration="
-				+ this.leaveDateDuration
-				+ ", "
-				+ (this.leaveReturnDate != null ? "leaveReturnDate="
-						+ this.leaveReturnDate + ", " : "")
-				+ (this.leaveLastReturnDate != null ? "leaveLastReturnDate="
-						+ this.leaveLastReturnDate + ", " : "")
-				+ (this.leaveStatus != null ? "leaveStatus=" + this.leaveStatus
-						+ ", " : "")
-				+ (this.employee != null ? "employee=" + this.employee + ", "
-						: "")
-				+ (this.leaveType != null ? "leaveType=" + this.leaveType
-						+ ", " : "")
-				+ (this.leaveTypeFlag != null ? "leaveTypeFlag="
-						+ this.leaveTypeFlag + ", " : "")
-				+ (this.status != null ? "status=" + this.status + ", " : "")
-				+ (this.approve != null ? "approve=" + this.approve + ", " : "")
-				+ (this.leavePurpose != null ? "leavePurpose="
-						+ this.leavePurpose + ", " : "")
-				+ "leaveRequestActive="
-				+ this.leaveRequestActive
-				+ ", "
-				+ (this.leaveRequestRemarks != null ? "leaveRequestRemarks="
-						+ this.leaveRequestRemarks + ", " : "")
-				+ (this.suggestedHod != null ? "suggestedHod="
-						+ this.suggestedHod + ", " : "")
-				+ (this.approverId != null ? "approverId=" + this.approverId
-						+ ", " : "")
-				+ (this.researchId != null ? "researchId=" + this.researchId
-						+ ", " : "")
-				+ "sabbaticalLowerApproverAction="
-				+ this.sabbaticalLowerApproverAction
-				+ ", approverSequenceNo="
-				+ this.approverSequenceNo
-				+ ", "
-				+ (this.processSalaray != null ? "processSalaray="
-						+ this.processSalaray : "") + "]";
+		return "LeaveRequest [requestNo=" + this.requestNo + ", requestDate="
+				+ this.requestDate + ", leaveStartDate=" + this.leaveStartDate
+				+ ", leaveEndDate=" + this.leaveEndDate
+				+ ", leaveDateDuration=" + this.leaveDateDuration
+				+ ", leaveReturnDate=" + this.leaveReturnDate
+				+ ", leaveLastReturnDate=" + this.leaveLastReturnDate
+				+ ", leaveStatus=" + this.leaveStatus + ", employee="
+				+ this.employee + ", leaveType=" + this.leaveType
+				+ ", leaveTypeFlag=" + this.leaveTypeFlag + ", status="
+				+ this.status + ", approve=" + this.approve + ", leavePurpose="
+				+ this.leavePurpose + ", leaveRequestActive="
+				+ this.leaveRequestActive + ", leaveRequestRemarks="
+				+ this.leaveRequestRemarks + ", suggestedHod="
+				+ this.suggestedHod + ", approverId=" + this.approverId
+				+ ", researchId=" + this.researchId
+				+ ", sabbaticalLowerApproverAction="
+				+ this.sabbaticalLowerApproverAction + ", approverSequenceNo="
+				+ this.approverSequenceNo + ", processSalaray="
+				+ this.processSalaray + ", leaveReturn=" + this.leaveReturn
+				+ "]";
 	}
 	
 	

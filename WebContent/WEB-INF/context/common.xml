@@ -100,9 +100,12 @@
 		</property>
 	</bean>
    
+   	 <bean id="queryPropsReturn" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+    	<property name="locations" value="classpath:sql_leave_return.xml" />
+	</bean>
 	
 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="java:comp/env/jdbc/hrmscl"/>
+    	<property name="jndiName" value="java:comp/env/jdbc/hrmsTest"/>
 	</bean>
 	<tx:annotation-driven/>
 	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -135,6 +138,7 @@
  	<bean id="leaveDbDao"	class="om.edu.squ.squportal.portlet.leaveapp.dao.db.LeaveDbDaoImpl">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="emailService" ref="emailService"/>
+		<property name="queryPropsReturn" ref="queryPropsReturn"/>
 	</bean>	
 
 	<bean id="leaveAppServiceDao"	class="om.edu.squ.squportal.portlet.leaveapp.dao.service.LeaveAppServiceDaoImpl">
@@ -193,6 +197,7 @@
 
 	
 	<!-- Default ExceptionHandler -->
+<!-- 
 	<bean id="defaultExceptionHandler" class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver">
     <property name="order" value="10"/>
 		<property name="defaultErrorView" value="error"/>
@@ -205,5 +210,5 @@
 			</props>
 		</property>  
 	</bean>
-    
+ -->    
 </beans>    

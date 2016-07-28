@@ -90,6 +90,7 @@ public interface Constants
 	public static final	String	CONST_LEAVE_STATUS_DATE			=			"LEAVE_STATUS_DATE";
 	public static final	String	CONST_LEAVE_REQUEST_REMARKS		=			"LEAVE_REQUEST_REMARKS";
 	public static final	String	CONST_LEAVE_REQUEST_PROCESS_SALARY	=		"LEAVE_PROCESS_SALARY";
+	public static final	String	CONST_LEAVE_RETURN_ELIGIBLE		=			"RETURN_ELIGIBLE";
 	
 	public static final	String	CONST_LEAVE_TYPE				=			"LEAVE_TYPE";
 	public static final	String	CONST_LEAVE_DESC				=			"LEAVE_DESC";
@@ -234,6 +235,7 @@ public interface Constants
 	public static String	PAGE_LEAVE_APPLY_FORM							=			"leaveApplicationForm";
 	public static String	PAGE_LEAVE_APPROVE_FORM							=			"leaveApplicationApproveForm";
 	public static String	PAGE_LEAVE_VIEW									=			"leaveApplicationView";
+	public static String	PAGE_LEAVE_RETURN								=			"leaveReturn";
 	
 	
 	/******************************************************/
@@ -273,6 +275,10 @@ public interface Constants
 	public	static	String	CONST_DELEGATION_START_DATE						=			"Start : ";
 	public	static	String	CONST_DELEGATION_END_DATE						=			"End : ";
 
+	
+	/**********CONSTANTS - SQL - QUERY PROPERTY- NAME**************/	
+	public static 	String	CONST_SELECT_RETURN_ELIGIBLE					=			"select.return.eligible";
+	
 	
 	/**********SQL**********************************/
 
@@ -582,18 +588,28 @@ public interface Constants
 										                                    "	) AS EMP_APP_FIRST_NAME,								" +
 										                                    "	(														" +
 																			"		SELECT DECODE(:paramLocale,							" +
-										                                    "          'en',initCap(EMPAPP.VHM_EMP_LAST_NAME),	" +
+										                                    "          'en',initCap(EMPAPP.VHM_EMP_LAST_NAME),			" +
 										                                    "          'ar',EMPAPP.VHM_EMP_LAST_NAME_ARABIC) 			" +
 										                                    "    	FROM VHM_EMPLOYEE  EMPAPP							" +
 										                                    "    	WHERE 												" +
 										                                    "	EMPAPP.VHM_EMP_CODE=APP.VHM_APP_EMP_CODE				" +
-										                                    "	) AS EMP_APP_LAST_NAME,								" +
+										                                    "	) AS EMP_APP_LAST_NAME,									" +
 										                                    "	APP.VHM_APP_SEQ_NO AS APPROVER_SEQUENCE_NO,				" +
 										                                    "   IS_VALID_LEAVE_APP_APPROVER								" +
 										                                    "				(											" +
 										                                    "					APP.VHM_APP_SEQ_NO,						" +
 										                                    "					LVREQ.VHM_LEAVE_REQ_NO					" +
-										                                    "				) AS SAB_ACTION_LOWER						" +
+										                                    "				) AS SAB_ACTION_LOWER,						" +
+												                            " 	(														" +
+										                                    "        SELECT 											" +
+												                    		"		COUNT(VHM_STATUS_CODE) 								" +
+												                    		"	FROM 													" +
+												                    		"		VHM_EMP_LEAVE_REQUEST								" +
+												                    		"	WHERE													" +
+												                    		"			TRUNC(SYSDATE) > TRUNC(VHM_LEAVE_END_DATE)		" +
+												                    		"		AND VHM_LEAVE_REQ_NO = LVREQ.VHM_LEAVE_REQ_NO		" +
+												                    		"  		AND	VHM_STATUS_CODE = '0000000002'					" +
+												                    		" 	)  AS RETURN_ELIGIBLE									" +
 																			" FROM 														" +
 																			"		VHM_EMP_LEAVE_REQUEST LVREQ,						" +
 																			"		VHM_LEAVE_TYPE_FLAG LVTYPE,							" +

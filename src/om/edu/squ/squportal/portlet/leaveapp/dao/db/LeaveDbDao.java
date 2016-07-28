@@ -532,4 +532,22 @@ public interface LeaveDbDao
 	 * Date    		:	Jul 8, 2013 1:21:42 PM
 	 */
 	public String	getLeaveBalance(String empNumber, String strStartDate);
+	
+	/***********************************************************************************
+	 *             LEAVE RETURN
+	 ***********************************************************************************/
+	
+	/**
+	 * 
+	 * method name  : isReturnEligible
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: if current date is higher than leave return date then return eligible function returns true
+	 *
+	 * Date    		:	May 31, 2016 2:19:54 PM
+	 */
+	public boolean isReturnEligible(String requestNo);
 }

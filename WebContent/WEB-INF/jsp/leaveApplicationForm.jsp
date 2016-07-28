@@ -146,8 +146,7 @@
 	.ui-corner-all {font-size: small;}
 	.ui-datepicker { width: 16em; padding: .2em .2em 0; display: none; }
 	
-	/*Accordion content */
-	.ui-accordion-content .ui-helper-reset .ui-widget-content .ui-corner-bottom .ui-accordion-content-active{height: inherit; overflow-x: hidden;}
+
 	
 </style>
 

@@ -31,7 +31,11 @@ package om.edu.squ.squportal.portlet.leaveapp.controller;
 
 
 
+import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,6 +43,8 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
@@ -63,6 +69,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 /**
  * @author Bhabesh
@@ -135,6 +142,8 @@ public class LeaveAppControllerMain
 		model.addAttribute("leaveActionApprove", Constants.CONST_LEAVE_ACTION_APPROVE);
 		model.addAttribute("leaveActionReturn", Constants.CONST_LEAVE_ACTION_RETURN);
 		model.addAttribute("leaveActionReject", Constants.CONST_LEAVE_ACTION_REJECT);
+		
+		
 		
 		return Constants.PAGE_WELCOME;
 	}
@@ -635,6 +644,110 @@ public class LeaveAppControllerMain
 		return Constants.PAGE_LEAVE_APPLY_FORM;
 	}
 	
+	/**
+	 * 
+	 * method name  : leaveReturn
+	 * @param request
+	 * @param model
+	 * @param locale
+	 * @return
+	 * LeaveAppControllerMain
+	 * return type  : String
+	 * 
+	 * purpose		: Rendering of leave return
+	 *
+	 * Date    		:	Jun 2, 2016 12:18:14 PM
+	 */
+	@RequestMapping(params="action=leaveReturn")
+	private String leaveReturn(
+			@RequestParam("requestNo") String requestNum,
+			@RequestParam("approverEmpNo") String approverEmpNo,
+			PortletRequest request, Model model,Locale locale)
+	{
+		PortletSession	session	=	request.getPortletSession();
+		Employee	employee	=	(Employee)session.getAttribute("employee");	
+		String		empNumber	=	String.format("%07d", Integer.parseInt(employee.getEmpNumber()));
+		
+		List<LeaveRequest>	leaveRequests	=	leaveAppServiceDao.getLeaveRequests(employee,locale);
+		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(approverEmpNo, requestNum, locale);
+		
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		String stringDate = df.format(new Date());
+		
+		if(!model.containsAttribute("leaveAppModel"))
+		{
+			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
+			leaveAppModel.setRequestNo(requestNum);
+			leaveAppModel.setApproverEmpNumber(approverEmpNo);
+			leaveAppModel.setLeaveReturnDate(stringDate);
+			model.addAttribute("leaveAppModel",leaveAppModel );
+		}
+		
+		model.addAttribute("employee",employee );
+		model.addAttribute("leaveRequests", leaveRequests);
+		model.addAttribute("leaveRequest", leaveRequest);
+		model.addAttribute("approver", leaveRequest.getApprove());
+		model.addAttribute("branches",leaveAppServiceDao.getBranches(employee.getBranchCode(),locale));
+		
+		//model.addAttribute("mgrName", leaveAppServiceDao.getManager(empNumber, locale).getEmpName());
+		
+		
+		
+/*		
+		model.addAttribute("empHierarchy", employee.getHierarchyCode());
+		model.addAttribute("empHierarchyAddl", employee.getHierarchyAddlCode());
+		model.addAttribute("empNumber", String.format("%07d", Integer.parseInt(employee.getEmpNumber())));
+		model.addAttribute("empName", employee.getEmpName())+;1
+		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
+		model.addAttribute("furtherClarification", Constants.CONST_LEAVE_STATUS_FURTHER_CLARIFICATION);
+		model.addAttribute("leaveStatusApproved", Constants.CONST_LEAVE_STATUS_APPROVED);
+		model.addAttribute("leaveStatusRejected", Constants.CONST_LEAVE_STATUS_REJECTED);
+				
+		model.addAttribute("leaveActionApprove", Constants.CONST_LEAVE_ACTION_APPROVE);
+		model.addAttribute("leaveActionReturn", Constants.CONST_LEAVE_ACTION_RETURN);
+		model.addAttribute("leaveActionReject", Constants.CONST_LEAVE_ACTION_REJECT);
+		
+*/		
+		return Constants.PAGE_LEAVE_RETURN;
+	}
+
+	/**
+	 * 
+	 * method name  : submitLeaveReturn
+	 * @param request
+	 * @param response
+	 * @param req
+	 * @param leaveApplModel
+	 * @param result
+	 * @param locale
+	 * @param model
+	 * LeaveAppControllerMain
+	 * return type  : void
+	 * 
+	 * purpose		: Submit Leave return
+	 *
+	 * Date    		:	Jul 25, 2016 11:05:23 AM
+	 */
+	@RequestMapping(params="action=leaveReturn")
+	private void submitLeaveReturn(ActionRequest request,
+			ActionResponse response, PortletRequest req, 
+			@ModelAttribute("leaveAppModel") LeaveAppModel leaveApplModel,
+			BindingResult result,Locale locale,Model model)
+	{
+		logger.info("Inside leave return action");
+		logger.info("leaveApplModel : "+leaveApplModel.toString());
+	}
+	
+	
+	@ResourceMapping(value="getDepartmentsByAjax")
+	private void getDepartments(
+				@RequestParam("branchCode") String branchCode,
+				ResourceRequest request, ResourceResponse response,Locale locale) throws IOException
+	{
+		
+	}
+	
+	
 	
 	/**
 	 * 
@@ -686,5 +799,7 @@ public class LeaveAppControllerMain
 		
 		return empNumber;
 	}
+	
+	
 	
 }

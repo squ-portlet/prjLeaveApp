@@ -49,6 +49,7 @@ public class LeaveAppModel implements Serializable
 	private	String			leaveTypeFlag;
 	private	String			leaveStartDate;
 	private	String			leaveEndDate;
+	private	String			leaveReturnDate;
 	private	String			leaveRemarks;
 	private	String			leavePurpose;
 	private	String			leaveLastReturnDate;
@@ -189,6 +190,26 @@ public class LeaveAppModel implements Serializable
 	public void setLeaveEndDate(String leaveEndDate)
 	{
 		this.leaveEndDate = leaveEndDate;
+	}
+	/**
+	 * Getter Method	: getLeaveReturnDate
+	 * @return the leaveReturnDate
+	 * 
+	 * Date				: Jul 26, 2016
+	 */
+	public String getLeaveReturnDate()
+	{
+		return this.leaveReturnDate;
+	}
+	/**
+	 * Setter method : setLeaveReturnDate
+	 * @param leaveReturnDate the leaveReturnDate to set
+	 * 
+	 * Date          : Jul 26, 2016 12:12:13 PM
+	 */
+	public void setLeaveReturnDate(String leaveReturnDate)
+	{
+		this.leaveReturnDate = leaveReturnDate;
 	}
 	/**
 	 * Getter Method	: getLeaveRemarks
@@ -620,57 +641,25 @@ public class LeaveAppModel implements Serializable
 	@Override
 	public String toString()
 	{
-		return "LeaveAppModel ["
-				+ (this.requestNo != null ? "requestNo=" + this.requestNo
-						+ ", " : "")
-				+ (this.requestDate != null ? "requestDate=" + this.requestDate
-						+ ", " : "")
-				+ (this.leaveType != null ? "leaveType=" + this.leaveType
-						+ ", " : "")
-				+ (this.leaveTypeFlag != null ? "leaveTypeFlag="
-						+ this.leaveTypeFlag + ", " : "")
-				+ (this.leaveStartDate != null ? "leaveStartDate="
-						+ this.leaveStartDate + ", " : "")
-				+ (this.leaveEndDate != null ? "leaveEndDate="
-						+ this.leaveEndDate + ", " : "")
-				+ (this.leaveRemarks != null ? "leaveRemarks="
-						+ this.leaveRemarks + ", " : "")
-				+ (this.leavePurpose != null ? "leavePurpose="
-						+ this.leavePurpose + ", " : "")
-				+ (this.leaveLastReturnDate != null ? "leaveLastReturnDate="
-						+ this.leaveLastReturnDate + ", " : "")
-				+ "leaveBalance="
-				+ this.leaveBalance
-				+ ", "
-				+ (this.employeeNumber != null ? "employeeNumber="
-						+ this.employeeNumber + ", " : "")
-				+ (this.empLevel != null ? "empLevel=" + this.empLevel + ", "
-						: "")
-				+ (this.researchId != null ? "researchId=" + this.researchId
-						+ ", " : "")
-				+ "adminSqu="
-				+ this.adminSqu
-				+ ", "
-				+ (this.branch != null ? "branch=" + this.branch + ", " : "")
-				+ (this.branch2 != null ? "branch2=" + this.branch2 + ", " : "")
-				+ (this.department2 != null ? "department2=" + this.department2
-						+ ", " : "")
-				+ (this.section2 != null ? "section2=" + this.section2 + ", "
-						: "")
-				+ (this.hod != null ? "hod=" + this.hod + ", " : "")
-				+ (this.positionAdditional != null ? "positionAdditional="
-						+ this.positionAdditional + ", " : "")
-				+ (this.delegatedEmps != null ? "delegatedEmps="
-						+ Arrays.toString(this.delegatedEmps) + ", " : "")
-				+ (this.approverAction != null ? "approverAction="
-						+ this.approverAction + ", " : "")
-				+ (this.approverRemark != null ? "approverRemark="
-						+ this.approverRemark + ", " : "")
-				+ (this.opMode != null ? "opMode=" + this.opMode + ", " : "")
-				+ (this.approverEmpNumber != null ? "approverEmpNumber="
-						+ this.approverEmpNumber + ", " : "")
-				+ (this.processSalaray != null ? "processSalaray="
-						+ this.processSalaray : "") + "]";
+		return "LeaveAppModel [requestNo=" + this.requestNo + ", requestDate="
+				+ this.requestDate + ", leaveType=" + this.leaveType
+				+ ", leaveTypeFlag=" + this.leaveTypeFlag + ", leaveStartDate="
+				+ this.leaveStartDate + ", leaveEndDate=" + this.leaveEndDate
+				+ ", leaveReturnDate=" + this.leaveReturnDate
+				+ ", leaveRemarks=" + this.leaveRemarks + ", leavePurpose="
+				+ this.leavePurpose + ", leaveLastReturnDate="
+				+ this.leaveLastReturnDate + ", leaveBalance="
+				+ this.leaveBalance + ", employeeNumber=" + this.employeeNumber
+				+ ", empLevel=" + this.empLevel + ", researchId="
+				+ this.researchId + ", adminSqu=" + this.adminSqu + ", branch="
+				+ this.branch + ", branch2=" + this.branch2 + ", department2="
+				+ this.department2 + ", section2=" + this.section2 + ", hod="
+				+ this.hod + ", positionAdditional=" + this.positionAdditional
+				+ ", delegatedEmps=" + Arrays.toString(this.delegatedEmps)
+				+ ", approverAction=" + this.approverAction
+				+ ", approverRemark=" + this.approverRemark + ", opMode="
+				+ this.opMode + ", approverEmpNumber=" + this.approverEmpNumber
+				+ ", processSalaray=" + this.processSalaray + "]";
 	}
 	
 	

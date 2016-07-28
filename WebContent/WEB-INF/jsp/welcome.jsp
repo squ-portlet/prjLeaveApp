@@ -322,6 +322,11 @@
 					<portlet:actionURL var="varLeaveCancel">
 						<portlet:param name="action" value="leaveCancel"/>
 					</portlet:actionURL>
+					<portlet:renderURL var="urlLeaveReturn">
+						<portlet:param name="action" value="leaveReturn" />
+						<portlet:param name="requestNo" value="${req.requestNo}"/>
+						<portlet:param name="approverEmpNo" value="${req.approve.employee.empNumber}"/>
+					</portlet:renderURL>
 				<tr>
 						<td class="clsNum">
 							<c:choose>
@@ -410,6 +415,10 @@
 										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" appEmpNo="${req.approve.employee.empNumber}" indexRef="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
 									</c:otherwise>
 								</c:choose>
+								<c:if test="${req.leaveReturn}">
+									  <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text"/></a>
+								</c:if>
+								
 						</td>
 				</tr>
 				</c:if>

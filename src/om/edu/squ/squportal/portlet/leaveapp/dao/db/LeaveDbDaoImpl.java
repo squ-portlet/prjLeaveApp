@@ -669,7 +669,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			
 			resultProc			=	simpleJdbcCall.execute(paramIn);
 			
-			if(
+			if( (null != resultProc.get(Constants.CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN) ) && 
 					((String)resultProc.get(Constants.CONST_PROC_COL_OUT_P_ACCEPT_LEAVE_YN))
 						.equalsIgnoreCase(Constants.CONST_YES_CAPITAL)
 			  )
@@ -1356,6 +1356,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Sep 12, 2012 12:38:08 PM
 	 */
+	
+	//(intResult==1)?true:false;
 	public List<LeaveRequest>	getLeaveRequests(Employee employee, Locale locale)
 	{
 		RowMapper<LeaveRequest> mapper	=	new RowMapper<LeaveRequest>()
@@ -1369,7 +1371,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				LeaveApprove	leaveApprove	=	new LeaveApprove();
 				Employee		employeeReq		=	new	Employee();											//	Employee as requester
 				Employee		employeeApp		=	new Employee();											//	Employee as approver
-				
+				int 			returnEligible	=	0;
 				leaveRequest.setRequestNo(rs.getString(Constants.CONST_LEAVE_REQUEST_NO));
 				leaveRequest.setRequestDate(rs.getString(Constants.CONST_LEAVE_REQ_DATE));
 				leaveRequest.setLeaveStartDate(rs.getString(Constants.CONST_LEAVE_START_DATE));
@@ -1407,6 +1409,15 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				{
 					leaveRequest.setSabbaticalLowerApproverAction(false);
 				}
+				if(rs.getInt(Constants.CONST_LEAVE_RETURN_ELIGIBLE) == 1 )
+				{
+					leaveRequest.setLeaveReturn(true);
+				}
+				else
+				{
+					leaveRequest.setLeaveReturn(false);
+				}
+				
 				
 				return leaveRequest;
 			}
@@ -1417,8 +1428,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramEmpNumber", employee.getEmpNumber());
 		namedParameters.put("paramLevel", employee.getHierarchyLevelCode());
 		
-		List<LeaveRequest>	leaveRequests	=	this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_LEAVE_REQUEST, namedParameters, mapper);
 		
+		
+		List<LeaveRequest>	leaveRequests	=	this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_LEAVE_REQUEST, namedParameters, mapper);
 				
 		return leaveRequests;
 	}
@@ -2328,6 +2340,31 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *             LEAVE RETURN
 	 ***********************************************************************************/
 	
+	/**
+	 * 
+	 * method name  : isReturnEligible
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: if current date is higher than leave return date then return eligible function returns true
+	 *
+	 * Date    		:	May 31, 2016 2:19:54 PM
+	 */
+	public boolean isReturnEligible(String requestNo)
+	{
+		boolean booResult;
+		int		intResult;
+		String 				CONST_SELECT_RETURN_ELIGIBLE	=	queryPropsReturn.getProperty(Constants.CONST_SELECT_RETURN_ELIGIBLE);
+		
+		Map<String,String> 	namedParameters 				= 	new HashMap<String,String>();
+							namedParameters.put("paramReqNo", requestNo);
+		
+							intResult						=	namedParameterJdbcTemplate.queryForInt(CONST_SELECT_RETURN_ELIGIBLE, namedParameters);
+		
+		return (intResult==1)?true:false;
+	}
 	
 	
 }
