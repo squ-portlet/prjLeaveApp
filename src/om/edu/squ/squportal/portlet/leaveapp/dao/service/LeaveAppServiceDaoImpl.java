@@ -787,5 +787,34 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	{
 		return leaveDbDao.isReturnEligible(requestNo);
 	}
+	
+	/**
+	 * 
+	 * method name  : newLeaveReturn
+	 * @param leaveRequest
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: Request submitted for leave return
+	 *
+	 * Date    		:	Aug 1, 2016 11:37:06 AM
+	 */
+	public int newLeaveReturn(LeaveAppModel	leaveAppModel)
+	{
+		LeaveRequest	leaveRequest	=	new LeaveRequest();
+		leaveRequest.setRequestNo(leaveAppModel.getRequestNo());
+		if((null== leaveAppModel.getHod()) && null != leaveAppModel.getApproverEmpNumber())
+		{
+			leaveRequest.setApproverId(leaveAppModel.getApproverEmpNumber());
+		}
+		else if ((null != leaveAppModel.getHod()) && null != leaveAppModel.getApproverEmpNumber())
+		{
+			leaveRequest.setApproverId(leaveAppModel.getHod());
+		}
+		leaveRequest.setLeaveReturnDate(leaveAppModel.getLeaveReturnDate());
+			
+		return leaveDbDao.newLeaveReturn(leaveRequest);
+	}
 }
 

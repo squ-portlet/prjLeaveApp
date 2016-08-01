@@ -67,9 +67,12 @@ public interface Constants
 	public static final	String	CONST_EMP_SECTION_CODE			=			"EMP_SECTION_CODE";
 	public static final	String	CONST_EMP_SECTION				=			"EMP_SECTION";
 	public static final	String	CONST_EMP_APP_CODE				=			"EMP_APP_CODE";
+	public static final	String	CONST_RETURN_EMP_APP_CODE		=			"RETURN_EMP_APP_CODE";
 	public static final	String	CONST_EMP_APP_NAME				=			"EMP_APP_NAME";
 	public static final	String	CONST_EMP_APP_FIRST_NAME		=			"EMP_APP_FIRST_NAME";
 	public static final	String	CONST_EMP_APP_LAST_NAME			=			"EMP_APP_LAST_NAME";
+	public static final	String	CONST_RETURN_EMP_APP_FIRST_NAME	=			"RETURN_EMP_APP_FIRST_NAME";
+	public static final	String	CONST_RETURN_EMP_APP_LAST_NAME	=			"RETURN_EMP_APP_LAST_NAME";
 	public static final	String	CONST_EMP_APP_BRANCH_CODE		=			"EMP_APP_BRANCH_CODE";
 	public static final	String	CONST_EMP_APP_DEPARTMENT_CODE	=			"EMP_APP_DEPARTMENT_CODE";
 	public static final	String	CONST_EMP_APP_SECTION_CODE		=			"EMP_APP_SECTION_CODE";
@@ -276,8 +279,9 @@ public interface Constants
 	public	static	String	CONST_DELEGATION_END_DATE						=			"End : ";
 
 	
-	/**********CONSTANTS - SQL - QUERY PROPERTY- NAME**************/	
+	/**********CONSTANTS - SQL - QUERY PROPERTY- NAME - LEAVE RETURN - **************/	
 	public static 	String	CONST_SELECT_RETURN_ELIGIBLE					=			"select.return.eligible";
+	public static 	String	CONST_LEAVE_RETURN_NEW							=			"update.leave.return.new";
 	
 	
 	/**********SQL**********************************/
@@ -594,6 +598,23 @@ public interface Constants
 										                                    "    	WHERE 												" +
 										                                    "	EMPAPP.VHM_EMP_CODE=APP.VHM_APP_EMP_CODE				" +
 										                                    "	) AS EMP_APP_LAST_NAME,									" +
+										                                    "  LVREQ.VHM_RETURN_APP_EMP_CODE AS RETURN_EMP_APP_CODE, 	" +  
+										                                    "	(														" +
+																			"		SELECT DECODE(:paramLocale,							" +
+																			"          'en',initCap(EMPAPP.VHM_EMP_1ST_NAME),			" +
+																			"          'ar',EMPAPP.VHM_EMP_1ST_NAME_ARABIC) 			" +
+																			"    	FROM VHM_EMPLOYEE  EMPAPP							" +
+																			"    	WHERE 												" +
+																			"	EMPAPP.VHM_EMP_CODE=LVREQ.VHM_RETURN_APP_EMP_CODE		" +
+																			"	) AS RETURN_EMP_APP_FIRST_NAME,							" +
+																			"	(														" +
+																			"		SELECT DECODE(:paramLocale,							" +
+																			"          'en',initCap(EMPAPP.VHM_EMP_LAST_NAME),			" +
+																			"          'ar',EMPAPP.VHM_EMP_LAST_NAME_ARABIC) 			" +
+																			"    	FROM VHM_EMPLOYEE  EMPAPP							" +
+																			"    	WHERE 												" +
+																			"	EMPAPP.VHM_EMP_CODE=LVREQ.VHM_RETURN_APP_EMP_CODE		" +
+																			"	) AS RETURN_EMP_APP_LAST_NAME,							" +										                                    
 										                                    "	APP.VHM_APP_SEQ_NO AS APPROVER_SEQUENCE_NO,				" +
 										                                    "   IS_VALID_LEAVE_APP_APPROVER								" +
 										                                    "				(											" +

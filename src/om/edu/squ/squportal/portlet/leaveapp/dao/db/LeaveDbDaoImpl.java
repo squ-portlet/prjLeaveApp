@@ -1365,12 +1365,16 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			
 			public LeaveRequest mapRow(ResultSet rs, int rowNum) throws SQLException
 			{
-				LeaveRequest	leaveRequest	=	new LeaveRequest();
-				LeaveType		leaveType		=	new LeaveType();
-				LeaveStatus		leaveStatus		=	new LeaveStatus();
-				LeaveApprove	leaveApprove	=	new LeaveApprove();
-				Employee		employeeReq		=	new	Employee();											//	Employee as requester
-				Employee		employeeApp		=	new Employee();											//	Employee as approver
+				LeaveRequest	leaveRequest		=	new LeaveRequest();
+				LeaveType		leaveType			=	new LeaveType();
+				LeaveStatus		leaveStatus			=	new LeaveStatus();
+				LeaveApprove	leaveApprove		=	new LeaveApprove();
+				LeaveApprove	leaveReturnApprove	=	new LeaveApprove();
+				Employee		employeeReq			=	new	Employee();											//	Employee as requester
+				Employee		employeeApp			=	new Employee();											//	Employee as approver
+				Employee		employeeRetApp		=	new Employee();											//	Employee as approver for Leave Return	
+
+				
 				int 			returnEligible	=	0;
 				leaveRequest.setRequestNo(rs.getString(Constants.CONST_LEAVE_REQUEST_NO));
 				leaveRequest.setRequestDate(rs.getString(Constants.CONST_LEAVE_REQ_DATE));
@@ -1401,6 +1405,11 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveApprove.setEmployee(employeeApp);
 				leaveRequest.setApprove(leaveApprove);
 				leaveRequest.setApproverSequenceNo(rs.getInt(Constants.CONST_APPROVER_SEQUENCE_NO));
+						employeeRetApp.setEmpNumber(rs.getString(Constants.CONST_RETURN_EMP_APP_CODE));
+						employeeRetApp.setEmpName(rs.getString(Constants.CONST_RETURN_EMP_APP_FIRST_NAME) + " " +rs.getString(Constants.CONST_RETURN_EMP_APP_LAST_NAME));
+				leaveReturnApprove.setEmployee(employeeRetApp);
+				leaveRequest.setReturnApprove(leaveReturnApprove);
+
 				if((null != rs.getString(Constants.CONST_APPROVER_BEFORE_ACTION)) && rs.getString(Constants.CONST_APPROVER_BEFORE_ACTION).equalsIgnoreCase(Constants.CONST_YES_CAPITAL))
 				{
 					leaveRequest.setSabbaticalLowerApproverAction(true);
@@ -1418,6 +1427,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveRequest.setLeaveReturn(false);
 				}
 				
+
 				
 				return leaveRequest;
 			}
@@ -2364,6 +2374,35 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 							intResult						=	namedParameterJdbcTemplate.queryForInt(CONST_SELECT_RETURN_ELIGIBLE, namedParameters);
 		
 		return (intResult==1)?true:false;
+	}
+	
+
+	/**
+	 * 
+	 * method name  : newLeaveReturn
+	 * @param leaveRequest
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: Request submitted for leave return
+	 *
+	 * Date    		:	Aug 1, 2016 11:37:06 AM
+	 */
+	public int newLeaveReturn(LeaveRequest	leaveRequest)
+	{
+		int		intResult;
+		String 				CONST_SQL_UPDATE_LEAVE_RETURN_NEW	=	queryPropsReturn.getProperty(Constants.CONST_LEAVE_RETURN_NEW);
+		
+		Map<String,String> 	namedParameters 				= 	new HashMap<String,String>();
+		namedParameters.put("paramReqNo", leaveRequest.getRequestNo());
+		namedParameters.put("paramLeaveReturnDate", leaveRequest.getLeaveReturnDate());
+		namedParameters.put("paramEmpReturnApprover", leaveRequest.getApproverId());
+		
+		intResult	=	namedParameterJdbcTemplate.update(CONST_SQL_UPDATE_LEAVE_RETURN_NEW, namedParameters);
+		
+		return intResult;
+		
 	}
 	
 	

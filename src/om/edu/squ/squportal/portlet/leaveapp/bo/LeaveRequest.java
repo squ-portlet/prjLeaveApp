@@ -53,6 +53,7 @@ public class LeaveRequest implements Serializable
 	private	LeaveType		leaveTypeFlag;
 	private	LeaveStatus		status;
 	private	LeaveApprove	approve;
+	private	LeaveApprove	returnApprove;
 	private	String			leavePurpose;
 	private	boolean			leaveRequestActive;
 	private	String			leaveRequestRemarks;
@@ -327,6 +328,26 @@ public class LeaveRequest implements Serializable
 		this.approve = approve;
 	}
 	/**
+	 * Getter Method	: getReturnApprove
+	 * @return the returnApprove
+	 * 
+	 * Date				: Aug 1, 2016
+	 */
+	public LeaveApprove getReturnApprove()
+	{
+		return this.returnApprove;
+	}
+	/**
+	 * Setter method : setReturnApprove
+	 * @param returnApprove the returnApprove to set
+	 * 
+	 * Date          : Aug 1, 2016 1:53:43 PM
+	 */
+	public void setReturnApprove(LeaveApprove returnApprove)
+	{
+		this.returnApprove = returnApprove;
+	}
+	/**
 	 * Getter Method	: getLeavePurpose
 	 * @return the leavePurpose
 	 * 
@@ -544,7 +565,8 @@ public class LeaveRequest implements Serializable
 				+ ", leaveStatus=" + this.leaveStatus + ", employee="
 				+ this.employee + ", leaveType=" + this.leaveType
 				+ ", leaveTypeFlag=" + this.leaveTypeFlag + ", status="
-				+ this.status + ", approve=" + this.approve + ", leavePurpose="
+				+ this.status + ", approve=" + this.approve
+				+ ", returnApprove=" + this.returnApprove + ", leavePurpose="
 				+ this.leavePurpose + ", leaveRequestActive="
 				+ this.leaveRequestActive + ", leaveRequestRemarks="
 				+ this.leaveRequestRemarks + ", suggestedHod="

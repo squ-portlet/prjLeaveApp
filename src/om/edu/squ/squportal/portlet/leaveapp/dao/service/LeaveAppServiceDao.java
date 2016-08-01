@@ -438,4 +438,19 @@ public interface LeaveAppServiceDao
 	 */
 	public boolean isReturnEligible(String requestNo);
 	
+
+	/**
+	 * 
+	 * method name  : newLeaveReturn
+	 * @param leaveRequest
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: Request submitted for leave return
+	 *
+	 * Date    		:	Aug 1, 2016 11:37:06 AM
+	 */
+	public int newLeaveReturn(LeaveAppModel	leaveAppModel);
+	
 }

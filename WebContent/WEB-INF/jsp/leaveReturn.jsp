@@ -571,14 +571,16 @@ $(function() {
 					</span>
 					</td>
 					<td colspan="4">
-						<c:choose>
-							<c:when test="${not empty leaveRequest.leaveRequestRemarks}">
-								<c:out value="${leaveRequest.leaveRequestRemarks}"/>
-							</c:when>
-							<c:otherwise>
-								<spring:message code="prop.leave.app.apply.leave.remarks.not.available"/>
-							</c:otherwise>
-						</c:choose>
+							<c:choose>
+								<c:when test="${not empty leaveRequest.leaveRequestRemarks}">
+									<c:out value="${leaveRequest.leaveRequestRemarks}"/>
+								</c:when>
+								<c:otherwise>
+									<spring:message code="prop.leave.app.apply.leave.remarks.not.available"/>
+								</c:otherwise>
+							</c:choose>
+						<br>
+						<form:textarea path="leaveRemarks"/>
 					</td>
 				</tr>
 				<tr>

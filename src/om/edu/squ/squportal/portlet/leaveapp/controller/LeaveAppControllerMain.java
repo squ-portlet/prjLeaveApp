@@ -135,6 +135,8 @@ public class LeaveAppControllerMain
 		model.addAttribute("empNumber", String.format("%07d", Integer.parseInt(empNumber)));
 		model.addAttribute("empName", employee.getEmpName());
 		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
+			
+		model.addAttribute("waitingApproval", Constants.CONST_LEAVE_STATUS_WAITING_APPV);
 		model.addAttribute("furtherClarification", Constants.CONST_LEAVE_STATUS_FURTHER_CLARIFICATION);
 		model.addAttribute("leaveStatusApproved", Constants.CONST_LEAVE_STATUS_APPROVED);
 		model.addAttribute("leaveStatusRejected", Constants.CONST_LEAVE_STATUS_REJECTED);
@@ -659,7 +661,7 @@ public class LeaveAppControllerMain
 	 * Date    		:	Jun 2, 2016 12:18:14 PM
 	 */
 	@RequestMapping(params="action=leaveReturn")
-	private String leaveReturn(
+	private String leaveReturnApply(
 			@RequestParam("requestNo") String requestNum,
 			@RequestParam("approverEmpNo") String approverEmpNo,
 			PortletRequest request, Model model,Locale locale)
@@ -711,6 +713,9 @@ public class LeaveAppControllerMain
 		return Constants.PAGE_LEAVE_RETURN;
 	}
 
+	
+	
+	
 	/**
 	 * 
 	 * method name  : submitLeaveReturn
@@ -734,6 +739,7 @@ public class LeaveAppControllerMain
 			@ModelAttribute("leaveAppModel") LeaveAppModel leaveApplModel,
 			BindingResult result,Locale locale,Model model)
 	{
+		int resultUpdate = leaveAppServiceDao.newLeaveReturn(leaveApplModel);
 		logger.info("Inside leave return action");
 		logger.info("leaveApplModel : "+leaveApplModel.toString());
 	}

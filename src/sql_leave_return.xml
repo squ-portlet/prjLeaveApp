@@ -13,4 +13,14 @@
 				AND VHM_LEAVE_REQ_NO = :paramReqNo
 	     ]]>
      </entry>
+     <entry key="update.leave.return.new">
+     	<![CDATA[
+			UPDATE VHM_EMP_LEAVE_REQUEST
+			SET 
+			  VHM_RETURN_DATE = TO_DATE(:paramLeaveReturnDate,'DD/MM/YYYY'),
+			  VHM_RETURN_APP_EMP_CODE = :paramEmpReturnApprover,
+			  VHM_STATUS_CODE = '0000000001'
+			WHERE VHM_LEAVE_REQ_NO = :paramReqNo
+     	]]>
+     </entry>
 </properties>   
