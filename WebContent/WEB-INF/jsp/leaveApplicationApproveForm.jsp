@@ -197,6 +197,10 @@ http://designwithpc.com/Plugins/ddSlick
 							<span class="PortletHeaderText">
 								<spring:message code="prop.leave.app.apply.form.approvar.remarks"/>
 							</span>
+							<c:if test="${not empty leaveRequest.leaveReturnDate}">
+								<br>
+								<font color="red">(<spring:message code="prop.leave.app.return.link.text"/>)</font>
+							</c:if>
 						</th>
 						<td>
 							<spring:message code="prop.leave.app.apply.form.approvar.action.remarks"/>
@@ -267,6 +271,12 @@ http://designwithpc.com/Plugins/ddSlick
 						</th>
 						<td colspan="4"><c:out value="${leaveRequest.leaveRequestRemarks}"/></td>
 					</tr>
+					<c:if test="${not empty leaveRequest.leaveReturnDate}">
+						<tr>
+							<th><font color="red"><spring:message code="prop.leave.app.return.date"/></font></th>
+							<td><c:out value="${leaveRequest.leaveReturnDate}"/></td>
+						</tr>
+					</c:if>
 				</table>
 			</fieldset>
 			<p/>

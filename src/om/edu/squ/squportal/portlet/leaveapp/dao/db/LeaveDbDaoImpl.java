@@ -1470,14 +1470,15 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			public LeaveRequest mapRow(ResultSet rs, int rowNum)
 					throws SQLException
 			{
-				LeaveRequest	leaveRequest	=	new LeaveRequest();
-				LeaveStatus		leaveStatus		=	new LeaveStatus();
-				LeaveType		leaveType		=	new LeaveType();
-				LeaveType		leaveTypeFlag	=	new LeaveType();
-				Employee		employee		=	new	Employee();
-				
-				
-				LeaveApprove	approve			=	new LeaveApprove();
+				LeaveRequest	leaveRequest		=	new LeaveRequest();
+				LeaveStatus		leaveStatus			=	new LeaveStatus();
+				LeaveType		leaveType			=	new LeaveType();
+				LeaveType		leaveTypeFlag		=	new LeaveType();
+				Employee		employee			=	new	Employee();
+				Employee		empAppLeaveReturn	=	new Employee();
+				LeaveApprove	approve				=	new LeaveApprove();
+				LeaveApprove	returnApprove		=	new LeaveApprove();
+
 					leaveRequest.setRequestNo(rs.getString(Constants.CONST_LEAVE_REQUEST_NO));
 					leaveRequest.setRequestDate(rs.getString(Constants.CONST_LEAVE_REQ_DATE));
 						leaveStatus.setStatusCode(rs.getString(Constants.CONST_LEAVE_STATUS_CODE));
@@ -1485,6 +1486,11 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveRequest.setStatus(leaveStatus);
 					leaveRequest.setLeaveStartDate(rs.getString(Constants.CONST_LEAVE_START_DATE));
 					leaveRequest.setLeaveEndDate(rs.getString(Constants.CONST_LEAVE_END_DATE));
+					if(null != rs.getString(Constants.CONST_LEAVE_RETURN_DATE ))
+							{
+								leaveRequest.setLeaveReturnDate(rs.getString(Constants.CONST_LEAVE_RETURN_DATE ));
+							}
+					leaveRequest.setLeaveReturnDate(rs.getString(Constants.CONST_LEAVE_RETURN_DATE));
 						leaveType.setTypeNo(rs.getString(Constants.CONST_LEAVE_TYPE));
 						leaveType.setTypeDesc(rs.getString(Constants.CONST_LEAVE_DESC));
 						leaveTypeFlag.setTypeNo(rs.getString(Constants.CONST_LEAVE_TYPE_FLAG));
@@ -1525,6 +1531,14 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveRequest.setApproverId(rs.getString(Constants.CONST_EMP_APP_CODE));
 					leaveRequest.setApproverSequenceNo(rs.getInt(Constants.CONST_APPROVER_SEQUENCE_NO));
 					leaveRequest.setProcessSalaray(rs.getString(Constants.CONST_LEAVE_REQUEST_PROCESS_SALARY));
+
+					if(null != rs.getString(Constants.CONST_RETURN_EMP_APP_CODE ))
+					{
+						empAppLeaveReturn.setEmpNumber(rs.getString(Constants.CONST_RETURN_EMP_APP_CODE ));
+						returnApprove.setEmployee(empAppLeaveReturn);
+						leaveRequest.setReturnApprove(returnApprove);
+					}
+
 				return leaveRequest;
 			
 		}
@@ -2041,7 +2055,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 		if(result != 0)
 		{
-			result2 = setLeaveRequestStatusUpdate(employee.getEmpNumber(),approve.getRequestNo(), approve.getApproverAction());
+				result2 = setLeaveRequestStatusUpdate(employee.getEmpNumber(),approve.getRequestNo(), approve.getApproverAction());
 		}
 		else
 		{
@@ -2160,8 +2174,17 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramCompLeaveTypeFlag",leaveRequest.getLeaveTypeFlag().getTypeNo());
 		namedParameters.put("paramCompStartDate",leaveRequest.getLeaveStartDate());
 		namedParameters.put("paramCompEndDate",leaveRequest.getLeaveEndDate());
-		namedParameters.put("paramCompSuggestedHod",leaveRequest.getSuggestedHod());
-		return namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_REQ_STATUS, namedParameters);
+		if(null == leaveRequest.getLeaveReturnDate())
+		{
+			namedParameters.put("paramCompSuggestedHod",leaveRequest.getSuggestedHod());
+			return namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_REQ_STATUS, namedParameters);
+		}
+		else
+		{
+			namedParameters.put("paramLeaveReturnDate",leaveRequest.getLeaveReturnDate());
+			namedParameters.put("paramReturnApproverEmpNumber",leaveRequest.getReturnApprove().getEmployee().getEmpNumber());
+			return namedParameterJdbcTemplate.update(Constants.SQL_UPDATE_LEAVE_RETURN_STATUS, namedParameters);
+		}
 	}
 	
 	/**

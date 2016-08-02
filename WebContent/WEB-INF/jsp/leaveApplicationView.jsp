@@ -230,6 +230,12 @@ $(function() {
 						</c:choose>
 						</td>
 					</tr>
+					<c:if test="${not empty leaveRequest.leaveReturnDate}">
+						<tr>
+							<th><font color="red"><spring:message code="prop.leave.app.return.date"/></font></th>
+							<td><c:out value="${leaveRequest.leaveReturnDate}"/></td>
+						</tr>
+					</c:if>
 				</table>
 			</fieldset>
 			<p/>

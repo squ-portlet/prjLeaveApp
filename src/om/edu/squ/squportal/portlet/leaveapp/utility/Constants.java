@@ -88,6 +88,7 @@ public interface Constants
 	public static final	String	CONST_LEAVE_REQ_DATE			=			"LEAVE_REQ_DATE";
 	public static final	String	CONST_LEAVE_START_DATE			=			"LEAVE_START_DATE";
 	public static final	String	CONST_LEAVE_END_DATE			=			"LEAVE_END_DATE";
+	public static final	String	CONST_LEAVE_RETURN_DATE			=			"LEAVE_RETURN_DATE";
 	public static final	String	CONST_LEAVE_STATUS				=			"LEAVE_STATUS";
 	public static final	String	CONST_LEAVE_STATUS_CODE			=			"LEAVE_STATUS_CODE";
 	public static final	String	CONST_LEAVE_STATUS_DATE			=			"LEAVE_STATUS_DATE";
@@ -789,6 +790,8 @@ public interface Constants
 																			"									AS LEAVE_START_DATE,	" +
 																			"	TO_CHAR(LVREQ.VHM_LEAVE_END_DATE,'DD/MM/YYYY') 			" +
 																			"									AS LEAVE_END_DATE,		" +
+																			"	TO_CHAR(LVREQ.VHM_RETURN_DATE,'DD/MM/YYYY') 			" +
+																			"									AS LEAVE_RETURN_DATE,	" +
 																			"	LVREQ.VHM_LEAVE_TYPE_FLAG AS LEAVE_TYPE_FLAG,			" +
 																			" 	LVREQ.VHM_LEAVE_TYPE AS LEAVE_TYPE,						" +
 																			"	DECODE													" +
@@ -824,6 +827,7 @@ public interface Constants
 																			"							AS EMP_ADDITIONAL_POSITION_DESC," +
 																			"	LVAPRV.VHM_ACTION_CODE AS ACTION_CODE,					" +
 																			"	LVAPRV.VHM_APP_REMARKS AS APPROVER_REMARK,				" +
+																			"   LVREQ.VHM_RETURN_APP_EMP_CODE AS RETURN_EMP_APP_CODE,	" +
 																			"	LVREQ.VHM_SUGGESTED_APP_EMP_CODE 						" +
 																			"						AS SUGGESTED_APPROVER_CODE,			" +
 																			"   EMP.VHM_EMP_BRAN_CODE AS EMP_APP_BRANCH_CODE,			" +
@@ -854,7 +858,7 @@ public interface Constants
 																			"							SELECT MAX(VHM_APP_RECEIVED_DATE) " +	
 																			"							FROM VHM_EMP_LEAVE_REQUEST_APPROVAL " +
 																			"							WHERE VHM_LEAVE_REQ_NO = :paramReqNo " +
-																																						"										)					" +
+																			"										)					" +
 																			"	ORDER BY LEAVE_REQ_DATE DESC							" +
 																			") WHERE ROWNUM <=1											";
 
@@ -878,6 +882,8 @@ public interface Constants
 																			"									AS LEAVE_START_DATE,	" +
 																			"	TO_CHAR(LVREQ.VHM_LEAVE_END_DATE,'DD/MM/YYYY') 			" +
 																			"									AS LEAVE_END_DATE,		" +
+																			"	TO_CHAR(LVREQ.VHM_RETURN_DATE,'DD/MM/YYYY') 			" +
+																			"									AS LEAVE_RETURN_DATE,	" +																			
 																			"	LVREQ.VHM_LEAVE_TYPE_FLAG AS LEAVE_TYPE_FLAG,			" +
 																			" 	LVREQ.VHM_LEAVE_TYPE AS LEAVE_TYPE,						" +
 																			"	DECODE													" +
@@ -914,6 +920,7 @@ public interface Constants
 																			"	LVAPRV.VHM_ACTION_CODE AS ACTION_CODE,					" +
 																			"	LVAPRV.VHM_APP_REMARKS AS APPROVER_REMARK,				" +
 																			"	LVAPRV.VHM_APP_SEQ_NO AS APPROVER_SEQUENCE_NO,			" +
+																			"   LVREQ.VHM_RETURN_APP_EMP_CODE AS RETURN_EMP_APP_CODE,	" +
 																			"	LVREQ.VHM_SUGGESTED_APP_EMP_CODE 						" +
 																			"						AS SUGGESTED_APPROVER_CODE,			" +
 																			"   EMP.VHM_EMP_BRAN_CODE AS EMP_APP_BRANCH_CODE,			" +
@@ -1231,7 +1238,18 @@ public interface Constants
 																			"			VHM_SUGGESTED_APP_EMP_CODE = :paramCompSuggestedHod " +
 																			"		OR	:paramCompSuggestedHod IS NULL						" +
 																			"	   )														";
+
+	
+	public static final String	SQL_UPDATE_LEAVE_RETURN_STATUS	=			" UPDATE VHM_EMP_LEAVE_REQUEST									" +
+																			" SET VHM_STATUS_CODE=:paramStatusCode							" +
+																			" WHERE VHM_LEAVE_REQ_NO=:paramReqNo							" +
+																			" AND VHM_LEAVE_TYPE_FLAG = :paramCompLeaveTypeFlag				" +
+																			" AND VHM_LEAVE_START_DATE = TO_DATE(:paramCompStartDate,'DD/MM/YYYY') " +
+																			" AND VHM_LEAVE_END_DATE = TO_DATE(:paramCompEndDate,'DD/MM/YYYY') " +
+																			" AND VHM_RETURN_DATE = TO_DATE(:paramLeaveReturnDate,'DD/MM/YYYY') " +
+																			" AND VHM_RETURN_APP_EMP_CODE = :paramReturnApproverEmpNumber		";
 																			
+	
 	
 	public static final String	SQL_UPDATE_LEAVE_REQ_APPROVE	=			"	UPDATE VHM_EMP_LEAVE_REQUEST_APPROVAL						" +
 																			"	SET VHM_ACTION_CODE = :paramActionCode,						" +        
