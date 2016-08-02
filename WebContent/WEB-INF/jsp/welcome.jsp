@@ -430,6 +430,8 @@
 									  <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text"/></a>
 								</c:if>
 								
+								
+								
 						</td>
 				</tr>
 				</c:if>
@@ -557,6 +559,10 @@
 														</c:if>
 													</c:forEach>
 													&nbsp;&nbsp;<a href="${varLeaveApprove}"><font color="red"><spring:message code="prop.leave.app.title.request.actions" /></font></a>&nbsp;&nbsp;|
+													
+												<c:if test="${not empty req.returnApprove.employee.empNumber}">
+													(<spring:message code="prop.leave.app.return.link.text"/>)
+												</c:if>
 										</c:otherwise>
 									</c:choose>
 								</c:when>
