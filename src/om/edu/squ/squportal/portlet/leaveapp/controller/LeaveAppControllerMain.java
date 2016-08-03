@@ -670,7 +670,7 @@ public class LeaveAppControllerMain
 		Employee	employee	=	(Employee)session.getAttribute("employee");	
 		String		empNumber	=	String.format("%07d", Integer.parseInt(employee.getEmpNumber()));
 		
-		List<LeaveRequest>	leaveRequests	=	leaveAppServiceDao.getLeaveRequests(employee,locale);
+		//List<LeaveRequest>	leaveRequests	=	leaveAppServiceDao.getLeaveRequests(employee,locale);
 		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(approverEmpNo, requestNum, locale);
 		
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -686,7 +686,7 @@ public class LeaveAppControllerMain
 		}
 		
 		model.addAttribute("employee",employee );
-		model.addAttribute("leaveRequests", leaveRequests);
+		//model.addAttribute("leaveRequests", leaveRequests);
 		model.addAttribute("leaveRequest", leaveRequest);
 		model.addAttribute("approver", leaveRequest.getApprove());
 		model.addAttribute("branches",leaveAppServiceDao.getBranches(employee.getBranchCode(),locale));

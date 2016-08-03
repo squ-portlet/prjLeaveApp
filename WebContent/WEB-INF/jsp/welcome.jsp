@@ -34,6 +34,7 @@
 <%@ taglib prefix="form"    uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+
 <%@include file="ui/cssWelcome.jsp" %>
 
 <spring:url value="/css/images/backIcon.png" var="urlImgBack"/>
@@ -348,7 +349,16 @@
 							<c:out value="${req.leaveType.typeDesc}"/>
 						</td>
 						<td>
-							<c:out value="${req.leaveStatus}"/>
+							<c:choose>
+								<c:when test="${(req.status.statusCode eq leaveStatusRejected) && (not empty req.returnApprove.employee.empNumber) }">
+									<font color="red"><b>${req.leaveStatus}</b></font>
+								</c:when>
+								<c:otherwise>
+									<c:out value="${req.leaveStatus}"/>
+								</c:otherwise>
+								
+							</c:choose>
+							
 						</td>
 						<td>
 							<c:choose>
@@ -361,7 +371,7 @@
 												<c:out value="${req.returnApprove.employee.empName}"/>	
 										</c:when>
 										<c:otherwise>
-											<c:out value="${req.approve.employee.empName}"/>	
+											<c:out value="${req.approve.employee.empName}"/>  
 										</c:otherwise>
 									</c:choose>
 									
@@ -415,6 +425,9 @@
 									</c:when>
 									<c:when test="${(req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected)}">
 										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
+										<c:if test="${(req.status.statusCode eq leaveStatusRejected) && (not empty req.returnApprove.employee.empNumber) }">
+											| <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text.color.red"/></a>
+										</c:if> 
 									</c:when>
 									<c:when test="${(req.approverSequenceNo != 1)}">
 										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
@@ -427,7 +440,7 @@
 									</c:otherwise>
 								</c:choose>
 								<c:if test="${req.leaveReturn && (empty req.returnApprove.employee.empNumber)}">
-									  <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text"/></a>
+									 | <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text"/></a>
 								</c:if>
 								
 								

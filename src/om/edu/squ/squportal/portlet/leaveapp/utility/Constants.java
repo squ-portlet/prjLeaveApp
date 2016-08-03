@@ -673,7 +673,16 @@ public interface Constants
 																			"				)											" +
 																			"		)													" +
 																			"	AND LVREQ.VHM_STATUS_CODE != " + CONST_LEAVE_STATUS_CANCEL	  +
-																			"	ORDER BY DELEGATE_STATUS, LVREQ.VHM_LEAVE_REQ_NO	DESC, APP.VHM_APP_SEQ_NO ";
+																			"	AND APP.VHM_APP_CRE_DATE = 														" +
+																			"								(													" +
+																		    "                                      SELECT 										" +
+																		    "                                        MAX(VHM_APP_CRE_DATE)						" +
+																		    "                                      FROM											" +
+																		    "                                        VHM_EMP_LEAVE_REQUEST_APPROVAL				" +
+																		    "                                      WHERE 										" +
+																		    "                                        VHM_LEAVE_REQ_NO = LVREQ.VHM_LEAVE_REQ_NO	" +
+															                "                    	    	)													" +
+																			"	ORDER BY DELEGATE_STATUS, LVREQ.VHM_LEAVE_REQ_NO	DESC, APP.VHM_APP_SEQ_NO 	";
 
 	public static final String	SQL_VIEW_SABBATICAL_LIMITED		=			"	SELECT APP.VHM_LEAVE_REQ_NO	AS	LEAVE_REQUEST_NO,				" +
 																			"	       APP.VHM_ACTION_CODE AS ACTION_CODE,						" +
