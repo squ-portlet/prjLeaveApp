@@ -17,10 +17,11 @@
      	<![CDATA[
 			UPDATE VHM_EMP_LEAVE_REQUEST
 			SET 
-			  VHM_RETURN_DATE = TO_DATE(:paramLeaveReturnDate,'DD/MM/YYYY'),
-			  VHM_RETURN_APP_EMP_CODE = :paramEmpReturnApprover,
-			  VHM_STATUS_CODE = '0000000001'
-			WHERE VHM_LEAVE_REQ_NO = :paramReqNo
+			  VHM_RETURN_DATE 			= TO_DATE(:paramLeaveReturnDate,'DD/MM/YYYY'),
+			  VHM_RETURN_APP_EMP_CODE 	= :paramEmpReturnApprover,
+			  VHM_LEAVE_REQUEST_REMARKS = :paramLeaveReturnRemark, 
+			  VHM_STATUS_CODE 			= '0000000001'
+			WHERE VHM_LEAVE_REQ_NO 		= :paramReqNo
      	]]>
      </entry>
 </properties>   

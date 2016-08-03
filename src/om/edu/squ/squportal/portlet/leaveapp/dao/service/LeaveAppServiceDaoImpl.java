@@ -813,6 +813,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 			leaveRequest.setApproverId(leaveAppModel.getHod());
 		}
 		leaveRequest.setLeaveReturnDate(leaveAppModel.getLeaveReturnDate());
+		leaveRequest.setLeaveRequestRemarks(leaveAppModel.getLeaveRemarks());
 			
 		return leaveDbDao.newLeaveReturn(leaveRequest);
 	}

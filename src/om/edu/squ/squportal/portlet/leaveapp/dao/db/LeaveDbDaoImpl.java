@@ -2421,6 +2421,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramReqNo", leaveRequest.getRequestNo());
 		namedParameters.put("paramLeaveReturnDate", leaveRequest.getLeaveReturnDate());
 		namedParameters.put("paramEmpReturnApprover", leaveRequest.getApproverId());
+		namedParameters.put("paramLeaveReturnRemark", leaveRequest.getLeaveRequestRemarks());
 		
 		intResult	=	namedParameterJdbcTemplate.update(CONST_SQL_UPDATE_LEAVE_RETURN_NEW, namedParameters);
 		
