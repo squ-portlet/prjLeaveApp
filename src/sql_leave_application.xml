@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Post Teaching Survey Control</comment>
+     <entry key="select.leave.employee">
+		SELECT DISTINCT EMP.VHM_EMP_CODE AS EMP_CODE, 									
+		  SUBSTR(																			
+					VHM_EMP_SQU_EMAIL,1,													
+					INSTRB(VHM_EMP_SQU_EMAIL, '@', 1, 1)-1									
+				  ) AS EMP_INTERNET_ID,														
+		  VHM_EMP_SQU_EMAIL AS EMP_MAIL_ID,												
+		  DECODE(:paramLocale,                          											
+		            'en',initCap(EMP.VHM_EMP_NAME),   										       	
+					 'ar',EMP.VHM_EMP_NAME_ARABIC) AS EMP_NAME,								
+			initCap(EMP.VHM_EMP_NAME) AS EMP_NAME_EN,										
+			EMP.VHM_EMP_NAME_ARABIC	AS EMP_NAME_AR,											
+			EMP.VHM_EMP_JOB_TYPE AS EMP_JOB_TYPE_CODE,										
+			EMP.VHM_EMP_DESG_CODE AS EMP_DESIGNATION_CODE,									
+		  DECODE(:paramLocale,                          									
+		            'en',initCap(DESG.VHM_DESG_DESC),          							
+					 'ar',DESG.VHM_DESG_DESC_ARABIC) AS EMP_DESIGNATION,					
+			ADESIG.VEAT_EMP_DESG_CODE AS EMP_ADDITIONAL_POSITION_CODE,						
+		         (																			
+                                    SELECT ADDLDESG.VHM_HIERARCHY_CODE										
+                                     FROM VHM_DESIGNATION ADDLDESG											
+                                    WHERE ADDLDESG.VHM_DESG_CODE = ADESIG.VEAT_EMP_DESG_CODE					
+                                  ) AS EMP_ADDITIONAL_HIERARCHY_CODE,										
+                          		(																			
+                                     SELECT ADDLHIR.VHM_LEVEL												
+                                     FROM  VHM_HIERARCHY ADDLHIR											
+                                     WHERE ADDLHIR.VHM_HIERARCHY_CODE = 									
+                                       (																	
+                                         SELECT ADDLDESG.VHM_HIERARCHY_CODE								
+                                          FROM VHM_DESIGNATION ADDLDESG									
+                                         WHERE ADDLDESG.VHM_DESG_CODE = ADESIG.VEAT_EMP_DESG_CODE			
+                                       )																	
+                                   ) EMP_ADDITIONAL_LEVEL,												
+		 	VHM_EMP_ADMIN_POSITION_YN AS EMP_ADMIN,											
+			EMP.VHM_EMP_GRADE_CODE AS EMP_GRADE_CODE,												
+		  DECODE(:paramLocale,                          									
+		            'en',initCap(GRADE.VHM_GRADE_DESC),          							
+					 'ar',GRADE.VHM_GRADE_DESC_ARABIC) AS EMP_GRADE,						
+		   GRADE.VHM_GRADE_SHORT_DESC AS EMP_GRADE_SHORT, 									
+			EMP.VHM_EMP_BRAN_CODE AS EMP_BRANCH_CODE,      									
+		  DECODE(:paramLocale,                          									
+		            'en',initCap(BRANCH.VHM_BRANCH_NAME),          						
+					 'ar',BRANCH.VHM_BRANCH_NAME_ARABIC) AS EMP_BRANCH,						
+			ADESIG.VEAT_EMP_BRANCH_CODE AS EMP_BRANCH_ADDL_CODE,							
+		  EMP.VHM_EMP_DEPT_CODE AS EMP_DEPARTMENT_CODE,									
+		  DECODE(:paramLocale,                          									
+		            'en',initCap(DEPARTMENT.VHM_DEPT_NAME),          						
+					 'ar',DEPARTMENT.VHM_DEPT_NAME_ARABIC) AS EMP_DEPARTMENT,				
+		   DEPARTMENT.VHM_DEPT_SHORT_NAME AS EMP_DEPARTMENT_SHORT,							
+			ADESIG.VEAT_EMP_DEPT_CODE AS EMP_DEPARTMENT_ADDL_CODE, 							
+			EMP.VHM_EMP_SECTION_CODE AS EMP_SECTION_CODE,									
+		  DECODE(:paramLocale,                          									
+		            'en',initCap(SECTION.VHM_SECTION_NAME),          						
+					 'ar',SECTION.VHM_SECTION_NAME_ARABIC) AS EMP_SECTION,					
+		    TO_CHAR(VHM_EMP_JOIN_DATE,'dd/mm/yyyy') AS EMP_JOIN_DATE,						
+			DESG.VHM_HIERARCHY_CODE AS 	EMP_HIERARCHY_CODE,									
+			HIR.VHM_LEVEL	AS EMP_LEVEL,													
+		   EMP.VHM_REL_CODE AS EMP_RELIGION_CODE,											
+		   EMP.VHM_EMP_LOCAL	AS EMP_OMANI,												
+		   EMP.VHM_EMP_SEX  AS EMP_SEX														
+		 FROM VHM_EMPLOYEE EMP,															
+		     VHM_DESIGNATION DESG,															
+		 	  VHM_HIERARCHY HIR,															
+		     VHM_GRADE GRADE,																
+		     VHM_BRANCH BRANCH,															
+		     VHM_DEPARTMENT DEPARTMENT,													
+		     VHM_SECTION SECTION,															
+			  VHM_EMPLOYEE_ADDITIONAL_TASK ADESIG											
+		 WHERE EMP.VHM_EMP_CODE=LPAD(:paramEmpNumber,7,0)									
+			AND EMP.VHM_EMP_DESG_CODE = DESG.VHM_DESG_CODE									
+			AND EMP.VHM_EMP_GRADE_CODE=GRADE.VHM_GRADE_CODE									
+			AND EMP.VHM_EMP_BRAN_CODE=BRANCH.VHM_BRANCH_CODE								
+			AND EMP.VHM_EMP_DEPT_CODE=DEPARTMENT.VHM_DEPT_CODE								
+			AND EMP.VHM_EMP_SECTION_CODE=SECTION.VHM_SECTION_CODE							
+			AND HIR.VHM_HIERARCHY_CODE = DESG.VHM_HIERARCHY_CODE (+)						
+		   AND EMP.VHM_EMP_CODE = ADESIG.VEAT_EMP_CODE(+)									
+     </entry>
+      <entry key="select.leave.requests.for.requester">
+      	<![CDATA[
+ 			SELECT DISTINCT											
+				 LVREQ.VHM_LEAVE_REQ_NO																		AS 		LEAVE_REQUEST_NO,			
+				 TO_CHAR(LVREQ.VHM_LEAVE_REQ_DATE,'DD/MM/YYYY') 											AS 		LEAVE_REQ_DATE, 					
+				 TO_CHAR(LVREQ.VHM_LEAVE_START_DATE,'DD/MM/YYYY') 											AS 		LEAVE_START_DATE,	 		 
+				 TO_CHAR(LVREQ.VHM_LEAVE_END_DATE,'DD/MM/YYYY') 											AS 		LEAVE_END_DATE,			
+				 APP.VHM_APP_ACTION_DATE 																	AS 		ACTION_DATE,								
+			 	 LVTYPE.VHM_LEAVE_TYPE_FLAG 																AS 		LEAVE_TYPE, 														
+				 DECODE																
+					(																	
+						:paramLocale,													
+						'en',LVTYPE.VHM_LEAVE_TYPE_DESC,					
+						'ar',LVTYPE.VHM_LEAVE_TYPE_DESC_ARABIC				
+					) 																						AS 		LEAVE_DESC,										
+
+				 NVL(LVREQ.VHM_STATUS_CODE,'0000000001') 													AS 		LEAVE_STATUS_CODE, 						
+                       DECODE
+                       ( 
+                         :paramLocale,
+                         'en',initCap(LVSTATUS.VHM_STATUS_DESC),LVSTATUS.VHM_STATUS_DESC_ARABIC
+                       ) 																					AS 		LEAVE_STATUS, 					
+				LVREQ.VHM_EMP_CODE 																			AS 		EMP_CODE,							
+				LVREQ.VHM_EMP_INTERNET_USR_ID 																AS 		EMP_INTERNET_ID,		
+				 DECODE(
+				 			:paramLocale,										
+                         	'en',initCap(EMP.VHM_EMP_NAME),						
+                         	'ar',EMP.VHM_EMP_NAME_ARABIC
+                         ) 																					AS 		EMP_NAME,			
+                 DECODE (
+                 			:paramLocale,										
+                			'en',initCap(EMP.VHM_EMP_1ST_NAME),					
+                			'ar',EMP.VHM_EMP_1ST_NAME_ARABIC
+                		) 																					AS 		EMP_FIRST_NAME,
+                 DECODE ( 
+                 		:paramLocale,									
+                		'en', initCap(EMP.VHM_EMP_LAST_NAME),				
+                		'ar',VHM_EMP_LAST_NAME_ARABIC						
+                		) 																					AS 		EMP_LAST_NAME,																			
+					LVREQ.VHM_HIERARCHY_CODE 																AS 		EMP_HIERARCHY_CODE,			
+                 DECODE													
+                (														
+                   APP.VHM_APP_EMP_CODE, 
+                   :paramEmpNumber, 'senior','employee' 
+			 	) 																							AS 		DELEGATE_STATUS,
+                 HIR.VHM_LEVEL 																				AS 		EMP_LEVEL,		
+                          
+				 APP.VHM_APP_EMP_CODE 																		AS 		EMP_APP_CODE,					
+				(														
+					SELECT DECODE(
+								:paramLocale,							
+                                'en',initCap(EMPAPP.VHM_EMP_NAME),				
+                                'ar',EMPAPP.VHM_EMP_NAME_ARABIC) 				
+                    FROM 
+                    		VHM_EMPLOYEE  EMPAPP							
+                    WHERE 												
+                          	EMPAPP.VHM_EMP_CODE=APP.VHM_APP_EMP_CODE				
+               	) 																							AS 		EMP_APP_NAME,										
+	         	(														
+					SELECT DECODE(
+									:paramLocale,							
+                                   'en',initCap(EMPAPP.VHM_EMP_1ST_NAME),			
+                                   'ar',EMPAPP.VHM_EMP_1ST_NAME_ARABIC) 			
+                     FROM 
+                     		VHM_EMPLOYEE  EMPAPP							
+                     WHERE 												
+                         	EMPAPP.VHM_EMP_CODE=APP.VHM_APP_EMP_CODE				
+				) 																							AS 		EMP_APP_FIRST_NAME,								
+				(														
+					SELECT DECODE(
+									:paramLocale,							
+	                                'en',initCap(EMPAPP.VHM_EMP_LAST_NAME),			
+	                                'ar',EMPAPP.VHM_EMP_LAST_NAME_ARABIC) 			
+	                 FROM 
+	                 		VHM_EMPLOYEE  EMPAPP							
+	                 WHERE 												
+                          	EMPAPP.VHM_EMP_CODE=APP.VHM_APP_EMP_CODE				
+				) 																							AS 		EMP_APP_LAST_NAME,									
+                LVREQ.VHM_RETURN_APP_EMP_CODE 																AS 		RETURN_EMP_APP_CODE, 	  
+				(														
+					SELECT DECODE(:paramLocale,							
+			          'en',initCap(EMPAPP.VHM_EMP_1ST_NAME),			
+			          'ar',EMPAPP.VHM_EMP_1ST_NAME_ARABIC) 			
+			    	FROM 
+			    		VHM_EMPLOYEE  EMPAPP							
+			    	WHERE 												
+						EMPAPP.VHM_EMP_CODE=LVREQ.VHM_RETURN_APP_EMP_CODE		
+				) 																							AS 		RETURN_EMP_APP_FIRST_NAME,							
+				(														
+					SELECT DECODE(:paramLocale,							
+			          'en',initCap(EMPAPP.VHM_EMP_LAST_NAME),			
+			          'ar',EMPAPP.VHM_EMP_LAST_NAME_ARABIC) 			
+			    	FROM 
+			    		VHM_EMPLOYEE  EMPAPP							
+			    	WHERE 												
+						EMPAPP.VHM_EMP_CODE=LVREQ.VHM_RETURN_APP_EMP_CODE		
+				) 																							AS 		RETURN_EMP_APP_LAST_NAME,																	                                    
+               	APP.VHM_APP_SEQ_NO 																			AS 		APPROVER_SEQUENCE_NO,				
+                IS_VALID_LEAVE_APP_APPROVER								
+     				(											
+     					APP.VHM_APP_SEQ_NO,						
+     					LVREQ.VHM_LEAVE_REQ_NO					
+     				) 																						AS 		SAB_ACTION_LOWER,						
+               	(														
+                   	SELECT 												
+      					COUNT(VHM_STATUS_CODE) 							
+      				FROM 												
+      					VHM_EMP_LEAVE_REQUEST							
+      				WHERE												
+      						TRUNC(SYSDATE) > TRUNC(VHM_LEAVE_END_DATE)	
+      					AND VHM_LEAVE_REQ_NO = LVREQ.VHM_LEAVE_REQ_NO	
+      		  			AND	VHM_STATUS_CODE = '0000000002'				
+      		       	AND VHM_RETURN_APP_EMP_CODE IS NULL 			
+      		 	)  																							AS 		RETURN_ELIGIBLE,									
+				NVL(APP.VHM_LEAVE_REQ_RTN_IND,'L') 															AS 		LEAVE_RETURN_INDICATOR,    
+               (														
+                       SELECT 											
+                           VHM_STATUS_CODE								
+                       FROM 											
+                         VHM_EMP_LEAVE_REQUEST 							
+                       WHERE 											
+                         VHM_LEAVE_REQ_NO = LVREQ.VHM_LEAVE_REQ_NO		
+                           												
+                     ) 																						AS 		FINAL_STATUS_CODE								
+				 FROM 														
+						VHM_EMP_LEAVE_REQUEST LVREQ,						
+						VHM_LEAVE_TYPE_FLAG LVTYPE,							
+						VHM_WORKFLOW_STATUS LVSTATUS,						
+						VHM_EMP_LEAVE_REQUEST_APPROVAL APP,					
+						VHM_EMP_LEAVE_REQ_DELEGATION DELG,					
+						VHM_HIERARCHY HIR,									
+						VHM_EMPLOYEE EMP									
+				 WHERE														 													
+						LVREQ.VHM_LEAVE_TYPE_FLAG=LVTYPE.VHM_LEAVE_TYPE_FLAG 
+					AND LVREQ.VHM_EMP_CODE = EMP.VHM_EMP_CODE				
+					AND LVREQ.VHM_STATUS_CODE = LVSTATUS.VHM_STATUS_CODE 	
+					AND	LVREQ.VHM_LEAVE_REQUEST_ACTIVE='Y'					
+					AND LVREQ.VHM_LEAVE_REQ_NO = APP.VHM_LEAVE_REQ_NO		
+					AND APP.VHM_APP_EMP_CODE = DELG.VHM_EMP_CODE (+)		
+					AND HIR.VHM_HIERARCHY_CODE = LVREQ.VHM_HIERARCHY_CODE (+) 
+					AND 													
+						(													
+								LVREQ.VHM_EMP_CODE = :paramEmpNumber		
+							--OR APP.VHM_APP_EMP_CODE=:paramEmpNumber			
+							OR (											
+									DELG.VHM_DELEGATED_EMP_CODE = :paramEmpNumber	
+									AND	(									
+											TO_DATE(SYSDATE,'DD/MM/YYYY') BETWEEN 
+												TO_DATE(DELG.VHM_DELEGATED_FROM_DATE,'DD/MM/YYYY')	 
+											 AND TO_DATE(DELG.VHM_DELEGATED_TO_DATE,'DD/MM/YYYY')	 
+										)									
+									AND	(									
+											TO_DATE(LVREQ.VHM_LEAVE_START_DATE,'DD/MM/YYYY') BETWEEN 
+												TO_DATE(DELG.VHM_DELEGATED_FROM_DATE,'DD/MM/YYYY')	 
+											 AND TO_DATE(DELG.VHM_DELEGATED_TO_DATE,'DD/MM/YYYY')	 
+										)															 
+									AND DELG.VHM_LEAVE_REQ_NO IN (									 
+                                                                           SELECT VHM_LEAVE_REQ_NO 				 
+                                                                           FROM VHM_EMP_LEAVE_REQUEST				 
+                                                                           WHERE VHM_STATUS_CODE = '0000000002')	 
+                                                    AND DELG.VHM_EMP_CODE=APP.VHM_APP_EMP_CODE					 
+									AND HIR.VHM_LEVEL >= :paramLevel		
+								)											
+						)													
+
+                                                                 AND APP.VHM_APP_CRE_DATE =                                                         
+
+                 (                                                    
+                       SELECT                                         
+                         MAX(VHM_APP_CRE_DATE)                        
+                       FROM                                            
+                         VHM_EMP_LEAVE_REQUEST_APPROVAL                
+                       WHERE                                         
+                         VHM_LEAVE_REQ_NO = LVREQ.VHM_LEAVE_REQ_NO    
+                 )                                                    
+				
+					AND LVREQ.VHM_STATUS_CODE !=  '0000000005'
+					ORDER BY DELEGATE_STATUS, LVREQ.VHM_LEAVE_REQ_NO DESC, APP.VHM_APP_ACTION_DATE DESC	, APP.VHM_APP_SEQ_NO 	
+      	
+      	
+      	]]>
+      </entry>
+      <entry key="select.leave.requests.for.approver">
+      	<![CDATA[
+				SELECT DISTINCT											
+						LVREQ.VHM_LEAVE_REQ_NO																AS 	LEAVE_REQUEST_NO,			
+						TO_CHAR(LVREQ.VHM_LEAVE_REQ_DATE,'DD/MM/YYYY') 										AS 	LEAVE_REQ_DATE, 					
+						TO_CHAR(LVREQ.VHM_LEAVE_START_DATE,'DD/MM/YYYY') 									AS 	LEAVE_START_DATE,	 		 
+						TO_CHAR(LVREQ.VHM_LEAVE_END_DATE,'DD/MM/YYYY') 										AS 	LEAVE_END_DATE,			
+						APP.VHM_APP_ACTION_DATE 															AS 	ACTION_DATE,								
+						LVTYPE.VHM_LEAVE_TYPE_FLAG 															AS 	LEAVE_TYPE, 														
+						DECODE																
+						(																	
+							:paramLocale,													
+							'en',LVTYPE.VHM_LEAVE_TYPE_DESC,					
+							'ar',LVTYPE.VHM_LEAVE_TYPE_DESC_ARABIC				
+						) 																					AS 	LEAVE_DESC,										
+						APP.VHM_ACTION_CODE 																AS 	LEAVE_STATUS_CODE, 						
+						DECODE
+						( 
+						  :paramLocale,
+						  'en',initCap(LVACTION.VHM_ACTION_DESC),LVACTION.VHM_ACTION_DESC_ARABIC
+						) 																					AS 	LEAVE_STATUS, 					
+						LVREQ.VHM_EMP_CODE 																	AS 	EMP_CODE,							
+						LVREQ.VHM_EMP_INTERNET_USR_ID 														AS 	EMP_INTERNET_ID,		
+						DECODE(
+								:paramLocale,										
+                               'en',initCap(EMP.VHM_EMP_NAME),						
+                               'ar',EMP.VHM_EMP_NAME_ARABIC
+                              ) 																			AS 	EMP_NAME,			
+                        DECODE (
+                        		:paramLocale,										
+                       			'en',initCap(EMP.VHM_EMP_1ST_NAME),					
+                       			'ar',EMP.VHM_EMP_1ST_NAME_ARABIC
+                       			) 																			AS 	EMP_FIRST_NAME,
+                        DECODE ( 
+                        		:paramLocale,									
+                       			'en', initCap(EMP.VHM_EMP_LAST_NAME),				
+                       			'ar',VHM_EMP_LAST_NAME_ARABIC						
+                       			) 																			AS 	EMP_LAST_NAME,																			
+						LVREQ.VHM_HIERARCHY_CODE 															AS 	EMP_HIERARCHY_CODE,			
+						DECODE													
+                             (														
+                                APP.VHM_APP_EMP_CODE, 
+                                :paramEmpNumber, 'senior','employee' 
+ 							) 																				AS 	DELEGATE_STATUS,
+						HIR.VHM_LEVEL 																		AS 	EMP_LEVEL,		
+						                     
+						APP.VHM_APP_EMP_CODE 																AS 	EMP_APP_CODE,					
+						(														
+						SELECT DECODE(
+							:paramLocale,							
+	                        'en',initCap(EMPAPP.VHM_EMP_NAME),				
+	                        'ar',EMPAPP.VHM_EMP_NAME_ARABIC) 				
+	                        FROM 
+	                        	VHM_EMPLOYEE  EMPAPP							
+	                        WHERE 												
+	                          	EMPAPP.VHM_EMP_CODE=APP.VHM_APP_EMP_CODE				
+					    ) 																					AS 	EMP_APP_NAME,										
+                        (														
+						SELECT DECODE(:paramLocale,							
+                                   'en',initCap(EMPAPP.VHM_EMP_1ST_NAME),			
+                                   'ar',EMPAPP.VHM_EMP_1ST_NAME_ARABIC) 			
+                        FROM 
+                        	VHM_EMPLOYEE  EMPAPP							
+                        WHERE 												
+                         	EMPAPP.VHM_EMP_CODE=APP.VHM_APP_EMP_CODE				
+                        ) 																					AS 	EMP_APP_FIRST_NAME,								
+						(														
+						SELECT DECODE(:paramLocale,							
+                                    'en',initCap(EMPAPP.VHM_EMP_LAST_NAME),			
+                                    'ar',EMPAPP.VHM_EMP_LAST_NAME_ARABIC) 			
+                      	FROM 
+                      		VHM_EMPLOYEE  EMPAPP							
+                       	WHERE 												
+                        	EMPAPP.VHM_EMP_CODE=APP.VHM_APP_EMP_CODE				
+                        ) 																					AS 	EMP_APP_LAST_NAME,									
+						LVREQ.VHM_RETURN_APP_EMP_CODE 														AS 	RETURN_EMP_APP_CODE, 	  
+						                          	
+					(														
+					SELECT DECODE(:paramLocale,							
+					         'en',initCap(EMPAPP.VHM_EMP_1ST_NAME),			
+					         'ar',EMPAPP.VHM_EMP_1ST_NAME_ARABIC) 			
+				   	FROM VHM_EMPLOYEE  EMPAPP							
+				   	WHERE 												
+						EMPAPP.VHM_EMP_CODE=LVREQ.VHM_RETURN_APP_EMP_CODE		
+					) 																						AS 	RETURN_EMP_APP_FIRST_NAME,							
+					(														
+						SELECT DECODE(:paramLocale,							
+					         'en',initCap(EMPAPP.VHM_EMP_LAST_NAME),			
+					         'ar',EMPAPP.VHM_EMP_LAST_NAME_ARABIC) 			
+					   	FROM VHM_EMPLOYEE  EMPAPP							
+					   	WHERE 												
+							EMPAPP.VHM_EMP_CODE=LVREQ.VHM_RETURN_APP_EMP_CODE		
+					) 																						AS 	RETURN_EMP_APP_LAST_NAME,																	                                    
+					APP.VHM_APP_SEQ_NO 																		AS 	APPROVER_SEQUENCE_NO,				
+                    IS_VALID_LEAVE_APP_APPROVER								
+                 				(											
+                 					APP.VHM_APP_SEQ_NO,						
+                 					LVREQ.VHM_LEAVE_REQ_NO					
+                 				) 																			AS 	SAB_ACTION_LOWER						
+						
+				FROM 														
+					VHM_EMP_LEAVE_REQUEST LVREQ,						
+					VHM_LEAVE_TYPE_FLAG LVTYPE,							
+				                      VHM_WORKFLOW_ACTIONS LVACTION,
+					VHM_EMP_LEAVE_REQUEST_APPROVAL APP,					
+					VHM_EMP_LEAVE_REQ_DELEGATION DELG,					
+					VHM_HIERARCHY HIR,									
+					VHM_EMPLOYEE EMP									
+				WHERE														 													
+						LVREQ.VHM_LEAVE_TYPE_FLAG=LVTYPE.VHM_LEAVE_TYPE_FLAG 
+					AND LVREQ.VHM_EMP_CODE = EMP.VHM_EMP_CODE				
+					                    AND APP.VHM_ACTION_CODE  =  LVACTION.VHM_ACTION_CODE (+)
+					AND	LVREQ.VHM_LEAVE_REQUEST_ACTIVE='Y'					
+					AND LVREQ.VHM_LEAVE_REQ_NO = APP.VHM_LEAVE_REQ_NO		
+					AND APP.VHM_APP_EMP_CODE = DELG.VHM_EMP_CODE (+)		
+					AND HIR.VHM_HIERARCHY_CODE = LVREQ.VHM_HIERARCHY_CODE (+) 
+					AND 													
+						(													
+					
+					                        APP.VHM_APP_EMP_CODE=:paramEmpNumber			
+							OR (											
+									DELG.VHM_DELEGATED_EMP_CODE = :paramEmpNumber	
+									AND	(									
+											TO_DATE(SYSDATE,'DD/MM/YYYY') BETWEEN 
+												TO_DATE(DELG.VHM_DELEGATED_FROM_DATE,'DD/MM/YYYY')	 
+											 AND TO_DATE(DELG.VHM_DELEGATED_TO_DATE,'DD/MM/YYYY')	 
+										)									
+									AND	(									
+											TO_DATE(LVREQ.VHM_LEAVE_START_DATE,'DD/MM/YYYY') BETWEEN 
+												TO_DATE(DELG.VHM_DELEGATED_FROM_DATE,'DD/MM/YYYY')	 
+											 AND TO_DATE(DELG.VHM_DELEGATED_TO_DATE,'DD/MM/YYYY')	 
+										)															 
+									AND DELG.VHM_LEAVE_REQ_NO IN (									 
+					                                                                      SELECT VHM_LEAVE_REQ_NO 				 
+					                                                                      FROM VHM_EMP_LEAVE_REQUEST				 
+					                                                                      WHERE VHM_STATUS_CODE = '0000000002')	 
+					                                               AND DELG.VHM_EMP_CODE=APP.VHM_APP_EMP_CODE					 
+									AND HIR.VHM_LEVEL >= :paramLevel		
+								)											
+						)													
+						                                             
+	               AND APP.VHM_APP_CRE_DATE =                     (                                                    
+	                                     SELECT                                         
+	                                        MAX(VHM_APP_CRE_DATE)                        
+	                                      FROM                                            
+	                                        VHM_EMP_LEAVE_REQUEST_APPROVAL               
+	                                      WHERE                                        
+	                                        VHM_LEAVE_REQ_NO =  APP.VHM_LEAVE_REQ_NO 
+	                                        AND VHM_APP_EMP_CODE = :paramEmpNumber
+	                                ) 						
+																			
+					AND LVREQ.VHM_STATUS_CODE !=  '0000000005'
+					ORDER BY DELEGATE_STATUS, LVREQ.VHM_LEAVE_REQ_NO DESC, APP.VHM_APP_ACTION_DATE DESC	, APP.VHM_APP_SEQ_NO 	
+      	
+      	]]>
+      </entry>
+     
+</properties>

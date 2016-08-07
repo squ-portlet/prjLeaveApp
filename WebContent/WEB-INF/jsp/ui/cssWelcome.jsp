@@ -53,42 +53,7 @@
 <c:url value="${urlCdn}/jqueryui/1.11.4/jquery-ui.min.js" var="urlJsJqueryUIMin"/>
 <c:url value="${urlCdn}/jqueryvalidation/1.13.1/jquery.validate.min.js" var="urlJsValidatorJquery"/>
 <c:url value="${urlCdn}/jqueryvalidation/1.13.1/additional-methods.min.js" var="urlJsValidatorJqueryAddl"/>
-	<!-- ------------ jqwidget js declaration -->
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxcore.js" var="urlJsJqxCore"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxbuttons.js" var="urlJsJqxButtons"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxdata.js" var="urlJsJqxData"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxdatatable.js" var="urlJsJqxDataTable"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxscrollbar.js" var="urlJsJqxScrollbar"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxtreegrid.js" var="urlJsJqxTreeGrid"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxlistbox.js" var="urlJsJqxlistbox"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxdropdownlist.js" var="urlJsJqxdropdownlist"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxdata.export.js" var="urlJsJqxDataExport"/>
 
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxgrid.columnsreorder.js" var="urlJsJqxGridColumnsreorder"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxgrid.columnsresize.js" var="urlJsJqxGridColumnsresize"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxgrid.edit.js" var="urlJsJqxGridEdit"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxgrid.filter.js" var="urlJsJqxGridFilter"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxgrid.grouping.js" var="urlJsJqxGridGrouping"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxgrid.js" var="urlJsJqxGrid"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxgrid.pager.js" var="urlJsJqxGridPager"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxgrid.selection.js" var="urlJsJqxGridSelection"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxgrid.sort.js" var="urlJsJqxGridSort"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxmenu.js" var="urlJsJqxMenu"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxdocking.js" var="urlJsJqxDocking"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxpanel.js" var="urlJsJqxPanel"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxsplitter.js" var="urlJsJqxSplitter"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxtabs.js" var="urlJsJqxTabs"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxtooltip.js" var="urlJsJqxToolTip"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxwindow.js" var="urlJsJqxWindow"/>
-
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxdatetimeinput.js" var="urlJsJqxDateTimeInput"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/jqxcalendar.js" var="urlJsJqxCalendar"/>
-
-
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/locale/globalize.js" var="urlJsJqxLocaleGlobal"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/locale/globalize.culture.ar.js" var="urlJsJqxLocaleAr"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/locale/globalize.culture.ar.js" var="urlJsJqxLocaleAr"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/js/locale/globalize.culture.ar-OM.js" var="urlJsJqxLocaleArOm"/>
 
 
 <!-- ******************** CSS implementation************************ --> 
@@ -122,45 +87,6 @@
  
  <script type="text/javascript" src="${urlJsValidatorJquery}"></script>
 <script type="text/javascript" src="${urlJsValidatorJqueryAddl}"></script>
-
-	<!-- ------------ jqwidget js implementation -->
-<script type="text/javascript" src="${urlJsJqxCore}"></script>
-<script type="text/javascript" src="${urlJsJqxButtons}"></script>
-<script type="text/javascript" src="${urlJsJqxData}"></script>
-<script type="text/javascript" src="${urlJsJqxDataTable}"></script>
-<script type="text/javascript" src="${urlJsJqxScrollbar}"></script>
-<script type="text/javascript" src="${urlJsJqxTreeGrid}"></script>
-<script type="text/javascript" src="${urlJsJqxlistbox}"></script>
-<script type="text/javascript" src="${urlJsJqxdropdownlist}"></script>
-<script type="text/javascript" src="${urlJsJqxDataExport}"></script>
-
-<script type="text/javascript" src="${urlJsJqxGridColumnsreorder}"></script>
-<script type="text/javascript" src="${urlJsJqxGridColumnsresize}"></script>
-<script type="text/javascript" src="${urlJsJqxGridEdit}"></script>
-<script type="text/javascript" src="${urlJsJqxGridFilter}"></script>
-<script type="text/javascript" src="${urlJsJqxGridGrouping}"></script>
-<script type="text/javascript" src="${urlJsJqxGrid}"></script>
-<script type="text/javascript" src="${urlJsJqxGridPager}"></script>
-<script type="text/javascript" src="${urlJsJqxGridSelection}"></script>
-<script type="text/javascript" src="${urlJsJqxGridSort}"></script>
-<script type="text/javascript" src="${urlJsJqxMenu}"></script>
-
-<script type="text/javascript" src="${urlJsJqxDocking}"></script>
-<script type="text/javascript" src="${urlJsJqxPanel}"></script>
-<script type="text/javascript" src="${urlJsJqxSplitter}"></script>
-<script type="text/javascript" src="${urlJsJqxTabs}"></script>
-<script type="text/javascript" src="${urlJsJqxToolTip}"></script>
-<script type="text/javascript" src="${urlJsJqxWindow}"></script>
-
-<script type="text/javascript" src="${urlJsJqxDateTimeInput}"></script>
-<script type="text/javascript" src="${urlJsJqxCalendar}"></script>
-
-<c:if test="${rc.locale.language == 'ar'}">
-	<script type="text/javascript" src="${urlJsJqxLocaleGlobal}"></script>
-	<script type="text/javascript" src="${urlJsJqxLocaleAr}"></script>
-	<script type="text/javascript" src="${urlJsJqxLocaleArOm}"></script>
-</c:if>
-
 
 
 	 <c:if test="${rc.locale.language == 'en'}" >

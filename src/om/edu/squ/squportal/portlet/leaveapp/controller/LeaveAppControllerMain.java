@@ -119,7 +119,8 @@ public class LeaveAppControllerMain
 			session.removeAttribute("employee");
 		}
 		session.setAttribute("employee", employee);
-		List<LeaveRequest>	leaveRequests	=	leaveAppServiceDao.getLeaveRequests(employee,locale);
+		List<LeaveRequest>	leaveRequests			=	leaveAppServiceDao.getLeaveRequests(employee,locale, Constants.CONST_USERTYPE_REQUESTER);
+		List<LeaveRequest>	leaveRequestsApprover	=	leaveAppServiceDao.getLeaveRequests(employee,locale, Constants.CONST_USERTYPE_APPROVER);
 		
 		
 		if(!model.containsAttribute("leaveAppModel"))
@@ -129,6 +130,9 @@ public class LeaveAppControllerMain
 		}
 		
 		model.addAttribute("leaveRequests", leaveRequests);
+		model.addAttribute("leaveRequestsApprover", leaveRequestsApprover);
+		
+		
 		
 		model.addAttribute("empHierarchy", employee.getHierarchyCode());
 		model.addAttribute("empHierarchyAddl", employee.getHierarchyAddlCode());

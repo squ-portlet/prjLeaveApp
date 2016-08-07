@@ -95,6 +95,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	private SimpleJdbcCall 					simpleJdbcCall;
 	private	EmailService					emailService;
 	private	Properties						queryPropsReturn;
+	private Properties						queryPropsLeave;
 	
 	/**
 	 * 
@@ -149,8 +150,17 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		this.emailService	=	emailService;
 	}
 
-	
-	
+	/**
+	 * Setter method : setQueryPropsLeave
+	 * @param queryPropsLeave the queryPropsLeave to set
+	 * 
+	 * Date          : Aug 7, 2016 11:40:40 AM
+	 */
+	public void setQueryPropsLeave(Properties queryPropsLeave)
+	{
+		this.queryPropsLeave = queryPropsLeave;
+	}
+
 	/**
 	 * Setter method : setQueryPropsReturn
 	 * @param queryPropsReturn the queryPropsReturn to set
@@ -1358,8 +1368,14 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 */
 	
 	//(intResult==1)?true:false;
-	public List<LeaveRequest>	getLeaveRequests(Employee employee, Locale locale)
+	public List<LeaveRequest>	getLeaveRequests(Employee employee, Locale locale, final String userType)
 	{
+		
+		String 				CONST_SELECT_LEAVE_REQUESTS_FOR_REQUESTER	=	queryPropsLeave.getProperty(Constants.CONST_SELECT_LEAVE_REQUESTS_FOR_REQUESTER);
+		String 				CONST_SELECT_LEAVE_REQUESTS_FOR_APPROVER	=	queryPropsLeave.getProperty(Constants.CONST_SELECT_LEAVE_REQUESTS_FOR_APPROVER);
+		
+		List<LeaveRequest>	leaveRequests								=	null;
+		
 		RowMapper<LeaveRequest> mapper	=	new RowMapper<LeaveRequest>()
 		{
 			
@@ -1418,6 +1434,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				{
 					leaveRequest.setSabbaticalLowerApproverAction(false);
 				}
+		if(userType.equals(Constants.CONST_USERTYPE_REQUESTER))
+		{
 				if(rs.getInt(Constants.CONST_LEAVE_RETURN_ELIGIBLE) == 1 )
 				{
 					leaveRequest.setLeaveReturn(true);
@@ -1427,7 +1445,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveRequest.setLeaveReturn(false);
 				}
 				
-
+				leaveRequest.setLeaveReturnIndicator(rs.getString(Constants.CONST_LEAVE_RETURN_INDICATOR));
+				leaveRequest.setFinalStatusCode(rs.getString(Constants.CONST_FINAL_STATUS_CODE));
+		}
 				
 				return leaveRequest;
 			}
@@ -1440,7 +1460,31 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 		
 		
-		List<LeaveRequest>	leaveRequests	=	this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_LEAVE_REQUEST, namedParameters, mapper);
+		//List<LeaveRequest>	leaveRequests	=	this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_LEAVE_REQUEST, namedParameters, mapper);
+		if(userType.equals(Constants.CONST_USERTYPE_REQUESTER))
+		{
+			try
+			{
+				leaveRequests	=	this.namedParameterJdbcTemplate.query(CONST_SELECT_LEAVE_REQUESTS_FOR_REQUESTER, namedParameters, mapper);
+			}
+			catch(Exception exReq)
+			{
+				logger.error("DB Exception for fetching requests for requester : "+exReq.getMessage());
+			}
+		}
+		else
+		{
+			try
+			{
+				leaveRequests	=	this.namedParameterJdbcTemplate.query(CONST_SELECT_LEAVE_REQUESTS_FOR_APPROVER, namedParameters, mapper);
+			}
+			catch(Exception exApp)
+			{
+				logger.error("DB Exception for fetching requests for approver : "+exApp.getMessage());
+			}
+		}
+
+		
 				
 		return leaveRequests;
 	}

@@ -297,11 +297,11 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 *
 	 * Date    		:	Sep 12, 2012 12:40:42 PM
 	 */
-	public List<LeaveRequest>	getLeaveRequests(Employee employee, Locale locale)
+	public List<LeaveRequest>	getLeaveRequests(Employee employee, Locale locale, String userType)
 	{
 		employee.setEmpNumber(String.format("%07d", Integer.valueOf(employee.getEmpNumber())));
 		
-		return leaveDbDao.getLeaveRequests(employee, locale);
+		return leaveDbDao.getLeaveRequests(employee, locale, userType);
 	}
 	
 

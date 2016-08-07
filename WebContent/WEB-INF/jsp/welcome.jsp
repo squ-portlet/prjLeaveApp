@@ -132,7 +132,7 @@
 				</div>
 		</center>
 	</div>
-<c:catch var="e">
+<%-- <c:catch var="e"> --%>
 
 
 		<c:if test="${not empty allowELeaveRequestMsg}">
@@ -141,15 +141,7 @@
 			<c:out value="${allowELeaveRequestMsg}"/></div>
 		</c:if>
 		
-		<table id="list3" class="listT"></table>
-		<div id="pager3" class="pagerT"></div>
 		
-		<table id="list2" class="listT"></table>
-		<div id="pager2" class="pagerT"></div>
-		
-		
-		
-		<c:if test="${not empty leaveRequests}">
 			<script type="text/javascript">
 			
 			/*Dialog for approve request*/
@@ -252,18 +244,21 @@
 
 			<c:set var="appCount" value="0"/>
 			<c:set var="reqCount" value="0"/>
-			<c:forEach items="${leaveRequests}" var="req" >
-				<c:choose>
-					<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
+			
+			
+				<c:if test="${not empty leaveRequestsApprover }">
 						<c:set var="isApprover" value="y"/>
 						<c:set var="appCount" value="${(appCount) + 1}"/>
-					</c:when>
-					<c:otherwise>
+				</c:if>
+
+				
+				<c:if test="${not empty  leaveRequests}">
 						<c:set var="isApprover" value="n"/>
 						<c:set var="reqCount" value="${reqCount+1}"/>
-					</c:otherwise>
-				</c:choose>
-			</c:forEach>
+				</c:if>
+
+				
+			
 
 <p>
 		<br></br>		
@@ -335,7 +330,7 @@
 									<a href="${varLeaveApprove}"><font color="red"><c:out value="${req.requestNo}"/></font></a>
 								</c:when>
 								<c:otherwise>
-									<c:out value="${req.requestNo}"/>
+									<c:out value="${req.requestNo}"/> - <b><c:out value="${req.leaveReturnIndicator}"/></b> &nbsp;
 								</c:otherwise>
 							</c:choose>
 						</td>
@@ -354,29 +349,14 @@
 									<font color="red"><b>${req.leaveStatus}</b></font>
 								</c:when>
 								<c:otherwise>
-									<c:out value="${req.leaveStatus}"/>
+									<c:out value="${req.leaveStatus}"/> 
 								</c:otherwise>
 								
 							</c:choose>
 							
 						</td>
 						<td>
-							<c:choose>
-								<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
-									<c:out value="${req.employee.empName}"/>
-								</c:when>
-								<c:otherwise>
-									<c:choose>
-										<c:when test="${not empty req.returnApprove.employee.empNumber}">
-												<c:out value="${req.returnApprove.employee.empName}"/>	
-										</c:when>
-										<c:otherwise>
-											<c:out value="${req.approve.employee.empName}"/>  
-										</c:otherwise>
-									</c:choose>
-									
-								</c:otherwise>
-							</c:choose>
+							<c:out value="${req.approve.employee.empName}"/>
 						</td>
 						<td>
 						
@@ -425,8 +405,8 @@
 									</c:when>
 									<c:when test="${(req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected)}">
 										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
-										<c:if test="${(req.status.statusCode eq leaveStatusRejected) && (not empty req.returnApprove.employee.empNumber) }">
-											| <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text.color.red"/></a>
+										<c:if test="${(req.status.statusCode eq leaveStatusRejected) && (not empty req.returnApprove.employee.empNumber) && (req.finalStatusCode != leaveStatusApproved) }">
+											| <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text.color.red"/></a> 
 										</c:if> 
 									</c:when>
 									<c:when test="${(req.approverSequenceNo != 1)}">
@@ -471,7 +451,7 @@
 					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.requester"/></th>
 					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.action"/></th>
 			</tr>
-			<c:forEach items="${leaveRequests}" var="req" >
+			<c:forEach items="${leaveRequestsApprover}" var="req" >
 			
 				<c:choose>
 					<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber))}">
@@ -522,6 +502,9 @@
 					</td>
 					<td>
 						<c:out value="${req.leaveStatus}"/>
+						<c:if test="${empty  req.leaveStatus}">
+							<spring:message code="prop.leave.app.apply"/>
+						</c:if>
 					</td>
 					<td>
 						<c:choose>
@@ -600,7 +583,7 @@
 	</fieldset>
 </c:if>
 
-	</c:if>		
+
 
 <p>
 		<br></br>		
@@ -609,8 +592,4 @@
 		</a>
 </p>
 
-</c:catch>
- <c:if test="${e != null}">The caught exception is:
-    <c:out value="${e}" />
-    <br />
- </c:if>		 
+	 

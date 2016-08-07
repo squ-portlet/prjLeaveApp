@@ -174,6 +174,7 @@ public interface LeaveAppServiceDao
 	 * method name  : getLeaveRequests
 	 * @param employee
 	 * @param locale
+	 * @param userType TODO
 	 * @return
 	 * LeaveAppServiceDao
 	 * return type  : List<LeaveRequest>
@@ -182,7 +183,7 @@ public interface LeaveAppServiceDao
 	 *
 	 * Date    		:	Sep 12, 2012 12:41:29 PM
 	 */
-	public List<LeaveRequest>	getLeaveRequests(Employee employee, Locale locale);
+	public List<LeaveRequest>	getLeaveRequests(Employee employee, Locale locale, String userType);
 	
 
 

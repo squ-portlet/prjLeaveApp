@@ -48,6 +48,7 @@ public class LeaveRequest implements Serializable
 	private	String			leaveReturnDate;
 	private	String			leaveLastReturnDate;
 	private	String			leaveStatus;
+	private	String			finalStatusCode;										//	-- Irrespective of different intermediate leave status code, it shows the last leave status code
 	private	Employee		employee;
 	private	LeaveType		leaveType;
 	private	LeaveType		leaveTypeFlag;
@@ -64,6 +65,8 @@ public class LeaveRequest implements Serializable
 	private	int				approverSequenceNo;
 	private	String			processSalaray;
 	private	boolean			leaveReturn;
+	private String			leaveReturnIndicator;
+	
 	
 	
 	/**
@@ -226,6 +229,26 @@ public class LeaveRequest implements Serializable
 	public void setLeaveStatus(String leaveStatus)
 	{
 		this.leaveStatus = leaveStatus;
+	}
+	/**
+	 * Getter Method	: getFinalStatusCode
+	 * @return the finalStatusCode
+	 * 
+	 * Date				: Aug 4, 2016
+	 */
+	public String getFinalStatusCode()
+	{
+		return this.finalStatusCode;
+	}
+	/**
+	 * Setter method : setFinalStatusCode
+	 * @param finalStatusCode the finalStatusCode to set
+	 * 
+	 * Date          : Aug 4, 2016 3:08:44 PM
+	 */
+	public void setFinalStatusCode(String finalStatusCode)
+	{
+		this.finalStatusCode = finalStatusCode;
 	}
 	/**
 	 * Getter Method	: getEmployee
@@ -550,6 +573,27 @@ public class LeaveRequest implements Serializable
 	{
 		this.leaveReturn = leaveReturn;
 	}
+	
+	/**
+	 * Getter Method	: getLeaveReturnIndicator
+	 * @return the leaveReturnIndicator
+	 * 
+	 * Date				: Aug 4, 2016
+	 */
+	public String getLeaveReturnIndicator()
+	{
+		return this.leaveReturnIndicator;
+	}
+	/**
+	 * Setter method : setLeaveReturnIndicator
+	 * @param leaveReturnIndicator the leaveReturnIndicator to set
+	 * 
+	 * Date          : Aug 4, 2016 12:30:25 PM
+	 */
+	public void setLeaveReturnIndicator(String leaveReturnIndicator)
+	{
+		this.leaveReturnIndicator = leaveReturnIndicator;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -562,21 +606,21 @@ public class LeaveRequest implements Serializable
 				+ ", leaveDateDuration=" + this.leaveDateDuration
 				+ ", leaveReturnDate=" + this.leaveReturnDate
 				+ ", leaveLastReturnDate=" + this.leaveLastReturnDate
-				+ ", leaveStatus=" + this.leaveStatus + ", employee="
-				+ this.employee + ", leaveType=" + this.leaveType
-				+ ", leaveTypeFlag=" + this.leaveTypeFlag + ", status="
-				+ this.status + ", approve=" + this.approve
-				+ ", returnApprove=" + this.returnApprove + ", leavePurpose="
-				+ this.leavePurpose + ", leaveRequestActive="
-				+ this.leaveRequestActive + ", leaveRequestRemarks="
-				+ this.leaveRequestRemarks + ", suggestedHod="
-				+ this.suggestedHod + ", approverId=" + this.approverId
-				+ ", researchId=" + this.researchId
+				+ ", leaveStatus=" + this.leaveStatus + ", finalStatusCode="
+				+ this.finalStatusCode + ", employee=" + this.employee
+				+ ", leaveType=" + this.leaveType + ", leaveTypeFlag="
+				+ this.leaveTypeFlag + ", status=" + this.status + ", approve="
+				+ this.approve + ", returnApprove=" + this.returnApprove
+				+ ", leavePurpose=" + this.leavePurpose
+				+ ", leaveRequestActive=" + this.leaveRequestActive
+				+ ", leaveRequestRemarks=" + this.leaveRequestRemarks
+				+ ", suggestedHod=" + this.suggestedHod + ", approverId="
+				+ this.approverId + ", researchId=" + this.researchId
 				+ ", sabbaticalLowerApproverAction="
 				+ this.sabbaticalLowerApproverAction + ", approverSequenceNo="
 				+ this.approverSequenceNo + ", processSalaray="
 				+ this.processSalaray + ", leaveReturn=" + this.leaveReturn
-				+ "]";
+				+ ", leaveReturnIndicator=" + this.leaveReturnIndicator + "]";
 	}
 	
 	

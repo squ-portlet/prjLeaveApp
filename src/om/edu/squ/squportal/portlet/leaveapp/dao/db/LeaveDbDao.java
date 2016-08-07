@@ -267,6 +267,7 @@ public interface LeaveDbDao
 	 * method name  : getLeaveRequests
 	 * @param employee
 	 * @param locale
+	 * @param userType TODO
 	 * @return
 	 * LeaveDbDao
 	 * return type  : List<LeaveRequest>
@@ -275,7 +276,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Sep 12, 2012 12:39:13 PM
 	 */
-	public List<LeaveRequest>	getLeaveRequests(Employee employee, Locale locale);
+	public List<LeaveRequest>	getLeaveRequests(Employee employee, Locale locale, String userType);
 	
 	/**
 	 * 
