@@ -39,9 +39,10 @@
 <c:url value="${urlCdn}/jqueryui/1.11.4.custom/jquery-ui.css" var="urlCssJQueryUiCustom"/>
 <c:url value="${urlCdn}/bootstrap-arabic/bootstrap-3-arabic-master/3.3.6/css/bootstrap-arabic.css" var="urlCssBootstrapArabic"/>
 <c:url value="${urlCdn}/bootstrap-arabic/bootstrap-3-arabic-master/3.3.6/css/bootstrap-arabic-theme.css" var="urlCssBootstrapArabicTheme"/>
-	<!-- ------------ jqwidget css declaration -->
-<c:url value="${urlCdn}/jqwidgets/3.8.2/css/jqx.base.css" var="urlCssJqxBase"/>
-<c:url value="${urlCdn}/jqwidgets/3.8.2/css/jqx.bootstrap.css" var="urlCssJqxBootStrap"/>
+
+	<!-- ------------ data table css declaration -->
+<c:url value="${urlCdn}/DataTables/1.10.11/DataTables-1.10.11/css/dataTables.bootstrap.min.css" var="urlCssDataTableBSMin"/>
+<c:url value="${urlCdn}/DataTables/1.10.11/Responsive-2.0.2/css/responsive.bootstrap.min.css" var="urlCssDataTableResponsiveBSMin"/>
 
 
 
@@ -54,6 +55,11 @@
 <c:url value="${urlCdn}/jqueryvalidation/1.13.1/jquery.validate.min.js" var="urlJsValidatorJquery"/>
 <c:url value="${urlCdn}/jqueryvalidation/1.13.1/additional-methods.min.js" var="urlJsValidatorJqueryAddl"/>
 
+	<!-- ------------ Data Table js declaration -->
+<c:url value="${urlCdn}/DataTables/1.10.11/DataTables-1.10.11/js/jquery.dataTables.min.js" var="urlJsDataTableJQueryMin"/>
+<c:url value="${urlCdn}/DataTables/1.10.11/DataTables-1.10.11/js/dataTables.bootstrap.min.js" var="urlJsDataTableBSMin"/>
+<c:url value="${urlCdn}/DataTables/1.10.11/Responsive-2.0.2/js/dataTables.responsive.min.js" var="urlJsDataTableResponsiveMin"/>
+<c:url value="${urlCdn}/DataTables/1.10.11/Responsive-2.0.2/js/responsive.bootstrap.min.js" var="urlJsDataTableResponsiveBSMin"/>
 
 
 <!-- ******************** CSS implementation************************ --> 
@@ -69,9 +75,11 @@
 
  <link rel="stylesheet" type="text/css" href="${urlCssJQueryUiCustom}" />
 
-	<!-- ------------ jqwidget css implementation --> 
- <link rel="stylesheet" type="text/css" href="${urlCssJqxBase}" />
- <link rel="stylesheet" type="text/css" href="${urlCssJqxBootStrap}" />
+	<!-- ------------ datatable css implementation -->
+
+ <link rel="stylesheet" type="text/css" href="${urlCssDataTableBSMin}" />
+ <link rel="stylesheet" type="text/css" href="${urlCssDataTableResponsiveBSMin}" />
+ 
  
  <!-- ******************** JS implementation************************ --> 
   <script type="text/javascript" src="${urlJsJqueryMin}"></script>
@@ -87,6 +95,12 @@
  
  <script type="text/javascript" src="${urlJsValidatorJquery}"></script>
 <script type="text/javascript" src="${urlJsValidatorJqueryAddl}"></script>
+
+	<!-- ------------ datatable js implementation -->
+<script type="text/javascript" src="${urlJsDataTableJQueryMin}"></script>
+<script type="text/javascript" src="${urlJsDataTableBSMin}"></script>
+<script type="text/javascript" src="${urlJsDataTableResponsiveMin}"></script>
+<script type="text/javascript" src="${urlJsDataTableResponsiveBSMin}"></script>
 
 
 	 <c:if test="${rc.locale.language == 'en'}" >

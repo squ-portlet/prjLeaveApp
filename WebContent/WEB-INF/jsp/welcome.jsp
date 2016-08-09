@@ -37,6 +37,7 @@
 
 <%@include file="ui/cssWelcome.jsp" %>
 
+<spring:message code="url.squ.cdn" var="urlCdn"/>
 <spring:url value="/css/images/backIcon.png" var="urlImgBack"/>
 <c:url value="/css/images/calendar.gif" var="urlImgCalendar"/>
 <c:url value="/css/images/ui-bg_diagonals-thick_75_f3d8d8_40x40.png" var="urlImgBgDiagonals"/>
@@ -66,7 +67,7 @@
     border:1px solid red;
   }
 
-	.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {border: 1px solid #cc0000; background: #f3d8d8 url("${urlImgBgDiagonals}") 50% 50% repeat; color: #2e2e2e; }
+ 	.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {border: 1px solid #cc0000; background: #f3d8d8 url("${urlImgBgDiagonals}") 50% 50% repeat; color: #2e2e2e; }
 	.ui-widget-overlay { background: #a6a6a6 url("${urlImgBgDots}") 50% 50% repeat; opacity: .40;filter:Alpha(Opacity=40); }
 	.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; background: #333333 url("${urlImgBgFlat}") 50% 50% repeat-x; opacity: .10;filter:Alpha(Opacity=10); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }
 	
@@ -76,7 +77,7 @@
 	.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #d8dcdf; background: #eeeeee url("${urlImgBgHighLightHard1}") 50% 50% repeat-x; font-weight: bold; color: #004276; }
 	.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #cdd5da; background: #f6f6f6 url("${urlImgBgHighLightHard2}") 50% 50% repeat-x; font-weight: bold; color: #111111; }
 	
-
+ 
 	.ui-widget-header { border: 1px solid #e3a1a1; background: #cc0000 url("${urlImgBgHighLightSoft1}") 50% 50% repeat-x; color: #ffffff; font-weight: bold; }
 /* 	.ui-widget-header { border: 1px solid #e3a1a1; background: #cc0000 url("${urlImgBgHighLightSoft1}") 50% 50% repeat-x; color: #ffffff; font-weight: bold; } */
 	.ui-state-highlight .ui-icon {background-image: url("${urlImgIcons1}"); }
@@ -93,8 +94,8 @@
 	.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url("${urlImgIcons2}"); }
 	.ui-state-active .ui-icon {background-image: url("${urlImgIcons2}"); }
 	.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url("${urlImgIcons2}"); }
-	
-	 /* .myDialogClass .ui-widget-header {background: purple;} */
+	 
+	  .myDialogClass .ui-widget-header {background: purple;} 
 	
 /* 	.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url("${urlImgBgFlat}");} */
 
@@ -234,6 +235,38 @@
 			                                        });
 			    
 			}); 
+
+		
+			$(function() {
+
+					$('#dataTableRequester').DataTable({
+						"sDom":  '<f><t><"col-sm-3"i><"col-sm-2"l><"col-sm-5"p><"clearfix">', 
+						"oLanguage": {
+							  "sUrl": "${urlCdn}/DataTables/language/lang_${rc.locale.language}.txt"
+							},
+						"order": []
+						
+					});	
+					
+					
+				var dataTableApprover =	$('#dataTableApprover').DataTable({
+					"sDom":  '<f><t><"col-sm-3"i><"col-sm-2"l><"col-sm-5"p><"clearfix">', 
+						"oLanguage": {
+							  "sUrl": "${urlCdn}/DataTables/language/lang_${rc.locale.language}.txt"
+							},
+						"order": []
+						
+					});	
+
+/*		
+				$('#dataTableApprover tbody').on( 'click', 'td', function () {
+				    alert( "cell data : "+dataTableApprover.cell( this ).data() );
+				    var  linkRefApproveClass = $(this).find('.refApproveClass');
+				} );
+	*/				 
+			});
+			
+			
 			
 			</script>
 		
@@ -276,19 +309,24 @@
 		Requester table
  -->
 	<c:if test="${reqCount != 0}">
+	  
 		<fieldset >
 			<legend><spring:message code="prop.leave.app.title.request.requester.header"/> (<c:out value="${empName}"/>)</legend>
 			<center>
-			<table border="1" style="border:1px solid;  border-collapse: collapse; " width="100%">
-				<tr>
-						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.no"/></th>
-						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.start.date"/></th>
-						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
-						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
-						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.status"/></th>
-						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.approver"/></th>
-						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.action"/></th>
-				</tr>
+			<div class="container-fluid">
+			<table border="1" style="border:1px solid;  border-collapse: collapse; " width="100%" id="dataTableRequester" class=" table table-striped table-bordered dt-responsive nowrap collapsed ">
+				<thead>
+					<tr>
+							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.no"/></th>
+							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.start.date"/></th>
+							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
+							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
+							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.status"/></th>
+							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.approver"/></th>
+							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.action"/></th>
+					</tr>
+				</thead>
+				<tbody>
 				<c:forEach items="${leaveRequests}" var="req" >
 				
 					<c:choose>
@@ -429,8 +467,9 @@
 				</tr>
 				</c:if>
 				</c:forEach>
-				
+			</tbody>	
 			</table>
+		</div>
 		</center>
 		</fieldset>
 	</c:if>
@@ -441,16 +480,20 @@
 <c:if test="${appCount != 0}">
 	<fieldset >
 		<legend><spring:message code="prop.leave.app.title.request.approver.header"/></legend>
-		<table border="1" style="border:1px solid;  border-collapse: collapse;" width="100%">
-			<tr>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.no"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.start.date"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.status"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.requester"/></th>
-					 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.action"/></th>
-			</tr>
+	<div class="container-fluid">
+		<table border="1" style="border:1px solid;  border-collapse: collapse;" width="100%" id="dataTableApprover" class=" table table-striped table-bordered dt-responsive nowrap collapsed ">
+			<thead>
+				<tr>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.no"/></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.start.date"/></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.status"/></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.requester"/></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.action"/></th>
+				</tr>
+			</thead>
+			<tbody>
 			<c:forEach items="${leaveRequestsApprover}" var="req" >
 			
 				<c:choose>
@@ -480,14 +523,15 @@
 				<portlet:actionURL var="varLeaveCancel">
 					<portlet:param name="action" value="leaveCancel"/>
 				</portlet:actionURL>
+			
 			<tr>
 					<td class="clsNum">
 						<c:choose>
 							<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber) && (req.sabbaticalLowerApproverAction && ! ((req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected))))}">
-								<a href="${varLeaveApprove}"><font color="red"><c:out value="${req.requestNo}"/></font></a>
+								<a href="${varLeaveApprove}"><font color="red"><c:out value="${req.requestNo}"/></font> - <b><c:out value="${req.leaveReturnIndicator}"/></b> &nbsp; </a>
 							</c:when>
 							<c:otherwise>
-								<c:out value="${req.requestNo}"/>
+								<c:out value="${req.requestNo}"/> - <b><c:out value="${req.leaveReturnIndicator}"/></b> &nbsp;
 							</c:otherwise>
 						</c:choose>
 					</td>
@@ -501,10 +545,21 @@
 						<c:out value="${req.leaveType.typeDesc}"/>
 					</td>
 					<td>
-						<c:out value="${req.leaveStatus}"/>
-						<c:if test="${empty  req.leaveStatus}">
-							<spring:message code="prop.leave.app.apply"/>
-						</c:if>
+						<c:choose>
+							<c:when test="${empty  req.status.statusCode}">
+									<font color="blue"><spring:message code="prop.leave.app.apply"/></font>
+							</c:when>
+							<c:when test="${req.status.statusCode == leaveActionApprove}">
+									<font color="green"><c:out value="${req.leaveStatus}"/></font>
+							</c:when>
+							<c:when test="${req.status.statusCode == leaveActionReject}">
+									<font color="red"><c:out value="${req.leaveStatus}"/></font>
+							</c:when>
+							<c:otherwise>
+								<c:out value="${req.leaveStatus}"/>
+							</c:otherwise>
+						</c:choose>
+
 					</td>
 					<td>
 						<c:choose>
@@ -547,10 +602,10 @@
 													<portlet:param name="_approverAction" value="${admActions.actionCode}"/>
 													</portlet:renderURL>
 
-													<c:if test="${(admActions.actionCode == leaveActionApprove)}">
-															|&nbsp;&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}" appActionNum="${admActions.actionCode}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		
-														</c:if>
-														<c:if test="${(admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">
+<%-- 													<c:if test="${(admActions.actionCode == leaveActionApprove)}"> --%>
+<%-- 															|&nbsp;&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}" appActionNum="${admActions.actionCode}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		 --%>
+<%-- 														</c:if> --%>
+														<c:if test="${(admActions.actionCode == leaveActionApprove) || (admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">
 															&nbsp;&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|
 														</c:if>
 													</c:forEach>
@@ -579,7 +634,9 @@
 			</tr>
 			</c:if>
 			</c:forEach>
+		 </tbody>
 		</table>
+	</div>
 	</fieldset>
 </c:if>
 

@@ -1445,10 +1445,11 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveRequest.setLeaveReturn(false);
 				}
 				
-				leaveRequest.setLeaveReturnIndicator(rs.getString(Constants.CONST_LEAVE_RETURN_INDICATOR));
+				
 				leaveRequest.setFinalStatusCode(rs.getString(Constants.CONST_FINAL_STATUS_CODE));
 		}
-				
+
+		leaveRequest.setLeaveReturnIndicator(rs.getString(Constants.CONST_LEAVE_RETURN_INDICATOR));	
 				return leaveRequest;
 			}
 		};

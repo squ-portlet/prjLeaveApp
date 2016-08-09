@@ -359,7 +359,8 @@
                  				(											
                  					APP.VHM_APP_SEQ_NO,						
                  					LVREQ.VHM_LEAVE_REQ_NO					
-                 				) 																			AS 	SAB_ACTION_LOWER						
+                 				) 																			AS 	SAB_ACTION_LOWER,
+                 	NVL(APP.VHM_LEAVE_REQ_RTN_IND,'L') 														AS 	LEAVE_RETURN_INDICATOR  						
 						
 				FROM 														
 					VHM_EMP_LEAVE_REQUEST LVREQ,						
