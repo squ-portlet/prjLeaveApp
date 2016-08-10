@@ -744,8 +744,10 @@ public class LeaveAppControllerMain
 			BindingResult result,Locale locale,Model model)
 	{
 		int resultUpdate = leaveAppServiceDao.newLeaveReturn(leaveApplModel);
-		logger.info("Inside leave return action");
-		logger.info("leaveApplModel : "+leaveApplModel.toString());
+		if(resultUpdate == 0)
+		{
+			logger.error("Leave return submit not successful");
+		}
 	}
 	
 	

@@ -410,7 +410,6 @@
 	                                        VHM_EMP_LEAVE_REQUEST_APPROVAL               
 	                                      WHERE                                        
 	                                        VHM_LEAVE_REQ_NO =  APP.VHM_LEAVE_REQ_NO 
-	                                        AND VHM_APP_EMP_CODE = :paramEmpNumber
 	                                ) 						
 																			
 					AND LVREQ.VHM_STATUS_CODE !=  '0000000005'
