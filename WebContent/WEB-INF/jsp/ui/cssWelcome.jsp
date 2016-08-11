@@ -30,7 +30,7 @@
 <%@ taglib prefix="spring"  uri="http://www.springframework.org/tags" %>
 
 <spring:message code="url.squ.cdn" var="urlCdn"/>
-<c:url value="/ui/images/calendar.gif" var="imgCalendar"/>
+<c:url value="/ui/images/calendar.png" var="imgCalendar"/>
 
 
 <!-- ******************** CSS Declaration************************ --> 

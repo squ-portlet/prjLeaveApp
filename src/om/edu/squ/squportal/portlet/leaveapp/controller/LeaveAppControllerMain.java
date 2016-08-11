@@ -670,11 +670,11 @@ public class LeaveAppControllerMain
 			@RequestParam("approverEmpNo") String approverEmpNo,
 			PortletRequest request, Model model,Locale locale)
 	{
-		PortletSession	session	=	request.getPortletSession();
-		Employee	employee	=	(Employee)session.getAttribute("employee");	
-		String		empNumber	=	String.format("%07d", Integer.parseInt(employee.getEmpNumber()));
+		PortletSession	session			=	request.getPortletSession();
+		Employee	employee			=	(Employee)session.getAttribute("employee");	
+		String		empNumber			=	String.format("%07d", Integer.parseInt(employee.getEmpNumber()));
+		Employee	delegatedEmployee	=	leaveAppServiceDao.getDelegatedEmployeeCurrentDate(approverEmpNo, locale);
 		
-		//List<LeaveRequest>	leaveRequests	=	leaveAppServiceDao.getLeaveRequests(employee,locale);
 		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(approverEmpNo, requestNum, locale);
 		
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -684,36 +684,28 @@ public class LeaveAppControllerMain
 		{
 			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
 			leaveAppModel.setRequestNo(requestNum);
-			leaveAppModel.setApproverEmpNumber(approverEmpNo);
+			if(null == delegatedEmployee)
+			{
+				leaveAppModel.setApproverEmpNumber(approverEmpNo);
+			}
+			else
+			{
+				leaveAppModel.setApproverEmpNumber(delegatedEmployee.getEmpNumber());
+			}
 			leaveAppModel.setLeaveReturnDate(stringDate);
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
 		
+		
 		model.addAttribute("employee",employee );
-		//model.addAttribute("leaveRequests", leaveRequests);
+		model.addAttribute("delegatedEmployee",delegatedEmployee );
 		model.addAttribute("leaveRequest", leaveRequest);
 		model.addAttribute("approver", leaveRequest.getApprove());
 		model.addAttribute("branches",leaveAppServiceDao.getBranches(employee.getBranchCode(),locale));
 		
 		//model.addAttribute("mgrName", leaveAppServiceDao.getManager(empNumber, locale).getEmpName());
 		
-		
-		
-/*		
-		model.addAttribute("empHierarchy", employee.getHierarchyCode());
-		model.addAttribute("empHierarchyAddl", employee.getHierarchyAddlCode());
-		model.addAttribute("empNumber", String.format("%07d", Integer.parseInt(employee.getEmpNumber())));
-		model.addAttribute("empName", employee.getEmpName())+;1
-		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
-		model.addAttribute("furtherClarification", Constants.CONST_LEAVE_STATUS_FURTHER_CLARIFICATION);
-		model.addAttribute("leaveStatusApproved", Constants.CONST_LEAVE_STATUS_APPROVED);
-		model.addAttribute("leaveStatusRejected", Constants.CONST_LEAVE_STATUS_REJECTED);
-				
-		model.addAttribute("leaveActionApprove", Constants.CONST_LEAVE_ACTION_APPROVE);
-		model.addAttribute("leaveActionReturn", Constants.CONST_LEAVE_ACTION_RETURN);
-		model.addAttribute("leaveActionReject", Constants.CONST_LEAVE_ACTION_REJECT);
-		
-*/		
+
 		return Constants.PAGE_LEAVE_RETURN;
 	}
 

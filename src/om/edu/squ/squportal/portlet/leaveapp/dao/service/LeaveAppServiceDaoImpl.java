@@ -766,7 +766,23 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		return leaveDbDao.getLeaveBalance(empNumber, strStartDate);
 	}
 	
-
+	
+	/**
+	 * 
+	 * method name  : getDelegatedEmployeeCurrentDate
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : Employee
+	 * 
+	 * purpose		: Get delegate employee (if any)  at present date 
+	 *
+	 * Date    		:	Aug 11, 2016 1:01:28 PM
+	 */
+	public Employee getDelegatedEmployeeCurrentDate(String empAppNumber, Locale locale)
+	{
+		return leaveDbDao.getDelegatedEmployeeCurrentDate(empAppNumber, locale);
+	}
 	/***********************************************************************************
 	 *             LEAVE RETURN
 	 ***********************************************************************************/

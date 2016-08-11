@@ -36,7 +36,7 @@
 <head>
 
 <spring:url value="/css/images/backIcon.png" var="urlImgBack"/>
-<c:url value="/css/images/calendar.gif" var="urlImgCalendar"/>
+<c:url value="/css/images/calendar.png" var="urlImgCalendar"/>
 <c:url value="/css/images/ui-bg_diagonals-thick_75_f3d8d8_40x40.png" var="urlImgBgDiagonals"/>
 <c:url value="/css/images/ui-bg_dots-small_65_a6a6a6_2x2.png" var="urlImgBgDots"/>
 <c:url value="/css/images/ui-bg_flat_0_333333_40x100.png" var="urlImgBgFlat"/>

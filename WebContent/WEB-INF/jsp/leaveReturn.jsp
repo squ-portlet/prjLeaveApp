@@ -40,7 +40,7 @@
 <head>
 
 <spring:url value="/css/images/backIcon.png" var="urlImgBack"/>
-<c:url value="/css/images/calendar.gif" var="urlImgCalendar"/>
+<c:url value="/css/images/calendar.png" var="urlImgCalendar"/>
 <c:url value="/css/images/ui-bg_diagonals-thick_75_f3d8d8_40x40.png" var="urlImgBgDiagonals"/>
 <c:url value="/css/images/ui-bg_dots-small_65_a6a6a6_2x2.png" var="urlImgBgDots"/>
 <c:url value="/css/images/ui-bg_flat_0_333333_40x100.png" var="urlImgBgFlat"/>
@@ -596,12 +596,25 @@ $(function() {
 					<td colspan="2">
 				
 							<div  >
-										<h3 >
-<!-- 												<a href="#"> -->
-														<spring:message code="prop.leave.app.apply.form.leave.manager.custom"/>
-														<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i></font>
-<!-- 												</a> -->
-										</h3>
+										<c:choose>
+											<c:when test="${not empty delegatedEmployee}">
+												<h5>
+													<spring:message code="prop.leave.app.apply.form.leave.manager.custom"/>
+													<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i> &nbsp; <spring:message code="prop.leave.app.apply.employee.on.leave"/></font>
+												</h5>
+												<h4 >
+													<spring:message code="prop.leave.app.apply.form.delegated.employees"/>
+													<font color="red" size="small"><i><c:out value="${delegatedEmployee.empName}"/></i></font>
+												</h4>	
+											</c:when>
+											<c:otherwise>
+												<h4 >
+													<spring:message code="prop.leave.app.apply.form.leave.manager.custom"/>
+													<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i></font>
+												</h4>											
+											</c:otherwise>												
+										
+										</c:choose>
 							<div>
 										<fieldset style="padding: 5; border: 1;">
 										<legend><spring:message code="prop.leave.app.apply.form.leave.manager.select"/> </legend>

@@ -420,7 +420,19 @@ public interface LeaveAppServiceDao
 	 */
 	public String	getLeaveBalance(String empNumber, String strStartDate);
 	
-	
+	/**
+	 * 
+	 * method name  : getDelegatedEmployeeCurrentDate
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : Employee
+	 * 
+	 * purpose		: Get delegate employee (if any)  at present date 
+	 *
+	 * Date    		:	Aug 11, 2016 1:01:28 PM
+	 */
+	public Employee getDelegatedEmployeeCurrentDate(String empAppNumber, Locale locale);
 	/***********************************************************************************
 	 *             LEAVE RETURN
 	 ***********************************************************************************/

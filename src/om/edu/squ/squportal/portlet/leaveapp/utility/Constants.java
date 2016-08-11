@@ -288,6 +288,9 @@ public interface Constants
 	public static 	String	CONST_SELECT_LEAVE_REQUESTS_FOR_REQUESTER		=			"select.leave.requests.for.requester";
 	public static 	String	CONST_SELECT_LEAVE_REQUESTS_FOR_APPROVER		=			"select.leave.requests.for.approver";
 	
+	public static 	String	CONST_SELECT_DELEGATE_STATUS_CURRENT_DATE		=			"select.delegate.status.at.current.date";
+	public static 	String	CONST_SELECT_DELEGATE_EMPLOYEE_CURRENT_DATE	=			"select.delegate.employee.at.current.date";
+	
 	
 	/**********CONSTANTS - SQL - QUERY PROPERTY- NAME - LEAVE RETURN - **************/	
 	public static 	String	CONST_SELECT_RETURN_ELIGIBLE					=			"select.return.eligible";

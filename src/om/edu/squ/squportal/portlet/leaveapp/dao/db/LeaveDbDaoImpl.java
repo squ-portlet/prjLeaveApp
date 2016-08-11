@@ -2413,6 +2413,87 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		return String.valueOf(simpleJdbcCall.executeFunction(Object.class, paramIn));
 	}
 	
+	/**
+	 * 
+	 * method name  : getDelegateStatusCurrentDate
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: Check whether delegation exist at present date
+	 *
+	 * Date    		:	Aug 11, 2016 12:48:15 PM
+	 */
+	private	boolean getDelegateStatusCurrentDate(String empAppNumber)
+	{
+		boolean	booResult = false;
+		String CONST_SELECT_DELEGATE_STATUS_DATE_SPECIFIC	=	queryPropsLeave.getProperty(Constants.CONST_SELECT_DELEGATE_STATUS_CURRENT_DATE);
+		Map<String,String> 	namedParameters 				= 	new HashMap<String,String>();
+							namedParameters.put("paramEmpAppNo", empAppNumber);
+		
+		if(namedParameterJdbcTemplate.queryForInt(CONST_SELECT_DELEGATE_STATUS_DATE_SPECIFIC, namedParameters) == 1)
+		{
+			booResult	=	true;
+		}
+		else
+		{
+			booResult	=	false;
+		}
+		
+		
+		return booResult;
+	}
+
+	
+	
+	
+	/**
+	 * 
+	 * method name  : getDelegatedEmployeeCurrentDate
+	 * @param requestNo
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : Employee
+	 * 
+	 * purpose		: Get delegate employee (if any)  at present date 
+	 *
+	 * Date    		:	Aug 11, 2016 1:01:28 PM
+	 */
+	public Employee getDelegatedEmployeeCurrentDate(String empAppNumber, Locale locale)
+	{
+		Employee	employee	= null;
+		String CONST_SELECT_DELEGATE_EMPLOYEE_DATE_SPECIFIC	=	queryPropsLeave.getProperty(Constants.CONST_SELECT_DELEGATE_EMPLOYEE_CURRENT_DATE);
+		if(getDelegateStatusCurrentDate(empAppNumber))
+		{
+			employee	=	new Employee();
+			
+			RowMapper<Employee> mapper	=	new RowMapper<Employee>()
+			{
+				
+				public Employee mapRow(ResultSet rs, int rowNum) throws SQLException
+				{
+					Employee	employee	=	new Employee();
+					employee.setEmpNumber(rs.getString(Constants.CONST_EMP_APP_CODE));
+					employee.setEmpName(rs.getString(Constants.CONST_EMP_APP_NAME));
+					
+					return employee;
+				}
+			};
+			
+			Map<String,String> 	namedParameters 				= 	new HashMap<String,String>();
+			namedParameters.put("paramEmpAppNo", empAppNumber);
+			namedParameters.put("paramLocale", locale.getLanguage());
+			
+			employee	=	namedParameterJdbcTemplate.queryForObject(CONST_SELECT_DELEGATE_EMPLOYEE_DATE_SPECIFIC, namedParameters, mapper);
+			
+			
+		}
+		
+		return employee;
+	}
+	
+	
 	
 	/***********************************************************************************
 	 *             LEAVE RETURN

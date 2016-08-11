@@ -417,5 +417,57 @@
       	
       	]]>
       </entry>
+           <entry key="select.leave.approver">
+	     	SELECT 
+			  VHM_APP_EMP_CODE																				AS	EMP_APP_CODE
+			FROM 
+			  VHM_EMP_LEAVE_REQUEST_APPROVAL
+			WHERE
+			  VHM_LEAVE_REQ_NO = :paramReqNo
+			  AND VHM_APP_CRE_DATE = (
+			                            SELECT 
+			                              max(VHM_APP_CRE_DATE)
+			                            FROM
+			                              VHM_EMP_LEAVE_REQUEST_APPROVAL 
+			                            WHERE
+			                              VHM_LEAVE_REQ_NO = :paramReqNo
+			                          )
+     </entry>
+     
+     <entry key="select.delegate.status.at.current.date">
+     	<![CDATA[
+	   		SELECT 
+				COUNT(VHM_DELEGATED_EMP_CODE) AS DELEGATE_STATUS
+			FROM
+				VHM_EMP_LEAVE_REQ_DELEGATION REQ_DELG
+			WHERE
+					TRUNC(SYSDATE) 
+					BETWEEN 
+					        TRUNC(VHM_DELEGATED_FROM_DATE)
+					    AND
+					        TRUNC(VHM_DELEGATED_TO_DATE)
+				 AND REQ_DELG.VHM_EMP_CODE = LPAD(:paramEmpAppNo,7,0)
+     	]]>
+     </entry>
+     <entry key="select.delegate.employee.at.current.date">
+     	<![CDATA[
+		    SELECT 
+		      	VHM_DELEGATED_EMP_CODE 																		AS EMP_APP_CODE,
+		      	DECODE(:paramLocale,											
+		        	'en',initCap(EMP.VHM_EMP_NAME),						
+		        	'ar',EMP.VHM_EMP_NAME_ARABIC							
+		      	) 																							AS EMP_APP_NAME	
+		 	FROM
+		      	VHM_EMP_LEAVE_REQ_DELEGATION REQ_DELG,
+		      	VHM_EMPLOYEE EMP
+		 	WHERE
+		      		EMP.VHM_EMP_CODE = REQ_DELG.VHM_DELEGATED_EMP_CODE
+		      	AND TRUNC(SYSDATE) BETWEEN 
+		              TRUNC(VHM_DELEGATED_FROM_DATE)
+		          	AND
+		              TRUNC(VHM_DELEGATED_TO_DATE)
+		      	 AND REQ_DELG.VHM_EMP_CODE = LPAD(:paramEmpAppNo,7,0)
+		 ]]>    	
+     </entry>
      
 </properties>
