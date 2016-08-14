@@ -940,8 +940,7 @@ public interface Constants
 																			" VHM_LEAVE_TYPE, BDGID_BUDG_ID,  	VHM_ADMIN_HOLDING_YN,	  " +
 																			" VHM_POSITION_CODE,VHM_HIERARCHY_CODE,VHM_LEAVE_REQUEST_ACTIVE," +
 																			" VHM_LEAVE_REQUEST_REMARKS,VHM_LEAVE_REQUEST_CRE_USR_INIT,VHM_LEAVE_REQUEST_CRE_DATE," +
-																			" VHM_LEAVE_TYPE_FLAG,VHM_SUGGESTED_APP_EMP_CODE,VHM_PROCESS_SAL_YN, 	" +
-																			" VHM_LEAVE_STATUS_DT											" +	
+																			" VHM_LEAVE_TYPE_FLAG,VHM_SUGGESTED_APP_EMP_CODE,VHM_PROCESS_SAL_YN 	" +
 																			" ) 															" +
 																			" VALUES 														" +
 																			"(																" +
@@ -953,10 +952,8 @@ public interface Constants
 																			" :paramLeaveType,:paramResearchId,:paramIsAdmin,				" +
 																			" :paramPositionCode,:paramHierarchyCode,:paramIsReqActive,		" +
 																			" :paramReqRemarks,:paramReqUserInit,SYSDATE,					" +
-																			" :paramLeaveTypeFlag,:paramHodId,UPPER(:paramProcessSalaray),	" +
-																			" SYSDATE 														" +
+																			" :paramLeaveTypeFlag,:paramHodId,UPPER(:paramProcessSalaray)	" +
 																			" )																";
-	
 	public static final String	SQL_VIEW_ONLY_LEAVE_REQUEST_SPECIFIC	=	" SELECT 														" +
 																			" TO_CHAR(LVREQ.VHM_LEAVE_START_DATE,'DD/MM/YYYY') AS LEAVE_START_DATE,	" +
 																			" TO_CHAR(LVREQ.VHM_LEAVE_END_DATE,'DD/MM/YYYY') AS LEAVE_END_DATE,		" +
@@ -993,8 +990,7 @@ public interface Constants
 																			"		VHM_LEAVE_TYPE_FLAG = :paramLeaveTypeFlag,				" +
 																			"		VHM_SUGGESTED_APP_EMP_CODE= :paramHodId,				" +
 																			"		VHM_STATUS_CODE  	= :paramLeaveStatus,				" +
-																			"		VHM_PROCESS_SAL_YN	= :paramProcessSalaray,				" +
-																			"		VHM_LEAVE_STATUS_DT	= SYSDATE							" +
+																			"		VHM_PROCESS_SAL_YN	= :paramProcessSalaray				" +
 																			"	WHERE VHM_LEAVE_REQ_NO 	= :paramReqNo						" +
 																			"	  AND VHM_STATUS_CODE  	= :paramCompLeaveStatus				" +
 																			"	AND (														" +
@@ -1004,8 +1000,7 @@ public interface Constants
 
 	
 	public static final String	SQL_CANCEL_LEAVE_REQUEST		=			"	UPDATE  VHM_EMP_LEAVE_REQUEST								" +
-																			"	SET VHM_STATUS_CODE = '" +CONST_LEAVE_STATUS_CANCEL + "',   " +
-																			"		VHM_LEAVE_STATUS_DT	= SYSDATE							" +
+																			"	SET VHM_STATUS_CODE = '" +CONST_LEAVE_STATUS_CANCEL + "'    " +
 																			" 	WHERE VHM_LEAVE_REQ_NO = :paramReqNo						" +
 																			"	AND VHM_STATUS_CODE  	= :paramCompLeaveStatus				" +
 																			"	AND (														" +
@@ -1098,8 +1093,7 @@ public interface Constants
 																		    "	)															";
 	
 	public static final String	SQL_UPDATE_LEAVE_REQ_STATUS		=			" UPDATE VHM_EMP_LEAVE_REQUEST									" +
-																			" SET VHM_STATUS_CODE=:paramStatusCode,							" +
-																			"		VHM_LEAVE_STATUS_DT	= SYSDATE							" +
+																			" SET VHM_STATUS_CODE=:paramStatusCode							" +
 																			" WHERE VHM_LEAVE_REQ_NO=:paramReqNo							" +
 																			" AND VHM_LEAVE_TYPE_FLAG = :paramCompLeaveTypeFlag				" +
 																			" AND VHM_LEAVE_START_DATE = TO_DATE(:paramCompStartDate,'DD/MM/YYYY')" +
@@ -1111,8 +1105,7 @@ public interface Constants
 
 	
 	public static final String	SQL_UPDATE_LEAVE_RETURN_STATUS	=			" UPDATE VHM_EMP_LEAVE_REQUEST									" +
-																			" SET VHM_STATUS_CODE=:paramStatusCode,							" +
-																			"		VHM_LEAVE_STATUS_DT	= SYSDATE							" +
+																			" SET VHM_STATUS_CODE=:paramStatusCode							" +
 																			" WHERE VHM_LEAVE_REQ_NO=:paramReqNo							" +
 																			" AND VHM_LEAVE_TYPE_FLAG = :paramCompLeaveTypeFlag				" +
 																			" AND VHM_LEAVE_START_DATE = TO_DATE(:paramCompStartDate,'DD/MM/YYYY') " +
