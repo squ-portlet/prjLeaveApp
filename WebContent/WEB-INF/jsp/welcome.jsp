@@ -397,8 +397,6 @@
 							<c:out value="${req.approve.employee.empName}"/>
 						</td>
 						<td>
-						
-						
 								<portlet:renderURL var="varLeaveView">
 									<portlet:param name="action" value="leaveView"/>
 									<portlet:param name="reqNo" value="${req.requestNo}"/>
@@ -438,9 +436,12 @@
 											</c:otherwise>
 										</c:choose>
 									</c:when>
-									<c:when test="${(req.status.statusCode == furtherClarification)}">
+									<c:when test="${(empty req.returnApprove.employee.empNumber) && (req.status.statusCode == furtherClarification)}">
 										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a>
 									</c:when>
+									<c:when test="${(not empty req.returnApprove.employee.empNumber) && (req.status.statusCode == furtherClarification)}">
+										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text.color.red"/></a>
+									</c:when>									
 									<c:when test="${(req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected)}">
 										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
 										<c:if test="${(req.status.statusCode eq leaveStatusRejected) && (not empty req.returnApprove.employee.empNumber) && (req.finalStatusCode != leaveStatusApproved) }">
