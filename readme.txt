@@ -4,9 +4,10 @@ prjLeaveApp
 Version : 1.1
 --------------------
 Feature :
-1) 'Apply for leave application' button placed on top 
+1) Leave return feature included
 2) Only Annual Leave is in effect
 3) Requester can able to update his/her approver, before approve of the leave
+4) Enhanced UI (Data Table plugin included)
 
 
 
