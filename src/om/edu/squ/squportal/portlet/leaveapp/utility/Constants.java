@@ -616,7 +616,10 @@ public interface Constants
 																			"		AND ADESIG.VEAT_EMP_BRANCH_CODE  =:paramBranchCode	" +
 										                                    "      AND HIR.VHM_LEVEL 			< DECODE(:paramEmpLevel,'NA','010',:paramEmpLevel)" +
 										                                    "      AND EMP.VHM_EMP_CODE = ADESIG.VEAT_EMP_CODE			" +
-										                                    "      AND ADESIG.VEAT_TO_DATE IS NULL						" +
+										                                    "	   AND ( 												" +
+										                                    "			ADESIG.VEAT_TO_DATE IS NULL						" +
+										                                    "		OR	TRUNC(ADESIG.VEAT_TO_DATE) >= TRUNC(SYSDATE)	" +
+										                                    "			)												" +
 										                                    "      AND EMP.VHM_EMP_ACTIVE          = 'Y'	    		";
 
 	
