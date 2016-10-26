@@ -145,6 +145,57 @@
 		
 			<script type="text/javascript">
 			
+			$(function() {
+				/*Dialog for cancel request*/
+				$('#dataTableRequester tbody').on('click', 'tr', function () {
+					$( ".mydialogCls" ).click(function(event) {
+						
+						
+							var i     		= this.getAttribute("indexRef");
+								var varReqNo 	= this.getAttribute("reqNo");
+								var	varAppEmpNo = this.getAttribute("appEmpNo");
+								var msg	     = '<spring:message code="prop.leave.app.title.request.cancel.msg" arguments="varReqNo"/>';
+								var msgReplace	=	msg.replace("varReqNo",varReqNo);
+								$("#myDialog").html(msgReplace);
+								event.preventDefault();
+								 $("#myDialog").closest('.ui-dialog').children('.ui-dialog-titlebar').addClass("dialog-title");
+								$("#myDialog").dialog(
+                            {
+                            	resizable: false,
+                            	width:400,
+                            	height:200,
+                            	modal: true,
+                				close: function(event, ui) {
+                					$("#myDialog").hide();
+                					return false;
+                					},
+              					buttons: {
+              						"<spring:message code='prop.leave.app.title.request.cancel.button.remove'/>": function() {
+              						$("#requestNo").val(varReqNo);
+              						$("#approverEmpNumber").val(varAppEmpNo);
+    	 							$("#leaveAppModel").attr("action", i);
+    	 							$("#leaveAppModel").submit();
+              						$( this ).dialog( "close" );
+              						},
+              						"<spring:message code='prop.leave.app.title.request.cancel.button.exit'/>": function() {
+              							$("#requestNo").val("");
+              							$("#approverEmpNumber").val("");
+              							$("#leaveAppModel").attr("action", "");
+              							$( this ).dialog( "close" );
+              						}
+              						}
+                            }		
+                            ); 
+                           
+                            return false; 
+						
+					});
+					
+					
+		      	} );
+			});
+			
+			
 			/*Dialog for approve request*/
 			$(function() { 
 			    $(".refApproveClass").click(function(event) {
@@ -189,53 +240,6 @@
 			                                        });
 			}); 
 
-			
-			/*Dialog for cancel request*/
-			$(function() { 
-			    $(".mydialogCls").click(function(event) {
-		    	
-			    	 								var i     		= this.getAttribute("indexRef");
-			    	 								var varReqNo 	= this.getAttribute("reqNo");
-			    	 								var	varAppEmpNo = this.getAttribute("appEmpNo");
-			    	 								var msg	     = '<spring:message code="prop.leave.app.title.request.cancel.msg" arguments="varReqNo"/>';
-			    	 								var msgReplace	=	msg.replace("varReqNo",varReqNo);
-			    	 								$("#myDialog").html(msgReplace);
-			    	 								event.preventDefault();
-			    	 								 $("#myDialog").closest('.ui-dialog').children('.ui-dialog-titlebar').addClass("dialog-title");
-			    	 								$("#myDialog").dialog(
-			                                        {
-			                                        	resizable: false,
-			                                        	width:400,
-			                                        	height:200,
-			                                        	modal: true,
-			                            				close: function(event, ui) {
-			                            					$("#myDialog").hide();
-			                            					return false;
-			                            					},
-			                          					buttons: {
-			                          						"<spring:message code='prop.leave.app.title.request.cancel.button.remove'/>": function() {
-			                          						$("#requestNo").val(varReqNo);
-			                          						$("#approverEmpNumber").val(varAppEmpNo);
-						    	 							$("#leaveAppModel").attr("action", i);
-						    	 							$("#leaveAppModel").submit();
-			                          						$( this ).dialog( "close" );
-			                          						},
-			                          						"<spring:message code='prop.leave.app.title.request.cancel.button.exit'/>": function() {
-			                          							$("#requestNo").val("");
-			                          							$("#approverEmpNumber").val("");
-			                          							$("#leaveAppModel").attr("action", "");
-			                          							$( this ).dialog( "close" );
-			                          						}
-			                          						}
-			                                        }		
-			                                        ); 
-			    	                               
-			                                        return false; 
-			    	                                    
-			                                        });
-			    
-			}); 
-
 		
 			$(function() {
 
@@ -257,13 +261,7 @@
 						"order": []
 						
 					});	
-
-/*		
-				$('#dataTableApprover tbody').on( 'click', 'td', function () {
-				    alert( "cell data : "+dataTableApprover.cell( this ).data() );
-				    var  linkRefApproveClass = $(this).find('.refApproveClass');
-				} );
-	*/				 
+			 
 			});
 			
 			
@@ -437,7 +435,7 @@
 										</c:choose>
 									</c:when>
 									<c:when test="${(empty req.returnApprove.employee.empNumber) && (req.status.statusCode == furtherClarification)}">
-										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a>
+										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" appEmpNo="${req.approve.employee.empNumber}" indexRef="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
 									</c:when>
 									<c:when test="${(not empty req.returnApprove.employee.empNumber) && (req.status.statusCode == furtherClarification)}">
 										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text.color.red"/></a>
