@@ -30,6 +30,7 @@
 package om.edu.squ.squportal.portlet.leaveapp.validator;
 
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
+import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +54,10 @@ public class LeaveAppValidatorApprove implements Validator
 		LeaveAppModel	leaveAppModel	=	(LeaveAppModel) obj;
 		if(null == leaveAppModel.getApproverRemark() || leaveAppModel.getApproverRemark().trim().equals(""))
 		{
-			err.rejectValue("approverRemark", "error.prop.leave.app.approverRemark.na");
+//			if( ! leaveAppModel.getApproverAction().equals(Constants.CONST_LEAVE_ACTION_APPROVE))
+//			{
+				err.rejectValue("approverRemark", "error.prop.leave.app.approverRemark.na");
+//			}
 		}
 
 		if(null == leaveAppModel.getApproverAction() || leaveAppModel.getApproverAction().trim().equals(""))
