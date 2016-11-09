@@ -789,8 +789,19 @@ $(function() {
 
 <div id="dialogDate" class="dialogApproveClass" title='<spring:message code="error.prop.leave.app.warning.dialogue.title"/>' style="display:none;"></div>
 
+
 <form:form modelAttribute="leaveAppModel"  action="${submitRequest}" method="post" htmlEscape="false" >
 <form:hidden path="approverEmpNumber" />
+
+	<div id="browserCompAdv" style="display:none;">
+		<center>
+				<div class="alert alert-warning" role="alert">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<form:errors path="acceptLeave" cssClass="error" />
+				</div>
+		</center>
+	</div>
+
 	<center><form:errors path="*"  cssClass="alert alert-danger" role="alert"/></center>
 	<fieldset>
 		<legend>

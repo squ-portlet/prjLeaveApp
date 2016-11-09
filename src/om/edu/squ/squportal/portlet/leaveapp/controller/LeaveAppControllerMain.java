@@ -285,6 +285,18 @@ public class LeaveAppControllerMain
 		String					empNumber				=	String.format("%07d", Integer.valueOf(employee.getEmpNumber()));
 		long					empLeaveBal				=	Long.parseLong(leaveAppServiceDao.getLeaveBalance(empNumber, leaveAppModel.getLeaveStartDate()));
 		leaveAppModel.setLeaveBalance(empLeaveBal);
+		try
+		{
+			allowEleaveRequestProc	=	leaveAppServiceDao.getAllowEleaveRequest (requestNo,leaveAppModel,employee, locale);
+			leaveAppModel.setAcceptLeave(allowEleaveRequestProc.isAcceptLeave());
+			leaveAppModel.setMsgLeaveRequest(allowEleaveRequestProc.getLeaveMessage());
+			
+		}
+		catch(ParseException ex)
+		{
+			logger.error("exception at leave request allow notification : "+ex.getMessage());
+		}
+		
 		new LeaveAppValidator().validate(leaveAppModel, result);
 		
 		if(result.hasErrors())
@@ -299,6 +311,7 @@ public class LeaveAppControllerMain
 			}
 			else
 			{
+				
 				response.setRenderParameter("action", "newApply");
 			}
 		}

@@ -72,6 +72,13 @@ public class LeaveAppValidator implements Validator
 //			err.rejectValue("hod", "error.prop.leave.app.approver.na");
 //		}
 		
+		/* generte error if leave not accepted - checked by db store procedure*/
+		if(!leaveAppModel.isAcceptLeave())
+		{
+			err.reject("acceptLeave", leaveAppModel.getMsgLeaveRequest());
+			
+		}
+		
 		if(null == leaveAppModel.getLeaveTypeFlag() || leaveAppModel.getLeaveTypeFlag().trim().equals(""))
 		{
 			err.rejectValue("leaveTypeFlag", "error.prop.leave.app.leaveType.na");

@@ -120,6 +120,24 @@ public interface LeaveAppServiceDao
 	 * 
 	 * method name  : getAllowEleaveRequest
 	 * @param requestNo
+	 * @param leaveAppModel
+	 * @param employee
+	 * @param locale TODO
+	 * @return
+	 * @throws ParseException
+	 * LeaveAppServiceDaoImpl
+	 * return type  : AllowEleaveRequestProc
+	 * 
+	 * purpose		: Check before insert leave request
+	 *
+	 * Date    		:	Nov 9, 2016 11:49:06 AM
+	 */
+	public AllowEleaveRequestProc getAllowEleaveRequest( String requestNo, LeaveAppModel 	leaveAppModel, Employee	employee, Locale locale) throws ParseException;
+	
+	/**
+	 * 
+	 * method name  : getAllowEleaveRequest
+	 * @param requestNo
 	 * @param leaveTypeNo
 	 * @param leaveAppModel
 	 * @param locale

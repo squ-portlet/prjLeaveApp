@@ -179,6 +179,51 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	/**
 	 * 
 	 * method name  : getAllowEleaveRequest
+	 * @param requestNo
+	 * @param leaveAppModel
+	 * @param employee
+	 * @return
+	 * @throws ParseException
+	 * LeaveAppServiceDaoImpl
+	 * return type  : AllowEleaveRequestProc
+	 * 
+	 * purpose		: Check before insert leave request
+	 *
+	 * Date    		:	Nov 9, 2016 11:49:06 AM
+	 */
+	public AllowEleaveRequestProc getAllowEleaveRequest( String requestNo, LeaveAppModel 	leaveAppModel, Employee	employee, Locale locale) throws ParseException
+	{
+		LeaveRequest 			leaveRequest 						=	new LeaveRequest();
+		LeaveType				leaveTypeFlag						=	new LeaveType();
+		AllowEleaveRequestProc	allowEleaveRequestProc				=	null;
+		
+		employee.setEmpNumber(String.format("%07d", Integer.valueOf(employee.getEmpNumber())));
+		employee.setAdmin(leaveAppModel.isAdminSqu());
+		employee.setDesignationAddlCode(leaveAppModel.getPositionAdditional());
+
+		employee.setBranch2Code(leaveAppModel.getBranch2());
+		employee.setDepartment2code(leaveAppModel.getDepartment2());
+		employee.setMyHodId(leaveAppModel.getHod());
+		leaveTypeFlag.setTypeNo(leaveAppModel.getLeaveTypeFlag());
+		
+		leaveRequest.setRequestNo(requestNo);
+		leaveRequest.setLeaveTypeFlag(leaveTypeFlag);
+		leaveRequest.setEmployee(employee);
+		leaveRequest.setLeaveStartDate(leaveAppModel.getLeaveStartDate());
+		leaveRequest.setLeaveEndDate(leaveAppModel.getLeaveEndDate());
+		leaveRequest.setLeaveRequestRemarks(leaveAppModel.getLeaveRemarks());
+		leaveRequest.setLeaveStatus(Constants.CONST_LEAVE_STATUS_WAITING_APPV);
+		leaveRequest.setResearchId(leaveAppModel.getResearchId());
+		
+		allowEleaveRequestProc	=	leaveDbDao.getAllowEleaveRequest(leaveRequest, locale);
+		
+		return allowEleaveRequestProc;
+	}
+	
+	
+	/**
+	 * 
+	 * method name  : getAllowEleaveRequest
 	 * @param requestNo 
 	 * @param leaveTypeNo
 	 * @param leaveAppModel

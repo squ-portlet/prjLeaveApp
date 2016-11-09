@@ -70,6 +70,8 @@ public class LeaveAppModel implements Serializable
 	private	String			opMode;												//  mode for update/insert etc.
 	private	String			approverEmpNumber;
 	private	String			processSalaray;
+	private	boolean			acceptLeave;
+	private	String			msgLeaveRequest;									// Message from eleave request - mostly at the time of rejection
 	
 	/**
 	 * Getter Method	: getRequestNo
@@ -635,6 +637,47 @@ public class LeaveAppModel implements Serializable
 	{
 		this.processSalaray = processSalaray;
 	}
+	/**
+	 * Getter Method	: isAcceptLeave
+	 * @return the acceptLeave
+	 * 
+	 * Date				: Nov 9, 2016
+	 */
+	public boolean isAcceptLeave()
+	{
+		return this.acceptLeave;
+	}
+	/**
+	 * Setter method : setAcceptLeave
+	 * @param acceptLeave the acceptLeave to set
+	 * 
+	 * Date          : Nov 9, 2016 11:57:24 AM
+	 */
+	public void setAcceptLeave(boolean acceptLeave)
+	{
+		this.acceptLeave = acceptLeave;
+	}
+	
+	/**
+	 * Getter Method	: getMsgLeaveRequest
+	 * @return the msgLeaveRequest
+	 * 
+	 * Date				: Nov 9, 2016
+	 */
+	public String getMsgLeaveRequest()
+	{
+		return this.msgLeaveRequest;
+	}
+	/**
+	 * Setter method : setMsgLeaveRequest
+	 * @param msgLeaveRequest the msgLeaveRequest to set
+	 * 
+	 * Date          : Nov 9, 2016 12:39:57 PM
+	 */
+	public void setMsgLeaveRequest(String msgLeaveRequest)
+	{
+		this.msgLeaveRequest = msgLeaveRequest;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -659,7 +702,9 @@ public class LeaveAppModel implements Serializable
 				+ ", approverAction=" + this.approverAction
 				+ ", approverRemark=" + this.approverRemark + ", opMode="
 				+ this.opMode + ", approverEmpNumber=" + this.approverEmpNumber
-				+ ", processSalaray=" + this.processSalaray + "]";
+				+ ", processSalaray=" + this.processSalaray + ", acceptLeave="
+				+ this.acceptLeave + ", msgLeaveRequest="
+				+ this.msgLeaveRequest + "]";
 	}
 	
 	
