@@ -1352,6 +1352,30 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			logger.error("Error in Delegated employees. error description : "+ex.getMessage());
 		}
 	}
+
+	
+	/**
+	 * 
+	 * method name  : getDaysAfterJoin
+	 * @param empNumber
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: Number of days after joining
+	 *
+	 * Date    		:	Nov 22, 2016 2:22:51 PM
+	 */
+	public int getDaysAfterJoin(String empNumber)
+	{
+		String CONST_SELECT_DAYS_AFTER_JOIN							=	queryPropsLeave.getProperty(Constants.CONST_SELECT_DAYS_AFTER_JOIN);
+		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
+		namedParameters.put("paramEmpCode", empNumber);
+		return this.namedParameterJdbcTemplate.queryForInt(CONST_SELECT_DAYS_AFTER_JOIN, namedParameters);
+		
+	}
+	
+	
 	
 	/**
 	 * 

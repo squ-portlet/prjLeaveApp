@@ -281,6 +281,33 @@ public interface LeaveAppServiceDao
 	 */
 	public List<DelegatedEmp>	getDelegations(String leaveRequestNo, Locale locale);
 	
+	/**
+	 * 
+	 * method name  : isLeaveApplicationForRequesterAllowed
+	 * @param empNumber
+	 * @return
+	 * LeaveAppServiceDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: 
+	 *
+	 * Date    		:	Nov 22, 2016 2:51:18 PM
+	 */
+	public boolean isLeaveApplicationForRequesterAllowed(String empNumber);
+	
+	/**
+	 * 
+	 * method name  : isDaysAfterJoinAllowed
+	 * @param empNumber
+	 * @return
+	 * LeaveAppServiceDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: Employee join after 90 days allowed to use leave application service 
+	 *
+	 * Date    		:	Nov 22, 2016 2:42:17 PM
+	 */
+	public boolean isDaysAfterJoinAllowed(String empNumber);
 
 	/**
 	 * 

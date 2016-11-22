@@ -501,6 +501,44 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		List<DelegatedEmp>	delegatedEmps	=	leaveDbDao.getDelegations(leaveRequestNo, locale);
 		return leaveDbDao.getDelegations(leaveRequestNo, locale);
 	}
+
+	/**
+	 * 
+	 * method name  : isLeaveApplicationForRequesterAllowed
+	 * @param empNumber
+	 * @return
+	 * LeaveAppServiceDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: 
+	 *
+	 * Date    		:	Nov 22, 2016 2:51:18 PM
+	 */
+	public boolean isLeaveApplicationForRequesterAllowed(String empNumber)
+	{
+		boolean result	= false;
+				result	=	isDaysAfterJoinAllowed(empNumber);
+		return result;
+	}
+	
+	
+	/**
+	 * 
+	 * method name  : isDaysAfterJoinAllowed
+	 * @param empNumber
+	 * @return
+	 * LeaveAppServiceDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: Employee join after 90 days allowed to use leave application service 
+	 *
+	 * Date    		:	Nov 22, 2016 2:42:17 PM
+	 */
+	public boolean isDaysAfterJoinAllowed(String empNumber)
+	{
+		return leaveDbDao.getDaysAfterJoin(empNumber) <= Constants.CONST_EMP_DAYS_AFTER_JOIN_LIMIT ? false : true;
+	}
+	
 	
 	/**
 	 * 

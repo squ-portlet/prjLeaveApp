@@ -78,6 +78,7 @@ public interface Constants
 	public static final	String	CONST_EMP_APP_SECTION_CODE		=			"EMP_APP_SECTION_CODE";
 	
 	public static final	String	CONST_EMP_JOIN_DATE				=			"EMP_JOIN_DATE";
+	public static final	String	CONST_EMP_DAYS_AFTER_JOIN		=			"DAYS_AFTER_JOIN";
 	public static final	String	CONST_EMP_HIERARCHY_CODE		=			"EMP_HIERARCHY_CODE";
 	public static final	String	CONST_EMP_RELIGION_CODE			=			"EMP_RELIGION_CODE";
 	public static final	String	CONST_EMP_OMANI					=			"EMP_OMANI";
@@ -88,9 +89,11 @@ public interface Constants
 	public static final	String	CONST_LEAVE_REQ_DATE			=			"LEAVE_REQ_DATE";
 	public static final	String	CONST_LEAVE_START_DATE			=			"LEAVE_START_DATE";
 	public static final	String	CONST_LEAVE_END_DATE			=			"LEAVE_END_DATE";
+	public static final	String	CONST_LEAVE_EXTENSION_START_DATE=			"LEAVE_EXTENSION_START_DATE";
 	public static final	String	CONST_LEAVE_RETURN_DATE			=			"LEAVE_RETURN_DATE";
 	public static final	String	CONST_LEAVE_STATUS				=			"LEAVE_STATUS";
 	public static final	String	CONST_LEAVE_STATUS_CODE			=			"LEAVE_STATUS_CODE";
+	public static final String	CONST_ALLOW_LEAVE_EXTENSTION	=			"IS_ALLOW_EXTENSION";
 	public static final	String	CONST_LEAVE_STATUS_DATE			=			"LEAVE_STATUS_DATE";
 	public static final	String	CONST_LEAVE_REQUEST_REMARKS		=			"LEAVE_REQUEST_REMARKS";
 	public static final	String	CONST_LEAVE_REQUEST_PROCESS_SALARY	=		"LEAVE_PROCESS_SALARY";
@@ -171,6 +174,8 @@ public interface Constants
 	public static final	String	CONST_NON_OMANI					=			"N";
 	public static final	String	CONST_EMP_SENIOR				=			"senior";
 	
+	public static final String	CONST_ALLOW_LEAVE_EXTENSTION_Y	=			"Y";
+	
 	public static final	String	CONST_ALLOW_ELEAVE_REQUEST_MSG	=			"allowELeaveRequestMsg";
 	
 	public static final int		CONST_LEVEL_COUNT				=			7;
@@ -181,13 +186,18 @@ public interface Constants
 	public static final String	CONST_NOT_AVAILABLE				=			"NA";
 	public static final int		CONST_DELEGATION_REQ_LEAVE_DAYS	=			5;
 	
-	public static final int		CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE =		5;
+	public static final int		CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE 	=		14;
 	
-	public static final String	CONST_YES_CAPITAL					 =		"Y";
-	public static final String	CONST_NO_CAPITAL					 =		"N";
+	public static final String	CONST_YES_CAPITAL					 	=		"Y";
+	public static final String	CONST_NO_CAPITAL					 	=		"N";
 	
-	public static final String	CONST_USERTYPE_REQUESTER			 =		"requester";
-	public static final String	CONST_USERTYPE_APPROVER				 =		"approver";
+	public static final String	CONST_USERTYPE_REQUESTER			 	=		"requester";
+	public static final String	CONST_USERTYPE_APPROVER				 	=		"approver";
+	
+	public static final String	CONST_LEAVE_RETURN_INDICATOR_RETURN	 	=		"R";
+	public static final String	CONST_LEAVE_RETURN_INDICATOR_LEAVE	 	=		"L";
+	public static final	int		CONST_EMP_DAYS_AFTER_JOIN_LIMIT			=		90;
+	
 	
 	/******************************************************/
 	
@@ -289,7 +299,9 @@ public interface Constants
 	public static 	String	CONST_SELECT_LEAVE_REQUESTS_FOR_APPROVER		=			"select.leave.requests.for.approver";
 	
 	public static 	String	CONST_SELECT_DELEGATE_STATUS_CURRENT_DATE		=			"select.delegate.status.at.current.date";
-	public static 	String	CONST_SELECT_DELEGATE_EMPLOYEE_CURRENT_DATE	=			"select.delegate.employee.at.current.date";
+	public static 	String	CONST_SELECT_DELEGATE_EMPLOYEE_CURRENT_DATE		=			"select.delegate.employee.at.current.date";
+	
+	public static 	String	CONST_SELECT_DAYS_AFTER_JOIN					=			"select.days.after.join";
 	
 	
 	/**********CONSTANTS - SQL - QUERY PROPERTY- NAME - LEAVE RETURN - **************/	

@@ -297,10 +297,12 @@
 			
 
 <p>
-		<br></br>		
-		<a class='btn btn-primary' href="${newApply}">
-			<spring:message code="prop.leave.app.apply.new"/>
-		</a>
+		<br></br>	
+		<c:if test="${isLeveApplyAllowed && isLeaveApplicationForRequesterAllowed}">	
+			<a class='btn btn-primary' href="${newApply}">
+				<spring:message code="prop.leave.app.apply.new"/>
+			</a>
+		</c:if>
 </p>
 			<form:form modelAttribute="leaveAppModel" method="post" htmlEscape="false">
 				<form:hidden 	path="requestNo" />
@@ -311,7 +313,7 @@
 <!-- 
 		Requester table
  -->
-	<c:if test="${reqCount != 0}">
+	<c:if test="${isLeaveApplicationForRequesterAllowed && reqCount != 0}">
 	  
 		<fieldset >
 			<legend><spring:message code="prop.leave.app.title.request.requester.header"/> (<c:out value="${empName}"/>)</legend>
@@ -656,10 +658,14 @@
 
 
 <p>
-		<br></br>		
-		<a class='btn btn-primary' href="${newApply}">
-			<spring:message code="prop.leave.app.apply.new"/>
-		</a>
+		<br></br>	
+		<c:if test="${isLeveApplyAllowed && isLeaveApplicationForRequesterAllowed}">	
+			<c:if test="${not empty leaveRequests}">
+				<a class='btn btn-primary' href="${newApply}">
+					<spring:message code="prop.leave.app.apply.new"/>
+				</a>
+			</c:if>
+		</c:if>
 </p>
 
 	 

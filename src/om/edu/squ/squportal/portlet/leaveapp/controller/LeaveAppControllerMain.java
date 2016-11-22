@@ -106,13 +106,14 @@ public class LeaveAppControllerMain
 	@RequestMapping
 	private String welcome(PortletRequest request, Model model, Locale locale)
 	{
-		String			empNumber 	=	getEmpNumber(request);	
-		PortletSession	session		=	request.getPortletSession();
-		Employee	employee	=	leaveAppServiceDao.getEmployee(
-				empNumber, 
-				ldapdao.getCorrectUserName(request.getRemoteUser()) ,
-				locale
-			  );
+		String			empNumber 				=	getEmpNumber(request);
+		boolean			booLeveApplyAllowed		=	false;
+		PortletSession	session					=	request.getPortletSession();
+		Employee		employee				=	leaveAppServiceDao.getEmployee(
+													empNumber, 
+													ldapdao.getCorrectUserName(request.getRemoteUser()) ,
+													locale
+												  );
 		
 		if(null != session.getAttribute("employee"))
 		{
@@ -121,13 +122,38 @@ public class LeaveAppControllerMain
 		session.setAttribute("employee", employee);
 		List<LeaveRequest>	leaveRequests			=	leaveAppServiceDao.getLeaveRequests(employee,locale, Constants.CONST_USERTYPE_REQUESTER);
 		List<LeaveRequest>	leaveRequestsApprover	=	leaveAppServiceDao.getLeaveRequests(employee,locale, Constants.CONST_USERTYPE_APPROVER);
-		
+
+		if(null != leaveRequests )
+		{
+			if(leaveRequests.size() != 0)
+			{
+				LeaveRequest maxLeaveRequest	=	(LeaveRequest) leaveRequests.get(0);
+				if((maxLeaveRequest.getStatus().getStatusCode().equals(Constants.CONST_LEAVE_STATUS_APPROVED)) && (maxLeaveRequest.getLeaveReturnIndicator().equals(Constants.CONST_LEAVE_RETURN_INDICATOR_RETURN)))
+				{
+					booLeveApplyAllowed	= true;
+				}
+				if((maxLeaveRequest.getStatus().getStatusCode().equals(Constants.CONST_LEAVE_STATUS_REJECTED)) && (maxLeaveRequest.getLeaveReturnIndicator().equals(Constants.CONST_LEAVE_RETURN_INDICATOR_LEAVE)))
+				{
+					booLeveApplyAllowed	= true;
+				}
+			}
+			
+			if(leaveRequests.size() == 0)
+			{
+				booLeveApplyAllowed	= true;
+			}
+
+			
+		}
 		
 		if(!model.containsAttribute("leaveAppModel"))
 		{
 			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
+
+		
+		model.addAttribute("isLeveApplyAllowed", booLeveApplyAllowed);
 		
 		model.addAttribute("leaveRequests", leaveRequests);
 		model.addAttribute("leaveRequestsApprover", leaveRequestsApprover);
@@ -149,6 +175,14 @@ public class LeaveAppControllerMain
 		model.addAttribute("leaveActionReturn", Constants.CONST_LEAVE_ACTION_RETURN);
 		model.addAttribute("leaveActionReject", Constants.CONST_LEAVE_ACTION_REJECT);
 		
+		model.addAttribute("isLeaveApplicationForRequesterAllowed", leaveAppServiceDao.isLeaveApplicationForRequesterAllowed(empNumber));
+		if(!leaveAppServiceDao.isLeaveApplicationForRequesterAllowed(empNumber))
+		{
+			if (!model.containsAttribute(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG))
+			{
+				model.addAttribute(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, UtilProperty.getMessage("error.prop.leave.apply.not.available.in.probation", null, locale));
+			}
+		}
 		
 		
 		return Constants.PAGE_WELCOME;
