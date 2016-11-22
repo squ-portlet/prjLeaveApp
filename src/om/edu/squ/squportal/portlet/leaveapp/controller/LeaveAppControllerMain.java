@@ -202,7 +202,7 @@ public class LeaveAppControllerMain
 		return Constants.PAGE_LEAVE_VIEW;
 	}
 	
-	
+
 	/**
 	 * 
 	 * method name  : newApply
@@ -217,7 +217,10 @@ public class LeaveAppControllerMain
 	 * Date    		:	Aug 7, 2012 1:06:00 PM
 	 */
 	@RequestMapping(params="action=newApply")
-	private	String newApply(PortletRequest request, Model model,Locale locale)
+	private	String newApply(
+			@RequestParam("paramEndDate") String paramEndDate,
+			@RequestParam("paramLeaveExtension") String paramLeaveExtension,
+			PortletRequest request, Model model,Locale locale)
 	{
 		PortletSession	session	=	request.getPortletSession();
 		Employee	employee	=	(Employee)session.getAttribute("employee");	
@@ -225,6 +228,11 @@ public class LeaveAppControllerMain
 		if(!model.containsAttribute("leaveAppModel"))
 		{
 			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
+			if(!paramEndDate.equals("na"))
+			{
+				leaveAppModel.setLeaveStartDate(paramEndDate);
+				
+			}
 			leaveAppModel.setAdminSqu(employee.isAdmin());
 			leaveAppModel.setPositionAdditional(employee.getDesignationAddlCode());
 			leaveAppModel.setOpMode(Constants.CONST_MODEL_MODE_INSERT);
@@ -247,6 +255,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("reqNum", Constants.CONST_NOT_AVAILABLE);
 		model.addAttribute("leaveTypeNo", Constants.CONST_NOT_AVAILABLE);
 		model.addAttribute("daysAllowed", Constants.CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE);
+		model.addAttribute("parmLeaveExtension", paramLeaveExtension);
 		return Constants.PAGE_LEAVE_APPLY_FORM;
 	}
 
@@ -273,6 +282,7 @@ public class LeaveAppControllerMain
 			@RequestParam("operation") String operation,
 			@RequestParam("reqNum") String requestNo,
 			@RequestParam("leaveTypeNo") String leaveTypeNo,
+			@RequestParam("parmLeaveExtension") String parmLeaveExtension,
 			ActionRequest request,
 			ActionResponse response, PortletRequest req, 
 			@ModelAttribute("leaveAppModel") LeaveAppModel leaveAppModel,
@@ -311,7 +321,8 @@ public class LeaveAppControllerMain
 			}
 			else
 			{
-				
+				response.setRenderParameter("paramEndDate", leaveAppModel.getLeaveStartDate());
+				response.setRenderParameter("paramLeaveExtension", parmLeaveExtension);
 				response.setRenderParameter("action", "newApply");
 			}
 		}

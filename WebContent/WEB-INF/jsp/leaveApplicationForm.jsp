@@ -169,56 +169,68 @@ $(function(){
 });
 
 $(function(){
-	// Datepicker
-	$('.calendarStart').datepicker({
-		dateFormat:"dd/mm/yy",
-		showOn: "both",
-		buttonImage: "${urlImgCalendar}",
-		buttonImageOnly: true,
-		minDate: -<c:out value="${daysAllowed}"/>,
-		firstDay:7,
-		beforeShowDay: function(date){
-			var day = date.getDay();
-			return [(day != 5 && day != 6)];
-	    },
-		onClose: function( selectedDate ) {
-			var	endDt	=	$( ".calendarEnd" ).datepicker( "getDate" );
-			resDtIssueOK = diffLeaveDate();	
-			if(null == endDt || resDtIssueOK)
-					{
-						$( ".calendarEnd" ).datepicker( "option", "minDate", selectedDate ); 
-						$( ".calendarDelgStart" ).datepicker( "option", "minDate", selectedDate );
-						$( ".calendarDelgEnd" ).datepicker( "option", "minDate", selectedDate );
-					}
-			showHideProcessSalaray();
+	<c:choose>
+		<c:when test="${(not empty leaveAppModel.leaveStartDate) && (parmLeaveExtension=='yes') }">
+			$('#leaveStartDate').prop('readonly', true);
+			$( '.calendarStart' ).datepicker( "option", "disabled", true );
+		</c:when>
+		<c:otherwise>
+				// Datepicker
+				$('.calendarStart').datepicker({
+					dateFormat:"dd/mm/yy",
+					showOn: "both",
+					buttonImage: "${urlImgCalendar}",
+					buttonImageOnly: true,
+					minDate: -<c:out value="${daysAllowed}"/>,
+					firstDay:7,
+					beforeShowDay: function(date){
+						var day = date.getDay();
+						return [(day != 5 && day != 6)];
+				    },
+					onClose: function( selectedDate ) {
+						var	endDt	=	$( ".calendarEnd" ).datepicker( "getDate" );
+						resDtIssueOK = diffLeaveDate();	
+						if(null == endDt || resDtIssueOK)
+								{
+									$( ".calendarEnd" ).datepicker( "option", "minDate", selectedDate ); 
+									$( ".calendarDelgStart" ).datepicker( "option", "minDate", selectedDate );
+									$( ".calendarDelgEnd" ).datepicker( "option", "minDate", selectedDate );
+								}
+						showHideProcessSalaray();
+		
+						var startLeaveDt=$(this).val();
+						var empNumber = "${empNumber}";
+					       $.ajax({
+					            type: "GET",
+		//			             contentType: "application/json; charset=utf-8", hierarchyLevelCode
+					            url:  "${servletLeaveBal}",
+					            data: 'startLeaveDt='+startLeaveDt+"&empNumber="+empNumber,
+					            dataType: "json",
+					            success: function(resp) {
+					            			if(null != resp && resp.length > 0 && $("#leaveTypeFlag option:selected").val() == 'A')
+					            			{
+					            				varLeaveBal	= resp;
+												$("#divLeaveBal").html('<font color="red">'+resp+'</font>' + '&nbsp; <spring:message code="prop.leave.app.apply.form.leave.balance.days"/>');
+												$("#divLeaveBalTxt").html('&nbsp;&nbsp; <spring:message code="prop.leave.app.apply.form.leave.balance"/> &nbsp; : &nbsp;&nbsp;');
+					            			}
+					            			else
+					            				{
+					            				$("#divLeaveBal").html("");
+					            				$("#divLeaveBalTxt").html("");
+					            				}
+					            }
+					        }
+					        );
+						
+							}
+					//inline: true
+				});
+		
+		</c:otherwise>
+	</c:choose>
+	
+	
 
-			var startLeaveDt=$(this).val();
-			var empNumber = "${empNumber}";
-		       $.ajax({
-		            type: "GET",
-//		             contentType: "application/json; charset=utf-8", hierarchyLevelCode
-		            url:  "${servletLeaveBal}",
-		            data: 'startLeaveDt='+startLeaveDt+"&empNumber="+empNumber,
-		            dataType: "json",
-		            success: function(resp) {
-		            			if(null != resp && resp.length > 0 && $("#leaveTypeFlag option:selected").val() == 'A')
-		            			{
-		            				varLeaveBal	= resp;
-									$("#divLeaveBal").html('<font color="red">'+resp+'</font>' + '&nbsp; <spring:message code="prop.leave.app.apply.form.leave.balance.days"/>');
-									$("#divLeaveBalTxt").html('&nbsp;&nbsp; <spring:message code="prop.leave.app.apply.form.leave.balance"/> &nbsp; : &nbsp;&nbsp;');
-		            			}
-		            			else
-		            				{
-		            				$("#divLeaveBal").html("");
-		            				$("#divLeaveBalTxt").html("");
-		            				}
-		            }
-		        }
-		        );
-			
-				}
-		//inline: true
-	});
 });
 
 
@@ -774,6 +786,7 @@ $(function() {
 	</portlet:param>
 	<portlet:param name="reqNum" value="${reqNum}"/>
 	<portlet:param name="leaveTypeNo" value="${leaveTypeNo}"/>
+	<portlet:param name="parmLeaveExtension" value="${parmLeaveExtension}"/>
 </portlet:actionURL>
 
 <portlet:renderURL var="backToMain">
@@ -843,7 +856,11 @@ $(function() {
 							<spring:message code="prop.leave.app.apply.form.leave.start.date"/>:
 						</span>
 					</td>
-					<td><div style="float: ${direction};"><form:input path="leaveStartDate" id="leaveStartDate" cssClass="calendarStart" /></div><div id="divLeaveBalTxt" style="float: ${direction};"></div><div id="divLeaveBal"></div> 
+					<td> 
+
+					<div style="float: ${direction};">
+						<form:input path="leaveStartDate" id="leaveStartDate" cssClass="calendarStart" />
+					</div><div id="divLeaveBalTxt" style="float: ${direction};"></div><div id="divLeaveBal"></div> 
 						<br><form:errors path="leaveStartDate" cssClass="error" />
 					</td>
 	

@@ -261,6 +261,20 @@ public interface LeaveDbDao
 	 * Date    		:	Sep 19, 2012 11:19:56 AM
 	 */
 	public List<DelegatedEmp>	getDelegations(String leaveRequestNo, Locale locale);
+
+	/**
+	 * 
+	 * method name  : getDaysAfterJoin
+	 * @param empNumber
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : int
+	 * 
+	 * purpose		: Number of days after joining
+	 *
+	 * Date    		:	Nov 22, 2016 2:22:51 PM
+	 */
+	public int getDaysAfterJoin(String empNumber);
 	
 	/**
 	 * 

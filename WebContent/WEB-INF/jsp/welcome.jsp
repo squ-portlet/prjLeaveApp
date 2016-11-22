@@ -115,8 +115,13 @@
 </style>
 
 <portlet:renderURL var="newApply">
+	<portlet:param name="paramEndDate" value="na"/>
+	<portlet:param name="paramLeaveExtension" value="no"/>
 	<portlet:param name="action" value="newApply"/>
 </portlet:renderURL>
+
+
+
 
 <c:if test="${rc.locale.language=='en'}">
 	<c:set var="direction" value="left"/>
@@ -359,6 +364,12 @@
 						<portlet:param name="requestNo" value="${req.requestNo}"/>
 						<portlet:param name="approverEmpNo" value="${req.approve.employee.empNumber}"/>
 					</portlet:renderURL>
+					<portlet:renderURL var="newApplyExtension">
+						<portlet:param name="paramEndDate" value="${req.leaveExtnStartDate}"/>
+						<portlet:param name="paramLeaveExtension" value="yes"/>
+						<portlet:param name="action" value="newApply"/>
+					</portlet:renderURL>
+					
 				<tr>
 						<td class="clsNum">
 							<c:choose>
@@ -445,6 +456,9 @@
 										<c:if test="${(req.status.statusCode eq leaveStatusRejected) && (not empty req.returnApprove.employee.empNumber) && (req.finalStatusCode != leaveStatusApproved) }">
 											| <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text.color.red"/></a> 
 										</c:if> 
+										<c:if test="${(req.allowLeaveExtension) }">
+										| <a href="${newApplyExtension}"><spring:message code="prop.leave.app.title.request.extension"/></a> 
+										</c:if>
 									</c:when>
 									<c:when test="${(req.approverSequenceNo != 1)}">
 										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
