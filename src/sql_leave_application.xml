@@ -100,7 +100,31 @@
                        ( 
                          :paramLocale,
                          'en',initCap(LVSTATUS.VHM_STATUS_DESC),LVSTATUS.VHM_STATUS_DESC_ARABIC
-                       ) 																					AS 		LEAVE_STATUS, 					
+                       ) 																					AS 		LEAVE_STATUS, 
+		        DECODE(																																-- APPROVED AND ALLOWED FOR EXTENSION 
+		               NVL(LVREQ.VHM_STATUS_CODE,'0000000001'),
+		                '0000000002'  
+		                , 
+		                DECODE(
+		                  LVREQ.VHM_LEAVE_REQ_NO,
+		                  (
+		                  	SELECT 
+		                  		VHM_LEAVE_REQ_NO
+		                  	FROM  VHM_EMP_LEAVE_REQUEST 
+		                  	WHERE 	VHM_EMP_CODE = :paramEmpNumber 
+                        		AND VHM_STATUS_CODE = '0000000002'
+                        		AND TRUNC(SYSDATE) <= TRUNC(VHM_LEAVE_END_DATE)
+                        		AND VHM_LEAVE_REQ_NO =  LVREQ.VHM_LEAVE_REQ_NO
+		                  		AND VHM_LEAVE_REQUEST_ACTIVE = 'Y'
+		                  )
+		                  , 'Y'
+		                  , 'N'
+		                )
+		                
+		                ,'N'
+		        
+		        	) 																						AS 		IS_ALLOW_EXTENSION,
+		        TO_CHAR(LVREQ.VHM_LEAVE_END_DATE+1,'DD/MM/YYYY') 											AS 		LEAVE_EXTENSION_START_DATE, 
 				LVREQ.VHM_EMP_CODE 																			AS 		EMP_CODE,							
 				LVREQ.VHM_EMP_INTERNET_USR_ID 																AS 		EMP_INTERNET_ID,		
 				 DECODE(
