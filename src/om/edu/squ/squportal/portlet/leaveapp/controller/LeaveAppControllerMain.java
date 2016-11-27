@@ -30,7 +30,6 @@
 package om.edu.squ.squportal.portlet.leaveapp.controller;
 
 
-
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -46,6 +45,7 @@ import javax.portlet.PortletSession;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import om.edu.squ.portal.common.EmpCommon;
 import om.edu.squ.squportal.portlet.leaveapp.bo.AllowEleaveRequestProc;
 import om.edu.squ.squportal.portlet.leaveapp.bo.DelegatedEmp;
 import om.edu.squ.squportal.portlet.leaveapp.bo.Employee;
@@ -837,33 +837,13 @@ public class LeaveAppControllerMain
 		if (request.getRemoteUser() != null)
 		{
 			String remoteUser	=	request.getRemoteUser();
-			try
-			{
-				empNumber			=	ldapdao.getEmpNumber(remoteUser);
-			}
-//			catch(CommunicationException	comEx)
-//			{
-//				logger.error("communication with ldap failed", comEx.getExplanation());
-//				empNumber = "com/ex";
-//			}
-			catch(NullPointerException  nulEx)
-			{
-				empNumber = null;
-			}
-
+			EmpCommon	empCommon	=	new EmpCommon();
+			empNumber = empCommon.getEmployeeNumber(request.getRemoteUser());
 		}
 		else
 		{
 			empNumber = "N/A";										// N/A = Not Available
-			
-			if (request.getRemoteUser() != null)
-			{
-				logger.error("Invalid user : {}",new Object[]{ldapdao.getCorrectUserName(request.getRemoteUser())});
-			}
-			else
-			{
-				logger.error("User not logged in");
-			}
+			logger.error("Invalid user");
 		}
 		
 		
