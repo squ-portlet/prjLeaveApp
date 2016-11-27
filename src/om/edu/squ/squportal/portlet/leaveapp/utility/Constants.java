@@ -302,6 +302,7 @@ public interface Constants
 	public static 	String	CONST_SELECT_DELEGATE_EMPLOYEE_CURRENT_DATE		=			"select.delegate.employee.at.current.date";
 	
 	public static 	String	CONST_SELECT_DAYS_AFTER_JOIN					=			"select.days.after.join";
+	public static 	String	CONST_SELECT_IS_END_OF_SERVICE					=			"select.is.end.of.service";
 	
 	
 	/**********CONSTANTS - SQL - QUERY PROPERTY- NAME - LEAVE RETURN - **************/	

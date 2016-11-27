@@ -517,7 +517,12 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	public boolean isLeaveApplicationForRequesterAllowed(String empNumber)
 	{
 		boolean result	= false;
-				result	=	isDaysAfterJoinAllowed(empNumber);
+		
+			if(isDaysAfterJoinAllowed(empNumber) || isEndOfService(empNumber))
+			{
+				result = true;
+			}
+				
 		return result;
 	}
 	
@@ -539,6 +544,22 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		return leaveDbDao.getDaysAfterJoin(empNumber) <= Constants.CONST_EMP_DAYS_AFTER_JOIN_LIMIT ? false : true;
 	}
 	
+	/**
+	 * 
+	 * method name  : isEndOfService
+	 * @param empNumber
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: findout is end of service mentioned in DB
+	 *
+	 * Date    		:	Nov 27, 2016 12:11:36 PM
+	 */
+	public boolean isEndOfService(String empNumber)
+	{
+		return leaveDbDao.isEndOfService(empNumber);
+	}
 	
 	/**
 	 * 

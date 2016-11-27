@@ -278,6 +278,20 @@ public interface LeaveDbDao
 	
 	/**
 	 * 
+	 * method name  : isEndOfService
+	 * @param empNumber
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: findout is end of service mentioned in DB
+	 *
+	 * Date    		:	Nov 27, 2016 12:11:36 PM
+	 */
+	public boolean isEndOfService(String empNumber);
+	
+	/**
+	 * 
 	 * method name  : getLeaveRequests
 	 * @param employee
 	 * @param locale

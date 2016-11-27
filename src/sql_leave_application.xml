@@ -503,6 +503,20 @@
 					VHM_EMP_CODE = LPAD(:paramEmpCode,7,0)     	
      	]]>
      </entry>
+     <entry key="select.is.end.of.service">
+     	<![CDATA[
+     		SELECT 
+				DECODE 
+			          (
+			            VHM_EMP_TERM_DATE,
+			            NULL, 'N', 'Y'
+			          )                                                                 					AS  IS_END_OF_SERVICE
+			FROM 
+					VHM_EMPLOYEE
+			WHERE 
+					VHM_EMP_CODE = LPAD(:paramEmpCode,7,0)    
+     	]]>
+     </entry>
      
      
 </properties>

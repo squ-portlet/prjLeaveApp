@@ -1374,7 +1374,31 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		return this.namedParameterJdbcTemplate.queryForInt(CONST_SELECT_DAYS_AFTER_JOIN, namedParameters);
 		
 	}
-	
+
+	/**
+	 * 
+	 * method name  : isEndOfService
+	 * @param empNumber
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: findout is end of service mentioned in DB
+	 *
+	 * Date    		:	Nov 27, 2016 12:11:36 PM
+	 */
+	public boolean isEndOfService(String empNumber)
+	{
+		String result													=	null;
+		String CONST_SELECT_IS_END_OF_SERVICE							=	queryPropsLeave.getProperty(Constants.CONST_SELECT_IS_END_OF_SERVICE);
+		Map<String,String> namedParameters 								= 	new HashMap<String,String>();
+		namedParameters.put("paramEmpCode", empNumber);
+		
+				result													=	this.namedParameterJdbcTemplate.queryForObject(CONST_SELECT_IS_END_OF_SERVICE, namedParameters, String.class);
+		
+		
+		return result.equals(Constants.CONST_YES_CAPITAL)?true:false;
+	}
 	
 	
 	/**

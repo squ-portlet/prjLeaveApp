@@ -308,6 +308,20 @@ public interface LeaveAppServiceDao
 	 * Date    		:	Nov 22, 2016 2:42:17 PM
 	 */
 	public boolean isDaysAfterJoinAllowed(String empNumber);
+	
+	/**
+	 * 
+	 * method name  : isEndOfService
+	 * @param empNumber
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: findout is end of service mentioned in DB
+	 *
+	 * Date    		:	Nov 27, 2016 12:11:36 PM
+	 */
+	public boolean isEndOfService(String empNumber);
 
 	/**
 	 * 
