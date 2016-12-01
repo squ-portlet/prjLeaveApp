@@ -128,14 +128,14 @@ public class LeaveAppControllerMain
 			if(leaveRequests.size() != 0)
 			{
 				LeaveRequest maxLeaveRequest	=	(LeaveRequest) leaveRequests.get(0);
-				if((maxLeaveRequest.getStatus().getStatusCode().equals(Constants.CONST_LEAVE_STATUS_APPROVED)) && (maxLeaveRequest.getLeaveReturnIndicator().equals(Constants.CONST_LEAVE_RETURN_INDICATOR_RETURN)))
-				{
-					booLeveApplyAllowed	= true;
-				}
+				
+				booLeveApplyAllowed = leaveAppServiceDao.isNewLeaveAfterReturn(leaveRequests);
+
 				if((maxLeaveRequest.getStatus().getStatusCode().equals(Constants.CONST_LEAVE_STATUS_REJECTED)) && (maxLeaveRequest.getLeaveReturnIndicator().equals(Constants.CONST_LEAVE_RETURN_INDICATOR_LEAVE)))
 				{
 					booLeveApplyAllowed	= true;
 				}
+				
 			}
 			
 			if(leaveRequests.size() == 0)
@@ -281,6 +281,12 @@ public class LeaveAppControllerMain
 			leaveAppModel.setProcessSalaray(Constants.CONST_YES_CAPITAL);
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
+		if(null == paramLeaveExtension || paramLeaveExtension.trim().equals(""))
+		{
+			paramLeaveExtension = "no";
+		}
+		
+	
 		model.addAttribute("empNumber", empNumber);
 		model.addAttribute("leaveTypeFlag",leaveAppServiceDao.getLeaveTypes(employee,locale) );
 		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
@@ -713,6 +719,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("reqNum", requestNo);
 		model.addAttribute("leaveTypeNo", leaveRequest.getLeaveType().getTypeNo());
 		model.addAttribute("daysAllowed", Constants.CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE);
+		model.addAttribute("parmLeaveExtension", "no");
 		return Constants.PAGE_LEAVE_APPLY_FORM;
 	}
 	

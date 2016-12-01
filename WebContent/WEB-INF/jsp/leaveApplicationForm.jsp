@@ -776,7 +776,6 @@ $(function() {
 </script>
 
 </head>
- 
 <portlet:actionURL var="submitRequest">
 	<portlet:param name="action" value="newApply"/>
 		<portlet:param name="operation">

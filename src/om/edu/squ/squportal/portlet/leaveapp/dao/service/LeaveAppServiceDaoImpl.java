@@ -299,6 +299,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 				leaveRequest.setApproverId(leaveAppModel.getApproverEmpNumber());
 			}
 			leaveRequest.setProcessSalaray(leaveAppModel.getProcessSalaray());
+			
 			int result = leaveDbDao.setNewLeaveRequest(leaveRequest,leaveAppModel.getDelegatedEmps(), locale);
 				if (result == 0)
 				{
@@ -523,6 +524,34 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 				result = true;
 			}
 				
+		return result;
+	}
+
+	/**
+	 * 
+	 * method name  : isNewLeaveAfterReturn
+	 * @param leaveRequests
+	 * @return
+	 * LeaveAppServiceDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		:
+	 *
+	 * Date    		:	Nov 29, 2016 12:01:19 PM
+	 */
+	public boolean isNewLeaveAfterReturn(List<LeaveRequest> leaveRequests)
+	{
+		boolean	result = true;
+		
+		for (LeaveRequest leaveReq: leaveRequests )
+		{
+			if(leaveReq.getLeaveReturnIndicator().equals(Constants.CONST_LEAVE_RETURN_INDICATOR_RETURN) && ! leaveReq.getStatus().getStatusCode().equals(Constants.CONST_LEAVE_STATUS_APPROVED))
+			{
+				result = false;
+				break;
+			}
+		}
+		
 		return result;
 	}
 	

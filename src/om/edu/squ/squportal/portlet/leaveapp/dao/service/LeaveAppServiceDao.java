@@ -297,6 +297,20 @@ public interface LeaveAppServiceDao
 	
 	/**
 	 * 
+	 * method name  : isNewLeaveAfterReturn
+	 * @param leaveRequests
+	 * @return
+	 * LeaveAppServiceDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		:
+	 *
+	 * Date    		:	Nov 29, 2016 12:01:19 PM
+	 */
+	public boolean isNewLeaveAfterReturn(List<LeaveRequest> leaveRequests);
+	
+	/**
+	 * 
 	 * method name  : isDaysAfterJoinAllowed
 	 * @param empNumber
 	 * @return

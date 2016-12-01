@@ -101,7 +101,7 @@
                          :paramLocale,
                          'en',initCap(LVSTATUS.VHM_STATUS_DESC),LVSTATUS.VHM_STATUS_DESC_ARABIC
                        ) 																					AS 		LEAVE_STATUS, 
-		        DECODE(																																-- APPROVED AND ALLOWED FOR EXTENSION 
+		        DECODE(																														-- APPROVED AND ALLOWED FOR EXTENSION 
 		               NVL(LVREQ.VHM_STATUS_CODE,'0000000001'),
 		                '0000000002'  
 		                , 
@@ -226,7 +226,7 @@
                        WHERE 											
                          VHM_LEAVE_REQ_NO = LVREQ.VHM_LEAVE_REQ_NO		
                            												
-                     ) 																						AS 		FINAL_STATUS_CODE								
+               ) 																							AS 		FINAL_STATUS_CODE								
 				 FROM 														
 						VHM_EMP_LEAVE_REQUEST LVREQ,						
 						VHM_LEAVE_TYPE_FLAG LVTYPE,							
