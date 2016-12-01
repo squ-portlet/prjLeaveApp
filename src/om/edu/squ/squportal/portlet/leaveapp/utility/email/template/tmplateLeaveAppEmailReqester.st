@@ -1,7 +1,7 @@
 <html>
 	<body>
 		<div dir="ltr" style="direction: ltr">
-			<h1><center> This is a test email. Please process for testing purposes</center> </h1>
+
 			Dear $emailData.emailReceiverNameEn$,<br>
 			<b>$emailData.emailMessage$</b><br><br>
 			
