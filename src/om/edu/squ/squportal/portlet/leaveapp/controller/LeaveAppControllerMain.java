@@ -108,18 +108,11 @@ public class LeaveAppControllerMain
 	{
 		String			empNumber 				=	getEmpNumber(request);
 		boolean			booLeveApplyAllowed		=	false;
-		PortletSession	session					=	request.getPortletSession();
 		Employee		employee				=	leaveAppServiceDao.getEmployee(
 													empNumber, 
 													ldapdao.getCorrectUserName(request.getRemoteUser()) ,
 													locale
 												  );
-		
-		if(null != session.getAttribute("employee"))
-		{
-			session.removeAttribute("employee");
-		}
-		session.setAttribute("employee", employee);
 		List<LeaveRequest>	leaveRequests			=	leaveAppServiceDao.getLeaveRequests(employee,locale, Constants.CONST_USERTYPE_REQUESTER);
 		List<LeaveRequest>	leaveRequestsApprover	=	leaveAppServiceDao.getLeaveRequests(employee,locale, Constants.CONST_USERTYPE_APPROVER);
 
@@ -135,7 +128,6 @@ public class LeaveAppControllerMain
 				{
 					booLeveApplyAllowed	= true;
 				}
-				
 			}
 			
 			if(leaveRequests.size() == 0)
@@ -264,9 +256,13 @@ public class LeaveAppControllerMain
 			@RequestParam("paramLeaveExtension") String paramLeaveExtension,
 			PortletRequest request, Model model,Locale locale)
 	{
-		PortletSession	session	=	request.getPortletSession();
-		Employee	employee	=	(Employee)session.getAttribute("employee");	
-		String		empNumber	=	String.format("%07d", Integer.valueOf(employee.getEmpNumber()));
+		String			empNumber 				=	getEmpNumber(request);
+		Employee		employee				=	leaveAppServiceDao.getEmployee(
+														empNumber, 
+														ldapdao.getCorrectUserName(request.getRemoteUser()) ,
+														locale
+													  );
+		
 		if(!model.containsAttribute("leaveAppModel"))
 		{
 			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
@@ -286,6 +282,7 @@ public class LeaveAppControllerMain
 			paramLeaveExtension = "no";
 		}
 		
+		empNumber	=	String.format("%07d", Integer.valueOf(employee.getEmpNumber()));
 	
 		model.addAttribute("empNumber", empNumber);
 		model.addAttribute("leaveTypeFlag",leaveAppServiceDao.getLeaveTypes(employee,locale) );
@@ -337,11 +334,17 @@ public class LeaveAppControllerMain
 			BindingResult result,Locale locale,Model model
 			)
 	{
-		PortletSession			session					=	request.getPortletSession();
-		Employee				employee				=	(Employee)session.getAttribute("employee");	
+		String					empNumber 				=	getEmpNumber(request);
+		Employee				employee				=	leaveAppServiceDao.getEmployee(
+																empNumber, 
+																ldapdao.getCorrectUserName(request.getRemoteUser()) ,
+																locale
+															  );
+
 		AllowEleaveRequestProc	allowEleaveRequestProc	=	null;
-		String					empNumber				=	String.format("%07d", Integer.valueOf(employee.getEmpNumber()));
+								empNumber				=	String.format("%07d", Integer.valueOf(employee.getEmpNumber()));
 		long					empLeaveBal				=	Long.parseLong(leaveAppServiceDao.getLeaveBalance(empNumber, leaveAppModel.getLeaveStartDate()));
+		
 		leaveAppModel.setLeaveBalance(empLeaveBal);
 		try
 		{
@@ -464,8 +467,13 @@ public class LeaveAppControllerMain
 			Locale locale
 		)
 	{
-		PortletSession			session					=	request.getPortletSession();
-		Employee				employee				=	(Employee)session.getAttribute("employee");	
+		String					empNumber 				=	getEmpNumber(request);
+		Employee				employee				=	leaveAppServiceDao.getEmployee(
+															empNumber, 
+															ldapdao.getCorrectUserName(request.getRemoteUser()) ,
+															locale
+														  );
+		
 		LeaveRequest			leaveRequest	=	leaveAppServiceDao.getLeaveRequest(String.format("%07d", Integer.valueOf(employee.getEmpNumber())), requestNo, locale);
 		if(!model.containsAttribute("leaveAppModel"))
 		{
@@ -524,7 +532,12 @@ public class LeaveAppControllerMain
 			BindingResult result,Locale locale,Model model
 			)
 	{
-		Employee	employee	=	(Employee)request.getPortletSession().getAttribute("employee");
+		String					empNumber 				=	getEmpNumber(request);
+		Employee				employee				=	leaveAppServiceDao.getEmployee(
+																empNumber, 
+																ldapdao.getCorrectUserName(request.getRemoteUser()) ,
+																locale
+															  );
 		
 		new LeaveAppValidatorApprove().validate(leaveAppModel, result);
 		if (result.hasErrors())
@@ -611,9 +624,16 @@ public class LeaveAppControllerMain
 
 		)
 	{
-		String 	requestNo		=	leaveAppModel.getRequestNo();
-		String	actionNo		=	leaveAppModel.getApproverAction();
-		Employee	employee	=	(Employee)request.getPortletSession().getAttribute("employee");
+		String 		requestNo		=	leaveAppModel.getRequestNo();
+		String		actionNo		=	leaveAppModel.getApproverAction();
+
+		String		empNumber 		=	getEmpNumber(request);
+		Employee	employee		=	leaveAppServiceDao.getEmployee(
+														empNumber, 
+														ldapdao.getCorrectUserName(request.getRemoteUser()) ,
+														locale
+													  );		
+
 		int resultApprove = leaveAppServiceDao.setLeaveApprove(requestNo, actionNo, locale, employee);
 		if(resultApprove == 0)
 		{
@@ -678,9 +698,14 @@ public class LeaveAppControllerMain
 									PortletRequest request, Model model,Locale locale
 									)
 	{
-		PortletSession	session	=	request.getPortletSession();
-		Employee	employee	=	(Employee)session.getAttribute("employee");	
-		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(appEmpNo, requestNo, locale);
+		String			empNumber 				=	getEmpNumber(request);
+		Employee		employee				=	leaveAppServiceDao.getEmployee(
+														empNumber, 
+														ldapdao.getCorrectUserName(request.getRemoteUser()) ,
+														locale
+													  );		
+		
+		LeaveRequest		leaveRequest		=	leaveAppServiceDao.getLeaveRequest(appEmpNo, requestNo, locale);
 		
 		if(!model.containsAttribute("leaveAppModel"))
 		{
@@ -743,12 +768,16 @@ public class LeaveAppControllerMain
 			@RequestParam("approverEmpNo") String approverEmpNo,
 			PortletRequest request, Model model,Locale locale)
 	{
-		PortletSession	session			=	request.getPortletSession();
-		Employee	employee			=	(Employee)session.getAttribute("employee");	
-		String		empNumber			=	String.format("%07d", Integer.parseInt(employee.getEmpNumber()));
-		Employee	delegatedEmployee	=	leaveAppServiceDao.getDelegatedEmployeeCurrentDate(approverEmpNo, locale);
+		String			empNumber 				=	getEmpNumber(request);
+		Employee		employee				=	leaveAppServiceDao.getEmployee(
+														empNumber, 
+														ldapdao.getCorrectUserName(request.getRemoteUser()) ,
+														locale
+													  );
+						empNumber				=	String.format("%07d", Integer.parseInt(employee.getEmpNumber()));
+		Employee		delegatedEmployee		=	leaveAppServiceDao.getDelegatedEmployeeCurrentDate(approverEmpNo, locale);
 		
-		LeaveRequest		leaveRequest	=	leaveAppServiceDao.getLeaveRequest(approverEmpNo, requestNum, locale);
+		LeaveRequest	leaveRequest			=	leaveAppServiceDao.getLeaveRequest(approverEmpNo, requestNum, locale);
 		
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		String stringDate = df.format(new Date());
