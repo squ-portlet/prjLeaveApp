@@ -201,48 +201,51 @@
 			});
 			
 			
-			/*Dialog for approve request*/
+			/*Dialog for approve request - dataTableApprover*/
 			$(function() { 
-			    $(".refApproveClass").click(function(event) {
-			    	 								var linkRef     	= this.getAttribute("linkRef");
-			    	 								var varReqNo 		= this.getAttribute("reqNo");
-			    	 								var	varAppActionNum = this.getAttribute("appActionNum");
-			    	 								var msg	     		= '<spring:message code="prop.leave.app.title.request.dialog.approve.msg" arguments="varReqNo"/>';
-			    	 								var msgReplace		=	msg.replace("varReqNo",varReqNo);
-			    	 								$("#dialogApprove").html(msgReplace);
-			    	 								event.preventDefault();
-			    	 								 $("#dialogApprove").closest('.ui-dialog').children('.ui-dialog-titlebar').addClass("dialog-title");
-			    	 								$("#dialogApprove").dialog(
-			                                        {
-			                                        	resizable: false,
-			                                        	width:400,
-			                                        	height:200,
-			                                        	modal: true,
-			                            				close: function(event, ui) {
-			                            					$("#dialogApprove").hide();
-			                            					return false;
-			                            					},
-			                          					buttons: {
-			                          						"<spring:message code='prop.leave.app.title.request.dialog.approve.button.yes'/>": function() {
-			                          							$("#requestNo").val(varReqNo);
-			                          							$("#approverAction").val(varAppActionNum);
-							    	 							$("#leaveAppModel").attr("action", linkRef);
-							    	 							$("#leaveAppModel").submit();
-			                          						$( this ).dialog( "close" );
-			                          						},
-			                          						"<spring:message code='prop.leave.app.title.request.dialog.approve.button.exit'/>": function() {
-			                          							$("#requestNo").val("");
-			                          							$("#approverAction").val("");
-			                          							$("#leaveAppModel").attr("action", "");
-			                          							$( this ).dialog( "close" );
-			                          						}
-			                          						}
-			                                        }		
-			                                        ); 
-			    	                              
-			                                        return false; 
-			                                        
-			                                        });
+				$('#dataTableApprover tbody').on('click', 'tr', function () {
+					    $(".refApproveClass").click(function(event) {
+					    	 								var linkRef     	= this.getAttribute("linkRef");
+					    	 								var varReqNo 		= this.getAttribute("reqNo");
+					    	 								var	varAppActionNum = this.getAttribute("appActionNum");
+					    	 								var msg	     		= '<spring:message code="prop.leave.app.title.request.dialog.approve.msg" arguments="varReqNo"/>';
+					    	 								var msgReplace		=	msg.replace("varReqNo",varReqNo);
+					    	 								$("#dialogApprove").html(msgReplace);
+					    	 								event.preventDefault();
+					    	 								 $("#dialogApprove").closest('.ui-dialog').children('.ui-dialog-titlebar').addClass("dialog-title");
+					    	 								$("#dialogApprove").dialog(
+					                                        {
+					                                        	resizable: false,
+					                                        	width:400,
+					                                        	height:200,
+					                                        	modal: true,
+					                            				close: function(event, ui) {
+					                            					$("#dialogApprove").hide();
+					                            					return false;
+					                            					},
+					                          					buttons: {
+					                          						"<spring:message code='prop.leave.app.title.request.dialog.approve.button.yes'/>": function() {
+					                          							$("#requestNo").val(varReqNo);
+					                          							$("#approverAction").val(varAppActionNum);
+									    	 							$("#leaveAppModel").attr("action", linkRef);
+									    	 							$("#leaveAppModel").submit();
+					                          						$( this ).dialog( "close" );
+					                          						},
+					                          						"<spring:message code='prop.leave.app.title.request.dialog.approve.button.exit'/>": function() {
+					                          							$("#requestNo").val("");
+					                          							$("#approverAction").val("");
+					                          							$("#leaveAppModel").attr("action", "");
+					                          							$( this ).dialog( "close" );
+					                          						}
+					                          						}
+					                                        }		
+					                                        ); 
+					    	                              
+					                                        return false; 
+					                                        
+					                                        });
+					    
+						});
 			}); 
 
 		
@@ -617,10 +620,10 @@
 													<portlet:param name="_approverAction" value="${admActions.actionCode}"/>
 													</portlet:renderURL>
 
-<%-- 													<c:if test="${(admActions.actionCode == leaveActionApprove)}"> --%>
-<%-- 															|&nbsp;&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}" appActionNum="${admActions.actionCode}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		 --%>
-<%-- 														</c:if> --%>
-														<c:if test="${(admActions.actionCode == leaveActionApprove) || (admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">
+													<c:if test="${(admActions.actionCode == leaveActionApprove)}">
+															|&nbsp;&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}" appActionNum="${admActions.actionCode}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		
+														</c:if>
+														<c:if test="${ (admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">
 															&nbsp;&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|
 														</c:if>
 													</c:forEach>
