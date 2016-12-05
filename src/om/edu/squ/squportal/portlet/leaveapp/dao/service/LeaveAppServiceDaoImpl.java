@@ -545,7 +545,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		
 		for (LeaveRequest leaveReq: leaveRequests )
 		{
-			if(leaveReq.getLeaveReturnIndicator().equals(Constants.CONST_LEAVE_RETURN_INDICATOR_RETURN) && ! leaveReq.getStatus().getStatusCode().equals(Constants.CONST_LEAVE_STATUS_APPROVED))
+			if(leaveReq.isLeaveReturn() || (leaveReq.getLeaveReturnIndicator().equals(Constants.CONST_LEAVE_RETURN_INDICATOR_RETURN) && ! leaveReq.getStatus().getStatusCode().equals(Constants.CONST_LEAVE_STATUS_APPROVED)))
 			{
 				result = false;
 				break;

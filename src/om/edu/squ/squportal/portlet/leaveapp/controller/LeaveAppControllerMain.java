@@ -129,12 +129,10 @@ public class LeaveAppControllerMain
 					booLeveApplyAllowed	= true;
 				}
 			}
-			
-			if(leaveRequests.size() == 0)
+			else
 			{
 				booLeveApplyAllowed	= true;
 			}
-
 			
 		}
 		
@@ -626,7 +624,7 @@ public class LeaveAppControllerMain
 	{
 		String 		requestNo		=	leaveAppModel.getRequestNo();
 		String		actionNo		=	leaveAppModel.getApproverAction();
-
+		
 		String		empNumber 		=	getEmpNumber(request);
 		Employee	employee		=	leaveAppServiceDao.getEmployee(
 														empNumber, 
