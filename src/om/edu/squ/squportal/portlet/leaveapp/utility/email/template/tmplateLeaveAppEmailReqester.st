@@ -41,7 +41,7 @@
 		</div>
 		<div dir="rtl" style="direction: rtl">	
 			 
-			&#1578;&#1580;&#1585;&#1610;&#1576;&#1610;&#1577; &#1601;&#1602;&#1591;&#1548; &#1601;&#1585;&#1580;&#1575;&#1569;&#1575; &#1578;&#1580;&#1575;&#1607;&#1604;&#1607;&#1575;</span></center> </h1>
+			
 			<span dir="RTL">&#1593;&#1586;&#1610;&#1586;&#1610;</span> $emailData.emailReceiverNameAr$<br>
 			<b>$emailData.emailMessageAr$</b><br><br>
 			&nbsp;
