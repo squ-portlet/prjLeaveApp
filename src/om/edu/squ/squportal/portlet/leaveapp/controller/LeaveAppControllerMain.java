@@ -842,7 +842,22 @@ public class LeaveAppControllerMain
 		}
 	}
 	
-	
+
+	/**
+	 * 
+	 * method name  : getDepartments
+	 * @param branchCode
+	 * @param request
+	 * @param response
+	 * @param locale
+	 * @throws IOException
+	 * LeaveAppControllerMain
+	 * return type  : void
+	 * 
+	 * purpose		:
+	 *
+	 * Date    		:	Dec 7, 2016 12:54:13 PM
+	 */
 	@ResourceMapping(value="getDepartmentsByAjax")
 	private void getDepartments(
 				@RequestParam("branchCode") String branchCode,

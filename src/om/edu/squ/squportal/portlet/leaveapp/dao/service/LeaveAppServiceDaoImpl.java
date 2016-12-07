@@ -861,7 +861,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 				if  (sequenceNo < leaveDbDao.getMaxLeaveApproverSequence(requestNo))
 				{
 					LeaveApprove	leaveApproveSeq	=	leaveDbDao.getLeaveApproveHistorySequence(requestNo, String.valueOf(sequenceNo+1), locale).get(0);
-					emailLeave	=	new EmailGeneral(true, leaveRequest, leaveApproveSeq, null, emailService, locale);
+					emailLeave	=	new EmailGeneral(true, false, leaveRequest, leaveApproveSeq, null, emailService);
 					result		=	emailLeave.sendEmail(true, true);
 				}
 			}
@@ -879,6 +879,34 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 				}
 		return result;
 	}
+
+	/**
+	 * 
+	 * method name  : sendLeaveReturnEmail
+	 * @param appEmpNumber
+	 * @param requestNo
+	 * @return
+	 * LeaveAppServiceDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: 
+	 *
+	 * Date    		:	Dec 7, 2016 1:40:07 PM
+	 */
+	private boolean sendLeaveReturnEmail(String appEmpNumber,String requestNo)
+	{
+		boolean			result			=	false;
+		EmailLeave		emailLeave		=	null;		
+		LeaveRequest	leaveRequest	=	getLeaveRequest(appEmpNumber, requestNo, new Locale("en"));
+		LeaveApprove	leaveApprove	=	getLeaveApproveHistory(requestNo,appEmpNumber, new Locale("en")).get(0);
+
+						emailLeave		=	new EmailGeneral(false, true, leaveRequest, leaveApprove, null, emailService);
+						result			=	emailLeave.sendEmail(true, true);
+
+		return result;
+	}
+	
+	
 	
 	/**
 	 * 
@@ -951,6 +979,7 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 */
 	public int newLeaveReturn(LeaveAppModel	leaveAppModel)
 	{
+		int 			result			=	0; 
 		LeaveRequest	leaveRequest	=	new LeaveRequest();
 		leaveRequest.setRequestNo(leaveAppModel.getRequestNo());
 		if((null== leaveAppModel.getHod()) && null != leaveAppModel.getApproverEmpNumber())
@@ -963,8 +992,14 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		}
 		leaveRequest.setLeaveReturnDate(leaveAppModel.getLeaveReturnDate());
 		leaveRequest.setLeaveRequestRemarks(leaveAppModel.getLeaveRemarks());
-			
-		return leaveDbDao.newLeaveReturn(leaveRequest);
+		
+		result = leaveDbDao.newLeaveReturn(leaveRequest);
+		
+		if(result !=0)
+		{
+			sendLeaveReturnEmail(leaveRequest.getApproverId(), leaveAppModel.getRequestNo());
+		}
+		return result;
 	}
 }
 

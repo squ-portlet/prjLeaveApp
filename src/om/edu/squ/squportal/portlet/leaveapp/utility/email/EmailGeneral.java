@@ -52,6 +52,7 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 	private	Locale 			locale				=	null;
 	private	boolean			isNewEmail			=	false;
 	private	boolean			isSabbatical		=	false;
+	private	boolean			isLeaveReturn		=	false;
 	
 
 	/**
@@ -109,26 +110,32 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 	 * 
 	 * Constructor
 	 * @param SabbaticalRequired
-	 * @param leaveRequestNo
+	 * @param leaveReturnRequired TODO
 	 * @param leaveRequest
 	 * @param leaveApprove
 	 * @param delegatedEmps
 	 * @param emailService
-	 * @param locale
+	 * @param leaveRequestNo
 	 *
 	 */
 	public EmailGeneral
 	(
-			boolean SabbaticalRequired, LeaveRequest leaveRequest, 
-			LeaveApprove leaveApprove,DelegatedEmp[] delegatedEmps, 
-			EmailService emailService,Locale locale
+			boolean SabbaticalRequired, boolean leaveReturnRequired, 
+			LeaveRequest leaveRequest,LeaveApprove leaveApprove, 
+			DelegatedEmp[] delegatedEmps,EmailService emailService
 	)
 	{
-		this.emailData	=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps,emailService,locale);
-		this.isNewEmail	=	false;
-		isSabbatical	=	SabbaticalRequired;
-		this.locale		=	locale;
+		this.emailData		=	setGeneralEmailData(leaveRequest,leaveApprove,delegatedEmps,emailService,locale);
+		this.isNewEmail		=	false;
+		this.isLeaveReturn	=	leaveReturnRequired;	
+		isSabbatical		=	SabbaticalRequired;
+
 	}
+
+
+
+
+	
 	
 	
 	/**
@@ -160,18 +167,25 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester",null, ARABIC));
 		}
 		else
-		{
-			if(isSabbatical)
-			{
-				this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester.sabbatical",null));
-				this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester.sabbatical",null, ARABIC));
-			}
-				
-			else
-			{
-				this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null));
-				this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null, ARABIC));
-			}
+		{		if(isLeaveReturn)
+				{
+					this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.leave.return.requester",null));
+					this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.leave.return.requester",null, ARABIC));
+				}
+				else
+				{
+					if(isSabbatical)
+					{
+						this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester.sabbatical",null));
+						this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.requester.sabbatical",null, ARABIC));
+					}
+						
+					else
+					{
+						this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null));
+						this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.requester",null, ARABIC));
+					}
+				}
 		}
 		return sendLeaveEmail();
 	}
@@ -206,15 +220,23 @@ public class EmailGeneral extends EmailDataAbstract implements EmailLeave
 		}
 		else 
 		{
-			if(isSabbatical)
+			if(isLeaveReturn)
 			{
-				this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver.sabbatical",null));
-				this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver.sabbatical",null, ARABIC));
+				this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.leave.return.approver",null));
+				this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.leave.return.approver",null, ARABIC));
 			}
 			else
 			{
-				this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null));
-				this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null, ARABIC));
+				if(isSabbatical)
+				{
+					this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver.sabbatical",null));
+					this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.new.approver.sabbatical",null, ARABIC));
+				}
+				else
+				{
+					this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null));
+					this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.return.update.approver",null, ARABIC));
+				}
 			}
 		}
 		return sendLeaveEmail();
