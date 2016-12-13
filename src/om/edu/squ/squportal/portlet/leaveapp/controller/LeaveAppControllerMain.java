@@ -735,8 +735,8 @@ public class LeaveAppControllerMain
 		model.addAttribute("departments",leaveAppServiceDao.getDepartments(employee.getBranchCode(),locale));
 		model.addAttribute("baseHierarchyEmp", Constants.CONST_EMPLOYEE_HIERARCHY_CODE);
 		model.addAttribute("baseLevelEmp", Constants.CONST_EMPLOYEE_LEVEL);
-		model.addAttribute("opMode", Constants.CONST_MODEL_MODE_UPDATE);
-		model.addAttribute("mgrName", leaveAppServiceDao.getManager(employee.getEmpNumber(), locale).getEmpName());
+		model.addAttribute("opMode", Constants.CONST_MODEL_MODE_UPDATE); 
+		model.addAttribute("mgrName", leaveAppServiceDao.getManager(String.format("%07d", Integer.valueOf(empNumber)), locale).getEmpName());
 		model.addAttribute("approver", leaveRequest.getApprove());
 		model.addAttribute("appEmpNo", appEmpNo);
 		model.addAttribute("reqNum", requestNo);
