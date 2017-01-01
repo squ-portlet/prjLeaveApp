@@ -46,6 +46,7 @@ public class LeaveApprove implements Serializable
 	private		String		sectionCode;
 	private		String		approverAction;
 	private		String		approverRemark;
+	private		String		leaveIndicator;					// R = Leave Return & L = Leave Request
 	/**
 	 * Getter Method	: getRequestNo
 	 * @return the requestNo
@@ -206,28 +207,39 @@ public class LeaveApprove implements Serializable
 	{
 		this.approverRemark = approverRemark;
 	}
+	/**
+	 * Getter Method	: getLeaveIndicator
+	 * @return the leaveIndicator
+	 * 
+	 * Date				: Jan 1, 2017
+	 */
+	public String getLeaveIndicator()
+	{
+		return this.leaveIndicator;
+	}
+	/**
+	 * Setter method : setLeaveIndicator
+	 * @param leaveIndicator the leaveIndicator to set
+	 * 
+	 * Date          : Jan 1, 2017 11:31:44 AM
+	 */
+	public void setLeaveIndicator(String leaveIndicator)
+	{
+		this.leaveIndicator = leaveIndicator;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString()
 	{
-		return "LeaveApprove ["
-				+ (this.requestNo != null ? "requestNo=" + this.requestNo
-						+ ", " : "")
-				+ (this.action != null ? "action=" + this.action + ", " : "")
-				+ (this.employee != null ? "employee=" + this.employee + ", "
-						: "")
-				+ (this.branchCode != null ? "branchCode=" + this.branchCode
-						+ ", " : "")
-				+ (this.departmentCode != null ? "departmentCode="
-						+ this.departmentCode + ", " : "")
-				+ (this.sectionCode != null ? "sectionCode=" + this.sectionCode
-						+ ", " : "")
-				+ (this.approverAction != null ? "approverAction="
-						+ this.approverAction + ", " : "")
-				+ (this.approverRemark != null ? "approverRemark="
-						+ this.approverRemark : "") + "]";
+		return "LeaveApprove [requestNo=" + this.requestNo + ", action="
+				+ this.action + ", employee=" + this.employee + ", branchCode="
+				+ this.branchCode + ", departmentCode=" + this.departmentCode
+				+ ", sectionCode=" + this.sectionCode + ", approverAction="
+				+ this.approverAction + ", approverRemark="
+				+ this.approverRemark + ", leaveIndicator="
+				+ this.leaveIndicator + "]";
 	}
 	
 	

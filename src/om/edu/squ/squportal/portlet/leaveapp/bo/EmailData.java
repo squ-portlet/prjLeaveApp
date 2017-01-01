@@ -62,6 +62,7 @@ public class EmailData
 	private	String	leaveUrl;
 	private	String	emailMessage;
 	private	String	emailMessageAr;
+	private	String	leaveIndicator;
 	
 	
 	/**
@@ -604,66 +605,57 @@ public class EmailData
 	{
 		this.emailMessageAr = emailMessageAr;
 	}
+	
+	/**
+	 * Getter Method	: getLeaveIndicator
+	 * @return the leaveIndicator
+	 * 
+	 * Date				: Jan 1, 2017
+	 */
+	public String getLeaveIndicator()
+	{
+		return this.leaveIndicator;
+	}
+	/**
+	 * Setter method : setLeaveIndicator
+	 * @param leaveIndicator the leaveIndicator to set
+	 * 
+	 * Date          : Jan 1, 2017 12:06:39 PM
+	 */
+	public void setLeaveIndicator(String leaveIndicator)
+	{
+		this.leaveIndicator = leaveIndicator;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString()
 	{
-		return "EmailData ["
-				+ (this.mailTo != null ? "mailTo=" + this.mailTo + ", " : "")
-				+ (this.mailFrom != null ? "mailFrom=" + this.mailFrom + ", "
-						: "")
-				+ (this.emailReceiverName != null ? "emailReceiverName="
-						+ this.emailReceiverName + ", " : "")
-				+ (this.emailReceiverNameEn != null ? "emailReceiverNameEn="
-						+ this.emailReceiverNameEn + ", " : "")
-				+ (this.emailReceiverNameAr != null ? "emailReceiverNameAr="
-						+ this.emailReceiverNameAr + ", " : "")
-				+ (this.emailTemplateName != null ? "emailTemplateName="
-						+ this.emailTemplateName + ", " : "")
-				+ (this.requestNo != null ? "requestNo=" + this.requestNo
-						+ ", " : "")
-				+ (this.requesterName != null ? "requesterName="
-						+ this.requesterName + ", " : "")
-				+ (this.requesterNameAr != null ? "requesterNameAr="
-						+ this.requesterNameAr + ", " : "")
-				+ (this.requesterEmail != null ? "requesterEmail="
-						+ this.requesterEmail + ", " : "")
-				+ (this.requestDate != null ? "requestDate=" + this.requestDate
-						+ ", " : "")
-				+ (this.requestStartDate != null ? "requestStartDate="
-						+ this.requestStartDate + ", " : "")
-				+ (this.requestEndDate != null ? "requestEndDate="
-						+ this.requestEndDate + ", " : "")
-				+ (this.requesterRemark != null ? "requesterRemark="
-						+ this.requesterRemark + ", " : "")
-				+ (this.delegationAvilable != null ? "delegationAvilable="
-						+ this.delegationAvilable + ", " : "")
-				+ (this.delegationDetails != null ? "delegationDetails="
-						+ this.delegationDetails + ", " : "")
-				+ (this.delegateName != null ? "delegateName="
-						+ this.delegateName + ", " : "")
-				+ (this.delegationStartDate != null ? "delegationStartDate="
-						+ this.delegationStartDate + ", " : "")
-				+ (this.delegationEndDate != null ? "delegationEndDate="
-						+ this.delegationEndDate + ", " : "")
-				+ (this.approverName != null ? "approverName="
-						+ this.approverName + ", " : "")
-				+ (this.approverNameAr != null ? "approverNameAr="
-						+ this.approverNameAr + ", " : "")
-				+ (this.approverEmail != null ? "approverEmail="
-						+ this.approverEmail + ", " : "")
-				+ (this.approveDate != null ? "approveDate=" + this.approveDate
-						+ ", " : "")
-				+ (this.approverRemark != null ? "approverRemark="
-						+ this.approverRemark + ", " : "")
-				+ (this.leaveUrl != null ? "leaveUrl=" + this.leaveUrl + ", "
-						: "")
-				+ (this.emailMessage != null ? "emailMessage="
-						+ this.emailMessage + ", " : "")
-				+ (this.emailMessageAr != null ? "emailMessageAr="
-						+ this.emailMessageAr : "") + "]";
+		return "EmailData [mailTo=" + this.mailTo + ", mailFrom="
+				+ this.mailFrom + ", emailReceiverName="
+				+ this.emailReceiverName + ", emailReceiverNameEn="
+				+ this.emailReceiverNameEn + ", emailReceiverNameAr="
+				+ this.emailReceiverNameAr + ", emailTemplateName="
+				+ this.emailTemplateName + ", requestNo=" + this.requestNo
+				+ ", requesterName=" + this.requesterName
+				+ ", requesterNameAr=" + this.requesterNameAr
+				+ ", requesterEmail=" + this.requesterEmail + ", requestDate="
+				+ this.requestDate + ", requestStartDate="
+				+ this.requestStartDate + ", requestEndDate="
+				+ this.requestEndDate + ", requesterRemark="
+				+ this.requesterRemark + ", delegationAvilable="
+				+ this.delegationAvilable + ", delegationDetails="
+				+ this.delegationDetails + ", delegateName="
+				+ this.delegateName + ", delegationStartDate="
+				+ this.delegationStartDate + ", delegationEndDate="
+				+ this.delegationEndDate + ", approverName="
+				+ this.approverName + ", approverNameAr=" + this.approverNameAr
+				+ ", approverEmail=" + this.approverEmail + ", approveDate="
+				+ this.approveDate + ", approverRemark=" + this.approverRemark
+				+ ", leaveUrl=" + this.leaveUrl + ", emailMessage="
+				+ this.emailMessage + ", emailMessageAr=" + this.emailMessageAr
+				+ ", leaveIndicator=" + this.leaveIndicator + "]";
 	}
 	
 	

@@ -5,7 +5,7 @@
 			Dear $emailData.emailReceiverNameEn$,<br>
 			<b>$emailData.emailMessage$</b><br><br>
 			
-			Details of the leave application are as below : <br><br>
+			Details of the leave request are as below : <br><br>
 			
 			Request No : $emailData.requestNo$ <br><br>
 			
@@ -40,7 +40,7 @@
 		<hr>
 	<br>
 	
-	<!--  microsoft front page to design/modify -->
+	<!--  microsoft front page or expression web to design/modify -->
 	
 	<div dir="rtl" style="direction: rtl">
 		

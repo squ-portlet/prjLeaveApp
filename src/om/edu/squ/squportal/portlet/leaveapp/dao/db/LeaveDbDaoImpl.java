@@ -1807,6 +1807,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				
 				approve.setAction(action);
 				approve.setEmployee(employee);
+				approve.setLeaveIndicator(rs.getString(Constants.CONST_LEAVE_RETURN_INDICATOR));
 				
 				return approve;
 			}

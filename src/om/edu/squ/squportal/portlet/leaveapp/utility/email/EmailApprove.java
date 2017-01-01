@@ -89,8 +89,17 @@ public class EmailApprove extends EmailDataAbstract implements EmailLeave
 		this.emailData.setEmailReceiverNameEn(getEmpRequester().getEmpNameEn());
 		this.emailData.setEmailReceiverNameAr(getEmpRequester().getEmpNameAr());
 		this.emailData.setEmailTemplateName(emailTemplateRequesterPath);	
-		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.approve.requester",null));
-		this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.approve.requester",null, ARABIC));
+		if(this.emailData.getLeaveIndicator().equals(Constants.CONST_LEAVE_RETURN_INDICATOR_RETURN))
+		{
+			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.leave.return.approve.requester",null));
+			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.leave.return.approve.requester",null, ARABIC));
+		}
+		else
+		{
+			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.approve.requester",null));
+			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.approve.requester",null, ARABIC));
+		}
+
 		return sendLeaveEmail();
 	}
 
@@ -110,8 +119,18 @@ public class EmailApprove extends EmailDataAbstract implements EmailLeave
 		this.emailData.setEmailReceiverNameEn(getEmpApprover().getEmpNameEn());
 		this.emailData.setEmailReceiverNameAr(getEmpApprover().getEmpNameAr());
 		this.emailData.setEmailTemplateName(emailTemplateApproverPath);	
-		this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.approve.approver",null));
-		this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.approve.approver",null,ARABIC));
+		if(this.emailData.getLeaveIndicator().equals(Constants.CONST_LEAVE_RETURN_INDICATOR_RETURN))
+		{
+			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.leave.return.approve.approver",null));
+			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.leave.return.approve.approver",null,ARABIC));
+		}
+		else
+		{
+			this.emailData.setEmailMessage(UtilProperty.getMessage("prop.leave.app.email.template.msg.approve.approver",null));
+			this.emailData.setEmailMessageAr(UtilProperty.getMessage("prop.leave.app.email.template.msg.approve.approver",null,ARABIC));
+		}
+		
+		
 		return sendLeaveEmail();
 	}
 

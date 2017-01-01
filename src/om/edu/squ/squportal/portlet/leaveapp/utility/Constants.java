@@ -885,7 +885,7 @@ public interface Constants
 	public static final String	SQL_LEAVE_APPROVE_HISTORY_EMPLOYEE_NUM	=	" SELECT													" +
 																			"	VHM_APP_EMP_CODE AS EMP_CODE,							" +
 																			"	DECODE(													" +
-																			"	      :paramLocale,												" +
+																			"	      :paramLocale,										" +
 																			"	      'en',initcap(EMP.VHM_EMP_NAME),					" +
 																			"	      'ar',EMP.VHM_EMP_NAME_ARABIC						" +
 																			"	      ) AS EMP_NAME,									" +
@@ -902,7 +902,8 @@ public interface Constants
 																			"	  'en',initCap(VHM_ACTION_DESC),						" +
 																			"	  'ar',VHM_ACTION_DESC_ARABIC							" +
 																			"	) AS ACTION_DESC,										" +
-																			"	VHM_APP_REMARKS AS APPROVER_REMARK						" +
+																			"	VHM_APP_REMARKS AS APPROVER_REMARK,						" +
+																			"	VHM_LEAVE_REQ_RTN_IND  AS  LEAVE_RETURN_INDICATOR		" +
 																			"	FROM VHM_EMP_LEAVE_REQUEST_APPROVAL APP,				" +
 																			"	VHM_WORKFLOW_ACTIONS WFACTION,							" +
 																			"	VHM_EMPLOYEE EMP										" +
