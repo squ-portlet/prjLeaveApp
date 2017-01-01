@@ -150,28 +150,22 @@ $(function() {
 		</legend>
 			<fieldset style="padding-top=0;margin-top=0;">
 				<legend><spring:message code="prop.leave.app.apply.form.required.details"/></legend>
-				<table cellspacing="0" cellpadding="0" border="1" width="100%">
+				<table cellspacing="0" cellpadding="0"  width="100%">
 					<tr>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.request.no"/>:
-							</span>
-						</th> 
+						<td>
+								<b><spring:message code="prop.leave.app.apply.form.request.no"/>:</b>
+						</td> 
 						<td><c:out value="${leaveRequest.requestNo}"/></td>
 
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.request.date"/>:
-							</span>
-						</th>
+						<td>
+							<b><spring:message code="prop.leave.app.apply.form.request.date"/>:</b>
+						</td>
 						<td><c:out value="${leaveRequest.requestDate}"/></td>
 					</tr>
 					<tr>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.leave.type"/>:
-							</span>
-						</th>
+						<td>
+							<b><spring:message code="prop.leave.app.apply.form.leave.type"/>:</b>
+						</td>
 						<td >
 							<c:out value="${leaveRequest.leaveType.typeDesc}"/>
 							<c:if test="${leaveRequest.leaveTypeFlag.typeNo == 'B'}">
@@ -180,11 +174,9 @@ $(function() {
 						</td>
 					<c:if test="${leaveRequest.leaveTypeFlag.typeNo == 'A' && not empty leaveRequest.leaveDateDuration}">
 						<c:if test="${leaveRequest.leaveDateDuration > 14}">
-							<th class="PortletHeaderColor">
-								<span class="PortletHeaderText">
-									<spring:message code="prop.leave.app.apply.form.salary.advance"/>:
-								</span>
-							</th>
+							<td >
+									<b><spring:message code="prop.leave.app.apply.form.salary.advance"/>:</b>
+							</td>
 							<td>
 								<c:choose>
 									<c:when test="${leaveRequest.processSalaray == 'Y'}">
@@ -199,26 +191,20 @@ $(function() {
 					</c:if>
 					</tr>
 					<tr>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.leave.start.date"/>:
-							</span>
-						</th>
+						<td >
+							<b><spring:message code="prop.leave.app.apply.form.leave.start.date"/>:</b>
+						</td>
 						<td><c:out value="${leaveRequest.leaveStartDate}"/></td>
 
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.leave.end.date"/>:
-							</span>
-						</th>
+						<td >
+							<b><spring:message code="prop.leave.app.apply.form.leave.end.date"/>:</b>
+						</td>
 						<td><c:out value="${leaveRequest.leaveEndDate}"/></td>
 					</tr>
 					<tr>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.leave.remarks"/>:
-							</span>
-						</th>
+						<td>
+							<b><spring:message code="prop.leave.app.apply.form.leave.remarks"/>:</b>
+						</td>
 						<td colspan="3">
 						<c:choose>
 							<c:when test="${not empty leaveRequest.leaveRequestRemarks}">
@@ -232,7 +218,7 @@ $(function() {
 					</tr>
 					<c:if test="${not empty leaveRequest.leaveReturnDate}">
 						<tr>
-							<th><font color="red"><spring:message code="prop.leave.app.return.date"/></font></th>
+							<td><b><font color="red"><spring:message code="prop.leave.app.return.date"/></font></b></td>
 							<td><c:out value="${leaveRequest.leaveReturnDate}"/></td>
 						</tr>
 					</c:if>
@@ -243,38 +229,32 @@ $(function() {
 				<legend>
 					<spring:message code="prop.leave.app.apply.form.requester.details"/>
 				</legend>
-				<table cellspacing="0" cellpadding="0" border="1" width="100%">
+				<table cellspacing="0" cellpadding="0"  width="100%">
 					<tr>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.requester.name"/>
-							</span>
-						</th>
+						<td >
+							<b><spring:message code="prop.leave.app.apply.form.requester.name"/></b>
+						</td>
 						<td><c:out value="${leaveRequest.employee.empName}"/></td>
 						<td></td>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.requester.squ.id"/>
-							</span>
-						</th>
+						<td>
+							<b><spring:message code="prop.leave.app.apply.form.requester.squ.id"/></b>
+						</td>
 						<td><c:out value="${leaveRequest.employee.empInternetId}"/> / (<c:out value="${leaveRequest.employee.empNumber}"/>)</td>
 					</tr>
 					<tr>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.requester.job.title"/>
-							</span>
-						</th>
+						<td>
+							<b><spring:message code="prop.leave.app.apply.form.requester.job.title"/></b>
+						</td>
 						<td><c:out value="${leaveRequest.employee.designation}"/></td>
 						<td></td>
 
 <!-- Temporary blocking display of Grade  --  Code Start -->						
 
-						<th class="PortletHeaderColor">
-<!-- 							<span class="PortletHeaderText"> -->
+						<td>
+<!-- 							 -->
 <%-- 								<spring:message code="prop.leave.app.apply.form.requester.grade"/>: --%>
-<!-- 							</span> -->
-						</th>
+<!-- 							 -->
+						</td>
 						<td>
 <%-- 							<c:out value="${leaveRequest.employee.grade}"/> (<c:out value="${leaveRequest.employee.gradeShort}"/>) --%>
 						</td>
@@ -283,18 +263,14 @@ $(function() {
 						
 					</tr>
 					<tr>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.requester.branch"/>
-							</span>
-						</th>
+						<td>
+							<b><spring:message code="prop.leave.app.apply.form.requester.branch"/></b>
+						</td>
 						<td><c:out value="${leaveRequest.employee.branch}"/></td>
 						<td></td>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.requester.department"/>
-							</span>
-						</th>
+						<td>
+							<b><spring:message code="prop.leave.app.apply.form.requester.department"/></b>
+						</td>
 						<td>
 							<c:if test="not empty leaveRequest.employee.department2">
 								(<font color="red"><c:out value="${leaveRequest.employee.department2}"/></font>)
@@ -305,18 +281,13 @@ $(function() {
 						</td>
 					</tr>
 					<tr>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.requester.section"/>:
-							</span>
-						</th>
+						<td><b><spring:message code="prop.leave.app.apply.form.requester.section"/>:</b>
+						</td>
 						<td><c:out value="${leaveRequest.employee.section}"/></td>
 						<td></td>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
-								<spring:message code="prop.leave.app.apply.form.requester.doa"/>
-							</span>
-						</th>
+						<td>
+							<b><spring:message code="prop.leave.app.apply.form.requester.doa"/></b>
+						</td>
 						<td><c:out value="${leaveRequest.employee.joinDt}"/></td>
 					</tr>						
 				</table>
@@ -329,22 +300,22 @@ $(function() {
 				<legend>
 					<spring:message code="prop.leave.app.apply.form.delegated.employees"/>
 				</legend>
-				<table cellspacing="0" cellpadding="0" border="1" width="100%">
+				<table class="table table-bordered" width="100%">
 					<tr>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
+						<th >
+							
 								<spring:message code="prop.leave.app.apply.form.delegated.date.from"/>
-							</span>
+							
 						</th>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
+						<th >
+							
 								<spring:message code="prop.leave.app.apply.form.delegated.date.to"/>
-							</span>
+							
 						</th>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
+						<th >
+							
 								<spring:message code="prop.leave.app.apply.form.delegated.emp.code"/>
-							</span>
+							
 						</th>
 					</tr>
 						<c:forEach items="${delegatedEmps}" var="delgEmp">
@@ -366,22 +337,22 @@ $(function() {
 			<div>
 			<fieldset>
 				<legend><spring:message code="prop.leave.app.form.requester.history.details"/></legend>
-				<table cellspacing="0" cellpadding="0" border="1" width="100%">
+				<table class="table table-bordered" width="100%">
 					<tr>
-						<th  class="PortletHeaderColor">
-							<span class="PortletHeaderText">
+						<th  >
+							
 								<spring:message code="prop.leave.app.form.requester.history.date"/>
-							</span>
+							
 						</th>
-						<th  class="PortletHeaderColor">
-							<span class="PortletHeaderText">
+						<th  >
+							
 								<spring:message code="prop.leave.app.form.requester.history.status"/>
-							</span>
+							
 						</th>
-						<th  class="PortletHeaderColor">
-							<span class="PortletHeaderText">
+						<th  >
+							
 								<spring:message code="prop.leave.app.form.requester.history.remarks"/>
-							</span>
+							
 						</th>
 					</tr>
 					<c:forEach items="${leaveHistory}" var="lhis">
@@ -411,27 +382,27 @@ $(function() {
 			<div>
 			<fieldset>
 					<legend><spring:message code="prop.leave.app.apply.form.approvar.history.details"/></legend>
-				<table cellspacing="0" cellpadding="0" border="1" width="100%">
+				<table class="table table-bordered"  width="100%">
 					<tr>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
+						<th >
+							
 								<spring:message code="prop.leave.app.apply.form.approvar.name"/>
-							</span>
+							
 						</th>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
+						<th >
+							
 								<spring:message code="prop.leave.app.apply.form.approvar.date"/>
-							</span>
+							
 						</th>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
+						<th >
+							
 								<spring:message code="prop.leave.app.apply.form.approvar.action"/>
-							</span>
+							
 						</th>
-						<th class="PortletHeaderColor">
-							<span class="PortletHeaderText">
+						<th >
+							
 								<spring:message code="prop.leave.app.apply.form.approvar.approver"/>
-							</span>
+							
 						</th>	
 					</tr>
 					<c:forEach items="${appHistory}" var="appHis">
