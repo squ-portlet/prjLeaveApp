@@ -100,6 +100,8 @@ public interface Constants
 	public static final	String	CONST_LEAVE_RETURN_ELIGIBLE		=			"RETURN_ELIGIBLE";
 	public static final	String	CONST_LEAVE_RETURN_INDICATOR	=			"LEAVE_RETURN_INDICATOR";
 	public static final	String	CONST_FINAL_STATUS_CODE			=			"FINAL_STATUS_CODE";
+	public static final	String	CONST_LEAVE_BALANCE_START		=			"LEAVE_BALANCE_START";
+	public static final	String	CONST_LEAVE_BALANCE_END			=			"LEAVE_BALANCE_END";
 	
 	public static final	String	CONST_LEAVE_TYPE				=			"LEAVE_TYPE";
 	public static final	String	CONST_LEAVE_DESC				=			"LEAVE_DESC";
@@ -807,7 +809,15 @@ public interface Constants
 																			"	EMP.VHM_EMP_DEPT_CODE AS EMP_APP_DEPARTMENT_CODE,       " +
 																			"	EMP.VHM_EMP_SECTION_CODE AS EMP_APP_SECTION_CODE,		" +
 																			"	LVAPRV.VHM_APP_EMP_CODE AS EMP_APP_CODE,				" +
-																			"	LVREQ.VHM_PROCESS_SAL_YN AS LEAVE_PROCESS_SALARY		" +
+																			"	LVREQ.VHM_PROCESS_SAL_YN AS LEAVE_PROCESS_SALARY,		" +
+																			"   LEAVE_AVAIL (											" +
+																			"   	LPAD(LVREQ.VHM_EMP_CODE,7,0),							" +
+																			"   	TO_DATE(TO_CHAR(LVREQ.VHM_LEAVE_START_DATE-1,'dd/mm/yyyy'),'dd/mm/yyyy')  " +
+																			" 		) 							AS LEAVE_BALANCE_START,	" +
+																			"   LEAVE_AVAIL (											" +
+																			"   	LPAD(LVREQ.VHM_EMP_CODE,7,0),							" +
+																			"   	TO_DATE(TO_CHAR(LVREQ.VHM_LEAVE_END_DATE+1,'dd/mm/yyyy'),'dd/mm/yyyy') 	" +
+																			" 		) 							AS LEAVE_BALANCE_END	" +
 																			"	FROM													" + 
 																			"	  VHM_EMP_LEAVE_REQUEST LVREQ,							" +
 																			"	  VHM_WORKFLOW_STATUS LVSTAT,							" +

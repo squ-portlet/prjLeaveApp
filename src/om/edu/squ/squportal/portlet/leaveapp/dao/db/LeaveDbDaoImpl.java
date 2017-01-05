@@ -1641,6 +1641,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 						returnApprove.setEmployee(empAppLeaveReturn);
 						leaveRequest.setReturnApprove(returnApprove);
 					}
+					leaveRequest.setLeaveBalanceStart(rs.getInt(Constants.CONST_LEAVE_BALANCE_START));
+					leaveRequest.setLeaveBalanceEnd(rs.getInt(Constants.CONST_LEAVE_BALANCE_END));
 
 				return leaveRequest;
 			
@@ -1656,7 +1658,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveApprove.setEmployee(empApprover);
 		
 		leaveRequestResult.setApprove(leaveApprove);
-					
+		
 		return leaveRequestResult;
 		
 	}

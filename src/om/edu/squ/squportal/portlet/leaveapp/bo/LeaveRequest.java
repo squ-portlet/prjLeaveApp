@@ -68,6 +68,8 @@ public class LeaveRequest implements Serializable
 	private String			leaveReturnIndicator;
 	private	boolean			allowLeaveExtension;
 	private	String			leaveExtnStartDate;
+	private	int				leaveBalanceStart;
+	private	int				leaveBalanceEnd;
 	
 	
 	/**
@@ -635,6 +637,46 @@ public class LeaveRequest implements Serializable
 	{
 		this.leaveExtnStartDate = leaveExtnStartDate;
 	}
+	/**
+	 * Getter Method	: getLeaveBalanceStart
+	 * @return the leaveBalanceStart
+	 * 
+	 * Date				: Jan 5, 2017
+	 */
+	public int getLeaveBalanceStart()
+	{
+		return this.leaveBalanceStart;
+	}
+	/**
+	 * Setter method : setLeaveBalanceStart
+	 * @param leaveBalanceStart the leaveBalanceStart to set
+	 * 
+	 * Date          : Jan 5, 2017 12:11:50 PM
+	 */
+	public void setLeaveBalanceStart(int leaveBalanceStart)
+	{
+		this.leaveBalanceStart = leaveBalanceStart;
+	}
+	/**
+	 * Getter Method	: getLeaveBalanceEnd
+	 * @return the leaveBalanceEnd
+	 * 
+	 * Date				: Jan 5, 2017
+	 */
+	public int getLeaveBalanceEnd()
+	{
+		return this.leaveBalanceEnd;
+	}
+	/**
+	 * Setter method : setLeaveBalanceEnd
+	 * @param leaveBalanceEnd the leaveBalanceEnd to set
+	 * 
+	 * Date          : Jan 5, 2017 12:11:50 PM
+	 */
+	public void setLeaveBalanceEnd(int leaveBalanceEnd)
+	{
+		this.leaveBalanceEnd = leaveBalanceEnd;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -663,7 +705,9 @@ public class LeaveRequest implements Serializable
 				+ this.processSalaray + ", leaveReturn=" + this.leaveReturn
 				+ ", leaveReturnIndicator=" + this.leaveReturnIndicator
 				+ ", allowLeaveExtension=" + this.allowLeaveExtension
-				+ ", leaveExtnStartDate=" + this.leaveExtnStartDate + "]";
+				+ ", leaveExtnStartDate=" + this.leaveExtnStartDate
+				+ ", leaveBalanceStart=" + this.leaveBalanceStart
+				+ ", leaveBalanceEnd=" + this.leaveBalanceEnd + "]";
 	}
 	
 	
