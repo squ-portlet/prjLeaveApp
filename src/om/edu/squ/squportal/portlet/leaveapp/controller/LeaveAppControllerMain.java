@@ -366,6 +366,7 @@ public class LeaveAppControllerMain
 			! requestNo.trim().equals(Constants.CONST_NOT_AVAILABLE) )
 			{
 				response.setRenderParameter("reqNum", requestNo);
+				response.setRenderParameter("appEmpNo", leaveAppModel.getApproverEmpNumber());
 				response.setRenderParameter("action", "updateLeaveApply");
 			}
 			else
@@ -702,7 +703,6 @@ public class LeaveAppControllerMain
 														ldapdao.getCorrectUserName(request.getRemoteUser()) ,
 														locale
 													  );		
-		
 		LeaveRequest		leaveRequest		=	leaveAppServiceDao.getLeaveRequest(appEmpNo, requestNo, locale);
 		
 		if(!model.containsAttribute("leaveAppModel"))
