@@ -105,6 +105,11 @@ public class EmailDataAbstract
 		this.emailData.setApproverName(empApprover.getEmpNameEn());
 		this.emailData.setApproverNameAr(empApprover.getEmpNameAr());
 		this.emailData.setApproverEmail(empApprover.getEmpInternetId()+"@squ.edu.om");
+		if(null != leaveApprove.getApproverRemark())
+		{
+			this.emailData.setApproverRemark(leaveApprove.getApproverRemark());
+		}
+		
 		this.emailData.setLeaveIndicator(leaveApprove.getLeaveIndicator());
 		this.emailData.setEmailTemplateName(emailTemplatePath);	
 		this.emailData.setLeaveUrl(Constants.LEAVE_URL);
