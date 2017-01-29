@@ -1005,8 +1005,7 @@ $(function() {
 
 			</table>
 
-
-		<c:if test="${(employee.hierarchyLevelCode != baseLevelEmp) || (not empty (employee.hierarchyAddlLevelCode) != baseLevelEmp)}" >		
+		<c:if test="${(employee.hierarchyLevelCode != baseLevelEmp) || (not empty (employee.hierarchyAddlLevelCode) && (employee.hierarchyAddlLevelCode != baseLevelEmp))}" >	
 		<br>
 			<table cellspacing="0" cellpadding="0" border="1" width="100%" style="margin: 1em;">
 				<caption>
@@ -1081,6 +1080,9 @@ $(function() {
 					</td>
 				</tr>
 			</table>
+			
+			
+			
 		</c:if>
 		
 		<table cellspacing="0" cellpadding="0" border="1" width="100%">
