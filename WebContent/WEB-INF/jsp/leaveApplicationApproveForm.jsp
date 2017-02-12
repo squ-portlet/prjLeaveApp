@@ -264,6 +264,16 @@ http://designwithpc.com/Plugins/ddSlick
 						<td><c:out value="${leaveRequest.leaveEndDate}"/></td>
 					</tr>
 					<tr>
+						<th><spring:message code="prop.leave.app.apply.form.leave.duration"/></th>
+						<td><c:out value="${leaveRequest.leaveDateDuration}"/> <spring:message code="prop.leave.app.apply.form.leave.balance.days"/></td>
+						<td>&nbsp;</td>
+						<th><spring:message code="prop.leave.app.leave.balance"/></th>
+						<td>
+							<spring:message code="prop.leave.app.before.leave"/> :  <b>${leaveRequest.leaveBalanceStart}</b> <spring:message code="prop.leave.app.apply.form.leave.balance.days"/>
+						</td>
+						
+					</tr>
+					<tr>
 						<th class="PortletHeaderColor">
 							<span class="PortletHeaderText">
 								<spring:message code="prop.leave.app.apply.form.leave.remarks"/>:
