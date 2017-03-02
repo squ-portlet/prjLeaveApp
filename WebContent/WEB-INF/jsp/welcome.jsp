@@ -382,7 +382,18 @@
 									<a href="${varLeaveApprove}"><font color="red"><c:out value="${req.requestNo}"/></font></a>
 								</c:when>
 								<c:otherwise>
-									<c:out value="${req.requestNo}"/> - <b><c:out value="${req.leaveReturnIndicator}"/></b> &nbsp;
+									<c:out value="${req.requestNo}"/> - 
+									<b>
+										<c:choose>
+											<c:when test="${req.leaveExtended}">
+												<c:out value="${leaveExtensionSymbol}"></c:out>
+											</c:when>
+											<c:otherwise>
+												<c:out value="${req.leaveReturnIndicator}"/>
+											</c:otherwise>
+										</c:choose>
+										
+									</b> &nbsp;
 								</c:otherwise>
 							</c:choose>
 						</td>
@@ -461,7 +472,7 @@
 										<c:if test="${(req.status.statusCode eq leaveStatusRejected) && (not empty req.returnApprove.employee.empNumber) && (req.finalStatusCode != leaveStatusApproved) }">
 											| <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text.color.red"/></a> 
 										</c:if> 
-										<c:if test="${(req.allowLeaveExtension) }">
+										<c:if test="${(req.allowLeaveExtension) && not (req.leaveExtended)}">
 										| <a href="${newApplyExtension}"><spring:message code="prop.leave.app.title.request.extension"/></a> 
 										</c:if>
 									</c:when>
@@ -475,7 +486,7 @@
 										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" appEmpNo="${req.approve.employee.empNumber}" indexRef="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
 									</c:otherwise>
 								</c:choose>
-								<c:if test="${req.leaveReturn && (empty req.returnApprove.employee.empNumber)}">
+								<c:if test="${req.leaveReturn && (empty req.returnApprove.employee.empNumber) && not (req.leaveExtended)}">
 									 | <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text"/></a>
 								</c:if>
 								

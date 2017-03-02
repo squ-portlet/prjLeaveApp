@@ -545,16 +545,54 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		
 		for (LeaveRequest leaveReq: leaveRequests )
 		{
-			if(leaveReq.isLeaveReturn() || (leaveReq.getLeaveReturnIndicator().equals(Constants.CONST_LEAVE_RETURN_INDICATOR_RETURN) && ! leaveReq.getStatus().getStatusCode().equals(Constants.CONST_LEAVE_STATUS_APPROVED)))
+			if(leaveReq.isLeaveExtended())
+			{
+				result = true;
+				break;
+			}
+			if(
+					leaveReq.isLeaveReturn() || 
+					(
+							leaveReq.getLeaveReturnIndicator().equals(Constants.CONST_LEAVE_RETURN_INDICATOR_RETURN) && ! leaveReq.getStatus().getStatusCode().equals(Constants.CONST_LEAVE_STATUS_APPROVED) 
+					)
+					
+			 )
 			{
 				result = false;
+				break;
+			}
+
+		}
+		return result;
+	}
+	
+	/**
+	 * 
+	 * method name  : isExtendedLeaves
+	 * @param leaveRequests
+	 * @return
+	 * LeaveAppServiceDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: Get status of extended leave (consider to make the leave apply button visible without leave return approve)
+	 *
+	 * Date    		:	Mar 2, 2017 10:37:36 AM
+	 */
+	public boolean isExtendedLeaves(List<LeaveRequest> leaveRequests)
+	{
+		boolean	result = false;
+		
+		for (LeaveRequest leaveReq: leaveRequests )
+		{
+			if(leaveReq.isLeaveExtended())
+			{
+				result = true;
 				break;
 			}
 		}
 		
 		return result;
 	}
-	
 	
 	/**
 	 * 

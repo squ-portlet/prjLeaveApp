@@ -233,7 +233,8 @@
                        WHERE 											
                          VHM_LEAVE_REQ_NO = LVREQ.VHM_LEAVE_REQ_NO		
                            												
-               ) 																							AS 		FINAL_STATUS_CODE								
+               ) 																							AS 		FINAL_STATUS_CODE,
+              NVL(LVREQ.VHM_EXTENDED_YN,'N')																AS		IS_LEAVE_EXTENDED 								
 				 FROM 														
 						VHM_EMP_LEAVE_REQUEST LVREQ,						
 						VHM_LEAVE_TYPE_FLAG LVTYPE,							
@@ -391,7 +392,8 @@
                  					APP.VHM_APP_SEQ_NO,						
                  					LVREQ.VHM_LEAVE_REQ_NO					
                  				) 																			AS 	SAB_ACTION_LOWER,
-                 	NVL(APP.VHM_LEAVE_REQ_RTN_IND,'L') 														AS 	LEAVE_RETURN_INDICATOR  						
+                 	NVL(APP.VHM_LEAVE_REQ_RTN_IND,'L') 														AS 	LEAVE_RETURN_INDICATOR,
+                 	NVL(LVREQ.VHM_EXTENDED_YN,'N')															AS	IS_LEAVE_EXTENDED   						
 						
 				FROM 														
 					VHM_EMP_LEAVE_REQUEST LVREQ,						
@@ -525,5 +527,8 @@
      	]]>
      </entry>
      
-     
+     <entry key="select.function.update.extended.flag">
+     	SELECT upd_extended_leave(:paramReqNo) FROM DUAL
+     </entry>
+
 </properties>

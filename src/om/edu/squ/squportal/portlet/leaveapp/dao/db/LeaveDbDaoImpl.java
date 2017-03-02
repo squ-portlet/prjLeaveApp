@@ -1170,7 +1170,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 			result =  this.namedParameterJdbcTemplate.update(Constants.SQL_INSERT_LEAVE_REQUEST, namedParameters);
 
 			/***************** SENDING E-MAIL TO REQUESTER & APPROVER  FOR NEW LEAVE REQUEST*****************/
-
+				try
+				{
 					emailGeneral	=	new	EmailGeneral
 									(
 											leaveRequestNo,
@@ -1182,6 +1183,11 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 					emailLeave.sendRequesterEmail();
 					emailLeave.sendApproverEmail();
+				}
+				catch(Exception ex)
+				{
+					logger.error("Error in Email Sending : "+ex.getMessage());
+				}
 			/**************************************************************/			
 			
 			if(null != delegatedEmps)
@@ -1484,7 +1490,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 				}
 		if(userType.equals(Constants.CONST_USERTYPE_REQUESTER))
 		{
-				if(rs.getInt(Constants.CONST_LEAVE_RETURN_ELIGIBLE) == 1 )
+				if(rs.getInt(Constants.CONST_LEAVE_RETURN_ELIGIBLE) == 1 ) 
 				{
 					leaveRequest.setLeaveReturn(true);
 				}
@@ -1508,10 +1514,14 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		}
 
 		leaveRequest.setLeaveReturnIndicator(rs.getString(Constants.CONST_LEAVE_RETURN_INDICATOR));	
+		if(rs.getString(Constants.CONST_LEAVE_IS_LEAVE_EXTENDED).equals(Constants.CONST_YES_CAPITAL))
+		{
+			leaveRequest.setLeaveExtended(true);
+		}
 				return leaveRequest;
 			}
 		};
-		
+
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 		namedParameters.put("paramLocale", locale.getLanguage());
 		namedParameters.put("paramEmpNumber", employee.getEmpNumber());
@@ -2117,6 +2127,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	@Transactional("trLeaveAprv")
 	public synchronized int setLeaveApprove(LeaveApprove approve)
 	{
+		String SELECT_FUNCTION_LEAVE_EXTENDED_FLAG	=	queryPropsLeave.getProperty(Constants.CONST_SELECT_FUNCTION_LEAVE_EXTENDED_FLAG);
+		
 		int result	=	0;
 		int result2	=	0;
 		
@@ -2126,6 +2138,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 		Map<String,String> namedParameters 	= 	new HashMap<String,String>();
 			namedParameters.put("paramReqNo", approve.getRequestNo());
+			
+			result =  this.namedParameterJdbcTemplate.update(SELECT_FUNCTION_LEAVE_EXTENDED_FLAG,namedParameters );					/** Update flag for leave extension */
+			
 			namedParameters.put("paramEmpNo", employee.getEmpNumber());
 			namedParameters.put("paramActionCode",approve.getApproverAction());
 			namedParameters.put("paramApprvRemark", approve.getApproverRemark());

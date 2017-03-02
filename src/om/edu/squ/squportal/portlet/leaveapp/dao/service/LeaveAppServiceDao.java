@@ -308,6 +308,20 @@ public interface LeaveAppServiceDao
 	 * Date    		:	Nov 29, 2016 12:01:19 PM
 	 */
 	public boolean isNewLeaveAfterReturn(List<LeaveRequest> leaveRequests);
+
+	/**
+	 * 
+	 * method name  : isExtendedLeaves
+	 * @param leaveRequests
+	 * @return
+	 * LeaveAppServiceDaoImpl
+	 * return type  : boolean
+	 * 
+	 * purpose		: Get status of extended leave (consider to make the leave apply button visible without leave return approve)
+	 *
+	 * Date    		:	Mar 2, 2017 10:37:36 AM
+	 */
+	public boolean isExtendedLeaves(List<LeaveRequest> leaveRequests);
 	
 	/**
 	 * 
