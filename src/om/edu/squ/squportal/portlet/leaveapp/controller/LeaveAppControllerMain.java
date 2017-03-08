@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -759,12 +760,13 @@ public class LeaveAppControllerMain
 	 * purpose		: Rendering of leave return
 	 *
 	 * Date    		:	Jun 2, 2016 12:18:14 PM
+	 * @throws ParseException 
 	 */
 	@RequestMapping(params="action=leaveReturn")
 	private String leaveReturnApply(
 			@RequestParam("requestNo") String requestNum,
 			@RequestParam("approverEmpNo") String approverEmpNo,
-			PortletRequest request, Model model,Locale locale)
+			PortletRequest request, Model model,Locale locale) throws ParseException
 	{
 		String			empNumber 				=	getEmpNumber(request);
 		Employee		employee				=	leaveAppServiceDao.getEmployee(
@@ -777,8 +779,15 @@ public class LeaveAppControllerMain
 		
 		LeaveRequest	leaveRequest			=	leaveAppServiceDao.getLeaveRequest(approverEmpNo, requestNum, locale);
 		
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		String stringDate = df.format(new Date());
+		DateFormat 	df 					= 	new SimpleDateFormat("dd/MM/yyyy");
+		String 		stringDate 			= 	df.format(new Date());
+		Date 		leaveEndDate		=	df.parse(leaveRequest.getLeaveEndDate());
+		Calendar	cal					=	Calendar.getInstance();
+					cal.setTime(leaveEndDate);
+					cal.add(Calendar.DATE,1);
+		Date 		leaveEndDateAdd 	= cal.getTime();
+		
+		String 		expectedReturnDate 	= df.format(leaveEndDateAdd);
 		
 		if(!model.containsAttribute("leaveAppModel"))
 		{
@@ -792,7 +801,7 @@ public class LeaveAppControllerMain
 			{
 				leaveAppModel.setApproverEmpNumber(delegatedEmployee.getEmpNumber());
 			}
-			leaveAppModel.setLeaveReturnDate(stringDate);
+			leaveAppModel.setLeaveReturnDate(expectedReturnDate);
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
 		
