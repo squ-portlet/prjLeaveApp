@@ -41,7 +41,6 @@ import java.util.Locale;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
-import javax.portlet.PortletSession;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
@@ -122,8 +121,8 @@ public class LeaveAppControllerMain
 			{
 				LeaveRequest maxLeaveRequest	=	(LeaveRequest) leaveRequests.get(0);
 				
-				booLeveApplyAllowed = leaveAppServiceDao.isNewLeaveAfterReturn(leaveRequests);
-
+				booLeveApplyAllowed = (leaveAppServiceDao.isNewLeaveAfterReturn(leaveRequests));
+				
 				if((maxLeaveRequest.getStatus().getStatusCode().equals(Constants.CONST_LEAVE_STATUS_REJECTED)) && (maxLeaveRequest.getLeaveReturnIndicator().equals(Constants.CONST_LEAVE_RETURN_INDICATOR_LEAVE)))
 				{
 					booLeveApplyAllowed	= true;
@@ -135,7 +134,7 @@ public class LeaveAppControllerMain
 			}
 			
 		}
-		
+
 		if(!model.containsAttribute("leaveAppModel"))
 		{
 			LeaveAppModel	leaveAppModel	=	new LeaveAppModel();
@@ -181,9 +180,10 @@ public class LeaveAppControllerMain
 				
 			}
 		}
-		
+		model.addAttribute("leaveExtensionSymbol", Constants.CONST_LEAVE_EXTENSION_SYMBOL);
 		
 		return Constants.PAGE_WELCOME;
+		
 	}
 	
 	/**

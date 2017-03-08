@@ -102,6 +102,7 @@ public interface Constants
 	public static final	String	CONST_FINAL_STATUS_CODE			=			"FINAL_STATUS_CODE";
 	public static final	String	CONST_LEAVE_BALANCE_START		=			"LEAVE_BALANCE_START";
 	public static final	String	CONST_LEAVE_BALANCE_END			=			"LEAVE_BALANCE_END";
+	public static final	String	CONST_LEAVE_IS_LEAVE_EXTENDED	=			"IS_LEAVE_EXTENDED";
 	
 	public static final	String	CONST_LEAVE_TYPE				=			"LEAVE_TYPE";
 	public static final	String	CONST_LEAVE_DESC				=			"LEAVE_DESC";
@@ -200,6 +201,7 @@ public interface Constants
 	public static final String	CONST_LEAVE_RETURN_INDICATOR_LEAVE	 	=		"L";
 	public static final	int		CONST_EMP_DAYS_AFTER_JOIN_LIMIT			=		90;
 	
+	public static final	String	CONST_LEAVE_EXTENSION_SYMBOL			=		"E";
 	
 	/******************************************************/
 	
@@ -305,6 +307,8 @@ public interface Constants
 	
 	public static 	String	CONST_SELECT_DAYS_AFTER_JOIN					=			"select.days.after.join";
 	public static 	String	CONST_SELECT_IS_END_OF_SERVICE					=			"select.is.end.of.service";
+	
+	public static 	String	CONST_SELECT_FUNCTION_LEAVE_EXTENDED_FLAG		=			"select.function.update.extended.flag";
 	
 	
 	/**********CONSTANTS - SQL - QUERY PROPERTY- NAME - LEAVE RETURN - **************/	

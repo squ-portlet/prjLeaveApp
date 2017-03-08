@@ -70,6 +70,7 @@ public class LeaveRequest implements Serializable
 	private	String			leaveExtnStartDate;
 	private	int				leaveBalanceStart;
 	private	int				leaveBalanceEnd;
+	private	boolean			leaveExtended;
 	
 	
 	/**
@@ -677,12 +678,30 @@ public class LeaveRequest implements Serializable
 	{
 		this.leaveBalanceEnd = leaveBalanceEnd;
 	}
+	
+	/**
+	 * Getter Method	: isLeaveExtended
+	 * @return the leaveExtended
+	 * 
+	 * Date				: Mar 2, 2017
+	 */
+	public boolean isLeaveExtended() {
+		return this.leaveExtended;
+	}
+	/**
+	 * Setter method : setLeaveExtended
+	 * @param leaveExtended the leaveExtended to set
+	 * 
+	 * Date          : Mar 2, 2017 9:48:03 AM
+	 */
+	public void setLeaveExtended(boolean leaveExtended) {
+		this.leaveExtended = leaveExtended;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "LeaveRequest [requestNo=" + this.requestNo + ", requestDate="
 				+ this.requestDate + ", leaveStartDate=" + this.leaveStartDate
 				+ ", leaveEndDate=" + this.leaveEndDate
@@ -707,7 +726,8 @@ public class LeaveRequest implements Serializable
 				+ ", allowLeaveExtension=" + this.allowLeaveExtension
 				+ ", leaveExtnStartDate=" + this.leaveExtnStartDate
 				+ ", leaveBalanceStart=" + this.leaveBalanceStart
-				+ ", leaveBalanceEnd=" + this.leaveBalanceEnd + "]";
+				+ ", leaveBalanceEnd=" + this.leaveBalanceEnd
+				+ ", leaveExtended=" + this.leaveExtended + "]";
 	}
 	
 	
