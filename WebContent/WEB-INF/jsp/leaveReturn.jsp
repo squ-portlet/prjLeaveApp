@@ -173,11 +173,15 @@ $(function(){
 		}
 		
 	});
+	
+	validateReturnDate();
 });
 
 
 	function validateReturnDate()
 	{
+		
+		var addDay		=1;
 		var	fromDtStr	= "${leaveRequest.leaveStartDate}";
 		var	toDtStr		= "${leaveRequest.leaveEndDate}";
 		
@@ -200,7 +204,26 @@ $(function(){
 			$("#divLeaveReturnMsg").html("");
 		}
 		
+		if(toDate.getDay() == 4)
+		{
+			addDay = 3;
+		}
+		else
+		{
+			addDay = 1;
+		}
 		
+
+		if(returnDate > toDate.setDate((toDate.getDate()+addDay)))
+		{
+			  $("#browserCompAdv").html('&nbsp;<spring:message code="warn.prop.leave.return.delay"/> &nbsp;');
+			  $("#browserCompAdv").show();
+		}
+		else
+		{
+				$("#browserCompAdv").html('');
+			  	$("#browserCompAdv").hide();
+		}
 		
 	}
 
@@ -513,11 +536,27 @@ $(function() {
 	<portlet:param name="action" value="leaveReturn"/>
 </portlet:actionURL>
 
+<c:choose>
+	<c:when test="${request.returnDelay}">
+		<c:set value="" var="varHtmlDisplayReturnWarn"></c:set>
+	</c:when>
+	<c:otherwise>
+		<c:set value="style='display:none;'" var="varHtmlDisplayReturnWarn"></c:set>
+	</c:otherwise>
+</c:choose>
 
 
 <div id="dialogDate" class="dialogApproveClass" title='<spring:message code="error.prop.leave.app.warning.dialogue.title"/>' style="display:none;"></div>
 
 <form:form modelAttribute="leaveAppModel"  action="${submitRequest}" method="post" htmlEscape="false" >
+		<center>
+				<div id="browserCompAdv" class="alert alert-warning" role="alert"  ${varHtmlDisplayReturnWarn}>
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<c:if test="${request.returnDelay}">
+							<spring:message code="warn.prop.leave.return.delay"/>
+						</c:if>
+				</div>
+		</center>
 <form:hidden path="approverEmpNumber" />
 <form:hidden path="requestNo" />
 	<center><form:errors path="*"  cssClass="alert alert-danger" role="alert"/></center>
