@@ -1,4 +1,7 @@
 create or replace function calc_actual_leave_bal_func(ecode varchar2, sdate date)  return number is
+/*
+This function calculates the leave balance
+*/
 
    LEAVE_DAYS      NUMBER(9,2);
    EFFECTIVE_DT    DATE;
