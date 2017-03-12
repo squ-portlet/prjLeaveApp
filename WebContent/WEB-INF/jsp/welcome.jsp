@@ -325,7 +325,7 @@
 			<table border="1" style="border:1px solid;  border-collapse: collapse; " width="100%" id="dataTableRequester" class=" table table-striped table-bordered dt-responsive nowrap collapsed ">
 				<thead>
 					<tr>
-							 	<th  class="PortletHeaderColor PortletHeaderText"><!-- spring:message code="prop.leave.app.title.request.no"/--></th>
+							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.type"/></th>
 							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.start.date"/></th>
 							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
 							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
@@ -514,7 +514,7 @@
 		<table border="1" style="border:1px solid;  border-collapse: collapse;" width="100%" id="dataTableApprover" class=" table table-striped table-bordered dt-responsive nowrap collapsed ">
 			<thead>
 				<tr>
-						 	<th  class="PortletHeaderColor PortletHeaderText"><!-- spring:message code="prop.leave.app.title.request.no"/--></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.type"/></th>
 						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.start.date"/></th>
 						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
 						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
