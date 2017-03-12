@@ -330,7 +330,6 @@
 							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
 							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
 							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.status"/></th>
-							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.approver"/></th>
 							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.action"/></th>
 					</tr>
 				</thead>
@@ -422,9 +421,6 @@
 								
 							</c:choose>
 							
-						</td>
-						<td>
-							<c:out value="${req.approve.employee.empName}"/>
 						</td>
 						<td>
 								<portlet:renderURL var="varLeaveView">
