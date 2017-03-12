@@ -181,6 +181,8 @@ public class LeaveAppControllerMain
 				
 			}
 		}
+		model.addAttribute("leaveApplicationSymbol", Constants.CONST_LEAVE_RETURN_INDICATOR_LEAVE);
+		model.addAttribute("leaveReturnSymbol", Constants.CONST_LEAVE_RETURN_INDICATOR_RETURN);
 		model.addAttribute("leaveExtensionSymbol", Constants.CONST_LEAVE_EXTENSION_SYMBOL);
 		
 		return Constants.PAGE_WELCOME;
