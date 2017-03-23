@@ -138,7 +138,6 @@
 				</div>
 		</center>
 	</div>
-<%-- <c:catch var="e"> --%>
 
 
 		<c:if test="${not empty allowELeaveRequestMsg}">
@@ -325,12 +324,11 @@
 			<table border="1" style="border:1px solid;  border-collapse: collapse; " width="100%" id="dataTableRequester" class=" table table-striped table-bordered dt-responsive nowrap collapsed ">
 				<thead>
 					<tr>
-							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.no"/></th>
+							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.type"/></th>
 							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.start.date"/></th>
 							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
 							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
 							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.status"/></th>
-							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.approver"/></th>
 							 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.action"/></th>
 					</tr>
 				</thead>
@@ -382,14 +380,19 @@
 									<a href="${varLeaveApprove}"><font color="red"><c:out value="${req.requestNo}"/></font></a>
 								</c:when>
 								<c:otherwise>
-									<c:out value="${req.requestNo}"/> - 
+<%-- 									<c:out value="${req.requestNo}"/> -  --%>
 									<b>
 										<c:choose>
 											<c:when test="${req.leaveExtended}">
-												<c:out value="${leaveExtensionSymbol}"></c:out>
+												<spring:message code="prop.leave.app.symbol.E.text"/>
 											</c:when>
 											<c:otherwise>
-												<c:out value="${req.leaveReturnIndicator}"/>
+												<c:if test="${req.leaveReturnIndicator eq leaveApplicationSymbol}">
+													<spring:message code="prop.leave.app.symbol.L.text"/>
+												</c:if>
+												<c:if test="${req.leaveReturnIndicator eq leaveReturnSymbol}">
+													<spring:message code="prop.leave.app.symbol.R.text"/>
+												</c:if>
 											</c:otherwise>
 										</c:choose>
 										
@@ -417,9 +420,6 @@
 								
 							</c:choose>
 							
-						</td>
-						<td>
-							<c:out value="${req.approve.employee.empName}"/>
 						</td>
 						<td>
 								<portlet:renderURL var="varLeaveView">
@@ -513,7 +513,7 @@
 		<table border="1" style="border:1px solid;  border-collapse: collapse;" width="100%" id="dataTableApprover" class=" table table-striped table-bordered dt-responsive nowrap collapsed ">
 			<thead>
 				<tr>
-						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.no"/></th>
+						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.type"/></th>
 						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.start.date"/></th>
 						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.end.date"/></th>
 						 	<th  class="PortletHeaderColor PortletHeaderText"><spring:message code="prop.leave.app.title.request.leave.type"/></th>
@@ -555,12 +555,31 @@
 			
 			<tr>
 					<td class="clsNum">
+					
 						<c:choose>
-							<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber) && (req.sabbaticalLowerApproverAction && ! ((req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected))))}">
-								<a href="${varLeaveApprove}"><font color="red"><c:out value="${req.requestNo}"/></font> - <b><c:out value="${req.leaveReturnIndicator}"/></b> &nbsp; </a>
+							<c:when test="${req.leaveExtended}">
+								<spring:message code="prop.leave.app.symbol.E.text" var="varLeaveSymbol"/>
 							</c:when>
 							<c:otherwise>
-								<c:out value="${req.requestNo}"/> - <b><c:out value="${req.leaveReturnIndicator}"/></b> &nbsp;
+								<c:if test="${req.leaveReturnIndicator eq leaveApplicationSymbol}">
+									<spring:message code="prop.leave.app.symbol.L.text" var="varLeaveSymbol"/>
+								</c:if>
+								<c:if test="${req.leaveReturnIndicator eq leaveReturnSymbol}">
+									<spring:message code="prop.leave.app.symbol.R.text" var="varLeaveSymbol"/>
+								</c:if>
+							</c:otherwise>
+						</c:choose>
+					
+						<c:choose>
+							<c:when test="${(req.employee.senior && (req.employee.empNumber != empNumber) && (req.sabbaticalLowerApproverAction && ! ((req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected))))}">
+								<a href="${varLeaveApprove}">
+<%-- 										<font color="red"><c:out value="${req.requestNo}"/></font> - <b><c:out value="${req.leaveReturnIndicator}"/></b> &nbsp;  --%>
+										<font color="red"><c:out value="${varLeaveSymbol}"/></font>
+								</a>
+							</c:when>
+							<c:otherwise>
+<%-- 								<c:out value="${req.requestNo}"/> - <b><c:out value="${req.leaveReturnIndicator}"/></b> &nbsp; --%>
+								<c:out value="${varLeaveSymbol}"/>
 							</c:otherwise>
 						</c:choose>
 					</td>
