@@ -203,6 +203,8 @@ public interface Constants
 	
 	public static final	String	CONST_LEAVE_EXTENSION_SYMBOL			=		"E";
 	
+	public static final	String	CONST_TEST_TEXT_MSG_FROM_ACTION			=	"testActionMsg";
+	
 	/******************************************************/
 	
 	
@@ -314,7 +316,6 @@ public interface Constants
 	/**********CONSTANTS - SQL - QUERY PROPERTY- NAME - LEAVE RETURN - **************/	
 	public static 	String	CONST_SELECT_RETURN_ELIGIBLE					=			"select.return.eligible";
 	public static 	String	CONST_LEAVE_RETURN_NEW							=			"update.leave.return.new";
-	
 	
 	/**********SQL**********************************/
 

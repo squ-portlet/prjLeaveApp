@@ -791,6 +791,10 @@ $(function() {
 <portlet:renderURL var="backToMain">
 	<portlet:param name="action" value="backToMain"/>
 </portlet:renderURL>
+<portlet:renderURL var="varDefaultUrl">
+	<portlet:param name="action" value=""/>
+	<portlet:param name="msgDisplayAction" value="${testActionMsg}"/>
+</portlet:renderURL>
 
 <div >
 	<a class="button btn btn-primary" style="width: 100 px; " href="${backToMain}">
@@ -804,7 +808,7 @@ $(function() {
 
 <form:form modelAttribute="leaveAppModel"  action="${submitRequest}" method="post" htmlEscape="false" >
 <form:hidden path="approverEmpNumber" />
-
+<form:hidden path="renderUrlText" value="${varDefaultUrl}"/>
 	<div id="browserCompAdv" style="display:none;">
 		<center>
 				<div class="alert alert-warning" role="alert">

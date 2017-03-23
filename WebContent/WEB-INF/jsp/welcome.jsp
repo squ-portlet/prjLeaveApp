@@ -138,7 +138,6 @@
 				</div>
 		</center>
 	</div>
-<%-- <c:catch var="e"> --%>
 
 
 		<c:if test="${not empty allowELeaveRequestMsg}">

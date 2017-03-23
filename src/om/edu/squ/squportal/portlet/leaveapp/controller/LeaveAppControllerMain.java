@@ -42,6 +42,7 @@ import java.util.Locale;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
@@ -69,7 +70,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
+
+import com.liferay.portal.kernel.util.WebKeys;
 
 /**
  * @author Bhabesh
@@ -104,7 +108,7 @@ public class LeaveAppControllerMain
 	 * Date    		:	Aug 7, 2012 1:05:54 PM
 	 */
 	@RequestMapping
-	private String welcome(PortletRequest request, Model model, Locale locale)
+	private String welcome(@RequestParam(defaultValue="") String msgDisplayAction, PortletRequest request, Model model, Locale locale)
 	{
 		String			empNumber 				=	getEmpNumber(request);
 		boolean			booLeveApplyAllowed		=	false;
@@ -116,6 +120,11 @@ public class LeaveAppControllerMain
 		List<LeaveRequest>	leaveRequests			=	leaveAppServiceDao.getLeaveRequests(employee,locale, Constants.CONST_USERTYPE_REQUESTER);
 		List<LeaveRequest>	leaveRequestsApprover	=	leaveAppServiceDao.getLeaveRequests(employee,locale, Constants.CONST_USERTYPE_APPROVER);
 
+		if(!msgDisplayAction.equals(""))
+		{
+			model.addAttribute(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG,msgDisplayAction);
+		}
+		
 		if(null != leaveRequests )
 		{
 			if(leaveRequests.size() != 0)
@@ -302,6 +311,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("leaveTypeNo", Constants.CONST_NOT_AVAILABLE);
 		model.addAttribute("daysAllowed", Constants.CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE);
 		model.addAttribute("parmLeaveExtension", paramLeaveExtension);
+		model.addAttribute("testActionMsg", Constants.CONST_TEST_TEXT_MSG_FROM_ACTION);
 		return Constants.PAGE_LEAVE_APPLY_FORM;
 	}
 
@@ -322,6 +332,7 @@ public class LeaveAppControllerMain
 	 * purpose		: Submission of leave request
 	 *
 	 * Date    		:	Sep 1, 2012 12:31:53 PM
+	 * @throws IOException 
 	 */
 	@RequestMapping (params="action=newApply")
 	private void submitLeave(
@@ -330,11 +341,12 @@ public class LeaveAppControllerMain
 			@RequestParam("leaveTypeNo") String leaveTypeNo,
 			@RequestParam("parmLeaveExtension") String parmLeaveExtension,
 			ActionRequest request,
-			ActionResponse response, PortletRequest req, 
+			ActionResponse response, PortletRequest req, PortletResponse res,
 			@ModelAttribute("leaveAppModel") LeaveAppModel leaveAppModel,
-			BindingResult result,Locale locale,Model model
-			)
+			BindingResult result,SessionStatus status,Locale locale,Model model
+			) throws IOException
 	{
+		String					txtRenderUrl			=	leaveAppModel.getRenderUrlText();
 		String					empNumber 				=	getEmpNumber(request);
 		Employee				employee				=	leaveAppServiceDao.getEmployee(
 																empNumber, 
@@ -347,6 +359,7 @@ public class LeaveAppControllerMain
 		long					empLeaveBal				=	Long.parseLong(leaveAppServiceDao.getLeaveBalance(empNumber, leaveAppModel.getLeaveStartDate()));
 		
 		leaveAppModel.setLeaveBalance(empLeaveBal);
+		
 		try
 		{
 			allowEleaveRequestProc	=	leaveAppServiceDao.getAllowEleaveRequest (requestNo,leaveAppModel,employee, locale);
@@ -399,7 +412,8 @@ public class LeaveAppControllerMain
 			{
 					try
 					{
-						response.setRenderParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowEleaveRequestProc.getLeaveMessage());
+						model.addAttribute(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowEleaveRequestProc.getLeaveMessage());
+						txtRenderUrl = txtRenderUrl.replace(Constants.CONST_TEST_TEXT_MSG_FROM_ACTION, allowEleaveRequestProc.getLeaveMessage());
 					}
 					catch(NullPointerException nEx)
 					{
@@ -408,10 +422,14 @@ public class LeaveAppControllerMain
 			}
 			else if(operation.equals(Constants.CONST_OPERATION_UPDATE))
 			{
-				response.setRenderParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowEleaveRequestProc.getLeaveMessage());
+				model.addAttribute(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowEleaveRequestProc.getLeaveMessage());
+				txtRenderUrl = txtRenderUrl.replace(Constants.CONST_TEST_TEXT_MSG_FROM_ACTION, allowEleaveRequestProc.getLeaveMessage());
 
 			}
-			response.setRenderParameter("action", "backToMain");
+			request.setAttribute("testAttr", "testMessage");
+			response.sendRedirect(txtRenderUrl);
+			
+			
 		}
 		
 	}
@@ -525,6 +543,7 @@ public class LeaveAppControllerMain
 	 * purpose		: leave approve 
 	 *
 	 * Date    		:	Dec 9, 2012 2:36:22 PM
+	 * @throws IOException 
 	 */
 	@RequestMapping(params="action=leaveApprove")
 	private void leaveApplicationApprove(
@@ -532,7 +551,7 @@ public class LeaveAppControllerMain
 			ActionResponse response, PortletRequest req, 
 			@ModelAttribute("leaveAppModel") LeaveAppModel leaveAppModel,
 			BindingResult result,Locale locale,Model model
-			)
+			) throws IOException
 	{
 		String					empNumber 				=	getEmpNumber(request);
 		Employee				employee				=	leaveAppServiceDao.getEmployee(
@@ -557,8 +576,14 @@ public class LeaveAppControllerMain
 											Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, 
 											UtilProperty.getMessage("error.prop.leave.app.update.blocked", null, locale
 								));
+				response.setRenderParameter("action", "backToMain");
 			}
-			response.setRenderParameter("action", "backToMain");
+			else
+			{
+				response.sendRedirect("/leave-application");
+			}
+			
+			
 		}
 	}
 	
@@ -615,6 +640,7 @@ public class LeaveAppControllerMain
 	 * purpose		: action taken from data grid itself
 	 *
 	 * Date    		:	Jan 9, 2013 2:00:01 PM
+	 * @throws IOException 
 	 */
 	@RequestMapping(params="action=leaveAutoAdminAction")
 	private void leaveAppAutoAdminAction 
@@ -624,7 +650,7 @@ public class LeaveAppControllerMain
 				@ModelAttribute("leaveAppModel") LeaveAppModel leaveAppModel,
 				BindingResult result,Locale locale,Model model
 
-		)
+		) throws IOException
 	{
 		String 		requestNo		=	leaveAppModel.getRequestNo();
 		String		actionNo		=	leaveAppModel.getApproverAction();
@@ -637,15 +663,19 @@ public class LeaveAppControllerMain
 													  );		
 
 		int resultApprove = leaveAppServiceDao.setLeaveApprove(requestNo, actionNo, locale, employee);
+		
 		if(resultApprove == 0)
 		{
 			response.setRenderParameter(
 										Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, 
 										UtilProperty.getMessage("error.prop.leave.app.update.blocked", null, locale
 							));
+			response.setRenderParameter("action", "backToMain");
 		}
-
-		response.setRenderParameter("action", "backToMain");
+		else
+		{
+			response.sendRedirect("/leave-application");	
+		}
 	}
 	
 	
@@ -667,6 +697,8 @@ public class LeaveAppControllerMain
 								PortletRequest request, Model model, Locale locale
 							)
 	{
+		
+		/*
 		if(null != request.getParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG))
 		{
 			String allowELeaveRequestMsg	=	request.getParameter(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG);
@@ -675,7 +707,8 @@ public class LeaveAppControllerMain
 				model.addAttribute(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowELeaveRequestMsg);
 			}
 		}
-		return welcome(request,model,locale);
+		*/
+		return welcome("",request,model,locale);
 	}
 
 	
@@ -746,6 +779,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("leaveTypeNo", leaveRequest.getLeaveType().getTypeNo());
 		model.addAttribute("daysAllowed", Constants.CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE);
 		model.addAttribute("parmLeaveExtension", "no");
+		model.addAttribute("testActionMsg", Constants.CONST_TEST_TEXT_MSG_FROM_ACTION);
 		return Constants.PAGE_LEAVE_APPLY_FORM;
 	}
 	
