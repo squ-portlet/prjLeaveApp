@@ -904,7 +904,7 @@ $(function() {
 				<tr>
 					<td>
 						<span class="PortletHeaderText">
-							<spring:message code="prop.leave.app.apply.form.requester.approver.selection"/>
+
 						</span>
 					</td>
 					<td>
@@ -1005,6 +1005,11 @@ $(function() {
 						</div>	
 <!-- Accordion end -->
 					</td>
+				</tr>
+<!-- Create some space -->
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
 				</tr>
 
 			</table>
