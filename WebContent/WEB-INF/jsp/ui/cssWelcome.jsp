@@ -126,6 +126,16 @@
     color:red !important;
 }
 
+/* Below code for changing background color of the pagination */
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #f0efef;
+    border-color: #337ab7;
+}
+
+
 </style>
 
 <script>

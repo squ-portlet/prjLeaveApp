@@ -1,0 +1,15 @@
+4 April 2017
+-------------------------------------------------------------------
+1) Welcome page : 
+ Button : Apply for a leave application - Apply for leave
+2) Pagination color : Background : Same as header (gray)
+Leave Application Form
+-------------------------
+3) Calander color is red - squ website color green/golden
+4) label 'Select Approver from the list below' - Select Approver
+5) Left panel 'Select Approver' - remove it
+6) Top Heading 'Select approver' - Make it proper Camel case i.e. Select Approver  ('A' capital)
+7) Make space below and above the list of approvers
+-------------------
+Approver List
+8) 'Actions' - Check before  action
