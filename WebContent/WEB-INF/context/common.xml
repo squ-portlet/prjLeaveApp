@@ -116,6 +116,8 @@
  	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="java:comp/env/jdbc/hrmscl"/>
 	</bean>
+ 
+ 
  	
 	<tx:annotation-driven/>
 	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

@@ -143,7 +143,7 @@
 		<c:if test="${not empty allowELeaveRequestMsg}">
 		<div class="alert alert-warning" role="alert">
 			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-			<c:out value="${allowELeaveRequestMsg}"/></div>
+			<c:out value='${allowELeaveRequestMsg}' escapeXml="false"/></div>
 		</c:if>
 		
 		

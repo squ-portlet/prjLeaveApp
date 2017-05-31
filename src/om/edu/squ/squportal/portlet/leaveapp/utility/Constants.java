@@ -280,7 +280,8 @@ public interface Constants
 	//public	static	String	RESOURCE_PROPERTY_FILE_NAME					=			"mailProp";
 	public	static	String	MAIL_SMTP_HOST									=			"smtpHost";
 	public	static	String	MAIL_SMTP_PORT									=			"smtpPort";
-	public	static	String	MAIL_FROM										=			"portal_feedback@squ.edu.om";
+	public	static	String	MAIL_FROM										=			"noreply@squ.edu.om";
+	public	static	String	MAIL_FROM_USER									=			"Personnel Affairs Dept.";
 	public	static	String	MAIL_SUBJECT									=			"Leave application.";
 	public	static	String	MAIL_REQUEST_NO									=			" Request No: ";
 	public	static	boolean	IS_MAIL_SEND_ON									=			true;

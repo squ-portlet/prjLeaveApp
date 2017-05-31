@@ -31,6 +31,8 @@ package om.edu.squ.squportal.portlet.leaveapp.controller;
 
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -106,9 +108,10 @@ public class LeaveAppControllerMain
 	 * purpose		:
 	 *
 	 * Date    		:	Aug 7, 2012 1:05:54 PM
+	 * @throws UnsupportedEncodingException 
 	 */
 	@RequestMapping
-	private String welcome(@RequestParam(defaultValue="") String msgDisplayAction, PortletRequest request, Model model, Locale locale)
+	private String welcome(@RequestParam(defaultValue="") String msgDisplayAction, PortletRequest request, Model model, Locale locale) throws UnsupportedEncodingException
 	{
 		String			empNumber 				=	getEmpNumber(request);
 		boolean			booLeveApplyAllowed		=	false;
@@ -413,7 +416,7 @@ public class LeaveAppControllerMain
 					try
 					{
 						model.addAttribute(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, allowEleaveRequestProc.getLeaveMessage());
-						txtRenderUrl = txtRenderUrl.replace(Constants.CONST_TEST_TEXT_MSG_FROM_ACTION, allowEleaveRequestProc.getLeaveMessage());
+						txtRenderUrl = txtRenderUrl.replace(Constants.CONST_TEST_TEXT_MSG_FROM_ACTION, URLEncoder.encode(allowEleaveRequestProc.getLeaveMessage()));
 					}
 					catch(NullPointerException nEx)
 					{
@@ -427,8 +430,8 @@ public class LeaveAppControllerMain
 
 			}
 			request.setAttribute("testAttr", "testMessage");
+			request.setCharacterEncoding("utf-8");
 			response.sendRedirect(txtRenderUrl);
-			
 			
 		}
 		
@@ -691,11 +694,12 @@ public class LeaveAppControllerMain
 	 * purpose		:
 	 *
 	 * Date    		:	Aug 7, 2012 1:06:05 PM
+	 * @throws UnsupportedEncodingException 
 	 */
 	@RequestMapping(params="action=backToMain")
 	private String	backToMain (
 								PortletRequest request, Model model, Locale locale
-							)
+							) throws UnsupportedEncodingException
 	{
 		
 		/*
