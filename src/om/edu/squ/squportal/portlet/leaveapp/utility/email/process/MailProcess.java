@@ -70,7 +70,8 @@ import org.springframework.web.multipart.MultipartFile;
 		
 		   	private static  String 	SMTP_HOST_NAME;
 		    private static  int 	SMTP_HOST_PORT;
-		    private static  String 	SMTP_AUTH_USER;  
+		    private static  String 	SMTP_AUTH_USER; 
+		    private	static	String	SMTP_AUTH_USER_NAME;
 
 	
 			private StringTemplateGroup stringTemplateGroup;
@@ -112,11 +113,11 @@ import org.springframework.web.multipart.MultipartFile;
 					{
 						sendMail(
 								Constants.MAIL_FROM, 
+								Constants.MAIL_FROM_USER, 
 								new String[]{emailData.getMailTo()}, 
 								null, 
 								Constants.MAIL_SUBJECT+Constants.MAIL_REQUEST_NO+emailData.getRequestNo(), 
-								template.toString(), 
-								null);
+								template.toString(), null);
 						result	=	true;
 					}
 				}
@@ -132,7 +133,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 		    
 		    
-		public  boolean  sendMail(String fromAddress, String[] toAddress, String[] ccAddress, String txtMailSubject,String txtMailBody, MultipartFile multipartFile ) throws Exception{
+		public  boolean  sendMail(String fromAddress, String fromAddressUser, String[] toAddress, String[] ccAddress,String txtMailSubject, String txtMailBody, MultipartFile multipartFile ) throws Exception{
 			boolean	mailSuccess = false;
 			Properties props = new Properties();
 			
@@ -142,6 +143,7 @@ import org.springframework.web.multipart.MultipartFile;
 										new Object[]{} 
 								);
 	        SMTP_AUTH_USER 	=   fromAddress;
+	        SMTP_AUTH_USER_NAME	=   fromAddressUser;
 	        SMTP_HOST_PORT 	=   Integer.parseInt(
 									        		UtilProperty.getMessage
 													(
@@ -223,7 +225,7 @@ import org.springframework.web.multipart.MultipartFile;
 		        	}
 		        }
 		        
-		        message.setFrom(new InternetAddress(SMTP_AUTH_USER));
+		        message.setFrom(new InternetAddress(SMTP_AUTH_USER,SMTP_AUTH_USER_NAME));
 		        transport.connect ();
 		        transport.sendMessage(message,
 		            message.getRecipients(Message.RecipientType.TO));
