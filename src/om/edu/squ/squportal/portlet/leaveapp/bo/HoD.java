@@ -37,6 +37,8 @@ public class HoD
 {
 	private	String	hodId;
 	private	String	hodName;
+	private	boolean	delegated;
+	
 	public  HoD(){}
 	public  HoD(String hodId, String hodName)
 	{
@@ -83,6 +85,32 @@ public class HoD
 	public void setHodName(String hodName)
 	{
 		this.hodName = hodName;
+	}
+	/**
+	 * Getter Method	: isDelegated
+	 * @return the delegated
+	 * 
+	 * Date				: Jul 6, 2017
+	 */
+	public boolean isDelegated() {
+		return this.delegated;
+	}
+	/**
+	 * Setter method : setDelegated
+	 * @param delegated the delegated to set
+	 * 
+	 * Date          : Jul 6, 2017 1:35:07 PM
+	 */
+	public void setDelegated(boolean delegated) {
+		this.delegated = delegated;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "HoD [hodId=" + this.hodId + ", hodName=" + this.hodName
+				+ ", delegated=" + this.delegated + "]";
 	}
 	
 	

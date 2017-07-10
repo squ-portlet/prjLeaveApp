@@ -117,6 +117,7 @@ public interface Constants
 	public static final	String	CONST_APPROVER_MAX_SEQUENCE_NO	=			"APPROVER_MAX_SEQUENCE_NO";
 	public static final	String	CONST_APPROVER_NEXT_SEQUENCE_NO	=			"APPROVER_NEXT_SEQUENCE_NO";
 	public static final	String	CONST_APPROVER_BEFORE_ACTION	=			"SAB_ACTION_LOWER";
+	public static final	String	CONST_DELEGATED					=			"DELEGATED";
 	public static final	String	CONST_DELEGATE_START_DATE		=			"DELEGATE_START_DATE";
 	public static final	String	CONST_DELEGATE_END_DATE			=			"DELEGATE_END_DATE";
 	public static final	String	CONST_DELEGATE_STATUS			=			"DELEGATE_STATUS";
@@ -312,6 +313,10 @@ public interface Constants
 	public static 	String	CONST_SELECT_IS_END_OF_SERVICE					=			"select.is.end.of.service";
 	
 	public static 	String	CONST_SELECT_FUNCTION_LEAVE_EXTENDED_FLAG		=			"select.function.update.extended.flag";
+	
+	public static 	String	CONST_SELECT_SQL_VIEW_DEPT_HEAD_ID 				=			"select.list.of.head.of.department";
+	public static 	String	CONST_SELECT_SQL_VIEW_SECTION_HEAD_ID		 	=			"select.list.of.head.of.section";
+	public static 	String	CONST_SELECT_SQL_VIEW_BRANCH_HEAD_NEXT_HIERARCHY=			"select.list.of.next.higherarchy.branch.approver";
 	
 	
 	/**********CONSTANTS - SQL - QUERY PROPERTY- NAME - LEAVE RETURN - **************/	
@@ -575,92 +580,6 @@ public interface Constants
 																			"	WHERE APP.VHM_LEAVE_REQ_NO = TEMP.VHM_LEAVE_REQ_NO				" + 
 																			"	AND APP.VHM_APP_SEQ_NO < TEMP.VHM_APP_SEQ_NO					" +
 																			"   GROUP BY APP.VHM_LEAVE_REQ_NO,APP.VHM_ACTION_CODE				" ;
-	
-	public static final String	SQL_VIEW_DEPT_HEAD_ID			=			"   SELECT VHM_EMP_CODE AS EMP_CODE,						" +
-																			"  	DECODE(:paramLocale,									" +
-																		    "         'en',initCap(VHM_EMP_NAME) ,						" +
-																		    "         'ar',VHM_EMP_NAME_ARABIC							" +
-																		    "         )	AS EMP_NAME,HIR.VHM_LEVEL AS EMP_LEVEL			" +	
-																			"   FROM VHM_EMPLOYEE EMP ,									" +
-																			"	VHM_DESIGNATION DESG,VHM_HIERARCHY HIR					" +
-																			"   WHERE  EMP.VHM_EMP_DESG_CODE = DESG.VHM_DESG_CODE		" +
-																			"	AND  DESG.VHM_HIERARCHY_CODE = HIR.VHM_HIERARCHY_CODE (+)	" +
-																			"   AND VHM_EMP_BRAN_CODE =:paramBranchCode					" +			
-																			"   AND VHM_EMP_DEPT_CODE = :paramDept						" +
-																			"   AND VHM_EMP_ACTIVE = 'Y'								" +
-																			"   AND  HIR.VHM_LEVEL 			< DECODE(:paramEmpLevel,'NA','010',:paramEmpLevel)	";
-																			
-
-	public static final String	SQL_VIEW_BRANCH_HEAD_NEXT_HIERARCHY	=		"	SELECT	VHM_EMP_CODE AS EMP_CODE,						" +
-																		  	"	DECODE(:paramLocale,									" +
-																		  	"			'en',initCap(VHM_EMP_NAME) , 					" +
-																		  	"			'ar',VHM_EMP_NAME_ARABIC 						" +
-																		  	"		)	AS EMP_NAME, HIR.VHM_LEVEL AS EMP_LEVEL			" +
-																			"	FROM													" +
-																		  	"		VHM_EMPLOYEE EMP ,									" +
-																		  	"		VHM_DESIGNATION DESG, 								" +
-																		  	"		VHM_HIERARCHY HIR									" +
-																			"	WHERE													" +
-																		  	"		EMP.VHM_EMP_DESG_CODE   =  DESG.VHM_DESG_CODE		" +
-																			"		AND  DESG.VHM_HIERARCHY_CODE = HIR.VHM_HIERARCHY_CODE " +
-																			"		AND VHM_EMP_BRAN_CODE       = :paramBranchCode		" +
-																			"		AND VHM_EMP_ACTIVE          = 'Y'					" +
-																			"		AND HIR.VHM_LEVEL 			< DECODE(:paramEmpLevel,'NA','010',:paramEmpLevel)" +
-																			"		AND HIR.VHM_LEVEL = 								" +
-																			"		(													" +
-																		  	"			SELECT											" +
-																		  	"			MAX(HIR.VHM_LEVEL) - :paramLevelAdd AS NEXT_LEVEL " +
-																		  	"			FROM											" +
-																		    "			VHM_EMPLOYEE EMP ,								" +
-																		    "			VHM_DESIGNATION DESG, 							" +
-																		    "			VHM_HIERARCHY HIR								" +
-																		  	"			WHERE											" +
-																		    "				EMP.VHM_EMP_DESG_CODE   =  DESG.VHM_DESG_CODE " +
-																		  	"			AND  DESG.VHM_HIERARCHY_CODE = HIR.VHM_HIERARCHY_CODE " +
-																		  	"			AND EMP.VHM_EMP_BRAN_CODE       = :paramBranchCode	" +
-																		  	"			AND VHM_EMP_ACTIVE          = 'Y'				" +
-																			"		)													" +
-																			" UNION														" +
-																			"	SELECT DISTINCT	VHM_EMP_CODE AS EMP_CODE,				" +						
-																		  	"	DECODE(:paramLocale,									" +
-																		  	"			'en',initCap(VHM_EMP_NAME) , 					" +
-																		  	"			'ar',VHM_EMP_NAME_ARABIC 						" +
-																		  	"		)	AS EMP_NAME , HIR.VHM_LEVEL AS EMP_LEVEL		" +	
-																			"	FROM													" +
-																		  	"		VHM_EMPLOYEE EMP ,									" +
-																		  	"		VHM_DESIGNATION DESG, 								" +
-																		  	"		VHM_HIERARCHY HIR,									" +
-										                                    "      VHM_EMPLOYEE_ADDITIONAL_TASK ADESIG					" +
-																			"	WHERE													" +
-										                                    "      ADESIG.VEAT_EMP_DESG_CODE   =  DESG.VHM_DESG_CODE	" +
-																			"		AND  DESG.VHM_HIERARCHY_CODE = HIR.VHM_HIERARCHY_CODE " +
-																			"		AND ADESIG.VEAT_EMP_BRANCH_CODE  =:paramBranchCode	" +
-										                                    "      AND HIR.VHM_LEVEL 			< DECODE(:paramEmpLevel,'NA','010',:paramEmpLevel)" +
-										                                    "      AND EMP.VHM_EMP_CODE = ADESIG.VEAT_EMP_CODE			" +
-										                                    "	   AND ( 												" +
-										                                    "			ADESIG.VEAT_TO_DATE IS NULL						" +
-										                                    "		OR	TRUNC(ADESIG.VEAT_TO_DATE) >= TRUNC(SYSDATE)	" +
-										                                    "			)												" +
-										                                    "      AND EMP.VHM_EMP_ACTIVE          = 'Y'	    		";
-
-	
-	
-	public static final String SQL_VIEW_SECTION_HEAD_ID			=			"  SELECT VHM_EMP_CODE AS EMP_CODE,							" +
-																		    "  DECODE(:paramLocale,										" +
-																		    "         'en',initCap(VHM_EMP_NAME) ,						" +
-																		    "         'ar',VHM_EMP_NAME_ARABIC							" +
-																		    "         )	AS EMP_NAME, HIR.VHM_LEVEL AS EMP_LEVEL			" +
-																		    "   FROM VHM_EMPLOYEE EMP ,VHM_DESIGNATION DESG , 			" +
-																		    "		 VHM_HIERARCHY HIR, VHM_SECTION SEC					" +
-																		    "   WHERE  EMP.VHM_EMP_DESG_CODE = DESG.VHM_DESG_CODE		" +
-																		    "   AND    EMP.VHM_EMP_SECTION_CODE = SEC.VHM_SECTION_CODE	" +
-																		    "	AND  DESG.VHM_HIERARCHY_CODE = HIR.VHM_HIERARCHY_CODE	" +	
-																		    "   AND VHM_EMP_BRAN_CODE =:paramBranchCode					" +
-																		    "   AND VHM_EMP_DEPT_CODE = :paramDept						" +
-																		    "   AND SEC.VHM_SECTION_CODE = :paramSectCode				" +
-																		    "   AND VHM_EMP_ACTIVE = 'Y'								" +
-																		    "   AND HIR.VHM_LEVEL 			< DECODE(:paramEmpLevel,'NA','010',:paramEmpLevel)	"; 
-																		    											 
 	
 	
 	public static final String	SQL_VIEW_LEAVE_REQUEST_SPECIFIC	=			"SELECT * FROM (											" +

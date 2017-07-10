@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -32,13 +33,25 @@ public class LeaveAppHodServlet extends HttpServlet {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private	JdbcTemplate		jdbcTemplate;
 	private	DataSource			datasource;
+	private Properties			queryPropsLeave;
 	
 	public void setDataSource(DataSource dataSource) 
 	{ 
 		this.jdbcTemplate		=	new JdbcTemplate(dataSource);
 		this.datasource			=	dataSource;
-	}   
+	} 
+	
     /**
+	 * Setter method : setQueryPropsLeave
+	 * @param queryPropsLeave the queryPropsLeave to set
+	 * 
+	 * Date          : Jul 9, 2017 9:17:24 AM
+	 */
+	public void setQueryPropsLeave(Properties queryPropsLeave) {
+		this.queryPropsLeave = queryPropsLeave;
+	}
+
+	/**
      * @see HttpServlet#HttpServlet()
      */
     public LeaveAppHodServlet() {
@@ -52,6 +65,8 @@ public class LeaveAppHodServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		Object obj = config.getServletContext().getAttribute("srvDataSource"); 
 		setDataSource((DataSource)obj); 
+		Object	objProperties	=	config.getServletContext().getAttribute("queryPropsLeave");
+		setQueryPropsLeave((Properties)objProperties);
 	}
 
 	/**
@@ -76,6 +91,7 @@ public class LeaveAppHodServlet extends HttpServlet {
 		List<HoD>		hoDList				=	null;
 		String			strJson				=	null;
 		
+		
 		if(null == request.getParameter("localeSrv"))
 		{
 			localeSrv	=	"en";
@@ -91,7 +107,7 @@ public class LeaveAppHodServlet extends HttpServlet {
 			sectCode		=	request.getParameter("sectionCode");
 			try
 			{
-				sectHead		=	leaveDbDao.getSectionHead(branchCode, deptCode, sectCode,hierarchyLevelCode, locale);
+				sectHead		=	leaveDbDao.getSectionHead(branchCode, deptCode, sectCode,hierarchyLevelCode, locale, queryPropsLeave);
 				hoDList			=	sectHead;		//leaveDbDao.getDepartmentHead(branchCode, deptCode, locale);
 
 				if(hoDList.size()==0)
@@ -114,7 +130,7 @@ public class LeaveAppHodServlet extends HttpServlet {
 		{
 			try
 			{
-				hoDList	=	leaveDbDao.getDepartmentHead(branchCode, deptCode, hierarchyLevelCode, locale);
+				hoDList	=	leaveDbDao.getDepartmentHead(branchCode, deptCode, hierarchyLevelCode, locale, queryPropsLeave);
 				
 				if(hoDList.size() == 0)
 				{
@@ -123,7 +139,7 @@ public class LeaveAppHodServlet extends HttpServlet {
 						try
 							{
 								List<HoD> hoDNextLevelList	=	getBranchLevelHeads(branchCode, i, hierarchyLevelCode, locale);
-								if(hoDNextLevelList.size() != 0)
+								if(hoDNextLevelList.size() != 0 )
 								{
 									hoDList	= hoDNextLevelList;
 									break;
@@ -133,6 +149,7 @@ public class LeaveAppHodServlet extends HttpServlet {
 						catch(Exception ex4)
 						{
 							logger.error("hod not available at next level increment("+i+"), for branch : "+branchCode + "Error : "+ex4.getMessage());
+							
 						}
 						
 					}
@@ -142,7 +159,7 @@ public class LeaveAppHodServlet extends HttpServlet {
 			catch(Exception ex3)
 			{
 				logger.error("hod not available at department level, for branch : "+branchCode + "Error : "+ex3.getMessage());
-
+				ex3.printStackTrace();
 			}
 		}
 		
@@ -157,7 +174,6 @@ public class LeaveAppHodServlet extends HttpServlet {
 		{
 			strJson	=	gson.toJson(hoDList);
 		}
-
 		response.getWriter().print(strJson);
 	}
 	
@@ -181,7 +197,7 @@ public class LeaveAppHodServlet extends HttpServlet {
 		List<HoD>		lstHods		=	null;
 		try
 		{
-			lstHods	=	leaveDbDao.getDepartmentHead(branchCode, deptCode, hierarchyLevelCode, locale);
+			lstHods	=	leaveDbDao.getDepartmentHead(branchCode, deptCode, hierarchyLevelCode, locale, queryPropsLeave);
 		}
 		catch(Exception ex)
 		{
@@ -212,7 +228,7 @@ public class LeaveAppHodServlet extends HttpServlet {
 		
 		try
 		{
-			lstHods	=	leaveDbDao.getNextHeadBranch(branchCode, paramLevelAdd,hierarchyLevelCode, locale);
+			lstHods	=	leaveDbDao.getNextHeadBranch(branchCode, paramLevelAdd,hierarchyLevelCode, locale, queryPropsLeave);
 		}
 		catch(Exception ex)
 		{

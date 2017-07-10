@@ -142,6 +142,9 @@
 		    <map> 
 		      <entry key="srvDataSource"> 
 		        <ref bean="dataSource"/> 
+		      </entry>
+		      <entry key="queryPropsLeave">
+		      		<ref bean="queryPropsLeave"/>
 		      </entry> 
 		    </map> 
 		  </property> 

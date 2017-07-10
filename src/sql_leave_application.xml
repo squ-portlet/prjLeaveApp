@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-    <comment>Post Teaching Survey Control</comment>
+    <comment>Leave Application</comment>
      <entry key="select.leave.employee">
 		SELECT DISTINCT EMP.VHM_EMP_CODE AS EMP_CODE, 									
 		  SUBSTR(																			
@@ -526,9 +526,205 @@
 					VHM_EMP_CODE = LPAD(:paramEmpCode,7,0)    
      	]]>
      </entry>
-     
      <entry key="select.function.update.extended.flag">
      	SELECT upd_extended_leave(:paramReqNo) FROM DUAL
      </entry>
+	<entry key="select.list.of.head.of.department">
+     	<![CDATA[
+   		SELECT VHM_EMP_CODE 																				AS EMP_CODE,						
+			  	DECODE(:paramLocale,									
+		             'en',initCap(VHM_EMP_NAME) ,						
+		             'ar',VHM_EMP_NAME_ARABIC							
+		             )																						AS EMP_NAME,									
+		     	HIR.VHM_LEVEL 																				AS EMP_LEVEL,								
+		       'N' 																							AS DELEGATED 										
+			   FROM VHM_EMPLOYEE EMP ,									
+				VHM_DESIGNATION DESG,VHM_HIERARCHY HIR					
+			   WHERE  EMP.VHM_EMP_DESG_CODE = DESG.VHM_DESG_CODE		
+				AND  DESG.VHM_HIERARCHY_CODE = HIR.VHM_HIERARCHY_CODE (+)	
+			   	AND VHM_EMP_BRAN_CODE =:paramBranchCode								
+			   	AND VHM_EMP_DEPT_CODE = :paramDept						
+			   	AND VHM_EMP_ACTIVE = 'Y'								
+			   	AND  HIR.VHM_LEVEL 	< DECODE(:paramEmpLevel,'NA','010',:paramEmpLevel) 
+                AND  VHM_EMP_CODE NOT IN (								
+                                        SELECT ELA_EMP_CODE							
+                                        FROM EMP_LEAVE_AVAIL							
+                                        WHERE											
+                                              SYSDATE BETWEEN ELA_START_DATE AND ELA_END_DATE	
+                                       )												
+		UNION																	
 
+        SELECT 																
+            EMP.VHM_EMP_CODE 																				AS EMP_CODE,										
+		  	DECODE(:paramLocale,											
+		            'en',initCap(EMP.VHM_EMP_NAME) ,							
+		            'ar',EMP.VHM_EMP_NAME_ARABIC								
+		            )																						AS EMP_NAME,											
+             HIR.VHM_LEVEL 																					AS EMP_LEVEL,										
+         	'Y' 																							AS DELEGATED		 										
+        FROM 																	
+             VHM_EMP_LEAVE_REQ_DELEGATION DELG,								
+             VHM_EMPLOYEE EMP,												
+             VHM_DESIGNATION DESG,											
+             VHM_HIERARCHY HIR												
+       	WHERE																
+             SYSDATE BETWEEN VHM_DELEGATED_FROM_DATE AND VHM_DELEGATED_TO_DATE	
+             AND DELG.VHM_DELEGATED_EMP_CODE = EMP.VHM_EMP_CODE				
+             AND DELG.VHM_DELEGATED_EMP_DESG_CODE = DESG.VHM_DESG_CODE		
+             AND  DESG.VHM_HIERARCHY_CODE = HIR.VHM_HIERARCHY_CODE (+) 		
+             AND VHM_DELEGATED_EMP_BRANCH_CODE  =:paramBranchCode				
+             AND VHM_DELEGATED_EMP_DEPT_CODE = :paramDept						     
+     	]]>
+     </entry>
+     <entry key="select.list.of.head.of.section">
+     	<![CDATA[
+       SELECT VHM_EMP_CODE																					AS EMP_CODE,							
+		      DECODE(:paramLocale,										
+		             'en',initCap(VHM_EMP_NAME) ,						
+		             'ar',VHM_EMP_NAME_ARABIC							
+		             )																						AS EMP_NAME, 									
+		     	HIR.VHM_LEVEL 																				AS EMP_LEVEL,								
+		       'N' 																							AS DELEGATED		 								
+		FROM VHM_EMPLOYEE EMP ,VHM_DESIGNATION 			DESG , 			
+		    		 VHM_HIERARCHY 						HIR, 
+		    		 VHM_SECTION 						SEC					
+		WHERE  EMP.VHM_EMP_DESG_CODE 		= DESG.VHM_DESG_CODE		
+		    AND EMP.VHM_EMP_SECTION_CODE 	= SEC.VHM_SECTION_CODE	
+		    AND DESG.VHM_HIERARCHY_CODE 	= HIR.VHM_HIERARCHY_CODE		
+		    AND VHM_EMP_BRAN_CODE 			= :paramBranchCode					
+		    AND VHM_EMP_DEPT_CODE 			= :paramDept						
+		    AND SEC.VHM_SECTION_CODE 		= :paramSectCode				
+		    AND VHM_EMP_ACTIVE 				= 'Y'								
+		    AND HIR.VHM_LEVEL 			< DECODE(:paramEmpLevel,'NA','010',:paramEmpLevel) 
+		    AND VHM_EMP_CODE NOT IN (															
+                  SELECT ELA_EMP_CODE								
+                  FROM EMP_LEAVE_AVAIL								
+                  WHERE												
+                        SYSDATE BETWEEN ELA_START_DATE AND ELA_END_DATE	
+                  )																
+	 UNION																	
+	
+     SELECT 																
+        	EMP.VHM_EMP_CODE 																				AS EMP_CODE,										
+			DECODE(:paramLocale,											
+	         'en',initCap(EMP.VHM_EMP_NAME) ,							
+	         'ar',EMP.VHM_EMP_NAME_ARABIC								
+	         )																								AS EMP_NAME,											
+       		HIR.VHM_LEVEL 																					AS EMP_LEVEL,										
+	   		'Y' 																							AS DELEGATED		 										
+	 FROM 																	
+	      VHM_EMP_LEAVE_REQ_DELEGATION 	DELG,								
+	      VHM_EMPLOYEE 					EMP,												
+	      VHM_DESIGNATION 				DESG,											
+	      VHM_HIERARCHY 				HIR												
+		WHERE																
+	      		SYSDATE BETWEEN VHM_DELEGATED_FROM_DATE AND VHM_DELEGATED_TO_DATE	
+	      AND 	DELG.VHM_DELEGATED_EMP_CODE 		= EMP.VHM_EMP_CODE				
+	      AND 	DELG.VHM_DELEGATED_EMP_DESG_CODE 	= DESG.VHM_DESG_CODE		
+	      AND  	DESG.VHM_HIERARCHY_CODE 			= HIR.VHM_HIERARCHY_CODE (+) 		
+	      AND 	VHM_DELEGATED_EMP_BRANCH_CODE  		= :paramBranchCode				
+	      AND 	VHM_DELEGATED_EMP_DEPT_CODE 		= :paramDept						
+	  	   AND 	VHM_DELEGATED_EMP_SECTION_CODE 		= :paramSectCode
+	  	]]>				
+     </entry> 
+     <entry key="select.list.of.next.higherarchy.branch.approver">
+     		<![CDATA[
+     SELECT 
+     		* 
+     FROM											
+			(															
+					SELECT	
+							VHM_EMP_CODE 																	AS EMP_CODE,						
+					  		DECODE(:paramLocale,									
+					  				'en',initCap(VHM_EMP_NAME) , 					
+					  				'ar',VHM_EMP_NAME_ARABIC 						
+					  			)																			AS EMP_NAME, 									
+					  	 	HIR.VHM_LEVEL 																	AS EMP_LEVEL,								
+					  	   'N' 																				AS DELEGATED			 							
+					FROM													
+			  			VHM_EMPLOYEE 		EMP ,									
+			  			VHM_DESIGNATION 	DESG, 								
+			  			VHM_HIERARCHY 		HIR									
+					WHERE													
+			  			EMP.VHM_EMP_DESG_CODE   		=  DESG.VHM_DESG_CODE		
+						AND  DESG.VHM_HIERARCHY_CODE 	= HIR.VHM_HIERARCHY_CODE 
+						AND VHM_EMP_BRAN_CODE       	= :paramBranchCode		
+						AND VHM_EMP_ACTIVE          	= 'Y'					
+						AND HIR.VHM_LEVEL 				< DECODE(:paramEmpLevel,'NA','010',:paramEmpLevel)
+				
+						AND HIR.VHM_LEVEL 				= 								
+															(													
+												  				SELECT											
+												  						MAX(HIR.VHM_LEVEL) - :paramLevelAdd AS NEXT_LEVEL 
+												  				FROM											
+													    			VHM_EMPLOYEE 	EMP ,								
+													    			VHM_DESIGNATION DESG, 							
+													    			VHM_HIERARCHY 	HIR								
+												  				WHERE											
+												    				EMP.VHM_EMP_DESG_CODE   =  DESG.VHM_DESG_CODE 
+												  				AND DESG.VHM_HIERARCHY_CODE = HIR.VHM_HIERARCHY_CODE 
+												  				AND EMP.VHM_EMP_BRAN_CODE   = :paramBranchCode	
+												  				AND VHM_EMP_ACTIVE          = 'Y'				
+															)													
+				UNION														
+						SELECT DISTINCT	
+						VHM_EMP_CODE 																		AS EMP_CODE,										
+				  		DECODE(:paramLocale,									
+				  				'en',initCap(VHM_EMP_NAME) , 					
+				  				'ar',VHM_EMP_NAME_ARABIC 						
+				  			)																				AS EMP_NAME ,  									
+				  	 		HIR.VHM_LEVEL 																	AS EMP_LEVEL,							
+				  	   	'N' 																				AS DELEGATED		 							
+						FROM													
+				  			VHM_EMPLOYEE 					EMP ,									
+				  			VHM_DESIGNATION 				DESG, 								
+				  			VHM_HIERARCHY 					HIR,									
+                            VHM_EMPLOYEE_ADDITIONAL_TASK 	ADESIG					
+						WHERE													
+                                 ADESIG.VEAT_EMP_DESG_CODE  	=	DESG.VHM_DESG_CODE	
+							AND  DESG.VHM_HIERARCHY_CODE		= 	HIR.VHM_HIERARCHY_CODE 
+							AND	 ADESIG.VEAT_EMP_BRANCH_CODE	=	:paramBranchCode	
+                            AND  HIR.VHM_LEVEL 					< 	DECODE(:paramEmpLevel,'NA','010',:paramEmpLevel)
+                            AND  EMP.VHM_EMP_CODE 				=	ADESIG.VEAT_EMP_CODE			
+                       	    AND ( 												
+                        				ADESIG.VEAT_TO_DATE IS NULL						
+                        			OR	TRUNC(ADESIG.VEAT_TO_DATE) >= TRUNC(SYSDATE)	
+                        		)												
+                            AND  EMP.VHM_EMP_ACTIVE          	= 'Y'	
+/* -- This part of query is closed to stop selecting delegated approvers at the time of select only branch
+				UNION 
+				        SELECT 																
+				            EMP.VHM_EMP_CODE 																				AS EMP_CODE,										
+						  	DECODE(:paramLocale,											
+						            'en',initCap(EMP.VHM_EMP_NAME) ,							
+						            'ar',EMP.VHM_EMP_NAME_ARABIC								
+						            )																						AS EMP_NAME,											
+				             HIR.VHM_LEVEL 																					AS EMP_LEVEL,										
+				         	'Y' 																							AS DELEGATED		 										
+				        FROM 																	
+				             VHM_EMP_LEAVE_REQ_DELEGATION DELG,								
+				             VHM_EMPLOYEE EMP,												
+				             VHM_DESIGNATION DESG,											
+				             VHM_HIERARCHY HIR												
+				       	WHERE																
+				             	 SYSDATE BETWEEN VHM_DELEGATED_FROM_DATE AND VHM_DELEGATED_TO_DATE	
+				             AND DELG.VHM_DELEGATED_EMP_CODE 		= EMP.VHM_EMP_CODE				
+				             AND DELG.VHM_DELEGATED_EMP_DESG_CODE 	= DESG.VHM_DESG_CODE		
+				             AND DESG.VHM_HIERARCHY_CODE 			= HIR.VHM_HIERARCHY_CODE (+) 		
+				             AND VHM_DELEGATED_EMP_BRANCH_CODE  	= :paramBranchCode	
+	*/		
+			             
+			)															
+		WHERE 
+				EMP_CODE NOT IN (									
+					                SELECT 
+					                		ELA_EMP_CODE						
+					                FROM 
+					                		EMP_LEAVE_AVAIL					
+					                WHERE									
+					                        SYSDATE BETWEEN ELA_START_DATE AND ELA_END_DATE 
+					             )
+     		]]>
+     
+     </entry>    
 </properties>

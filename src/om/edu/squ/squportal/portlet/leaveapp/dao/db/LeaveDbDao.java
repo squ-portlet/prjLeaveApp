@@ -32,6 +32,7 @@ package om.edu.squ.squportal.portlet.leaveapp.dao.db;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -140,6 +141,7 @@ public interface LeaveDbDao
 	 * @param paramLevelAdd
 	 * @param empLevel
 	 * @param locale
+	 * @param servQueryPropsLeave TODO
 	 * @return
 	 * LeaveDbDao
 	 * return type  : List<HoD>
@@ -148,7 +150,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Dec 5, 2012 8:29:35 AM
 	 */
-	public List<HoD> getNextHeadBranch(String branchCode, int paramLevelAdd, String empLevel, Locale locale);
+	public List<HoD> getNextHeadBranch(String branchCode, int paramLevelAdd, String empLevel, Locale locale, Properties servQueryPropsLeave);
 	
 	/**
 	 * 
@@ -157,6 +159,7 @@ public interface LeaveDbDao
 	 * @param deptCode
 	 * @param empLevel
 	 * @param locale
+	 * @param queryPropsLeave TODO
 	 * @return
 	 * LeaveDbDao
 	 * return type  : List<HoD>
@@ -165,7 +168,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Dec 5, 2012 9:34:39 AM
 	 */
-	public List<HoD> getDepartmentHead(String branchCode, String deptCode,String empLevel, Locale locale);
+	public List<HoD> getDepartmentHead(String branchCode, String deptCode,String empLevel, Locale locale, Properties queryPropsLeave);
 	
 	/**
 	 * 
@@ -175,6 +178,7 @@ public interface LeaveDbDao
 	 * @param sectCode
 	 * @param empLevel
 	 * @param locale
+	 * @param servQueryPropsLeave TODO
 	 * @return
 	 * LeaveDbDao
 	 * return type  : List<HoD>
@@ -183,7 +187,7 @@ public interface LeaveDbDao
 	 *
 	 * Date    		:	Dec 5, 2012 9:19:35 AM
 	 */
-	public List<HoD>	getSectionHead(String branchCode, String deptCode, String sectCode, String empLevel,Locale locale);
+	public List<HoD>	getSectionHead(String branchCode, String deptCode, String sectCode, String empLevel,Locale locale, Properties servQueryPropsLeave);
 	
 	/**
 	 * 

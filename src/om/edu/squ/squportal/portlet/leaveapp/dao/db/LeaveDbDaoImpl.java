@@ -38,6 +38,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -478,7 +479,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		}
 		catch(Exception ex)
 		{
-			logger.error("Error generated: can not fetch employee list");
+			logger.error("Error generated: can not fetch employee list, Details : "+ex.getMessage());
 		}
 		
 
@@ -957,8 +958,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 * method name  : getDepartmentHead
 	 * @param branchCode
 	 * @param deptCode
-	 * @param 
 	 * @param locale
+	 * @param 
 	 * @return
 	 * LeaveDbDao
 	 * return type  : List<HoD>
@@ -967,8 +968,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Dec 5, 2012 9:34:39 AM
 	 */
-	public List<HoD> getDepartmentHead(String branchCode, String deptCode,String empLevel, Locale locale)
+	public List<HoD> getDepartmentHead(String branchCode, String deptCode,String empLevel, Locale locale, Properties servQueryPropsLeave)
 	{
+		String	SQL_VIEW_DEPT_HEAD_ID=servQueryPropsLeave.getProperty(Constants.CONST_SELECT_SQL_VIEW_DEPT_HEAD_ID);
 		RowMapper<HoD> mapper	=	new RowMapper<HoD>()
 		{
 			
@@ -981,6 +983,10 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 //						+"<br>"+UtilProperty.getMessage("prop.leave.app.department.head", null)
 //						+" "+UtilProperty.getMessage("prop.leave.app.level.no", new String[]{rs.getString(Constants.CONST_EMP_LEVEL)})
 							);
+				if(rs.getString(Constants.CONST_DELEGATED).equals(Constants.CONST_YES_CAPITAL))
+				{
+					hod.setDelegated(true);
+				}
 				return hod;
 			}
 		};
@@ -993,7 +999,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		}
 		namedParameters.put("paramEmpLevel", empLevel);
 		namedParameters.put("paramLocale", locale.getLanguage());
-		return this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_DEPT_HEAD_ID, namedParameters, mapper);
+		return this.namedParameterJdbcTemplate.query(SQL_VIEW_DEPT_HEAD_ID, namedParameters, mapper);
 	}
 	
 	/**
@@ -1012,8 +1018,10 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Dec 5, 2012 9:19:35 AM
 	 */
-	public List<HoD>	getSectionHead(String branchCode, String deptCode, String sectCode, String empLevel, Locale locale)
+	public List<HoD>	getSectionHead(String branchCode, String deptCode, String sectCode, String empLevel, Locale locale, Properties servQueryPropsLeave)
 	{
+		
+		String SQL_VIEW_SECTION_HEAD_ID		=	servQueryPropsLeave.getProperty(Constants.CONST_SELECT_SQL_VIEW_SECTION_HEAD_ID);
 		RowMapper<HoD> mapper = new RowMapper<HoD>()
 		{
 
@@ -1042,7 +1050,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 
 		namedParameters.put("paramLocale", locale.getLanguage());
 		
-		return this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_SECTION_HEAD_ID, namedParameters, mapper);
+		return this.namedParameterJdbcTemplate.query(SQL_VIEW_SECTION_HEAD_ID, namedParameters, mapper);
 		
 	}
 	
@@ -1061,8 +1069,9 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 *
 	 * Date    		:	Dec 5, 2012 8:29:35 AM
 	 */
-	public List<HoD> getNextHeadBranch(String branchCode, int paramLevelAdd, String empLevel, Locale locale)
+	public List<HoD> getNextHeadBranch(String branchCode, int paramLevelAdd, String empLevel, Locale locale, Properties servQueryPropsLeave)
 	{
+		String SQL_VIEW_BRANCH_HEAD_NEXT_HIERARCHY	=	servQueryPropsLeave.getProperty(Constants.CONST_SELECT_SQL_VIEW_BRANCH_HEAD_NEXT_HIERARCHY);
 		RowMapper<HoD> 	mapper	=	new RowMapper<HoD>()
 		{
 			
@@ -1087,7 +1096,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		}
 		namedParameters.put("paramEmpLevel", empLevel);
 		namedParameters.put("paramLocale", locale.getLanguage());
-		return this.namedParameterJdbcTemplate.query(Constants.SQL_VIEW_BRANCH_HEAD_NEXT_HIERARCHY, namedParameters, mapper);
+		return this.namedParameterJdbcTemplate.query(SQL_VIEW_BRANCH_HEAD_NEXT_HIERARCHY, namedParameters, mapper);
 	}
 	
 	/**
@@ -1427,7 +1436,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 		String 				CONST_SELECT_LEAVE_REQUESTS_FOR_REQUESTER	=	queryPropsLeave.getProperty(Constants.CONST_SELECT_LEAVE_REQUESTS_FOR_REQUESTER);
 		String 				CONST_SELECT_LEAVE_REQUESTS_FOR_APPROVER	=	queryPropsLeave.getProperty(Constants.CONST_SELECT_LEAVE_REQUESTS_FOR_APPROVER);
-		
+
 		List<LeaveRequest>	leaveRequests								=	null;
 		
 		RowMapper<LeaveRequest> mapper	=	new RowMapper<LeaveRequest>()
