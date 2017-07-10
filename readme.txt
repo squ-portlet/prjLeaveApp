@@ -1,6 +1,11 @@
 prjLeaveApp 
 [Leave Application]
 
+Feature
+-----------
+1) Employee on leave will not appear as approver
+2) Delegated Employees will be shown as approver for the delegation period
+
 Version : 1.1
 --------------------
 Feature :
