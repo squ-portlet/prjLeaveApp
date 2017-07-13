@@ -649,12 +649,16 @@
 													<portlet:param name="reqNo" value="${req.requestNo}"/>
 													<portlet:param name="_approverAction" value="${admActions.actionCode}"/>
 													</portlet:renderURL>
-
 													<c:if test="${(admActions.actionCode == leaveActionApprove)}">
 															|&nbsp;&nbsp;<a class="refApproveClass" reqNo="${req.requestNo}" linkRef="${varLeaveAdminAction}" appActionNum="${admActions.actionCode}"  href="#"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|		
-														</c:if>
+													</c:if>
 														<c:if test="${ (admActions.actionCode == leaveActionReturn) || (admActions.actionCode == leaveActionReject)}">
-															&nbsp;&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|
+															<c:if test="${(req.leaveReturnIndicator eq leaveReturnSymbol) && (admActions.actionCode == leaveActionReturn) }">
+																&nbsp;&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|
+															</c:if>
+															<c:if test="${(req.leaveReturnIndicator eq leaveApplicationSymbol)  }">
+																&nbsp;&nbsp;<a href="${varLeaveApprove2}"><font color="red"><c:out value="${admActions.actionDesc}"/></font></a>&nbsp;&nbsp;|
+															</c:if>															
 														</c:if>
 													</c:forEach>
 													&nbsp;&nbsp;<a href="${varLeaveApprove}"><font color="red"><spring:message code="prop.leave.app.title.request.actions" /></font></a>&nbsp;&nbsp;|
