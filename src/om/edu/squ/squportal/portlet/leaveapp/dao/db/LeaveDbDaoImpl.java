@@ -279,6 +279,41 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		namedParameters.put("paramLocale", locale.getLanguage());
 		return this.namedParameterJdbcTemplate.query(Constants.SQL_ADMIN_ACTION, namedParameters, mapper);
 	}
+
+	/**
+	 * 
+	 * method name  : getAdminActionsReturned
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<AdminAction>
+	 * 
+	 * purpose		: Admin Actions for leave return
+	 *
+	 * Date    		:	Aug 6, 2017 2:12:45 PM
+	 */
+	public List<AdminAction>	getAdminActionsReturned(Locale locale)
+	{
+		RowMapper<AdminAction> mapper	=	new RowMapper<AdminAction>()
+		{
+
+			public AdminAction mapRow(ResultSet rs, int rowNum)
+					throws SQLException
+			{
+				AdminAction	action	=	new AdminAction();
+				action.setActionCode(rs.getString(Constants.CONST_ACTION_CODE));
+				action.setActionDesc(rs.getString(Constants.CONST_ACTION_DESC));
+				return action;
+			}
+			
+		};
+		Map<String,String> namedParameters = new HashMap<String,String>();
+		namedParameters.put("paramLocale", locale.getLanguage());
+		namedParameters.put("paramActionCode", Constants.CONST_LEAVE_ACTION_REJECT);
+		return this.namedParameterJdbcTemplate.query(Constants.SQL_ADMIN_ACTION_RETURN, namedParameters, mapper);
+	}	
+	
+	
 	
 	/**
 	 * 

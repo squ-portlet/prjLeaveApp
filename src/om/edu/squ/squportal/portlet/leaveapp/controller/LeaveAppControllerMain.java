@@ -519,6 +519,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("leaveRequest", leaveRequest);
 		model.addAttribute("delegatedEmps", delegatedEmps);
 		model.addAttribute("adminActions", leaveAppServiceDao.getAdminActions(locale));
+		model.addAttribute("adminActionsReturn", leaveAppServiceDao.getAdminActionsReturned(locale));
 		model.addAttribute("constActionApprove",Constants.CONST_LEAVE_ACTION_APPROVE);
 		model.addAttribute("constActionReturn", Constants.CONST_LEAVE_ACTION_RETURN);
 		model.addAttribute("constActionReject", Constants.CONST_LEAVE_ACTION_REJECT);	

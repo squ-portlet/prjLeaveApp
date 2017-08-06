@@ -189,7 +189,16 @@ http://designwithpc.com/Plugins/ddSlick
 								<c:if test="${empty leaveRequest.approve.approverAction}">
 									<form:option value=""><spring:message code="prop.leave.app.dropdown.text"/></form:option>
 								</c:if>
-								<form:options items="${adminActions}" itemLabel="actionDesc" itemValue="actionCode"/>
+								<c:choose>
+									<c:when test="${not empty leaveRequest.leaveReturnDate}">
+										<form:options items="${adminActionsReturn}" itemLabel="actionDesc" itemValue="actionCode"/>
+									</c:when>
+									<c:otherwise>
+										<form:options items="${adminActions}" itemLabel="actionDesc" itemValue="actionCode"/>
+									</c:otherwise>
+								</c:choose>
+								
+								
 							</form:select>
 							
 						</td>

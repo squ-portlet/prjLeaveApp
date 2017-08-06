@@ -88,6 +88,20 @@ public interface LeaveAppServiceDao
 	
 	/**
 	 * 
+	 * method name  : getAdminActionsReturned
+	 * @param locale
+	 * @return
+	 * LeaveDbDaoImpl
+	 * return type  : List<AdminAction>
+	 * 
+	 * purpose		: Admin Actions for leave return
+	 *
+	 * Date    		:	Aug 6, 2017 2:12:45 PM
+	 */
+	public List<AdminAction>	getAdminActionsReturned(Locale locale);
+	
+	/**
+	 * 
 	 * method name  : getEmployee
 	 * @param empNumber
 	 * @param locale
