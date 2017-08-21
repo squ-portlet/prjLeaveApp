@@ -555,6 +555,12 @@ $(function() {
 						<c:if test="${request.returnDelay}">
 							<spring:message code="warn.prop.leave.return.delay"/>
 						</c:if>
+						<center>
+							<div class="alert alert-warning" role="alert">
+								<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+								<form:errors path="acceptLeave" cssClass="error" />
+							</div>
+						</center>
 				</div>
 		</center>
 <form:hidden path="approverEmpNumber" />

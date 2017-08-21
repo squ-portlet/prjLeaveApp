@@ -60,12 +60,14 @@ import om.edu.squ.squportal.portlet.leaveapp.dao.service.LeaveAppServiceDao;
 import om.edu.squ.squportal.portlet.leaveapp.model.LeaveAppModel;
 import om.edu.squ.squportal.portlet.leaveapp.utility.Constants;
 import om.edu.squ.squportal.portlet.leaveapp.utility.UtilProperty;
+import om.edu.squ.squportal.portlet.leaveapp.validator.LeaveAppReturnValidator;
 import om.edu.squ.squportal.portlet.leaveapp.validator.LeaveAppValidator;
 import om.edu.squ.squportal.portlet.leaveapp.validator.LeaveAppValidatorApprove;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -356,24 +358,45 @@ public class LeaveAppControllerMain
 																ldapdao.getCorrectUserName(request.getRemoteUser()) ,
 																locale
 															  );
+		String					approverEmpNum		=	null;
 
 		AllowEleaveRequestProc	allowEleaveRequestProc	=	null;
 								empNumber				=	String.format("%07d", Integer.valueOf(employee.getEmpNumber()));
 		long					empLeaveBal				=	Long.parseLong(leaveAppServiceDao.getLeaveBalance(empNumber, leaveAppModel.getLeaveStartDate()));
 		
 		leaveAppModel.setLeaveBalance(empLeaveBal);
-		
+		leaveAppModel.setEmployeeNumber(empNumber);
 		try
 		{
-			allowEleaveRequestProc	=	leaveAppServiceDao.getAllowEleaveRequest (requestNo,leaveAppModel,employee, locale);
-			leaveAppModel.setAcceptLeave(allowEleaveRequestProc.isAcceptLeave());
-			leaveAppModel.setMsgLeaveRequest(allowEleaveRequestProc.getLeaveMessage());
+			if((null== leaveAppModel.getHod()) && null != leaveAppModel.getApproverEmpNumber())
+			{
+				approverEmpNum = leaveAppModel.getApproverEmpNumber();
+			}
+			else if ((null != leaveAppModel.getHod()) && null != leaveAppModel.getApproverEmpNumber())
+			{
+				approverEmpNum = leaveAppModel.getHod();
+			}
 			
+			if(approverEmpNum.trim().equals(leaveAppModel.getEmployeeNumber().trim()))
+			{
+				leaveAppModel.setAcceptLeave(false);
+				leaveAppModel.setMsgLeaveRequest(UtilProperty.getMessage("warn.prop.leave.self.approve.not.allowed", null, locale));
+			}
+			else
+			{
+				allowEleaveRequestProc	=	leaveAppServiceDao.getAllowEleaveRequest (requestNo,leaveAppModel,employee, locale);
+				leaveAppModel.setAcceptLeave(allowEleaveRequestProc.isAcceptLeave());
+				leaveAppModel.setMsgLeaveRequest(allowEleaveRequestProc.getLeaveMessage());
+			}
 		}
 		catch(ParseException ex)
 		{
 			logger.error("exception at leave request allow notification : "+ex.getMessage());
 		}
+		
+		
+		
+		
 		
 		new LeaveAppValidator().validate(leaveAppModel, result);
 		
@@ -802,13 +825,17 @@ public class LeaveAppControllerMain
 	 *
 	 * Date    		:	Jun 2, 2016 12:18:14 PM
 	 * @throws ParseException 
+	 * @throws UnsupportedEncodingException 
 	 */
 	@RequestMapping(params="action=leaveReturn")
 	private String leaveReturnApply(
 			@RequestParam("requestNo") String requestNum,
 			@RequestParam("approverEmpNo") String approverEmpNo,
-			PortletRequest request, Model model,Locale locale) throws ParseException
+			PortletRequest request, Model model,Locale locale) throws ParseException, UnsupportedEncodingException
 	{
+		
+
+		LeaveRequest	leaveRequest			=	null;
 		String			empNumber 				=	getEmpNumber(request);
 		Employee		employee				=	leaveAppServiceDao.getEmployee(
 														empNumber, 
@@ -816,9 +843,25 @@ public class LeaveAppControllerMain
 														locale
 													  );
 						empNumber				=	String.format("%07d", Integer.parseInt(employee.getEmpNumber()));
+						
+						/* Self approval not supported*/
+						if(empNumber.equals(approverEmpNo.trim()))
+						{
+							model.addAttribute("allowELeaveRequestMsg", UtilProperty.getMessage("warn.prop.leave.self.approve.not.allowed", null, locale));
+							return welcome("",request,model,locale);
+						}
+						
 		Employee		delegatedEmployee		=	leaveAppServiceDao.getDelegatedEmployeeCurrentDate(approverEmpNo, locale);
 		
-		LeaveRequest	leaveRequest			=	leaveAppServiceDao.getLeaveRequest(approverEmpNo, requestNum, locale);
+						try
+						{
+							leaveRequest			=	leaveAppServiceDao.getLeaveRequest(approverEmpNo, requestNum, locale);
+						}
+						catch(EmptyResultDataAccessException ex)
+						{
+							logger.error("Empty records : "+ex.getMessage());
+						}
+		
 		
 		DateFormat 	df 					= 	new SimpleDateFormat("dd/MM/yyyy");
 		String 		stringDate 			= 	df.format(new Date());
@@ -885,7 +928,35 @@ public class LeaveAppControllerMain
 			@ModelAttribute("leaveAppModel") LeaveAppModel leaveApplModel,
 			BindingResult result,Locale locale,Model model)
 	{
-		int resultUpdate = leaveAppServiceDao.newLeaveReturn(leaveApplModel);
+		String			empNumber 				=	getEmpNumber(request);
+						empNumber				=	String.format("%07d", Integer.parseInt(empNumber));
+						leaveApplModel.setEmployeeNumber(empNumber);
+		
+		int 	resultUpdate	=	0;	
+		String	approverEmpNum	=	null;
+		
+		new LeaveAppReturnValidator().validate(leaveApplModel, result);
+		if(result.hasErrors())
+		{
+			logger.warn("validation error in leave return. Most probably user trying to self approve the return");
+			if((null== leaveApplModel.getHod()) && null != leaveApplModel.getApproverEmpNumber())
+			{
+				approverEmpNum = leaveApplModel.getApproverEmpNumber();
+			}
+			else if ((null != leaveApplModel.getHod()) && null != leaveApplModel.getApproverEmpNumber())
+			{
+				approverEmpNum = leaveApplModel.getHod();
+			}
+
+			response.setRenderParameter("requestNo", leaveApplModel.getRequestNo());
+			response.setRenderParameter("approverEmpNo", approverEmpNum);
+			response.setRenderParameter("action", "leaveReturn");
+		}
+		else
+		{
+			resultUpdate = leaveAppServiceDao.newLeaveReturn(leaveApplModel);
+		}
+
 		if(resultUpdate == 0)
 		{
 			logger.error("Leave return submit not successful");
