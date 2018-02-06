@@ -519,7 +519,14 @@ $(function() {
 		    	 var selct = '';
 		    	 
 		    	 if (hod.hodId==hodId) selct=' checked ';
-			    	 dataHtml += "<tr><td><input type='radio' name='hod' id='radio"+hod.hodId+"' value='"+hod.hodId+"'"+ selct + "/> <a href='#' class='rdhlink' rdid='"+hod.hodId+"'>" +hod.hodName+ "</a></td></tr>"; 
+		    	 if(hod.delegated)
+		    	 {
+		    		 dataHtml += "<tr><td><input type='radio' name='hod' id='radio"+hod.hodId+"' value='"+hod.hodId+"'"+ selct + "/> <a href='#' class='rdhlink' rdid='"+hod.hodId+"'>" +hod.hodName+ "</a> (<spring:message code='prop.leave.app.apply.form.delegated.employees'/>) </td></tr>";
+		    	 }
+		    	 else
+		    	 {
+			    	 dataHtml += "<tr><td><input type='radio' name='hod' id='radio"+hod.hodId+"' value='"+hod.hodId+"'"+ selct + "/> <a href='#' class='rdhlink' rdid='"+hod.hodId+"'>" +hod.hodName+ "</a></td></tr>";
+		    	 }
 		    }
 		    
 		    if(data != null || data != '')
@@ -632,29 +639,33 @@ $(function() {
 	/**
 	* 
 	*/
-	function showHideProcessSalaray()
+	function showHideProcessSalaray() 
 	{
 			if($("#leaveTypeFlag").val() == 'A')
-				{
+			{
 				var start = $( ".calendarStart" ).datepicker( "getDate" );
 				var end = $( ".calendarEnd" ).datepicker( "getDate" );
 				var diff = new Date(end - start);
 
 				// get days
 				var days = diff/1000/60/60/24;
-				if (days >= 14)
- 				{
- 					$("#divProcessSal").show();
- 				}
-				else
- 				{
- 					$("#divProcessSal").hide();
- 				}
+					if (days >= 12)
+	 				{
+	 					$("#divProcessSal").show();
+	 					$("#processSalaray1").prop("checked", true);
+	 				}
+					else
+	 				{
+	 					$("#divProcessSal").hide();
+	 				}
 				}
 			else
  				{
  					$("#divProcessSal").hide();
  				}
+			
+			
+			
 	}
 	
 	/**
@@ -887,10 +898,16 @@ $(function() {
 						</span>
 					</td>
 					<td>
-						<form:radiobutton path="processSalaray" value="Y"/> <spring:message code="prop.leave.app.apply.form.salary.radio.bttn.yes"/>
-						<c:if test="${employee.omani}">
-						<br><form:radiobutton path="processSalaray" value="N"/> <spring:message code="prop.leave.app.apply.form.salary.radio.bttn.no"/>
-						</c:if>
+						<c:choose>
+							<c:when test="${employee.omani}">
+								<form:radiobutton path="processSalaray" value="N"  /> <spring:message code="prop.leave.app.apply.form.salary.radio.bttn.no"/>
+								<br>
+								<form:radiobutton path="processSalaray" value="Y"/> <spring:message code="prop.leave.app.apply.form.salary.radio.bttn.yes"/>
+							</c:when>
+							<c:otherwise>
+								<form:radiobutton path="processSalaray" value="Y"/> <spring:message code="prop.leave.app.apply.form.salary.radio.bttn.yes"/>
+							</c:otherwise>
+						</c:choose>
 					</td>
 				</tr>
 				<tr>
