@@ -259,9 +259,12 @@ public class LeaveAppValidator implements Validator
 						
 							
 					} // End of for loop
-					if((lvDateNos  >  Constants.CONST_DELEGATION_REQ_LEAVE_DAYS) && lvDateNos != delgDateNos)
+					if(Constants.CONST_DELEGATION_REQUIRED)
 					{
-						err.rejectValue("leaveStartDate", "error.prop.leave.app.delegate.date.not.equal");
+						if((lvDateNos  >  Constants.CONST_DELEGATION_REQ_LEAVE_DAYS) && lvDateNos != delgDateNos)
+						{
+							err.rejectValue("leaveStartDate", "error.prop.leave.app.delegate.date.not.equal");
+						}
 					}
 					
 				}

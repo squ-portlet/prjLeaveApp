@@ -189,6 +189,7 @@ public interface Constants
 	
 	public static final String	CONST_NOT_AVAILABLE				=			"NA";
 	public static final int		CONST_DELEGATION_REQ_LEAVE_DAYS	=			5;
+	public static final	boolean	CONST_DELEGATION_REQUIRED		=			false;
 	
 	public static final int		CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE 	=		14;
 	
