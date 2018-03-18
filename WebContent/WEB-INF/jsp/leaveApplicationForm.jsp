@@ -146,7 +146,12 @@
 	.ui-corner-all {font-size: small;}
 	.ui-datepicker { width: 16em; padding: .2em .2em 0; display: none; }
 	
-
+	/* date picker background color*/
+	.ui-datepicker .ui-datepicker-header {
+		    position: relative;
+		    padding: .2em 0;
+		    background: #c93;
+	}
 	
 </style>
 
