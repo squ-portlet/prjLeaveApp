@@ -172,7 +172,7 @@ $(function(){
 	<c:choose>
 		<c:when test="${(not empty leaveAppModel.leaveStartDate) && (parmLeaveExtension=='yes') }">
 			$('#leaveStartDate').prop('readonly', true);
-			$( '.calendarStart' ).datepicker( "option", "disabled", true );
+			$(".calendarStart").datepicker({minDate:-1,maxDate:-2}).attr('readonly','readonly');
 		</c:when>
 		<c:otherwise>
 				// Datepicker
