@@ -177,7 +177,10 @@ $(function(){
 	<c:choose>
 		<c:when test="${(not empty leaveAppModel.leaveStartDate) && (parmLeaveExtension=='yes') }">
 			$('#leaveStartDate').prop('readonly', true);
-			$(".calendarStart").datepicker({minDate:-1,maxDate:-2}).attr('readonly','readonly');
+			$(".calendarStart").datepicker({
+				dateFormat:"dd/mm/yy",
+				minDate:1
+			}).attr('readonly','readonly');
 		</c:when>
 		<c:otherwise>
 				// Datepicker
@@ -261,6 +264,10 @@ $(function(){
 	    		$( ".calendarDelgEnd" ).datepicker( "option", "maxDate", selectedDate );
 	    		$( ".calendarDelgStart" ).datepicker( "option", "maxDate", selectedDate );
 			}
+	    	else
+	    		{
+	    		$('#leaveEndDate').val('');
+	    		}
 	    	
 	    	var durationDay	=	(($( ".calendarEnd" ).datepicker( "getDate" ) -  $( ".calendarStart" ).datepicker( "getDate" ))/(1000*60*60*24))+1;
 	    	if(null != $( ".calendarStart" ).datepicker( "getDate" ) && $( ".calendarStart" ).datepicker( "getDate" ) != "")
