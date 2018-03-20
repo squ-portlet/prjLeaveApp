@@ -106,17 +106,17 @@
    	 <bean id="queryPropsReturn" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
     	<property name="locations" value="classpath:sql_leave_return.xml" />
 	</bean>
-<!-- TEST DB  
+<!-- TEST DB  --> 
 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="java:comp/env/jdbc/hrmsTest"/>
 	</bean>
--->
 
-<!--   PRODUCTION DB  -->
+
+<!--   PRODUCTION DB 
  	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="java:comp/env/jdbc/hrmscl"/>
 	</bean>
- 
+-->  
  
  	
 	<tx:annotation-driven/>
@@ -127,7 +127,7 @@
 	<bean id="txManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 	  <property name="dataSource" ref="dataSource"/>
 	  	<qualifier value="trLeaveAprv"/>
-	 </bean>
+	 </bean>	
 	<bean id="txManager3" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 	  <property name="dataSource" ref="dataSource"/>
 	  	<qualifier value="trLeaveDelegate"/>

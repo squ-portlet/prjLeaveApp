@@ -178,8 +178,7 @@ $(function(){
 		<c:when test="${(not empty leaveAppModel.leaveStartDate) && (parmLeaveExtension=='yes') }">
 			$('#leaveStartDate').prop('readonly', true);
 			$(".calendarStart").datepicker({
-				dateFormat:"dd/mm/yy",
-				minDate:1
+				dateFormat:"dd/mm/yy"
 			}).attr('readonly','readonly');
 		</c:when>
 		<c:otherwise>
@@ -830,8 +829,9 @@ $(function() {
 
 
 <form:form modelAttribute="leaveAppModel"  action="${submitRequest}" method="post" htmlEscape="false" >
-<form:hidden path="approverEmpNumber" />
+<form:hidden path="approverEmpNumber" value="${manager.empNumber}"/>
 <form:hidden path="renderUrlText" value="${varDefaultUrl}"/>
+
 	<div id="browserCompAdv" style="display:none;">
 		<center>
 				<div class="alert alert-warning" role="alert">
@@ -944,7 +944,7 @@ $(function() {
 										<h3 >
 <!-- 												<a href="#"> -->
 														<spring:message code="prop.leave.app.apply.form.leave.manager.default"/>
-														<font color="red" size="small"><i><c:out value="${mgrName}"/></i></font>
+														<font color="red" size="small"><i><c:out value="${manager.empName}"/></i></font>
 <!-- 												</a> -->
 										</h3>
 										

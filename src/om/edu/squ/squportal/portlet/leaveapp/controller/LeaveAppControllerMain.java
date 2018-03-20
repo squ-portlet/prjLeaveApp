@@ -311,7 +311,7 @@ public class LeaveAppControllerMain
 		model.addAttribute("baseHierarchyEmp", Constants.CONST_EMPLOYEE_HIERARCHY_CODE);
 		model.addAttribute("baseLevelEmp", Constants.CONST_EMPLOYEE_LEVEL);
 		model.addAttribute("opMode", Constants.CONST_MODEL_MODE_INSERT);
-		model.addAttribute("mgrName", leaveAppServiceDao.getManager(empNumber, locale).getEmpName());
+		model.addAttribute("manager", leaveAppServiceDao.getManager(empNumber, locale));
 		model.addAttribute("reqNum", Constants.CONST_NOT_AVAILABLE);
 		model.addAttribute("leaveTypeNo", Constants.CONST_NOT_AVAILABLE);
 		model.addAttribute("daysAllowed", Constants.CONST_NO_OF_DAYS_BEFORE_CURRENT_DATE);
@@ -371,6 +371,7 @@ public class LeaveAppControllerMain
 			if((null== leaveAppModel.getHod()) && null != leaveAppModel.getApproverEmpNumber())
 			{
 				approverEmpNum = leaveAppModel.getApproverEmpNumber();
+				leaveAppModel.setHod(approverEmpNum);
 			}
 			else if ((null != leaveAppModel.getHod()) && null != leaveAppModel.getApproverEmpNumber())
 			{
