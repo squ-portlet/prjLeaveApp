@@ -138,6 +138,9 @@ public interface Constants
 	public static final	String	CONST_LEAVE_STATUS_REJECTED		=			"0000000003";
 	public static final	String	CONST_LEAVE_STATUS_FURTHER_CLARIFICATION =	"0000000004";
 	public static final	String	CONST_LEAVE_STATUS_CANCEL		 =			"0000000005";
+	public static final	String	CONST_LEAVE_STATUS_DELETE		 =			"0000000022";
+	public static final	String	CONST_LEAVE_STATUS_SUSPEND		 =			"0000000023";
+	
 	
 	public static final	String	CONST_LEAVE_ACTION_APPROVE		=			"0000000001";
 	public static final	String	CONST_LEAVE_ACTION_RETURN		=			"0000000002";

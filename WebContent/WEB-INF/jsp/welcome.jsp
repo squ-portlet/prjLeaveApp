@@ -373,6 +373,19 @@
 						<portlet:param name="action" value="newApply"/>
 					</portlet:renderURL>
 					
+					<c:choose>
+						<c:when test="${req.status.statusCode eq leaveStatusDelete}">
+							<c:set value="false" var="flagChange"></c:set>
+						</c:when>
+						<c:when test="${req.status.statusCode eq leaveStatusSuspend}">
+							<c:set value="false" var="flagChange"></c:set>
+						</c:when>
+						<c:otherwise>
+							<c:set value="true" var="flagChange"></c:set>
+						</c:otherwise>
+						
+					</c:choose>
+					
 				<tr>
 						<td class="clsNum">
 							<c:choose>
@@ -462,18 +475,28 @@
 										</c:choose>
 									</c:when>
 									<c:when test="${(empty req.returnApprove.employee.empNumber) && (req.status.statusCode == furtherClarification)}">
-										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" appEmpNo="${req.approve.employee.empNumber}" indexRef="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
+										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> 
+										<c:if test="${flagChange}"> 
+											| <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.apply.action.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" appEmpNo="${req.approve.employee.empNumber}" indexRef="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a> 
+										</c:if>
 									</c:when>
 									<c:when test="${(not empty req.returnApprove.employee.empNumber) && (req.status.statusCode == furtherClarification)}">
-										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text.color.red"/></a>
+										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> 
+										<c:if test="${flagChange}">
+											 | <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text.color.red"/></a>
+										</c:if>
 									</c:when>									
 									<c:when test="${(req.status.statusCode == leaveStatusApproved) || (req.status.statusCode == leaveStatusRejected)}">
 										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
 										<c:if test="${(req.status.statusCode eq leaveStatusRejected) && (not empty req.returnApprove.employee.empNumber) && (req.finalStatusCode != leaveStatusApproved) }">
-											| <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text.color.red"/></a> 
+											<c:if test="${flagChange}">
+												| <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text.color.red"/></a> 
+											</c:if>
 										</c:if> 
 										<c:if test="${(req.allowLeaveExtension) && not (req.leaveExtended)}">
-										| <a href="${newApplyExtension}"><spring:message code="prop.leave.app.title.request.extension"/></a> 
+											<c:if test="${flagChange}">
+												| <a href="${newApplyExtension}"><spring:message code="prop.leave.app.title.request.extension"/></a>
+											</c:if> 
 										</c:if>
 									</c:when>
 									<c:when test="${(req.approverSequenceNo != 1)}">
@@ -483,11 +506,16 @@
 										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | (<spring:message code="prop.leave.app.return.link.text"/>)
 									</c:when>
 									<c:otherwise>
-										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a> | <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" appEmpNo="${req.approve.employee.empNumber}" indexRef="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
+										<a href="${varLeaveView}"><spring:message code="prop.leave.app.title.request.view"/></a>
+											<c:if test="${flagChange}">
+										 		| <a href="${varLeaveClarification}"><spring:message code="prop.leave.app.title.request.update"/></a> | <a href="#" class="mydialogCls" reqNo="${req.requestNo}" appEmpNo="${req.approve.employee.empNumber}" indexRef="${varLeaveCancel}"><spring:message code="prop.leave.app.title.request.cancel"/></a>
+										 	</c:if>
 									</c:otherwise>
 								</c:choose>
 								<c:if test="${req.leaveReturn && (empty req.returnApprove.employee.empNumber) && not (req.leaveExtended)}">
-									 | <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text"/></a>
+									<c:if test="${flagChange}">
+									 	| <a href="${urlLeaveReturn}"><spring:message code="prop.leave.app.return.link.text"/></a>
+									</c:if>
 								</c:if>
 								
 								
