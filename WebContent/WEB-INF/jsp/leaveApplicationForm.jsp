@@ -793,6 +793,12 @@ $(function() {
 	});
 	
 	
+	$(function() {
+		$('#bttnSubmit').click(function(event){
+			$('#leaveAppModel').submit();
+			$('#bttnSubmit').prop('disabled', true);
+		});
+	});
 	
 	
 </script>
@@ -1133,7 +1139,7 @@ $(function() {
 		
 
 		<center>
-			<input id="bttnSubmit" class='btn btn-primary' type="submit" value='<spring:message code="prop.leave.app.apply.form.requester.submit"/>' style="border-style: solid; border-color: black; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
+			<input id="bttnSubmit" class='btn btn-primary' type="button" value='<spring:message code="prop.leave.app.apply.form.requester.submit"/>' style="border-style: solid; border-color: black; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
 		</center>
 
 		
