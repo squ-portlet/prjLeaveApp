@@ -534,11 +534,11 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 	 */
 	public boolean isLeaveApplicationForRequesterAllowed(String empNumber)
 	{
-		boolean result	= false;
+		boolean result	= true;
 		
-			if(isDaysAfterJoinAllowed(empNumber) || isEndOfService(empNumber))
+			if(isUnderProbation(empNumber) || isEndOfService(empNumber))
 			{
-				result = true;
+				result = false;
 			}
 				
 		return result;
@@ -611,21 +611,13 @@ public class LeaveAppServiceDaoImpl implements LeaveAppServiceDao
 		return result;
 	}
 	
-	/**
-	 * 
-	 * method name  : isDaysAfterJoinAllowed
-	 * @param empNumber
-	 * @return
-	 * LeaveAppServiceDaoImpl
-	 * return type  : boolean
-	 * 
-	 * purpose		: Employee join after 90 days allowed to use leave application service 
-	 *
-	 * Date    		:	Nov 22, 2016 2:42:17 PM
+	/*
+	 * (non-Javadoc)
+	 * @see om.edu.squ.squportal.portlet.leaveapp.dao.service.LeaveAppServiceDao#isUnderProbation(java.lang.String)
 	 */
-	public boolean isDaysAfterJoinAllowed(String empNumber)
+	public boolean isUnderProbation(String empNumber)
 	{
-		return leaveDbDao.getDaysAfterJoin(empNumber) <= Constants.CONST_EMP_DAYS_AFTER_JOIN_LIMIT ? false : true;
+		return leaveDbDao.getDaysAfterJoin(empNumber) <= Constants.CONST_EMP_DAYS_AFTER_JOIN_LIMIT ? true : false;
 	}
 	
 	/**

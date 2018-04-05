@@ -337,9 +337,10 @@ public interface LeaveAppServiceDao
 	 */
 	public boolean isExtendedLeaves(List<LeaveRequest> leaveRequests);
 	
+
 	/**
 	 * 
-	 * method name  : isDaysAfterJoinAllowed
+	 * method name  : isUnderProbation
 	 * @param empNumber
 	 * @return
 	 * LeaveAppServiceDaoImpl
@@ -348,8 +349,10 @@ public interface LeaveAppServiceDao
 	 * purpose		: Employee join after 90 days allowed to use leave application service 
 	 *
 	 * Date    		:	Nov 22, 2016 2:42:17 PM
+	 * Modify Date  :   04-April-2018
+	 * Note			:   After discussion with Abdullah Rashdi, function name change and return behavior
 	 */
-	public boolean isDaysAfterJoinAllowed(String empNumber);
+	public boolean isUnderProbation(String empNumber);
 	
 	/**
 	 * 

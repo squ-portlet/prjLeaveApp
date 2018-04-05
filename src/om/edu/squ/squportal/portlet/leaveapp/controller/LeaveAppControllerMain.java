@@ -186,11 +186,11 @@ public class LeaveAppControllerMain
 		{
 			if (!model.containsAttribute(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG))
 			{
-				if (!leaveAppServiceDao.isDaysAfterJoinAllowed(empNumber))
+				if (leaveAppServiceDao.isUnderProbation(empNumber))
 					{
 						model.addAttribute(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, UtilProperty.getMessage("error.prop.leave.apply.not.available.in.probation", null, locale));
 					}
-				if (!leaveAppServiceDao.isDaysAfterJoinAllowed(empNumber))
+				if (leaveAppServiceDao.isEndOfService(empNumber))
 					{
 						model.addAttribute(Constants.CONST_ALLOW_ELEAVE_REQUEST_MSG, UtilProperty.getMessage("error.prop.leave.apply.not.available.after.end.of.service", null, locale));
 					}
