@@ -74,6 +74,7 @@ import om.edu.squ.squportal.portlet.leaveapp.utility.email.EmailService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
@@ -330,7 +331,8 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 	 */
 	public Employee	getEmployee(String empNumber,Locale locale) throws DbNotAvailableException
 	{
-		RowMapper<Employee> mapper	=	new RowMapper<Employee>()
+		Employee			employee	=	null;
+		RowMapper<Employee> mapper		=	new RowMapper<Employee>()
 		{
 
 			public Employee mapRow(ResultSet rs, int rowNum)
@@ -388,9 +390,20 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		Map<String,String> namedParameters = new HashMap<String,String>();
 		namedParameters.put("paramLocale", locale.getLanguage());
 		namedParameters.put("paramEmpNumber", empNumber);
-
-		return this.namedParameterJdbcTemplate.queryForObject(Constants.SQL_EMPLOYEE, namedParameters, mapper);
+		try
+		{
+			 employee = this.namedParameterJdbcTemplate.queryForObject(Constants.SQL_EMPLOYEE, namedParameters, mapper);
+		}
+		catch(IncorrectResultSizeDataAccessException exResult)
+		{
+			logger.info("Different result set for emploee : {}, Error : {} ",empNumber,exResult.getMessage());
+		}
+		catch(Exception ex)
+		{
+			logger.info("Error to extract Employee record ");
+		}
 		
+		return employee;
 	}
 	
 	/**
@@ -844,8 +857,14 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		
 		Map<String,Object> 	paramIn				=	new HashMap<String, Object>();
 		paramIn.put(Constants.CONST_PROC_COL_IN_P_EMP_CODE, empNumber);
-		
-		result			=	simpleJdbcCall.execute(paramIn);
+		try
+		{
+			result			=	simpleJdbcCall.execute(paramIn);
+		}
+		catch(Exception ex)
+		{
+			logger.error("Error to get DirectManager for employee {}, Details : {} ",empNumber, ex.getMessage());
+		}
 		
 		mgrEmpNumber	=	(String)result.get(Constants.CONST_PROC_COL_OUT_V_MGR_EMP);
 		mgrEmployee		=	getEmployee(mgrEmpNumber, locale);

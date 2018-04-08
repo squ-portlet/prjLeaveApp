@@ -403,7 +403,9 @@ public interface Constants
 																			"	AND EMP.VHM_EMP_DEPT_CODE=DEPARTMENT.VHM_DEPT_CODE								" +
 																			"	AND EMP.VHM_EMP_SECTION_CODE=SECTION.VHM_SECTION_CODE							" +
 																			"	AND HIR.VHM_HIERARCHY_CODE = DESG.VHM_HIERARCHY_CODE (+)						" +
-																			"   AND EMP.VHM_EMP_CODE = ADESIG.VEAT_EMP_CODE(+)									";
+																			"   AND EMP.VHM_EMP_CODE = ADESIG.VEAT_EMP_CODE(+)									" +
+									                                        "	AND TRUNC(ADESIG.VEAT_TO_DATE (+) ) > TRUNC(SYSDATE)							" +   
+									                                        "	AND ROWNUM < 2																	";
 	
 	 public static final	String	SQL_EMP_BRANCH_DEPT_SHORT		= 		" SELECT VHM_EMP_CODE AS EMP_CODE,							" +							
 																			"     DECODE(												" +	
