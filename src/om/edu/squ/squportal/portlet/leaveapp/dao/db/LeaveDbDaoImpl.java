@@ -1562,10 +1562,15 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 					leaveRequest.setLeaveReturn(false);
 				}
 				
-				if (rs.getString(Constants.CONST_ALLOW_LEAVE_EXTENSTION).equals(Constants.CONST_ALLOW_LEAVE_EXTENSTION_Y))
+				if (rs.getString(Constants.CONST_ALLOW_LEAVE_EXTENSTION).equals(Constants.CONST_ALLOW_LEAVE_EXTENSTION_Y) )
 				{
-					leaveRequest.setAllowLeaveExtension(true);
-					leaveRequest.setLeaveExtnStartDate(rs.getString(Constants.CONST_LEAVE_EXTENSION_START_DATE));
+					if(null ==  employeeRetApp.getEmpNumber())
+					{
+						leaveRequest.setAllowLeaveExtension(true);
+						leaveRequest.setLeaveExtnStartDate(rs.getString(Constants.CONST_LEAVE_EXTENSION_START_DATE));
+						
+					}
+					
 				}
 				else
 				{
