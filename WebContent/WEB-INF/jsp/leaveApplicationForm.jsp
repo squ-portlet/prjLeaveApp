@@ -1051,9 +1051,15 @@ $(function() {
 
 		<c:if test="${(employee.hierarchyLevelCode != baseLevelEmp) || (not empty (employee.hierarchyAddlLevelCode) && (employee.hierarchyAddlLevelCode != baseLevelEmp))}" >	
 		<br>
+
 			<table cellspacing="0" cellpadding="0" border="1" width="100%" style="margin: 1em;">
 				<caption>
-					<spring:message code="prop.leave.app.apply.form.delegated.employees"/>
+					<div class="col-sm-2 col-xs-2">
+						<spring:message code="prop.leave.app.apply.form.delegated.employees"/>
+					</div>
+					<div class="alert alert-warning col-sm-8 col-xs-8">
+		   				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <spring:message code="warn.prop.leave.apply.delegation.msg.admin.order.required"/>
+					</div>
 				</caption>
 				<tr>
 					<td class="PortletHeaderColor">
