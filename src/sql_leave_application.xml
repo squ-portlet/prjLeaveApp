@@ -504,12 +504,19 @@
      </entry>
      <entry key="select.days.after.join">
      	<![CDATA[
-			SELECT 
-					TRUNC(SYSDATE) - TRUNC(VHM_EMP_JOIN_DATE) 												AS DAYS_AFTER_JOIN
+ 			SELECT 
+		          DECODE 
+		                    (
+		                        TRUNC(VHM_EMP_APPOINT_DT) - TRUNC(VHM_EMP_JOIN_DATE)
+		                      , 0 
+		                      , TRUNC(SYSDATE) - TRUNC(VHM_EMP_JOIN_DATE)
+		                      , TRUNC(SYSDATE) - TRUNC(VHM_EMP_APPOINT_DT)
+		                    ) 																				AS 	DAYS_AFTER_JOIN
+
 			FROM 
 					VHM_EMPLOYEE
 			WHERE 
-					VHM_EMP_CODE = LPAD(:paramEmpCode,7,0)     	
+					VHM_EMP_CODE = LPAD(:paramEmpCode,7,0)   	
      	]]>
      </entry>
      <entry key="select.is.end.of.service">
