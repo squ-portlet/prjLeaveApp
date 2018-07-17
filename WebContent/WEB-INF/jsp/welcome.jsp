@@ -299,12 +299,20 @@
 			
 
 <p>
-		<br></br>	
-		<c:if test="${isLeveApplyAllowed && isLeaveApplicationForRequesterAllowed}">	
-			<a class='btn btn-primary' href="${newApply}">
-				<spring:message code="prop.leave.app.apply.new"/>
-			</a>
-		</c:if>
+		<br></br>
+		<c:choose>
+			<c:when test="${isLeveApplyAllowed && isLeaveApplicationForRequesterAllowed}">
+				<a class='btn btn-primary' href="${newApply}">
+					<spring:message code="prop.leave.app.apply.new"/>
+				</a>
+			</c:when>
+			<c:otherwise>
+				<div class="alert alert-warning" role="alert">
+				  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				  <spring:message code="warn.prop.leave.return.or.approval.pending"/>
+				</div>			
+			</c:otherwise>
+		</c:choose>	
 </p>
 			<form:form modelAttribute="leaveAppModel" method="post" htmlEscape="false">
 				<form:hidden 	path="requestNo" />
