@@ -142,10 +142,6 @@ public class LeaveAppControllerMain
 				{
 					booLeveApplyAllowed	= true;
 				}
-				if(maxLeaveRequest.getStatus().getStatusCode().equals(Constants.CONST_LEAVE_STATUS_SUSPEND))
-				{
-					booLeveApplyAllowed	= true;
-				}
 			}
 			else
 			{
