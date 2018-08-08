@@ -580,7 +580,33 @@
              AND DELG.VHM_DELEGATED_EMP_DESG_CODE = DESG.VHM_DESG_CODE		
              AND  DESG.VHM_HIERARCHY_CODE = HIR.VHM_HIERARCHY_CODE (+) 		
              AND VHM_DELEGATED_EMP_BRANCH_CODE  =:paramBranchCode				
-             AND VHM_DELEGATED_EMP_DEPT_CODE = :paramDept						     
+             AND VHM_DELEGATED_EMP_DEPT_CODE = :paramDept
+             						     
+			UNION														
+						SELECT DISTINCT	
+						VHM_EMP_CODE 																		AS EMP_CODE,										
+				  		DECODE(:paramLocale,									
+				  				'en',initCap(VHM_EMP_NAME) , 					
+				  				'ar',VHM_EMP_NAME_ARABIC 						
+				  			)																				AS EMP_NAME ,  									
+				  	 		HIR.VHM_LEVEL 																	AS EMP_LEVEL,							
+				  	   	'N' 																				AS DELEGATED		 							
+						FROM													
+				  			VHM_EMPLOYEE 					EMP ,									
+				  			VHM_DESIGNATION 				DESG, 								
+				  			VHM_HIERARCHY 					HIR,									
+                VHM_EMPLOYEE_ADDITIONAL_TASK 	ADESIG					
+						WHERE													
+                   ADESIG.VEAT_EMP_DESG_CODE  					=	DESG.VHM_DESG_CODE	
+							AND  DESG.VHM_HIERARCHY_CODE		= 	HIR.VHM_HIERARCHY_CODE 
+							AND	 ADESIG.VEAT_EMP_DEPT_CODE		=	:paramDept	
+                            AND  HIR.VHM_LEVEL 					< 	DECODE(:paramEmpLevel,'NA','010',:paramEmpLevel)
+                            AND  EMP.VHM_EMP_CODE 				=	ADESIG.VEAT_EMP_CODE			
+                       	    AND ( 												
+                        				ADESIG.VEAT_TO_DATE IS NULL						
+                        			OR	TRUNC(ADESIG.VEAT_TO_DATE) >	= TRUNC(SYSDATE)	
+                        		)												
+                            AND  EMP.VHM_EMP_ACTIVE          			= 'Y'	                          						     
      	]]>
      </entry>
      <entry key="select.list.of.head.of.section">
