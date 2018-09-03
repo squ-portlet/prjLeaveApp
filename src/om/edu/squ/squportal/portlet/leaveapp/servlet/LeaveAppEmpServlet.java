@@ -72,6 +72,7 @@ public class LeaveAppEmpServlet extends HttpServlet {
 		String			empNumber		=	request.getParameter("empNumber");
 		String			branchCode		=	request.getParameter("branchCode");
 		String			localeSrv		=	request.getParameter("localeSrv");
+		List<Employee>	employees		=	null;
 		//String			deptCode	=	request.getParameter("deptCode");
 		response.setContentType("text/html; charset=utf-8");
 		
@@ -80,13 +81,15 @@ public class LeaveAppEmpServlet extends HttpServlet {
 			localeSrv	=	"en";
 		}
 		Locale				locale		=	new Locale(localeSrv);
-		
 		LeaveDbDao		leaveDbDao	=	new LeaveDbDaoImpl(datasource);
-		List<Employee>	employees	=	leaveDbDao.getEmployee(empNumber,branchCode,locale);
-		Gson gson = new Gson();
-		
-		String	strJson	=	gson.toJson(employees);
-		response.getWriter().print(strJson);
+		if(null != empNumber && !empNumber.trim().equals(""))
+		{
+			employees	=	leaveDbDao.getEmployee(empNumber,branchCode,locale);
+			Gson gson = new Gson();
+			
+			String	strJson	=	gson.toJson(employees);
+			response.getWriter().print(strJson);
+		}
 	}
 
 	/**

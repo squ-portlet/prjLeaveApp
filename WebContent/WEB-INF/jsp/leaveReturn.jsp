@@ -645,7 +645,7 @@ $(function() {
 											<c:when test="${not empty delegatedEmployee}">
 												<h5>
 													<spring:message code="prop.leave.app.apply.form.leave.manager.custom"/>
-													<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i> &nbsp; <spring:message code="prop.leave.app.apply.employee.on.leave"/></font>
+													<font color="red" size="small"><i><c:out value="${manager.empName}"/></i> &nbsp; <spring:message code="prop.leave.app.apply.employee.on.leave"/></font>
 												</h5>
 												<h4 >
 													<spring:message code="prop.leave.app.apply.form.delegated.employees"/>
@@ -655,7 +655,7 @@ $(function() {
 											<c:otherwise>
 												<h4 >
 													<spring:message code="prop.leave.app.apply.form.leave.manager.custom"/>
-													<font color="red" size="small"><i><c:out value="${approver.employee.empName}"/></i></font>
+													<font color="red" size="small"><i><c:out value="${manager.empName}"/></i></font>
 												</h4>											
 											</c:otherwise>												
 										

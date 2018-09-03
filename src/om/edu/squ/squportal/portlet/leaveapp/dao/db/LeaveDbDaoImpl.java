@@ -396,11 +396,11 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		}
 		catch(IncorrectResultSizeDataAccessException exResult)
 		{
-			logger.info("Different result set for emploee : {}, Error : {} ",empNumber,exResult.getMessage());
+			logger.error("Different result set for emploee : {}, Error : {}. Check whether employee is in leave or not",empNumber,exResult.getMessage());
 		}
 		catch(Exception ex)
 		{
-			logger.info("Error to extract Employee record ");
+			logger.error("Error to extract Employee record ");
 		}
 		
 		return employee;
@@ -527,7 +527,7 @@ public class LeaveDbDaoImpl implements LeaveDbDao
 		}
 		catch(Exception ex)
 		{
-			logger.error("Error generated: can not fetch employee list, Details : "+ex.getMessage());
+			logger.error("Error generated: can not fetch employee list for employee : {} , Details : {}",empNumber, ex.getMessage());
 		}
 		
 

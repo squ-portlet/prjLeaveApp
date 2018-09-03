@@ -840,6 +840,7 @@ public class LeaveAppControllerMain
 
 		LeaveRequest	leaveRequest			=	null;
 		String			empNumber 				=	getEmpNumber(request);
+		Employee		manager				=	leaveAppServiceDao.getManager(String.format("%07d", Integer.parseInt(empNumber)), locale);
 		Employee		employee				=	leaveAppServiceDao.getEmployee(
 														empNumber, 
 														ldapdao.getCorrectUserName(request.getRemoteUser()) ,
@@ -848,7 +849,7 @@ public class LeaveAppControllerMain
 						empNumber				=	String.format("%07d", Integer.parseInt(employee.getEmpNumber()));
 						
 						/* Self approval not supported*/
-						if(empNumber.equals(approverEmpNo.trim()))
+						if(empNumber.equals(approverEmpNo.trim()) || empNumber.equals(manager.getEmpNumber().trim()) )
 						{
 							model.addAttribute("allowELeaveRequestMsg", UtilProperty.getMessage("warn.prop.leave.self.approve.not.allowed", null, locale));
 							return welcome("",request,model,locale);
@@ -864,7 +865,7 @@ public class LeaveAppControllerMain
 						{
 							logger.error("Empty records : "+ex.getMessage());
 						}
-		
+
 		
 		DateFormat 	df 					= 	new SimpleDateFormat("dd/MM/yyyy");
 		String 		stringDate 			= 	df.format(new Date());
@@ -882,7 +883,7 @@ public class LeaveAppControllerMain
 			leaveAppModel.setRequestNo(requestNum);
 			if(null == delegatedEmployee)
 			{
-				leaveAppModel.setApproverEmpNumber(approverEmpNo);
+				leaveAppModel.setApproverEmpNumber(manager.getEmpNumber());
 			}
 			else
 			{
@@ -892,7 +893,7 @@ public class LeaveAppControllerMain
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
 		
-		
+		model.addAttribute("manager", manager);
 		model.addAttribute("employee",employee );
 		model.addAttribute("delegatedEmployee",delegatedEmployee );
 		model.addAttribute("leaveRequest", leaveRequest);

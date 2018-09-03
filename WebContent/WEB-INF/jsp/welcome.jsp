@@ -373,7 +373,7 @@
 					<portlet:renderURL var="urlLeaveReturn">
 						<portlet:param name="action" value="leaveReturn" />
 						<portlet:param name="requestNo" value="${req.requestNo}"/>
-						<portlet:param name="approverEmpNo" value="${req.approve.employee.empNumber}"/>
+						<portlet:param name="approverEmpNo" value="${req.approve.employee.empNumber}"/> 
 					</portlet:renderURL>
 					<portlet:renderURL var="newApplyExtension">
 						<portlet:param name="paramEndDate" value="${req.leaveExtnStartDate}"/>
