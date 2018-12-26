@@ -215,7 +215,7 @@ $(function() {
 							<b><spring:message code="prop.leave.app.leave.balance"/></b>
 						</td>
 						<td colspan="3">
-							<spring:message code="prop.leave.app.before.leave"/> :  <b>${leaveRequest.leaveBalanceStart}</b> <spring:message code="prop.leave.app.apply.form.leave.balance.days"/>
+									<b>${leaveRequest.leaveBalanceStart}</b> <spring:message code="prop.leave.app.apply.form.leave.balance.days"/>
 						</td>
 					</tr>
 					<tr>
