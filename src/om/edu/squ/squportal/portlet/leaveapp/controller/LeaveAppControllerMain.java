@@ -117,11 +117,22 @@ public class LeaveAppControllerMain
 	{
 		String			empNumber 				=	getEmpNumber(request);
 		boolean			booLeveApplyAllowed		=	false;
-		Employee		employee				=	leaveAppServiceDao.getEmployee(
+		Employee		employee				=	null;
+		String 			empUserName				=	null;
+		try
+		{
+						empUserName	=	ldapdao.getCorrectUserName(request.getRemoteUser());
+						employee	=	leaveAppServiceDao.getEmployee(
 													empNumber, 
-													ldapdao.getCorrectUserName(request.getRemoteUser()) ,
+													empUserName ,
 													locale
 												  );
+		}
+		catch(Exception ex)
+		{
+			logger.error("Error in fetching Employee for empNumber : {}, userName: {}",empNumber, empUserName);
+		}
+		
 		List<LeaveRequest>	leaveRequests			=	leaveAppServiceDao.getLeaveRequests(employee,locale, Constants.CONST_USERTYPE_REQUESTER);
 		List<LeaveRequest>	leaveRequestsApprover	=	leaveAppServiceDao.getLeaveRequests(employee,locale, Constants.CONST_USERTYPE_APPROVER);
 
