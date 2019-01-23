@@ -106,17 +106,17 @@
    	 <bean id="queryPropsReturn" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
     	<property name="locations" value="classpath:sql_leave_return.xml" />
 	</bean>
-<!-- TEST DB  --> 
+<!-- TEST DB   
 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="java:comp/env/jdbc/hrmsTest"/>
 	</bean>
+-->
 
-
-<!--   PRODUCTION DB 
+<!--   PRODUCTION DB -->
  	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="java:comp/env/jdbc/hrmscl"/>
 	</bean>
--->  
+
  
  	
 	<tx:annotation-driven/>

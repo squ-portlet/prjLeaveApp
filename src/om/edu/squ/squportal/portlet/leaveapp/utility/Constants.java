@@ -361,7 +361,7 @@ public interface Constants
 												                            "                  WHERE ADDLDESG.VHM_DESG_CODE = ADESIG.VEAT_EMP_DESG_CODE			" +
 												                            "                )																	" +
 												                            "            ) EMP_ADDITIONAL_LEVEL,												" +
-																			" 	VHM_EMP_ADMIN_POSITION_YN AS EMP_ADMIN,											" +
+																			" 	NVL(VHM_EMP_ADMIN_POSITION_YN,'N') AS EMP_ADMIN,								" +
 																			"	EMP.VHM_EMP_GRADE_CODE AS EMP_GRADE_CODE,										" +		
 																			"  DECODE(:paramLocale,                          									" +
 																			"            'en',initCap(GRADE.VHM_GRADE_DESC),          							" +
