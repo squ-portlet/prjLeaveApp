@@ -243,7 +243,7 @@ import org.springframework.web.multipart.MultipartFile;
 	        catch(Exception ex)
 	        {
 	        	mailSuccess	= false;
-	        	logger.error("Mail sending failure, Details : "+ex);
+	        	logger.error("Mail sending failure, from: {},  Details : {} ",fromAddress,ex.getMessage());
 	        }
 	        
 	        return mailSuccess;
