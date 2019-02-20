@@ -162,16 +162,16 @@ import org.springframework.web.multipart.MultipartFile;
 	        //props.put("mail.smtp.starttls.enable","false");								
 	        //props.setProperty("mail.smtp.ssl.trust", "squmail.squ.edu.om");
 	        props.put("mail.smtp.port", SMTP_HOST_PORT);
+	        SMTPAuthenticatorextends	auth	=	new SMTPAuthenticatorextends();
+	        Session mailSession = Session.getInstance(props,auth);
+	        MimeMessage message = new MimeMessage(mailSession);
+	        
 	        try
 	        {
-	        	SMTPAuthenticatorextends	auth	=	new SMTPAuthenticatorextends();
-		        Session mailSession = Session.getInstance(props,auth);
-		        
-		        
 		        //mailSession.setDebug(true);												// Debug output in console
 		        Transport transport = mailSession.getTransport();
 		
-		        MimeMessage message = new MimeMessage(mailSession);
+		        
 		        InternetAddress[] addressTo = new InternetAddress[toAddress.length];
 		        InternetAddress[] addressCC	=	null;
 
@@ -226,6 +226,7 @@ import org.springframework.web.multipart.MultipartFile;
 		        }
 		        
 		        message.setFrom(new InternetAddress(SMTP_AUTH_USER,SMTP_AUTH_USER_NAME));
+		        message.saveChanges();
 		        transport.connect ();
 		        transport.sendMessage(message,
 		            message.getRecipients(Message.RecipientType.TO));
@@ -243,7 +244,7 @@ import org.springframework.web.multipart.MultipartFile;
 	        catch(Exception ex)
 	        {
 	        	mailSuccess	= false;
-	        	logger.error("Mail sending failure, from: {},  Details : {} ",fromAddress,ex.getMessage());
+	        	logger.error("Mail sending failure: , messageId:{}, from: {} - to: {},  Details : {} ",message.getMessageID(), fromAddress, toAddress, ex.getMessage());
 	        }
 	        
 	        return mailSuccess;
