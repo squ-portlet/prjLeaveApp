@@ -139,7 +139,7 @@ import org.springframework.web.multipart.MultipartFile;
 			
 			SMTP_HOST_NAME	=	UtilProperty.getMessage
 								(
-										Constants.MAIL_SMTP_HOST, 
+										Constants.MAIL_SMTP_GMAIL_HOST, 
 										new Object[]{} 
 								);
 	        SMTP_AUTH_USER 	=   fromAddress;
@@ -147,7 +147,7 @@ import org.springframework.web.multipart.MultipartFile;
 	        SMTP_HOST_PORT 	=   Integer.parseInt(
 									        		UtilProperty.getMessage
 													(
-															Constants.MAIL_SMTP_PORT, 
+															Constants.MAIL_SMTP_GMAIL_PORT, 
 															new Object[]{} 
 													)
 	        									);
