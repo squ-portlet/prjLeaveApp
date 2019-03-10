@@ -245,6 +245,7 @@ import org.springframework.web.multipart.MultipartFile;
 	        {
 	        	mailSuccess	= false;
 	        	logger.error("Mail sending failure: , messageId:{}, from: {} - to: {},  Details : {} ",message.getMessageID(), fromAddress, toAddress, ex.getMessage());
+	        	logger.error("Mail sending failure (Stack Trace) : , messageId:{}, from: {} - to: {},  stack trace : {} ",message.getMessageID(), fromAddress, toAddress, ex.getStackTrace());
 	        }
 	        
 	        return mailSuccess;
