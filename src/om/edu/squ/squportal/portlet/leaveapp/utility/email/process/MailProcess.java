@@ -159,7 +159,7 @@ import org.springframework.web.multipart.MultipartFile;
 	        props.put("mail.smtp.host", SMTP_HOST_NAME);
 	        props.put("mail.smtp.debug", "true");
 	        props.put("mail.smtp.auth", "false");
-	        //props.put("mail.smtp.starttls.enable","false");								
+	        props.put("mail.smtp.starttls.enable","true");								
 	        //props.setProperty("mail.smtp.ssl.trust", "squmail.squ.edu.om");
 	        props.put("mail.smtp.port", SMTP_HOST_PORT);
 	        SMTPAuthenticatorextends	auth	=	new SMTPAuthenticatorextends();
