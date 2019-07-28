@@ -68,11 +68,19 @@ import org.springframework.web.multipart.MultipartFile;
 	{
 		private final Logger logger = LoggerFactory.getLogger(this.getClass());
 		
-		   	private static  String 	SMTP_HOST_NAME;
-		    private static  int 	SMTP_HOST_PORT;
-		    private static  String 	SMTP_AUTH_USER; 
-		    private	static	String	SMTP_AUTH_USER_NAME;
-
+		   	private static  String 				SMTP_HOST_NAME;
+		    private static  int 				SMTP_HOST_PORT;
+		    private static  String 				SMTP_AUTH_USER; 
+		    private	static	String				SMTP_AUTH_USER_NAME;
+		    private	static	String				SMTP_AUTHENTICATED;
+		    private	static	String				SMTP_TTLS;
+		    private	static	String				SMTP_USER;
+		    private	static	String				SMTP_USER_PWD;
+		    private	static	String				SMTP_TRANSPORT_PROTOCOL;
+		    
+	        private			InternetAddress[] 	addressTo 	= 	null; 
+	        private			InternetAddress[] 	addressCC	=	null;
+	        private			InternetAddress[] 	addressBCC	=	null;
 	
 			private StringTemplateGroup stringTemplateGroup;
 			private Map<String,String> stringTemplateMap;
@@ -136,6 +144,8 @@ import org.springframework.web.multipart.MultipartFile;
 		public  boolean  sendMail(String fromAddress, String fromAddressUser, String[] toAddress, String[] ccAddress,String txtMailSubject, String txtMailBody, MultipartFile multipartFile ) throws Exception{
 			boolean	mailSuccess = false;
 			Properties props = new Properties();
+			
+
 			
 			SMTP_HOST_NAME	=	UtilProperty.getMessage
 								(
