@@ -64,13 +64,23 @@ public class LeaveAppReturnValidator implements Validator
 			approverEmpNum = leaveAppModel.getHod();
 		}
 		
-		logger.info("approverEmpNum : "+approverEmpNum);
-		logger.info("LeaveAppModel : "+leaveAppModel.toString());
-		
+		if (
+					(null==leaveAppModel.getHod()) 
+				&& (
+							(null==leaveAppModel.getApproverEmpNumber())
+						|| 	(leaveAppModel.getApproverEmpNumber().trim().equals(""))
+					)
+			)
+		{
+			err.reject("error.prop.leave.app.approver.na");
+		}
+
 		if(approverEmpNum.trim().equals(leaveAppModel.getEmployeeNumber().trim()))
 		{
 			err.reject("warn.prop.leave.self.approve.not.allowed");
 		}
+		
+		
 		
 		
 	}

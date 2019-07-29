@@ -73,7 +73,7 @@ public class LeaveAppModel implements Serializable
 	private	boolean			acceptLeave;
 	private	String			msgLeaveRequest;									// Message from eleave request - mostly at the time of rejection
 	private	String			renderUrlText;
-	
+	private	String			userChoosenApproverEmpNumber;						// This approver number will be overrulled by direct manager by system
 	
 	
 	/**
@@ -700,6 +700,25 @@ public class LeaveAppModel implements Serializable
 	public void setRenderUrlText(String renderUrlText) {
 		this.renderUrlText = renderUrlText;
 	}
+	
+	/**
+	 * Getter Method	: getUserChoosenApproverEmpNumber
+	 * @return the userChoosenApproverEmpNumber
+	 * 
+	 * Date				: Jul 28, 2019
+	 */
+	public String getUserChoosenApproverEmpNumber() {
+		return this.userChoosenApproverEmpNumber;
+	}
+	/**
+	 * Setter method : setUserChoosenApproverEmpNumber
+	 * @param userChoosenApproverEmpNumber the userChoosenApproverEmpNumber to set
+	 * 
+	 * Date          : Jul 28, 2019 2:27:11 PM
+	 */
+	public void setUserChoosenApproverEmpNumber(String userChoosenApproverEmpNumber) {
+		this.userChoosenApproverEmpNumber = userChoosenApproverEmpNumber;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -726,7 +745,8 @@ public class LeaveAppModel implements Serializable
 				+ ", processSalaray=" + this.processSalaray + ", acceptLeave="
 				+ this.acceptLeave + ", msgLeaveRequest="
 				+ this.msgLeaveRequest + ", renderUrlText="
-				+ this.renderUrlText + "]";
+				+ this.renderUrlText + ", userChoosenApproverEmpNumber="
+				+ this.userChoosenApproverEmpNumber + "]";
 	}
 	
 	

@@ -494,6 +494,12 @@ $(function() {
 	
 </script>
 
+<style>
+		.error { 
+		color : red; 
+		font-weight: bold; 
+		}
+</style>
 </head>
 
 
@@ -564,6 +570,7 @@ $(function() {
 				</div>
 		</center>
 <form:hidden path="approverEmpNumber" />
+<form:hidden path="userChoosenApproverEmpNumber" />
 <form:hidden path="requestNo" />
 	<center><form:errors path="*"  cssClass="alert alert-danger" role="alert"/></center>
 	<fieldset>

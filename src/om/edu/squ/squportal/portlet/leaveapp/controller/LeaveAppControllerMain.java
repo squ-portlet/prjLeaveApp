@@ -847,7 +847,6 @@ public class LeaveAppControllerMain
 			@RequestParam("approverEmpNo") String approverEmpNo,
 			PortletRequest request, Model model,Locale locale) throws ParseException, UnsupportedEncodingException
 	{
-		
 
 		LeaveRequest	leaveRequest			=	null;
 		String			empNumber 				=	getEmpNumber(request);
@@ -859,15 +858,21 @@ public class LeaveAppControllerMain
 													  );
 						empNumber				=	String.format("%07d", Integer.parseInt(employee.getEmpNumber()));
 						
-						/* Self approval not supported*/
-						if(empNumber.equals(approverEmpNo.trim()) || empNumber.equals(manager.getEmpNumber().trim()) )
+						
+						if ( null != manager) 
 						{
-							model.addAttribute("allowELeaveRequestMsg", UtilProperty.getMessage("warn.prop.leave.self.approve.not.allowed", null, locale));
-							return welcome("",request,model,locale);
+							/* Self approval not supported*/
+							if(empNumber.equals(approverEmpNo.trim()) || empNumber.equals(manager.getEmpNumber().trim()) )
+							{
+								model.addAttribute("allowELeaveRequestMsg", UtilProperty.getMessage("warn.prop.leave.self.approve.not.allowed", null, locale));
+								return welcome("",request,model,locale);
+							}
 						}
 						
 		Employee		delegatedEmployee		=	leaveAppServiceDao.getDelegatedEmployeeCurrentDate(approverEmpNo, locale);
 		
+				if(null != approverEmpNo)
+				{
 						try
 						{
 							leaveRequest			=	leaveAppServiceDao.getLeaveRequest(approverEmpNo, requestNum, locale);
@@ -876,8 +881,8 @@ public class LeaveAppControllerMain
 						{
 							logger.error("Empty records : "+ex.getMessage());
 						}
-
-		
+				}
+				
 		DateFormat 	df 					= 	new SimpleDateFormat("dd/MM/yyyy");
 		String 		stringDate 			= 	df.format(new Date());
 		Date 		leaveEndDate		=	df.parse(leaveRequest.getLeaveEndDate());
@@ -894,13 +899,21 @@ public class LeaveAppControllerMain
 			leaveAppModel.setRequestNo(requestNum);
 			if(null == delegatedEmployee)
 			{
-				leaveAppModel.setApproverEmpNumber(manager.getEmpNumber());
+				if(null == manager)
+				{
+					leaveAppModel.setApproverEmpNumber(null);
+				}
+				else
+				{
+					leaveAppModel.setApproverEmpNumber(manager.getEmpNumber());
+				}
 			}
 			else
 			{
 				leaveAppModel.setApproverEmpNumber(delegatedEmployee.getEmpNumber());
 			}
 			leaveAppModel.setLeaveReturnDate(expectedReturnDate);
+			leaveAppModel.setUserChoosenApproverEmpNumber(approverEmpNo);
 			model.addAttribute("leaveAppModel",leaveAppModel );
 		}
 		
@@ -946,23 +959,39 @@ public class LeaveAppControllerMain
 		String			empNumber 				=	getEmpNumber(request);
 						empNumber				=	String.format("%07d", Integer.parseInt(empNumber));
 						leaveApplModel.setEmployeeNumber(empNumber);
+						
+		Employee		manager					=	leaveAppServiceDao.getManager(String.format("%07d", Integer.parseInt(empNumber)), locale);
 		
 		int 	resultUpdate	=	0;	
 		String	approverEmpNum	=	null;
 		
+		if(null == manager)
+		{
+			approverEmpNum	=	leaveApplModel.getUserChoosenApproverEmpNumber();
+		}
 		new LeaveAppReturnValidator().validate(leaveApplModel, result);
+
 		if(result.hasErrors())
 		{
 			logger.warn("validation error in leave return. Most probably user trying to self approve the return");
-			if((null== leaveApplModel.getHod()) && null != leaveApplModel.getApproverEmpNumber())
+			if(
+						(null== leaveApplModel.getHod()) 
+					&& 	( 		(null != leaveApplModel.getApproverEmpNumber() )
+							&& 	(! leaveApplModel.getApproverEmpNumber().trim().equals("") )
+						)
+			   )
 			{
 				approverEmpNum = leaveApplModel.getApproverEmpNumber();
 			}
-			else if ((null != leaveApplModel.getHod()) && null != leaveApplModel.getApproverEmpNumber())
+			else if (
+						(null != leaveApplModel.getHod()) && 
+						( 		(null != leaveApplModel.getApproverEmpNumber())
+							&&	(! leaveApplModel.getApproverEmpNumber().trim().equals(""))	
+						)
+					)
 			{
 				approverEmpNum = leaveApplModel.getHod();
 			}
-
 			response.setRenderParameter("requestNo", leaveApplModel.getRequestNo());
 			response.setRenderParameter("approverEmpNo", approverEmpNum);
 			response.setRenderParameter("action", "leaveReturn");
