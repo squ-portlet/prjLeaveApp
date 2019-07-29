@@ -282,15 +282,20 @@ public interface Constants
 
 	
 	/************* EMAIL *********************************/
+
 	//public	static	String	RESOURCE_PROPERTY_FILE_NAME					=			"mailProp";
-	public	static	String	MAIL_SMTP_HOST									=			"smtpHost";
-	public	static	String	MAIL_SMTP_PORT									=			"smtpPort";
-	public	static	String	MAIL_FROM										=			"leave.personnel@squ.edu.om";
-	public	static	String	MAIL_FROM_USER									=			"Personnel Affairs Dept.";
-	public	static	String	MAIL_SUBJECT									=			"Leave application.";
-	public	static	String	MAIL_REQUEST_NO									=			" Request No: ";
-	public	static	boolean	IS_MAIL_SEND_ON									=			true;
-	public	static	String	CONST_TEMP_EMAIL_TO								=			null;
+	public	static			String	MAIL_SMTP_HOST									=			"smtpHost";
+	public	static			String	MAIL_SMTP_PORT									=			"smtpPort";
+	public	static			String	MAIL_SMTP_GMAIL_HOST							=			"smtpGmailHost";
+	public	static			String	MAIL_SMTP_GMAIL_PORT							=			"smtpGmailPort";
+	public	static			String	MAIL_FROM										=			"leave.personnel@squ.edu.om";
+	public	static			String	MAIL_FROM_USER									=			"Personnel Affairs Dept.";
+	public	static			String	MAIL_SUBJECT									=			"Leave application.";
+	public	static			String	MAIL_REQUEST_NO									=			" Request No: ";
+	public	static			boolean	IS_MAIL_SEND_ON									=			true;
+	public	static			String	CONST_TEMP_EMAIL_TO								=			null;
+	public	static	final	boolean	CONST_IS_TEST_ENVIRONMENT						=			false;
+	public	static	final	String	CONST_DUMMY_USER_EMAIL_FROM						=			"bhabesh@squ.edu.om";
 	/******************************************************/
 
 	/************* EMAIL TEMPLATE***************************/

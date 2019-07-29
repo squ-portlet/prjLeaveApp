@@ -68,11 +68,19 @@ import org.springframework.web.multipart.MultipartFile;
 	{
 		private final Logger logger = LoggerFactory.getLogger(this.getClass());
 		
-		   	private static  String 	SMTP_HOST_NAME;
-		    private static  int 	SMTP_HOST_PORT;
-		    private static  String 	SMTP_AUTH_USER; 
-		    private	static	String	SMTP_AUTH_USER_NAME;
-
+		   	private static  String 				SMTP_HOST_NAME;
+		    private static  int 				SMTP_HOST_PORT;
+		    private static  String 				SMTP_AUTH_USER; 
+		    private	static	String				SMTP_AUTH_USER_NAME;
+		    private	static	String				SMTP_AUTHENTICATED;
+		    private	static	String				SMTP_TTLS;
+		    private	static	String				SMTP_USER;
+		    private	static	String				SMTP_USER_PWD;
+		    private	static	String				SMTP_TRANSPORT_PROTOCOL;
+		    
+	        private			InternetAddress[] 	addressTo 	= 	null; 
+	        private			InternetAddress[] 	addressCC	=	null;
+	        private			InternetAddress[] 	addressBCC	=	null;
 	
 			private StringTemplateGroup stringTemplateGroup;
 			private Map<String,String> stringTemplateMap;
@@ -137,9 +145,11 @@ import org.springframework.web.multipart.MultipartFile;
 			boolean	mailSuccess = false;
 			Properties props = new Properties();
 			
+
+			
 			SMTP_HOST_NAME	=	UtilProperty.getMessage
 								(
-										Constants.MAIL_SMTP_HOST, 
+										Constants.MAIL_SMTP_GMAIL_HOST, 
 										new Object[]{} 
 								);
 	        SMTP_AUTH_USER 	=   fromAddress;
@@ -147,7 +157,7 @@ import org.springframework.web.multipart.MultipartFile;
 	        SMTP_HOST_PORT 	=   Integer.parseInt(
 									        		UtilProperty.getMessage
 													(
-															Constants.MAIL_SMTP_PORT, 
+															Constants.MAIL_SMTP_GMAIL_PORT, 
 															new Object[]{} 
 													)
 	        									);
@@ -159,7 +169,7 @@ import org.springframework.web.multipart.MultipartFile;
 	        props.put("mail.smtp.host", SMTP_HOST_NAME);
 	        props.put("mail.smtp.debug", "true");
 	        props.put("mail.smtp.auth", "false");
-	        //props.put("mail.smtp.starttls.enable","false");								
+	        props.put("mail.smtp.starttls.enable","true");								
 	        //props.setProperty("mail.smtp.ssl.trust", "squmail.squ.edu.om");
 	        props.put("mail.smtp.port", SMTP_HOST_PORT);
 	        SMTPAuthenticatorextends	auth	=	new SMTPAuthenticatorextends();
